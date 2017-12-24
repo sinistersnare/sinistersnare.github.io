@@ -1,9 +1,17 @@
 # Blog of the Sinistersnare #
 
-Hey, this is my Blog's repository,
-enjoy reading source HTML when you could actually be using a web-browser to see rendered content.
-
 Find the real site [HERE](https://drs.is)
+
+Hey, this is my Blog's repository.
+The un-compiled code is in the `source` branch,
+and the generated HTML is in the `master` branch.
+
+Enjoy!
+
+# TODO:
+
+[] - Make everything Bigger. I have this site at 140% for chrissake!
+[] - Fix bug where RSS sidebar link goes missing on about and contact pages.
 
 
 ## LICENSE ##
