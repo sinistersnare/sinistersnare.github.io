@@ -8,10 +8,10 @@ and the generated HTML is in the `master` branch.
 
 Enjoy!
 
-# TODO:
+## TODO: ##
 
-[] - Make everything Bigger. I have this site at 140% for chrissake!
-[] - Fix bug where RSS sidebar link goes missing on about and contact pages.
+* Make everything Bigger. I have this site at 140% for chrissake!
+* Fix bug where RSS sidebar link goes missing on about and contact pages.
 
 
 ## LICENSE ##

@@ -21,11 +21,3 @@ Numbers 1 and 2 are very interesting to me, and I have work on both of them on m
 but I would love to make a post explaining the CS behind it.
 
 Tesselation just seems really cool and I would love to talk about that.
-
-
-```c
-fn code_example() {
-	let a = vec![1, 2, 3];
-	a[0] + a[1] + a[2]; // wont work
-}
-```
