@@ -4,6 +4,7 @@
 {{ partial "head.html" . }}
 
 <body>
+{{ "static/icons/symbol-defs.svg" | readFile | safeHTML }}
 <div id="layout">
 
   {{ partial "sidemenu.html" . }}

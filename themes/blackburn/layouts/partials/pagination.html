@@ -1,17 +1,19 @@
 {{ if or (.Paginator.HasPrev) (.Paginator.HasNext) }}
-{{ $prev := "fa fa-chevron-left"}}
-{{ $next := "fa fa-chevron-right"}}
 <nav class="pagination" role="pagination">
   {{ if .Paginator.HasPrev }}
-  <a href="{{ .Paginator.Prev.URL }}"><i class="{{ $prev }}"></i></a>
+  <a href="{{ .Paginator.Prev.URL }}">
+    <svg viewBox='0 0 100 100' class='icon icon-left-open'><use xlink:href='#icon-left-open'></use></svg>
+  </a>
   {{ else }}
-  <i class="{{ $prev }}"></i>
+  <svg viewBox='0 0 100 100' class='icon icon-left-open'><use xlink:href='#icon-left-open'></use></svg>
   {{ end }}
   <span>&nbsp;{{ .Paginator.PageNumber }} / {{ .Paginator.TotalPages }}&nbsp;</span>
   {{ if .Paginator.HasNext }}
-  <a href="{{ .Paginator.Next.URL }}"><i class="{{ $next }}"></i></a>
+  <a href="{{ .Paginator.Next.URL }}">
+    <svg viewBox='0 0 100 100' class='icon contact-icon icon-right-open'><use xlink:href='#icon-right-open'></use></svg>
+  </a>
   {{ else }}
-  <i class="{{ $next }}"></i>
+  <svg viewBox='0 0 100 100' class='icon contact-icon icon-right-open'><use xlink:href='#icon-right-open'></use></svg>
   {{ end }}
 </nav>
 {{ end }}

@@ -7,6 +7,10 @@ body {
     bottom: 0;
 }
 
+.sidebarlink:hover {
+    text-decoration: none;
+}
+
 .pure-img-responsive {
     max-width: 100%;
     height: auto;

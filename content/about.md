@@ -5,28 +5,24 @@ draft: false
 sidemenu: true
 ---
 
-Hi! I am Davis Ross Silverman (hence the URL)
+Hi! I am Davis Ross Silverman (hence the URL).
+I also go by my alter-ego: The Sinistersnare.
 
 I love technology, I love to teach it, and I love to talk it.
 
-I am currently a Bachelor student at the University of Maryland, College Park.
-I will be graduating in May 2018.
+Currently pursuing a bachelor degree in computer science at the University of Maryland, College Park,
+my graduation date is May 2018.
 
 
 ## Software ##
 
-I work mostly on non-web stuff. Compilers, video games, and data structures are my interests in software.
+My interests mostly revolve around non-web stuff. Compilers, video games, and data structures are my interests in software.
 I would like to write blog posts on those topics, so here I am!
 
 I like to work in Python, Java, Rust, and other functional languages (including Lisps!)
 
-
-## Gaming ##
-
-I play a lot of Counter-Strike, and various games on my PC. Recommend me games, I will recommend some to you!
-
 ## About This Site ##
 
-I made this site with Hugo and the Blackburn Theme (as the sidebar will tell you).
+This site is made with Hugo and the Blackburn Theme (as the sidebar will tell you).
 Hugo proved to be the easiest static-site-generator to setup and use on Windows, would recommend.
 

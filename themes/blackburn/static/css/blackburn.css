@@ -1,3 +1,27 @@
+.icon {
+  width: 1.0em;
+  /*text-align: center;
+  display: block;
+  margin: auto;*/
+  /* vv This seems a bit tailored for sidebar, if there is alignment issue, there needs to be new CSS class.*/
+  transform: translate(10%, 10%);
+  padding-right: 0.3em;
+  fill: #9a9998;
+}
+
+.contact-icon {
+  width: 1.5em;
+  fill: #3b8bba;
+}
+
+.contact-list {
+  list-style-type: none;
+}
+
+.icon-main {
+  padding-right: 0.5em;
+}
+
 .header {
   font-family: "Raleway", Helvetica, Arial, sans-serif
 }
@@ -8,7 +32,7 @@ a {
 }
 a:hover,
 a:focus {
-  text-decoration: underline;
+  /*text-decoration: underline;*/
 }
 a:visited {
   color: #265778;

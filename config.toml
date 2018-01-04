@@ -1,52 +1,51 @@
-baseURL = "https://drs.is/"
+baseurl = "https://drs.is/"
 languageCode = "en-us"
 title = "Sinistersnare's Blog"
 author = "Davis Silverman"
 theme = "blackburn"
-copyright = "&copy; 2017. All rights reserved."
+copyright = "&copy; 2017, All rights reserved."
 canonifyurls = true
 paginate = 5
-
 
 [indexes]
    topic = "topics"
 
 [params]
-   subtitle = "Coder / Gamer / More Coder"
+   subtitle = "Coder / Gamer / Something-Witty-er"
    brand = "Sin's Blog!"
    dateFormat = "02 Jan 2006"
    # googleAnalytics = "google analytics tracking ID"
-   highlightjs = "atelier-seaside-dark" # maybe androidstudio is the best ?
-   highlightjs_extra_languages = ["yaml"] # hmm?
+   highlightjs = "androidstudio" # TODO: check out other themes, maybe one is better?
+   highlightjs_extra_languages = ["yaml"] # other languages that highlight.js will support (check themes/partial/head.html)
 
 [menu] # side menu
 [[menu.main]]
    name = "Home"
-   pre = "<i class='fa fa-home fa-fw'></i>"
+   pre = "<svg viewBox='0 0 100 100' class='icon icon-main icon-home'><use xlink:href='#icon-home'></use></svg>"
    weight = 1
    identifier = "home"
    url = "/"
 [[menu.main]]
    name = "Posts"
-   pre = "<i class='fa fa-list fa-fw'></i>"
+   pre = "<svg viewBox='0 0 100 100' class='icon icon-main icon-list'><use xlink:href='#icon-list'></use></svg>"
    weight = 2
    identifier = "post"
    url = "/post/"
 [[menu.main]]
    name = "Topics"
-   pre = "<i class='fa fa-folder fa-fw'></i>"
+   pre = "<svg viewBox='0 0 100 100' class='icon icon-main icon-folder'><use xlink:href='#icon-folder'></use></svg>"
    weight = 3
    identifier = "topic"
    url = "/topics/"
 [[menu.main]]
    name = "About"
-   pre = "<i class='fa fa-user fa-fw'></i>"
+   pre = "<svg viewBox='0 0 100 100' class='icon icon-main icon-user'><use xlink:href='#icon-user'></use></svg>"
    weight = 4
    identifier = "about"
    url = "/about/"
 [[menu.main]]
    name = "Contact"
-   pre = "<i class='fa fa-phone fa-fw'></i>"
+   pre = "<svg viewBox='0 0 100 100' class='icon icon-main icon-phone'><use xlink:href='#icon-phone'></use></svg>"
    weight = 5
    identifier = "contact"
    url = "/contact/"

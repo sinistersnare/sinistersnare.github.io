@@ -2,7 +2,9 @@
 <div class="prev-next-post pure-g">
   <div class="pure-u-1-24" style="text-align: left;">
     {{ if .PrevInSection }}
-    <a href="{{ .PrevInSection.Permalink }}"><i class="fa fa-chevron-left"></i></a>
+    <a href="{{ .PrevInSection.Permalink }}">
+      <svg viewBox='0 0 100 100' class='icon icon-left-open'><use xlink:href='#icon-left-open'></use></svg>
+    </a>
     {{ end }}
   </div>
   <div class="pure-u-10-24">
@@ -24,7 +26,9 @@
   </div>
   <div class="pure-u-1-24" style="text-align: right;">
     {{ if .NextInSection }}
-    <a href="{{ .NextInSection.Permalink }}"><i class="fa fa-chevron-right"></i></a>
+    <a href="{{ .NextInSection.Permalink }}">
+      <svg viewBox='0 0 100 100' class='icon icon-right-open'><use xlink:href='#icon-right-open'></use></svg>
+    </a>
     {{ end }}
   </div>
 </div>
