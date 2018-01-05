@@ -6,12 +6,17 @@ draft: true
 topics: ["Programming"]
 ---
 
-***issues:***
+## TODO ##
 
-* should I better define 'node' in terms of a tree-node?
+* should I better define the word 'node' in terms of a tree-node?
 * make outbound links open in new tab.
+* add some history
+    * > In 1968, Donald Knuth asked whether a non-recursive algorithm for in-order traversal exists, that uses no stack and leaves the tree unmodified. One of the solutions to this problem is tree threading, presented by J. H. Morris in 1979.[1][2]
+* Make sure Table of Contents is correct when post is over
+*
 
-## Introduction ##
+
+# Introduction #
 
 In this post, we will discuss a novel tree traversal algorithm.
 Robson tree traversals traverse a tree in **Constant Space**,
@@ -21,29 +26,24 @@ The final code can be found [here](https://github.com/sinistersnare/robson), but
 The table of contents may help for people who think they can skip a bit :)
 
 
-TODO: add some history
-
-> In 1968, Donald Knuth asked whether a non-recursive algorithm for in-order traversal exists, that uses no stack and leaves the tree unmodified. One of the solutions to this problem is tree threading, presented by J. H. Morris in 1979.[1][2]
-
-
-## Table of Contents ##
+# Table of Contents #
 
 1. What is a Tree?
-	- How do we traverse a tree?
+    - How do we traverse a tree?
 2. Why is the 'standard' method bad?
 3. How can we do better than linear!?!?!
 4. Stackless Traversals
-	- The Threaded Tree
-	- The Link-Inversion Model
+    - The Threaded Tree
+    - The Link-Inversion Model
 5. The Robson Tree Traversal
-	- An Unholy Matrimony
-	- A Walkthrough
+    - An Unholy Matrimony
+    - A Walkthrough
 6. Conclusion
 
 
 
 
-## What is a Tree? ##
+# What is a Tree? #
 
 A 'tree' is a data structure commonly used in datastructures found in programs used everywhere.
 Filesystems use trees to store their [data](https://en.wikipedia.org/wiki/B-tre),
@@ -59,9 +59,9 @@ Here is a common tree definition. We will be using C for the whole of this post:
 
 ```c
 typedef struct Tree {
-	int data;
-	Tree* left;
-	Tree* right;
+    int data;
+    Tree* left;
+    Tree* right;
 } Tree;
 ```
 
@@ -69,13 +69,12 @@ We can use the tree like so:
 
 ```c
 int main(void) {
-	Tree root, root_left;
-	root_left.data = 0;
-	root_left.left = NULL;
-	root_left.right = NULL;
-
-	root.data = 1;
-	root.left = &rl;
+    Tree root, root_left;
+    root_left.data = 0;
+    root_left.left = NULL;
+    root_left.right = NULL;
+    root.data = 1;
+    root.left = &rl;
 }
 ```
 
@@ -91,20 +90,20 @@ Luckily, traversing a tree is super easy!
 
 ```c
 void traverse(Tree* cur) {
-	if (cur == NULL) {
-		return;
-	}
-	traverse(cur->left);
-	process(cur); // in-order traversal
-	traverse(cur->right);
+    if (cur == NULL) {
+        return;
+    }
+    traverse(cur->left);
+    visit(cur); // in-order traversal
+    traverse(cur->right);
 }
 ```
 
-This algorithm is commonly taught in CS-101 courses at universities,
+This algorithm is commonly taught in beginning CS courses at universities,
 and it gets the job done. However, I think I can do better.
 
 
-## Why is the 'standard' method bad? ##
+# Why is the 'standard' method bad? #
 
 To get into why an algorithm is bad, we need to talk about "Big-O notation",
 and that is a little bit out of scope for this already long blog-post, so...
@@ -149,37 +148,100 @@ That way, we use as little extra memory as possible!
 That is how we are going to get to our solution, but first we need to understand some preliminary concepts.
 
 
-## Stackless Traversals ##
+# Stackless Traversals #
 
 As mentioned in the introductory sections, the standard tree traversal requries a stack to traverse the tree.
 This is becuase we need to 'pop' back up the tree once we reach a leaf. Using a stack is super easy to understand,
-and it makes for a clean algorithm. However, using a stack is expensive (as shown previously).
-A stackless traversal is what we need.
+and it makes for a clean algorithm.
+
+In 1968, Donald Knuth asked the computer science community if there existed a method for computing
+tree traversals without a stack, while also leaving the tree unmodified. Lets discuss some methods for
+doing just that.
 
 
 
-### The Threaded-Tree ###
+## The Threaded Tree ##
 
-TODO: maybe this shouldnt be in 'stackless traversals'?
+J. H. Morris presented the threaded tree in 1979, and it involves using those wasteful null nodes
+at the end of the tree. However, you will see it does not solve all of our problems.
 
-The Threaded-Tree utilizes the leaf-pointers we discussed below, but not necessarily to traverse the tree.
-The 'threads' are used to find the in-order successor/predeccessor of a node.
+Threaded trees are used in binary search trees. (meld this into text)
 
-The benefit of the Threaded-Tree is constant space, and constant time successor/predeccesor location.
+We use the tree-leaf pointers, not necessarily to traverse the tree, but to find the next node in the
+in-order traversal.
 
-TODO: explain how standard trees are worst-case linear succ/pred finding.
+***TODO:*** Talk about how Amortized constant time, and linear space.
+Finding this next node is done in worst-case constant-time!
+The spatial cost of this however, is still linear with the tree. Lets explain how it works.
 
-MORE EXPLAANATION
+In this part, we will discuss only single threaded trees, for finding in-order ***successors*** to nodes.
+Make sure to note that by 'thread' we do not mean threads as in multiple-threads of execution, but just as in
+a pointer to another part of the tree. It is kind of confusing, I give you that reader, but it just happens sometimes.
+
+Lets dive right into some code:
+
+```c
+typedef struct Tree {
+    int data;
+    Tree* left;
+    Tree* right;
+    bool is_thread;
+} Tree;
+```
+
+This `Tree` struct includes a boolean field to tell whether the current tree node has an in-order thread.
+When we search for the in-order successor to the current node, and find that it is a thread, we take the
+right node to get the immediate successor! This is always a single operation, AKA O(1) time!
+
+You note, of course, that to support this method, we need to add a boolean field for each and every node in the tree!
+This means we are stuck with a linear space cost for this traversal.
+
+TODO: say how to form a thread. not just that there are threads.
 
 
-### The Link-Inversion Model ###
+Threaded trees are super cool, and I would love for people to know them. Luckily, there is a great
+[Wikipedia page](https://en.wikipedia.org/wiki/Threaded_binary_tree)
+on the subject. If there was not, I would definitely write more.
+
+* Space-Complexity: O(n)
+    * This is because each tree node needs a marker, so linear cost.
+* Time-Complexity: _Amortized_ O(1) (for traversing down non-threads)
+    * I could write a lot about how this comes to be amortized O(1), but that is not the topic for this post, sorry!
+    * Basically its just that, usually finding the successor is easy (so constant time), but sometimes its expensive (linear), so probabilistically, its considered O(1).... Computer Science!
+
+
+## The Link-Inversion Model ##
 
 Link Inversion is a key ingredient to our final algorithm. Link-Inversion is a process where we use a marker-bit
 on each node to tell if we should continue to traverse up, or traverse rightward when going up a tree.
 
 This method is stackless, and solves Knuth's question, but it does not solve our dilemma,
-we need O(1) worst-case space complexity!
+we need O(1) worst-case space complexity! Lets talk about how and why it works.
 
+The tree struct is the same as it was for the threaded tree, but the differences are in execution:
+
+```c
+typedef struct Tree {
+    int data;
+    Tree* left;
+    Tree* right;
+    bool is_marked;
+} Tree;
+
+Tree* prev;
+Tree* cur;
+```
+
+We start at the root of the tree and check the current
+
+
+### Risks ###
+
+Note that this algorithm changes pointers inside of the tree! That is pretty unsafe!
+That means that during traversal, do not try to use the tree! If this algorithm does not complete fully,
+then the tree will be left in an unrecoverable state. Memory leaks and data loss aho(?wrong word?)!
+
+So basically, make some tests to ensure that trees are recreated!
 
 ## The Robson Tree Traversal ##
 
@@ -187,7 +249,8 @@ Here we are! The Robson Tree Traversal is a method for traversing trees in linea
 
 Robson uses the ideas of the threaded tree and the link-inversion traversal to create the perfect harmony of tree-traversals.
 
-The downside of the threaded-tree was that it is not a traversal method, so we can't use that.
+The downside of the threaded-tree was that it is linear-space.
+However, it successfully used those null pointers that we
 
 The downside of the link-inversion model is that it is worst-case linear-space.
 We had to add an extra bit of memory to each node.
@@ -200,3 +263,13 @@ Just kidding heres how it works.
 
 
 ### The Algorithm ###
+
+
+
+
+## Conclusion ##
+
+Ending Text!
+
+
+If you liked this post, please feel free to tweet me @Sinistersnare or email me sinistersnare @ gmail.

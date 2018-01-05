@@ -1,3 +1,11 @@
+body {
+  zoom: 140%;
+}
+
+#main {
+  font-size: 1.5em;
+}
+
 .icon {
   width: 1.0em;
   /*text-align: center;
@@ -74,16 +82,17 @@ article > footer {
 #menu .brand {
   font-family: Raleway;
   font-weight: bold;
-  font-size: 1em;
+  font-size: 1.5em;
   letter-spacing: 0.1em;
   text-transform: none;
   background: transparent;
   text-decoration: none;
   margin: 0.5em 0;
+  padding-left: 0.28em;
 }
 
 #menu .pure-menu {
-  font-size: 0.9em;
+  font-size: 1.2em;
 }
 
 i {
