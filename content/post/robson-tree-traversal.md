@@ -266,11 +266,8 @@ Just kidding heres how it works.
 ### The Algorithm ###
 
 
-
-
 ## Conclusion ##
 
 Ending Text!
 
-
-If you liked this post, please feel free to tweet me @Sinistersnare or email me sinistersnare @ gmail.
+If you liked this post, please feel free to connect with me at any of the links on the footer of this site!

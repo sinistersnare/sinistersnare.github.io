@@ -18,6 +18,7 @@ $ hugo --config minimo.config.toml
 
 ## TODO: ##
 
+* I copied-over fluid-img{s} but they use pure-css stuff. Maybe port to vanilla CSS somehow?
 * main.f0e8df71.css file currently has max-width at 740px. is there a better way to set this?
 * Make everything Bigger. I have this site at 140% for chrissake!
 * Fix bug where RSS sidebar link goes missing on about and contact pages. Currently it is disabled.
