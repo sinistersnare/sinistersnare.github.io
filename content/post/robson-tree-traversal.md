@@ -1,10 +1,11 @@
----
-title: "The Robson Tree Traversal"
-description: "Traversing Trees, The Hard Way."
-date: 2017-12-24T08:10:44-05:00
-draft: true
-topics: ["Programming"]
----
++++
+title = "The Robson Tree Traversal"
+description = "Traversing Trees, The Hard Way."
+date = 2017-12-24T08:10:44-05:00
+draft = true
+tags = ["Data-Structures", "Algorithms"]
+categories = ["Software"]
++++
 
 ## TODO ##
 

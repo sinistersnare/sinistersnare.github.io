@@ -1,10 +1,10 @@
----
-title: "Hello World"
-description: "Please let this be the time I blog more than literally once."
-date: 2017-12-24T05:50:44-05:00
-draft: false
-topics: ["Meta"]
----
++++
+title = "Hello World"
+description = "Please let this be the time I blog more than literally once."
+date = 2017-12-24T05:50:44-05:00
+draft = false
+categories = ["Meta"]
++++
 
 
 Hey! Intro Post!

@@ -8,14 +8,25 @@ and the generated HTML is in the `master` branch.
 
 Enjoy!
 
+## Rendering The Site ##
+
+Run the command:
+
+```bash
+$ hugo --config minimo.config.toml
+```
+
 ## TODO: ##
 
+* main.f0e8df71.css file currently has max-width at 740px. is there a better way to set this?
 * Make everything Bigger. I have this site at 140% for chrissake!
 * Fix bug where RSS sidebar link goes missing on about and contact pages. Currently it is disabled.
 * IDK how to get other styles. pygmentsStyle=STYLE not working.
+* Mobile looks like shit. Make new theme time?
 
 ## Writing a Post ##
 
+* The below thing is outdated (from blackburn theme times)
 * When writing code blocks:
 	* Use simple three-backticks for simple linenumbered code. Use the following for no line numbers.
 	* use {{< highlight LANGNAME >}} to start a code-block, and {{< /highlight >}} to end the codeblock.
