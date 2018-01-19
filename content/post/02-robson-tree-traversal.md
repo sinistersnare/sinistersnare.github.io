@@ -1,7 +1,8 @@
 +++
+slug = "robson-traversal"
 title = "The Robson Tree Traversal"
 description = "Traversing Trees, The Hard Way."
-date = 2017-12-24T08:10:44-05:00
+date = 2018-01-01T08:10:44-05:00
 draft = true
 tags = ["Data-Structures", "Algorithms"]
 categories = ["Software"]
@@ -14,7 +15,6 @@ categories = ["Software"]
 * add some history
     * > In 1968, Donald Knuth asked whether a non-recursive algorithm for in-order traversal exists, that uses no stack and leaves the tree unmodified. One of the solutions to this problem is tree threading, presented by J. H. Morris in 1979.[1][2]
 * Make sure Table of Contents is correct when post is over
-*
 
 
 # Introduction #
@@ -94,14 +94,25 @@ void traverse(Tree* cur) {
     if (cur == NULL) {
         return;
     }
+    visit(cur); // pre-order traversal
     traverse(cur->left);
-    visit(cur); // in-order traversal
+    // visit(cur); // in-order traversal
     traverse(cur->right);
+    // visit(cur); // post-order traversal
 }
 ```
 
 This algorithm is commonly taught in beginning CS courses at universities,
 and it gets the job done. However, I think I can do better.
+
+Tree traversals can be adapted for use in memory management.
+Many garbage collectors represent their memory pool using tree-like structures,
+and when they are marking live memory, they traverse that tree.
+
+Pre-order traversal is used to ensure that parents are visited before children.
+For garbage collection, pre-order is used to prevent re-entering cyclic structures.
+Our robson traversal will be in pre-order format. Another use of pre-order traversals
+is to copy trees!
 
 
 # Why is the 'standard' method bad? #
@@ -110,7 +121,20 @@ To get into why an algorithm is bad, we need to talk about "Big-O notation",
 and that is a little bit out of scope for this already long blog-post, so...
 Take an algorithms course I guess? Lets just go with,
 "Big-O talks about algorithmic efficiency in terms of space-usage or time-usage."
-That sounds fine.
+Lets spend two quick paragraphs on it.
+
+When we talk about time efficiency, we talk about how long an algorithm takes to run.
+When someone says an algorithm is `O(n)` that means there is a linear relationship between
+input size, and run-time, `y = c*n` (for some constant `c`) if you graph it.
+Constant time, `O(1)` means no matter how big the input gets that we run the algorithm on,
+it takes the same time to run. This is equivalent to `y = c` when graphed.
+Remember, this talks about the relationship between input size and run-time,
+not necessarily how long it takes exactly.
+
+Space is very similar, but instead of run-time, it is memory used. To say an algorithm takes
+`O(n)` space means the amount of memory usage increases linearly with input size.
+If you want a more in-depth introduction to these concepts, check out [CLRS](link-please.com)
+chapter N for more information!
 
 The 'standard' traversal method is as efficient as possible, time-wise.
 We need to traverse all `n`-nodes of a tree, and the algorithm has `O(n)`
@@ -138,7 +162,7 @@ Here is the thing about trees: they can be quite wasteful!
 
 Lets look at a tree-structure:
 
-{{% fluid_img "/img/post/robson/wasteful.png" %}}
+{{% fluid_img "/img/post/robson-traversal/wasteful.png" %}}
 
 You see, the leaf-nodes have 2 pointers that are just ***null***!
 What a waste! Thats so much space we are wasting! (TODO: maybe do some math for how many nodes in a complete tree are null?)
@@ -229,11 +253,10 @@ typedef struct Tree {
     bool is_marked;
 } Tree;
 
-Tree* prev;
-Tree* cur;
+Tree* prev = NULL;
 ```
 
-We start at the root of the tree and check the current
+We start the traversal by going as far left as possible. As we traverse left, we 'invert' the left pointers to point to the previous node (note the `prev` pointer in the code-block above). The inversions are used so we can get back up the tree; remember we are not using recursion or an explicit stack here. I say explicit becuase the inverted links can be thought of like a stack.
 
 
 ### Risks ###
