@@ -24,6 +24,8 @@ $ hugo --config minimo.config.toml
 * Fix bug where RSS sidebar link goes missing on about and contact pages. Currently it is disabled.
 * IDK how to get other styles. pygmentsStyle=STYLE not working.
 * Mobile looks like shit. Make new theme time?
+* Give this blog the Attribution 4.0 Internation Creative Commons License
+    * https://creativecommons.org/choose/
 
 ## Writing a Post ##
 
