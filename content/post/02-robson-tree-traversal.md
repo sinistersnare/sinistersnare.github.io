@@ -3,19 +3,20 @@ slug = "robson-traversal"
 title = "The Robson Tree Traversal"
 description = "Traversing Trees, The Hard Way."
 date = 2018-01-01T08:10:44-05:00
-draft = false
+draft = true
 tags = ["Data-Structures", "Algorithms"]
 categories = ["Software"]
 +++
 
 ## TODO ##
 
-* should I better define the word 'node' in terms of a tree-node?
 * make outbound links open in new tab.
-* add some history
-    * > In 1968, Donald Knuth asked whether a non-recursive algorithm for in-order traversal exists, that uses no stack and leaves the tree unmodified. One of the solutions to this problem is tree threading, presented by J. H. Morris in 1979.
 * Make sure Table of Contents is correct when post is over
-* Add pictures of tree's being traversed. Jasons slides may be a help.
+* Add pictures of tree's being traversed!!!
+Create shitty pictures and ask Audrey to make pretty ones later.
+* StackOverflow posts:
+    * https://stackoverflow.com/questions/31323283/incomplete-traversal-using-link-inversion-of-binary-tree
+    * https://stackoverflow.com/questions/22288074/robson-tree-traversal-algorithm
 
 
 # Introduction #
@@ -30,17 +31,7 @@ The table of contents may help for people want to skip a bit :)
 
 # Table of Contents #
 
-1. What is a Tree?
-    - How do we traverse a tree?
-2. Why is the 'standard' method bad?
-3. How can we do better than linear!?!?!
-4. Stackless Traversals
-    - The Threaded Tree
-    - The Link-Inversion Model
-5. The Robson Tree Traversal
-    - An Unholy Matrimony
-    - A Walkthrough
-6. Conclusion
+TODO
 
 # What is a Tree? #
 
@@ -57,6 +48,9 @@ it uses its own definition to define itself!
 Here is a common tree definition. We will be using C for the whole of this post:
 
 ```c
+/* We will use this type definition later. */
+typedef void (*VisitFunc)(Tree*);
+
 typedef struct Tree {
     int data;
     struct Tree* left;
@@ -74,6 +68,7 @@ int main(void) {
     root_left.right = NULL;
     root.data = 1;
     root.left = &root_left;
+    root.right = NULL;
 }
 ```
 
@@ -103,7 +98,7 @@ void traverse(Tree* cur) {
 ```
 
 This algorithm is commonly taught in beginning CS courses at universities,
-and it gets the job done. However, I think I can do better.
+and it gets the job done. However, I think we can do better.
 
 Tree traversals can be adapted for use in memory management.
 Many garbage collectors represent their memory pool using tree-like structures,
@@ -112,30 +107,25 @@ and when they are marking live memory, they traverse that tree.
 Pre-order traversal is used to ensure that parents are visited before children.
 For garbage collection, pre-order is used to prevent re-entering cyclic structures.
 Our robson traversal will be in pre-order format. Another use of pre-order traversals
-is to copy trees!
+is to copy trees. In-order is as simple as it says, traversing a Binary Search Tree in-order
+will evaluate each node in-order. Post-order is good for when you only want to visit nodes
+after you will never see it again. This means things like deleting a tree will be using
+post-order so that there are no dangling un-free'd nodes.
 
 
 # Why is the 'standard' method bad? #
 
-To get into why an algorithm is bad, we need to talk about "Big-O notation",
+To get into how algorithms are rated against eachother, we need to talk about "Big-O notation",
 and that is a little bit out of scope for this already long blog-post, so...
-Take an algorithms course I guess? Lets just go with,
-"Big-O talks about algorithmic efficiency in terms of space-usage or time-usage."
-Lets spend two quick paragraphs on it.
+Take an algorithms course I guess? I'll give a quick paragraph.
 
-When we talk about time efficiency, we talk about how long an algorithm takes to run.
-When someone says an algorithm is `O(n) time` that means there is a linear relationship between
-input size, and run-time, `y = c*n` (for some constant `c`) if you graph it.
-Constant time, `O(1)` means no matter how big the input gets that we run the algorithm on,
-it takes the same time to run. This is equivalent to `y = c` when graphed.
-Remember, this talks about the relationship between input size and run-time,
-not necessarily how long it takes exactly.
-
-Space is very similar, but instead of run-time, it is memory used. To say an algorithm takes
-`O(n)` space means the amount of memory usage increases linearly with input size.
-If you want a more in-depth introduction to these concepts, check out
+Big-O uses a polynomial to describe how the function performs with relation to input size.
+If we are talking about speed, an `O(n)` function will perform linearly with regards to input.
+An `O(1)` function will always perform the same no matter how big the input gets. You should try
+to avoid `O(n!)` functions, too... These functions are used for 'time' and 'space'. If you
+are interested in this stuff, please check out
 [CLRS](https://en.wikipedia.org/wiki/Introduction_to_Algorithms)
-chapter 3 for more information!
+chapter 3 for more information, or ask me to write a post on it!
 
 The 'standard' traversal method is as efficient as possible, time-wise.
 We need to traverse all `n`-nodes of a tree, and the algorithm has `O(n)`
@@ -151,7 +141,7 @@ you would see that you need some memory for each level, and in the worst-case,
 we need `O(n)` memory!
 
 You may be saying now, "O(n) is not that bad! It seems as good as it can get!"
-Well I say no! We can do better! I say we can do it in ***constant time***!
+Well I say no! We can do better! I say we can do it in ***constant O(1) time***!
 
 That means we can do it using the same amount of memory, no matter how big the tree gets!
 
@@ -188,29 +178,50 @@ doing just that, ending in the Robson traversal.
 J. H. Morris presented the threaded tree in 1979, and it involves using those wasteful null nodes
 at the ends of the tree. However, you will see it does not solve all of our problems.
 
-TODO: Threaded trees are used in binary search trees. (meld this into text)
-
-We use the tree-leaf pointers, not necessarily to traverse the tree, but to find the next node in the
-in-order traversal.
-
-***TODO:*** Talk about how Amortized constant time, and linear space.
-Finding this next node is done in worst-case constant-time!
-The spatial cost of this however, is still linear with the tree. Lets explain how it works.
-
-In this part, we will discuss only single threaded trees, for finding in-order ***successors*** to nodes.
-Make sure to note that by 'thread' we do not mean threads as in multiple-threads of execution, but just as in
-a pointer to another part of the tree. It is kind of confusing, I give you that reader, but it just happens sometimes.
-
-Lets dive right into some code:
+Threaded trees have two bits, one for each direction, telling whether the pointer is a thread.
+If the left pointer is a thread (`cur->left_thread`), then `cur->left` points to the in-order
+predecessor. The same is true for `cur->right_thread` pointing to the in-order successor.
+Following threads is a constant operation to the predecessor/successor, which speeds up in-order
+traversals.
 
 ```c
 typedef struct Tree {
     int data;
     struct Tree* left;
     struct Tree* right;
-    bool is_thread;
+    bool left_thread;
+    bool right_thread;
 } Tree;
+
+/* Takes the root of the tree (we call it cur for readability in the function itself) */
+void threaded_traversal(Tree* cur) {
+    /* Go all the way down to the smallest number in the tree. */
+    while (!cur->is_thread) {
+        cur = cur->left;
+    }
+
+    /* Now all we have to do is go rightwards until the end! */
+    while (cur != NULL) {
+        inorder_visit(cur);
+        cur = tree_successor(cur);
+    }
+}
+
+Tree* tree_successor(Tree* node) {
+    Tree* cur;
+
+    /* fast path! */
+    if (node->right_thread) return node->right;
+
+    /* else return leftmost child of right subtree! */
+    cur = node->right;
+    while (!cur->left_thread) {
+        cur = cur->left;
+    }
+    return cur;
+}
 ```
+
 
 This `Tree` struct includes a boolean field to tell whether the current tree node has an in-order thread.
 When we search for the in-order successor to the current node, and find that it is a thread, we take the
@@ -219,58 +230,133 @@ right node to get the immediate successor! This is always a single operation, AK
 You note, of course, that to support this method, we need to add a boolean field for each and every node in the tree!
 This means we are stuck with a linear space cost for this traversal.
 
-TODO: say how to form a thread. not just that there are threads.
-
-
 Threaded trees are super cool, and I would love for people to know them. Luckily, there is a great
 [Wikipedia page](https://en.wikipedia.org/wiki/Threaded_binary_tree)
 on the subject. If there was not, I would definitely write more.
 
-* Space-Complexity: O(n)
-    * This is because each tree node needs a marker, so linear cost.
-* Time-Complexity: _Amortized_ O(1) (for traversing down non-threads)
-    * I could write a lot about how this comes to be amortized O(1), but that is not the topic for this post, sorry!
-    * Basically its just that, usually finding the successor is easy (so constant time), but sometimes its expensive (linear), so probabilistically, its considered O(1).... Computer Science!
+* Space-Complexity: `O(n)`
+    * This is because each tree node needs 2 markers, so linear cost
+* Time complexity: `O(n)`
+* Time complexity for finding successor: _Amortized_ `O(1)`!
+    * Ask for that algorithmic analysis post if you want me to explain this!
 
+So we have found a cool algorithm that makes use of those dumb null pointers at the fringes of
+the tree. It does not seem like we gain much, though, as it still comes at a linear spatial cost.
+If you want amortized constant successor finding, then this is a great algorithm for you!
 
 ## The Link-Inversion Model ##
 
-Link Inversion is a key ingredient to our final algorithm. Link-Inversion is a process where we use a marker-bit
-on each node to tell if we should continue to traverse up, or traverse rightward when going up a tree.
+Link Inversion is a key ingredient to our final algorithm. Link-Inversion is a process where we
+use a marker-bit on each node to tell if we should continue to traverse up, or traverse rightward
+when going up a tree.
 
-This method is stackless, and solves Knuth's question, but it does not solve our dilemma,
-we need O(1) worst-case space complexity! Lets talk about how and why it works.
-
-The tree struct is the same as it was for the threaded tree, but the differences are in execution:
+This method is stackless, like in the threaded tree, and solves Knuth's question.
+It does not solve our dilemma though, we need O(1) worst-case space complexity!
+Lets talk about how and why it works, which will lead us to Robson.
 
 ```c
 typedef struct Tree {
     int data;
     Tree* left;
     Tree* right;
-    bool is_marked;
+    bool went_right;
 } Tree;
 
-Tree* prev = NULL;
+void link_inversion(Tree* cur, VisitFunc pre_order, VisitFunc in_order, VisitFunc post_order) {
+    Tree* prev = NULL;
+    Tree* old_prev;
+    Tree* old_prev_left;
+    Tree* old_cur;
+
+    if (cur == NULL) return;
+
+    for (;;) {
+        /* Descend leftward as much as possible. */
+        while (cur != NULL) {
+            pre_order(cur);
+            cur->went_right = false;
+            old_cur = cur;
+            cur = old_cur->left;
+            old_cur->left = prev;
+            prev = old_cur;
+        }
+
+        /* ascend from right as much as we can. */
+        while (prev != NULL && prev->went_right) {
+            old_prev = prev;
+            prev = prev->right;
+            old_prev->right = cur;
+            cur = old_prev;
+            post_order(cur);
+        }
+
+        /* If cur is null after coming back up from the right,
+        // it means that we have finished traversal */
+        if (prev == NULL) return;
+
+        /* Switch from the left side of prev to the right
+        // Also, mark prev as went_right so we know to traverse upwards using right pointer. */
+        in_order(prev);
+        old_prev_left = prev->left;
+        prev->went_right = true;
+        prev->left = cur;
+        cur = prev->right;
+        prev->right = old_prev_left;
+    }
+}
+
 ```
 
-We start the traversal by going as far left as possible. As we traverse left, we 'invert' the left pointers to point to the previous node (note the `prev` pointer in the code-block above). The inversions are used so we can get back up the tree; remember we are not using recursion or an explicit stack here. I say explicit becuase the inverted links can be thought of like a stack.
+The core algorithm is in the name, we must invert the links. As we push down the tree,
+we invert the links so that way the child points to the parent, and we can walk up the tree
+the same way we walked down. As we go up, we need to un-invert the links so that way the tree
+is back as it started. The marker bit is used so that when we go back up, we know if we are
+ascending from the left or from the right.
 
-...
+Lets talk about each of these steps.
 
-After we have descended left to the leaf node, we must go back up the tree.
-However, how do we know when to ascend left or right? That is the beauty of the marker bit.
+The first thing that link inversion will do is go leftwards until `cur` is null.
+The `prev` pointer will be the actual final node once we reach this state. On the way down,
+we invert all `cur->left` to be `prev`, the parent.
+
+TODO: picture of inverted links down the left side of a tree.
+
+The next block of code states to 'ascend from right as much as possible,'
+but we are not quite there yet. If we are on the bottom left of a tree, we cant ascend rightwards
+yet. What we will do instead is go to the next block.
+
+We switch from the left side of `prev` to the right. The key here is that we set the
+`went_right` field, so we know how to ascend later. So even if `prev->right` is null
+(as `cur` is now), we swap to it. The inversions show that we re-set `prev->left` to point to
+the 'real' left child instead of `prev`'s parent, and instead now use `prev->right` to point to
+`prev`'s parent.
+
+This will allow us to do the previous step, which we conveniently skipped over.
+Looking at the algorithm, we jump back up to the first step of going down until
+`cur == NULL`. As I stated, if we are at a leaf, `cur` will already by null,
+so we skip straight to step 2.
+
+Both conditions are met, `prev != NULL && prev->went_right`, so know that we are ascending
+from the right. Now, `prev->right` points to prev's parent, so will become the new `prev`,
+and `prev` is the new `cur`. This is going up the tree one step. Step 3 happens again here,
+and we move to another possibly empty node.
+
+The algorithm is actually fairly simple, I recommend drawing out each step for a given tree
+if you have any more questions.
 
 
-...
+***WARNING***: This algorithm is _dangerous_! If you attempt to modify the tree while it is being
+traversed, pointers will be a complete mess! Make sure this algorithm completes before altering the
+tree any more!
 
-### Risks ###
+* Space-Complexity: `O(n)`
+    * This is because each tree node needs a marker, so linear cost.
+* Time complexity: `O(n)`
 
-Note that this algorithm changes pointers inside of the tree! That is pretty unsafe!
-That means that during traversal, do not try to use the tree! If this algorithm does not complete fully,
-then the tree will be left in an unrecoverable state. Memory leaks and data loss aho(?wrong word?)!
+We still have not yet improved on the algorithmic cost of the standard depth-first search.
+We have been doing quite well on solving Knuth's challenge, but thats only a minor goal!
+Lets get to the real thing now, the Robson traversal.
 
-So basically, make some tests to ensure that trees are recreated!
 
 ## The Robson Tree Traversal ##
 
@@ -283,16 +369,13 @@ The downside of the threaded-tree was that it is linear-space.
 Yet, it successfully used those null pointers that we lamented of their waste.
 The downside of the link-inversion model is that it is worst-case linear-space.
 We had to add an extra bit of memory to each node.
-Robson solves both problems by playing to the strenth's of both!
+Robson solves both problems by playing to the strength's of both!
 
 ##### ***BOOM end of blog post.*** #####
 
 Just kidding heres how it works...
 
-
 ### The Algorithm ###
-
-FIXME: `a la` is used twice, be original.
 
 Lets start by talking about the memory usage. We need a few bytes of memory for this to work,
 here is what we will be using those bytes for:
@@ -361,7 +444,9 @@ Once we find an exchange point we will set `available` to the head of the leaf-s
 
 Okay! Now lets get back to finding the next subtree to traverse!
 
-TODO: does this last sentence need more reasons/usage? I feel like people will get caught up on what an exchange point is, and lose grasp of the section.
+TODO: does this last sentence need more reasons/usage?
+I feel like people will get caught up on what an exchange point is,
+and lose grasp of the section.
 
 TODO: make this `ol` a shortcode so markdown can render inside of it.
 <!-- Have to re-start the ol from before. -->
@@ -412,6 +497,7 @@ anything there, as long as you swap it for 0 when you need to actually use the p
 as another way to do this stuff, you can just use one of the pointers' bottom bits as the follow pointer
 in link inversion. However, that would be really ugly to code, and then I would have had less to write about :(
 
+https://stackoverflow.com/questions/19991506/how-portable-is-using-the-low-bit-of-a-pointer-as-a-flag
 
 ### When not to use robson ###
 

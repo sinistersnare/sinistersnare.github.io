@@ -8,13 +8,19 @@ and the generated HTML is in the `master` branch.
 
 Enjoy!
 
-## Rendering The Site ##
+## Releasing The Site ##
 
-Run the command:
+1. Make sure Hugo is installed. https://gohugo.io/getting-started/installing/
+1. From the source directory, make sure all changes are committed.
+1. `$ hugo --config minimo.config.toml`
+1. `$ git checkout master` This will bring the `public/` directory to `master`
+1. `$ shopt -s extglob` this allows the next command
+1. `$ rm -rf !(public)`
+1. `$ mv public/* .`
+1. `$ git add --all`
+1. `$ git commit -m "Releasing new awesome blog post! "`
+1. `$ `
 
-```bash
-$ hugo --config minimo.config.toml
-```
 
 ## TODO: ##
 
@@ -29,11 +35,19 @@ $ hugo --config minimo.config.toml
 
 ## Writing a Post ##
 
+Run the command:
+
+```bash
+$ hugo serve -D --config minimo.config.toml
+```
+
+This will create a test-server to write new posts and content in. -D will publish drafts.
+
 * The below thing is outdated (from blackburn theme times)
 * When writing code blocks:
-	* Use simple three-backticks for simple linenumbered code. Use the following for no line numbers.
-	* use {{< highlight LANGNAME >}} to start a code-block, and {{< /highlight >}} to end the codeblock.
-	* "linenos=table" adds line numbers in such a way they wont be highlighted. Remove if line numbers are unneeded.
+    * Use simple three-backticks for simple linenumbered code. Use the following for no line numbers.
+    * use {{< highlight LANGNAME >}} to start a code-block, and {{< /highlight >}} to end the codeblock.
+    * "linenos=table" adds line numbers in such a way they wont be highlighted. Remove if line numbers are unneeded.
 
 ## Adding New Fonts ##
 
