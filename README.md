@@ -19,7 +19,7 @@ Enjoy!
 1. `$ mv public/* .`
 1. `$ git add --all`
 1. `$ git commit -m "Releasing new awesome blog post! "`
-1. `$ `
+1. `$ git push origin master`
 
 
 ## TODO: ##

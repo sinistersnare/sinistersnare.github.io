@@ -22,28 +22,26 @@ Create shitty pictures and ask Audrey to make pretty ones later.
 # Introduction #
 
 In this post, we will discuss a novel tree traversal algorithm.
-Robson tree traversals traverse a tree in **Constant Space**,
-as opposed to the standard method, which has a **linear** space cost.
+The standard, traversal method operates with a _linear_ spatial cost.
+The Robson traversal counters with a cool ***constant*** space!
 
-The final code can be found [here](https://github.com/sinistersnare/robson), but I encourage you to read the post.
-The table of contents may help for people want to skip a bit :)
-
+The final code is on [github](https://github.com/sinistersnare/robson),
+but I encourage you to read this post!
+The table of contents may help for people that may want to skip a bit :)
 
 # Table of Contents #
 
 TODO
 
-# What is a Tree? #
+# The Famous Tree #
 
-A 'tree' is a data structure commonly used in datastructures found in programs used everywhere.
-Filesystems use trees to store their [data](https://en.wikipedia.org/wiki/B-tre),
-text-editors use trees to [store text](https://en.wikipedia.org/wiki/Rope_(data_structure)),
-basically everything uses trees.
-
-A binary tree is commonly taught in introduction-to-programming classes at universities.
-These trees nodes contain some data, and two children, commonly called a 'left' and 'right' child,
-which are both trees themselves! This is called a recursive data-structure,
-it uses its own definition to define itself!
+Trees are an incredibly important data structure.
+A great learning tool for beginning computer scientists, starting to understand the science.
+Trees are also used throughout the real-world.
+File systems use trees to [store their data](https://en.wikipedia.org/wiki/B-tree).
+Text editors use trees to [organize their text](https://en.wikipedia.org/wiki/Rope_(data_structure)).
+Tree’s power the world, inside and outside of computers.
+Our tree’s are a bit more simply defined, however.
 
 Here is a common tree definition. We will be using C for the whole of this post:
 
@@ -72,9 +70,8 @@ int main(void) {
 }
 ```
 
-Note that the trees that we use in this post will be
-[Binary Search Trees](https://en.wikipedia.org/wiki/Binary_search_tree)
-mostly so in-order traversal looks pretty.
+We will  specifically be using
+[Binary Search Trees](https://en.wikipedia.org/wiki/Binary_search_tree) in this post.
 
 ## How Do We Traverse a tree? ##
 
@@ -89,16 +86,16 @@ Luckily, traversing a tree is super easy!
 ```c
 void traverse(Tree* cur) {
     if (cur == NULL) return;
-    pre_visit(cur); // pre-order traversal
+    pre_visit(cur); /* pre-order traversal */
     traverse(cur->left);
-    in_visit(cur); // in-order traversal
+    in_visit(cur); /* in-order traversal */
     traverse(cur->right);
-    post_visit(cur); // post-order traversal
+    post_visit(cur); /* post-order traversal */
 }
 ```
 
-This algorithm is commonly taught in beginning CS courses at universities,
-and it gets the job done. However, I think we can do better.
+This algorithm is universally taught in beginning CS courses at universities.
+It gets the job done, but I think we can do better.
 
 Tree traversals can be adapted for use in memory management.
 Many garbage collectors represent their memory pool using tree-like structures,
@@ -111,7 +108,6 @@ is to copy trees. In-order is as simple as it says, traversing a Binary Search T
 will evaluate each node in-order. Post-order is good for when you only want to visit nodes
 after you will never see it again. This means things like deleting a tree will be using
 post-order so that there are no dangling un-free'd nodes.
-
 
 # Why is the 'standard' method bad? #
 
@@ -133,7 +129,7 @@ run-time complexity. You cant get any better than that!
 
 A reader may think that you also cant get better space-wise.
 The algorithm is like 4 lines long, how can we get better than that!?
-Well, if you paid attention in your algorithms class,
+Well, if you paid attention in (or had taken an) algorithms class,
 you would know that stack space counts! Even though this algorithm
 looks small and perfect, it uses up a whole stack-frame each time the algorithm recurses!
 If you turn this recursive code into an iterative, explicit-stack based, solution,
@@ -156,7 +152,8 @@ Lets look at a tree-structure:
 {{% fluid_img "/img/post/robson-traversal/wasteful.png" %}}
 
 You see, the leaf-nodes have 2 pointers that are just ***null***!
-What a waste! Thats so much space we are wasting! For any given tree of `n` nodes, there will be `n + 1` NULL pointers.
+What a waste! Thats so much space we are wasting! For any given tree of `n` nodes,
+there will be `n + 1` null pointers.
 
 Here is the theory. We use that freely-available space for our traversal.
 That way, we use as little extra memory as possible!
@@ -207,6 +204,7 @@ void threaded_traversal(Tree* cur) {
     }
 }
 
+/* Returns a successor to any given node, `node`.*/
 Tree* tree_successor(Tree* node) {
     Tree* cur;
 
@@ -304,7 +302,6 @@ void link_inversion(Tree* cur, VisitFunc pre_order, VisitFunc in_order, VisitFun
         prev->right = old_prev_left;
     }
 }
-
 ```
 
 The core algorithm is in the name, we must invert the links. As we push down the tree,
@@ -344,7 +341,6 @@ and we move to another possibly empty node.
 The algorithm is actually fairly simple, I recommend drawing out each step for a given tree
 if you have any more questions.
 
-
 ***WARNING***: This algorithm is _dangerous_! If you attempt to modify the tree while it is being
 traversed, pointers will be a complete mess! Make sure this algorithm completes before altering the
 tree any more!
@@ -356,7 +352,6 @@ tree any more!
 We still have not yet improved on the algorithmic cost of the standard depth-first search.
 We have been doing quite well on solving Knuth's challenge, but thats only a minor goal!
 Lets get to the real thing now, the Robson traversal.
-
 
 ## The Robson Tree Traversal ##
 
@@ -415,7 +410,6 @@ Lets discuss these states with pictures! If someone wants to write an interactiv
 be my guest!
 
 Going up the tree, we have 4 cases, some mundane, and some interesting!
-
 
 1. The parent's right pointer is null. Here, we must be ascending from the left. We un-invert the
 pointers, as in link-inversion. No funny business yet!
