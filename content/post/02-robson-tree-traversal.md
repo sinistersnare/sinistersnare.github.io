@@ -8,6 +8,10 @@ tags = ["Data-Structures", "Algorithms"]
 categories = ["Software"]
 +++
 
+# THIS IS A DRAFT #
+
+Hiya, this is a draft! Please read and give me feedback! Thanks!
+
 ## TODO ##
 
 * make outbound links open in new tab.
