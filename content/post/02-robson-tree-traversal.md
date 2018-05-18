@@ -17,7 +17,7 @@ Hiya, this is a draft! Please read and give me feedback! Thanks!
 * make outbound links open in new tab.
 * Make sure Table of Contents is correct when post is over
 * Add pictures of tree's being traversed!!!
-Create shitty pictures and ask Audrey to make pretty ones later.
+    * Create shitty pictures and ask Audrey to make pretty ones later.
 * StackOverflow posts:
     * https://stackoverflow.com/questions/31323283/incomplete-traversal-using-link-inversion-of-binary-tree
     * https://stackoverflow.com/questions/22288074/robson-tree-traversal-algorithm
@@ -26,7 +26,7 @@ Create shitty pictures and ask Audrey to make pretty ones later.
 # Introduction #
 
 In this post, we will discuss a novel tree traversal algorithm.
-The standard, traversal method operates with a _linear_ spatial cost.
+The standard traversal method operates with a _linear_ spatial cost.
 The Robson traversal counters with a cool ***constant*** space!
 
 The final code is on [github](https://github.com/sinistersnare/robson),
@@ -39,15 +39,17 @@ TODO
 
 # The Famous Tree #
 
-Trees are an incredibly important data structure.
+The tree is an incredibly important data structure.
 A great learning tool for beginning computer scientists, starting to understand the science.
 Trees are also used throughout the real-world.
-File systems use trees to [store their data](https://en.wikipedia.org/wiki/B-tree).
-Text editors use trees to [organize their text](https://en.wikipedia.org/wiki/Rope_(data_structure)).
+File systems use [B-trees](https://en.wikipedia.org/wiki/B-tree)
+to [store their data](https://github.com/postgres/postgres/tree/master/src/backend/access/nbtree).
+Text editors use [ropes](https://en.wikipedia.org/wiki/Rope_(data_structure))
+to [organize their text](https://github.com/google/xi-editor/tree/master/rust/rope).
 Tree’s power the world, inside and outside of computers.
-Our tree’s are a bit more simply defined, however.
+We will be using a simple binary tree for this post.
 
-Here is a common tree definition. We will be using C for the whole of this post:
+Here is a common binary tree definition. We will be using C for the whole of this post:
 
 ```c
 /* We will use this type definition later. */
@@ -75,11 +77,10 @@ int main(void) {
 ```
 
 We will  specifically be using
-[Binary Search Trees](https://en.wikipedia.org/wiki/Binary_search_tree) in this post.
+[Binary Search Trees](https://en.wikipedia.org/wiki/Binary_search_tree),
+so that way in-order traversal works.
 
 ## How Do We Traverse a tree? ##
-
-_note_: should the 'why do we need to traverse' be in this section or the previous?
 
 Traversing a tree means accessing each node's data in the whole tree.
 This is obviously a critically important function of a tree,
@@ -174,6 +175,158 @@ In 1968, Donald Knuth asked the computer science community if there existed a me
 tree traversals without a stack, while also leaving the tree unmodified. Lets discuss some methods for
 doing just that, ending in the Robson traversal.
 
+## The Link-Inversion Model ##
+
+Link Inversion is a key ingredient to our final algorithm. Link-Inversion is a process where we
+use a marker-bit on each node to tell if we should continue to traverse up, or traverse rightward
+when going up a tree.
+
+This method is stackless, like in the threaded tree, and solves Knuth's question.
+It does not solve our dilemma though, we need O(1) worst-case space complexity!
+Lets talk about how and why it works, which will lead us to Robson.
+
+```c
+typedef struct Tree {
+    int data;
+    Tree* left;
+    Tree* right;
+    bool went_right;
+} Tree;
+
+void link_inversion(Tree* cur, VisitFunc pre_order,
+                               VisitFunc in_order,
+                               VisitFunc post_order) {
+    Tree* prev = NULL;
+    Tree* old_prev;
+    Tree* old_prev_left;
+    Tree* old_cur;
+
+    if (cur == NULL) return;
+
+    do {
+        /* 1) Descend leftward as much as possible. */
+        while (cur != NULL) {
+            pre_order(cur);
+            cur->went_right = false;
+            old_cur = cur;
+            cur = old_cur->left;
+            old_cur->left = prev;
+            prev = old_cur;
+        }
+
+        /* 2) ascend from right as much as we can. */
+        while (prev != NULL && prev->went_right) {
+            old_prev = prev;
+            prev = prev->right;
+            old_prev->right = cur;
+            cur = old_prev;
+            post_order(cur);
+        }
+
+        /* 3)
+            If prev is null after coming back up from the right,
+                it means that we have finished traversal,
+                so head back to the while-condition and get outta here!
+            Else, we will do an exchange here,
+                swap to right child of parent. */
+        if (prev != NULL) {
+            /* Switch from the left side of prev to the right
+               Also, mark prev as went_right so we know to traverse
+               upwards using right pointer. */
+            in_order(prev);
+            old_prev_left = prev->left;
+            prev->went_right = true;
+            prev->left = cur;
+            cur = prev->right;
+            prev->right = old_prev_left;
+        }
+    } while (prev != NULL);
+}
+```
+
+The core algorithm is in the name, we must invert the links. As we push down the tree,
+we invert the links so that way the child points to the parent, and we can walk up the tree
+the same way we walked down. As we go up, we need to un-invert the links so that way the tree
+is back as it started. The marker bit is used so that when we go back up, we know if we are
+ascending from the left or from the right.
+
+Lets talk about each of these steps.
+
+1) We must start by traversing leftwards as much as possible.
+Keeping pointers to the current and previously visited nodes.
+As we traverse, we invert the links. That means that cur->left will be changed to point to the parent.
+
+2) Next may not make sense, so if it doesnt make perfect sense, come to it after step 3.
+Here, we are done with this subtree, so we want to get to the subtree's root.
+We do this by ascending from the right until we get to the root of the traversed part of the tree.
+This ensures the tree is in a state that step 3 can deal with.
+
+3) Thirdly, we do an exchange. Here, we are assuredly in a left child, thanks to step 2.
+We can safely traverse to the parents right child and
+forget completely about the previous subtree forever!
+This exchange marks a completion of the left subtree of the new root,
+now we must traverse the right subtree of the new root. Back to step 1!
+
+Here, we are skipping some of the technicalities, like what is `went_right` for?
+It is so that we know when we get to the end of the subtree in step 2.
+Hopefully, I will elucidate why its necessary with pictures very soon.
+After I elucidate that, I will later explain why it's not necessary (hint: Robson!).
+
+### Walk-through ###
+
+The algorithm is weird, but I think it'll help by showing it!
+
+{{% fluid_img "/img/post/robson-traversal/inversion01.png" %}}
+
+Here, the tree has been traversed almost completely down the side.
+Each time we step downwards, we invert the links to point to the parent.
+The next step will be to venture into the NULL left-child from the current point.
+
+This image has not even finished the first run of step 1 from above yet, so lets continue.
+
+{{% fluid_img "/img/post/robson-traversal/inversion02.png" %}}
+
+Okay, we have successfully finished part 1 of the algorithm: 'go leftward a lot'!
+Now step 2 does not apply, `went_right` has been set for exactly 0 nodes at this point in execution.
+We swiftly move to step 3! Here, we perform an exchange.
+We have finished traversing the left child of the current subtree (the leaf), and now we must traverse the left.
+We do some swaps and end up here:
+
+{{% fluid_img "/img/post/robson-traversal/inversion03.png" %}}
+
+Okay, the exchange succeeded! We are back at step 1, because `prev != NULL`.
+Lets ignore the red circle for just a moment and execute step 1.
+Done! Did you see it? Nothing!
+Of course, `cur == NULL`, so step 1 is not run. Time for step 2! We must go up until we reach the root!
+We run this until `prev->went_right == false`, in this case one time.
+Running this step means we are prepared to forget about the current subtree.
+Step 3 will exchange once more, getting us to the parents right child:
+
+{{% fluid_img "/img/post/robson-traversal/inversion04.png" %}}
+
+If you are keen, you may have noticed that this is a strikingly similar image to the first one in the series.
+The only difference is the red marker in the `prev` node. If you apply the operations I have listed since the
+start of this subsection, you can fully traverse this tree. Making enough images to illustrate all of that
+is an exercise left to the reader.
+
+Link inversion is relatively complex when compared to the standard method, but definitely more fun!
+
+### Warning ###
+
+This algorithm is _dangerous_! If you attempt to modify the tree while it is being
+traversed, pointers will be a complete mess! Make sure this algorithm completes before altering the
+tree any more!
+
+### Analysis ###
+
+* Space-Complexity: `O(n)`
+    * This is because each tree node needs a marker, so linear cost.
+* Time complexity: `O(n)`
+
+We still have not yet improved on the algorithmic cost of the standard depth-first search.
+We have been doing quite well on solving Knuth's challenge, but thats only a minor goal!
+Lets get to the real thing now, the Robson traversal.
+
 ## The Threaded Tree ##
 
 J. H. Morris presented the threaded tree in 1979, and it involves using those wasteful null nodes
@@ -236,126 +389,26 @@ Threaded trees are super cool, and I would love for people to know them. Luckily
 [Wikipedia page](https://en.wikipedia.org/wiki/Threaded_binary_tree)
 on the subject. If there was not, I would definitely write more.
 
+I won't do a full walkthrough of the threaded traversal, but here is an image of a threaded tree:
+
+{{% fluid_img "/img/post/robson-traversal/threaded01.png" %}}
+
+To start, go to the leftmost node, which is the minimum of an inorder traversal.
+To find the successor, if the right pointer is a thread, follow it, and that is the successor.
+If it is not, take it, and then go left as much as possible, that is the next node in-order.
+
+### Analysis ###
+
 * Space-Complexity: `O(n)`
     * This is because each tree node needs 2 markers, so linear cost
 * Time complexity: `O(n)`
-* Time complexity for finding successor: _Amortized_ `O(1)`!
+* Time complexity for finding a single successor: _Amortized_ `O(1)`!
     * Ask for that algorithmic analysis post if you want me to explain this!
 
 So we have found a cool algorithm that makes use of those dumb null pointers at the fringes of
 the tree. It does not seem like we gain much, though, as it still comes at a linear spatial cost.
 If you want amortized constant successor finding, then this is a great algorithm for you!
 
-## The Link-Inversion Model ##
-
-Link Inversion is a key ingredient to our final algorithm. Link-Inversion is a process where we
-use a marker-bit on each node to tell if we should continue to traverse up, or traverse rightward
-when going up a tree.
-
-This method is stackless, like in the threaded tree, and solves Knuth's question.
-It does not solve our dilemma though, we need O(1) worst-case space complexity!
-Lets talk about how and why it works, which will lead us to Robson.
-
-```c
-typedef struct Tree {
-    int data;
-    Tree* left;
-    Tree* right;
-    bool went_right;
-} Tree;
-
-void link_inversion(Tree* cur, VisitFunc pre_order, VisitFunc in_order, VisitFunc post_order) {
-    Tree* prev = NULL;
-    Tree* old_prev;
-    Tree* old_prev_left;
-    Tree* old_cur;
-
-    if (cur == NULL) return;
-
-    for (;;) {
-        /* Descend leftward as much as possible. */
-        while (cur != NULL) {
-            pre_order(cur);
-            cur->went_right = false;
-            old_cur = cur;
-            cur = old_cur->left;
-            old_cur->left = prev;
-            prev = old_cur;
-        }
-
-        /* ascend from right as much as we can. */
-        while (prev != NULL && prev->went_right) {
-            old_prev = prev;
-            prev = prev->right;
-            old_prev->right = cur;
-            cur = old_prev;
-            post_order(cur);
-        }
-
-        /* If cur is null after coming back up from the right,
-        // it means that we have finished traversal */
-        if (prev == NULL) return;
-
-        /* Switch from the left side of prev to the right
-        // Also, mark prev as went_right so we know to traverse upwards using right pointer. */
-        in_order(prev);
-        old_prev_left = prev->left;
-        prev->went_right = true;
-        prev->left = cur;
-        cur = prev->right;
-        prev->right = old_prev_left;
-    }
-}
-```
-
-The core algorithm is in the name, we must invert the links. As we push down the tree,
-we invert the links so that way the child points to the parent, and we can walk up the tree
-the same way we walked down. As we go up, we need to un-invert the links so that way the tree
-is back as it started. The marker bit is used so that when we go back up, we know if we are
-ascending from the left or from the right.
-
-Lets talk about each of these steps.
-
-The first thing that link inversion will do is go leftwards until `cur` is null.
-The `prev` pointer will be the actual final node once we reach this state. On the way down,
-we invert all `cur->left` to be `prev`, the parent.
-
-TODO: picture of inverted links down the left side of a tree.
-
-The next block of code states to 'ascend from right as much as possible,'
-but we are not quite there yet. If we are on the bottom left of a tree, we cant ascend rightwards
-yet. What we will do instead is go to the next block.
-
-We switch from the left side of `prev` to the right. The key here is that we set the
-`went_right` field, so we know how to ascend later. So even if `prev->right` is null
-(as `cur` is now), we swap to it. The inversions show that we re-set `prev->left` to point to
-the 'real' left child instead of `prev`'s parent, and instead now use `prev->right` to point to
-`prev`'s parent.
-
-This will allow us to do the previous step, which we conveniently skipped over.
-Looking at the algorithm, we jump back up to the first step of going down until
-`cur == NULL`. As I stated, if we are at a leaf, `cur` will already by null,
-so we skip straight to step 2.
-
-Both conditions are met, `prev != NULL && prev->went_right`, so know that we are ascending
-from the right. Now, `prev->right` points to prev's parent, so will become the new `prev`,
-and `prev` is the new `cur`. This is going up the tree one step. Step 3 happens again here,
-and we move to another possibly empty node.
-
-The algorithm is actually fairly simple, I recommend drawing out each step for a given tree
-if you have any more questions.
-
-***WARNING***: This algorithm is _dangerous_! If you attempt to modify the tree while it is being
-traversed, pointers will be a complete mess! Make sure this algorithm completes before altering the
-tree any more!
-
-* Space-Complexity: `O(n)`
-    * This is because each tree node needs a marker, so linear cost.
-* Time complexity: `O(n)`
-
-We still have not yet improved on the algorithmic cost of the standard depth-first search.
-We have been doing quite well on solving Knuth's challenge, but thats only a minor goal!
-Lets get to the real thing now, the Robson traversal.
 
 ## The Robson Tree Traversal ##
 
@@ -474,10 +527,13 @@ TODO: make this `ol` a shortcode so markdown can render inside of it.
 </ol>
 
 The algorithm really isnt that hard, but when you look at the tree mid-algorithm, it can be really funky.
-Pointers just completely out of place, but still kind of beautiful in a way! This is another reminder not to
-edit the tree while running this algorithm! The tree is ***not*** in a safe, workable, state during these traversals!
+Pointers just completely out of place, but still kind of beautiful in a way!
+Oh yeah, another reminder to not edit the tree while running this algorithm!
+The tree is ***not*** in a safe, workable, state during these traversals!
 
-Now for pictures!
+### Analysis ###
+
+Amazing.
 
 ## Conclusion ##
 
@@ -485,7 +541,7 @@ Ending Text!
 
 If you liked this post, please feel free to connect with me at any of the links on the footer of this site!
 
-If anyone knows who JM Robson is please tell me, I've tried searching for him, but with no avail. Also,
+If anyone knows who JM Robson is please tell me, I've tried searching for him, but to no avail. Also,
 if anyone uses this algorithm, please let me know, I'd be super interested to see it used somewhere real.
 
 ### P.S. ###
