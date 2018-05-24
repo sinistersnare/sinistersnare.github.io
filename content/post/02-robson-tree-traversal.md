@@ -106,13 +106,12 @@ Tree traversals can be adapted for use in memory management.
 Many garbage collectors represent their memory pool using tree-like structures,
 and when they are marking live memory, they traverse that tree.
 
-Pre-order traversal is used to ensure that parents are visited before children.
-For garbage collection, pre-order is used to prevent re-entering cyclic structures.
-Our robson traversal will be in pre-order format. Another use of pre-order traversals
-is to copy trees. In-order is as simple as it says, traversing a Binary Search Tree in-order
-will evaluate each node in-order. Post-order is good for when you only want to visit nodes
-after you will never see it again. This means things like deleting a tree will be using
-post-order so that there are no dangling un-free'd nodes.
+Pre-order traversal always visits a parent before its child. This is very useful
+when you want to copy a tree, maintaining its order. In-order is mostly used for
+sorted trees, as it will visit nodes in order! A node will be visited in post-order
+only after its children have been visited. This means that post-order is best used
+for tasks such as deleting the tree, freeing its memory without dangling pointers left over.
+If we made `free` our pre-visit function, then we would never be able to traverse right children!
 
 # Why is the 'standard' method bad? #
 
@@ -541,7 +540,7 @@ Ending Text!
 
 If you liked this post, please feel free to connect with me at any of the links on the footer of this site!
 
-If anyone knows who JM Robson is please tell me, I've tried searching for him, but to no avail. Also,
+If anyone knows who JM Robson is please tell me, I've tried searching for him, but to no avail. Also,x
 if anyone uses this algorithm, please let me know, I'd be super interested to see it used somewhere real.
 
 ### P.S. ###
