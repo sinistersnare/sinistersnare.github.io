@@ -19,7 +19,7 @@ I think Rust needs to focus on less flashy things for 2019. We have added a lot 
 # The Compiler #
 
 I think that 2019 could be a year that we grab a ladder for some of the higher-hanging fruit of Rust.
-The compiler team has been heroic in their work since pre 1.0. Things like incremental builds, caching (through the likes of sscache), and using `cargo check` when you just need to see if it builds have helped the community work faster. However, a longstanding bottleneck in compilation is the code we give to LLVM. As I understand it, we have been waiting on MIR to start work on this. I would love to see Rust improve its LLVM-IR codegen. Perhaps if we give LLVM less work to do, we can gain back a large chunk of time wasted.
+The compiler team has been heroic in their work since pre 1.0. Things like incremental builds, caching (through the likes of sscache), and using `cargo check` when you just need to see if it builds, have helped the community work faster. However, a longstanding bottleneck in compilation is the code we give to LLVM. As I understand it, we have been waiting on MIR to start work on this. I would love to see Rust improve its LLVM-IR codegen. Perhaps if we give LLVM less work to do, we can gain back a large chunk of time wasted.
 
 On a personal note, my 2019 programming resolution is to start more serious work on compilers. I would love to help the compilers team on this effort! I hope 2019 can significantly improve the compilation story for Rust.
 
@@ -29,7 +29,7 @@ This seems like a heavily requested feature in Rust. Many other posts have talke
 
 # More Work On Embedded #
 
-Rust on WASM has been really cool! It has also, as I understand it, helped the embedded folks too. I would like to see Rust start to _really_ compete with C in embedded in 2019. Even if we dont have _all_ the architectures, there are many places we can beat C in embedded. We can be _better_ in the platforms we support. Rust can provide a more streamlined introduction to embedded programming. We can provide an amazing catalogue of `no_std` libraries that can help an embedded programmer feel less daunted. We can provide a welcoming community that recommends hardware that best fits their need, with configuration and examples on how to get started.
+Rust on WASM has been really cool! It has also, as I understand it, helped the embedded folks too. I would like to see Rust start to _really_ compete with C in embedded in 2019. Even if we do not have _all_ the architectures, there are many places we can beat C in embedded. We can be _better_ in the platforms we support. Rust can provide a more streamlined introduction to embedded programming. We can provide an amazing catalogue of `no_std` libraries that can help an embedded programmer feel less daunted. We can provide a welcoming community that recommends hardware that best fits their need, with configuration and examples on how to get started.
 
 
 # Slowdown on Sugar #

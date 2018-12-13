@@ -9,8 +9,7 @@ I also go by my alter-ego: The Sinistersnare.
 
 I love technology, I love to teach it, and I love to talk it.
 
-Currently pursuing a bachelor degree in computer science at the University of Maryland, College Park.
-My graduation date is May 2018.
+I have recently graduated from the University of Maryland, College Park. I recieved my Bachelors degree May of 2018.
 
 ## Software ##
 
