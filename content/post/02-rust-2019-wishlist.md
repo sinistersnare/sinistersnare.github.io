@@ -14,7 +14,7 @@ Thanks for reading!
 
 Rust needs to focus on less glamorous features in 2019. We have added a lot of great features since 1.0, but we need to address the warts that we have had for a long time. I mostly echo sentiments from
 [Jonathan Turner](https://www.jonathanturner.org/2018/12/the-fallow-year.html),
-[Nathan Vegdahl](https://blog.cessen.com/post/2018_12_12_rust_2019_its_the_little_things), and many others in my 'fallow-year' sentiments. Overall, Compilation speed and type-level constants are my two most wished-for features. On top of that, I would like to see more ecosystem work to make embedded applications more feasible and easy to use. Finally, Rust needs a moratorium on adding syntactic sugar for 2019.
+[Nathan Vegdahl](https://blog.cessen.com/post/2018_12_12_rust_2019_its_the_little_things), and many others in my 'fallow-year' sentiments. Overall, Compilation speed and generic constants are my two most wished-for features. On top of that, I would like to see more ecosystem work to make embedded applications more feasible and easy to use. Finally, Rust needs a moratorium on adding syntactic sugar for 2019.
 
 # The Compiler #
 
@@ -22,9 +22,9 @@ The coming year should be us grabbing a ladder, reaching for some of the higher-
 
 On a personal note, my 2019 programming resolution is to start more serious work on compilers. I would love to help the compilers team on this effort! I hope 2019 can significantly improve the compilation story for Rust.
 
-# Type-Level Constants #
+# Generic Constants #
 
-This seems like a heavily requested feature in Rust. Many other posts have talked about this, so I will just leave it be. Type-level constants are high up on my Rust 2019 wishlist. I am not sure if type-level integers are enough, or we should be able to use any constant. Regardless, I have seen some great ideas that could use this feature.
+This seems like a heavily requested feature in Rust. Many other posts have talked about this, so I will just leave it be. Generic constants are high up on my Rust 2019 wishlist. I am not sure if type-level integers are enough, or we should be able to use any constant. Regardless, I have seen some great ideas that could use this feature.
 
 # More Work On Embedded #
 
