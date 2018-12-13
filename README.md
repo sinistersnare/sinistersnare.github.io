@@ -28,6 +28,7 @@ $ hugo serve -D --config minimo.config.toml
 1. `$ git add --all`
 1. `$ git commit -m "Releasing new awesome blog post! "`
 1. `$ git push origin master`
+1. `$ git checkout source` Go back to the source of this blog.
 
 
 ## TODO: ##
