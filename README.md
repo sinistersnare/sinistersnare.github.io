@@ -22,8 +22,8 @@ $ hugo serve -D --config minimo.config.toml
 1. From the source directory, make sure all changes are committed.
 1. `$ hugo --config minimo.config.toml`
 1. `$ git checkout master` This will bring the `public/` directory to `master`
-1. `$ shopt -s extglob` this allows the next command
-1. `$ rm -rf !(public)`
+1. `$ shopt -s extglob` or `$ setopt extended_glob` for zsh. This allows the next command
+1. `$ rm -rf !(public)` or `$ rm -rf ^public` for zsh.
 1. `$ mv public/* .`
 1. `$ git add --all`
 1. `$ git commit -m "Releasing new awesome blog post! "`
