@@ -8,6 +8,14 @@ and the generated HTML is in the `master` branch.
 
 Enjoy!
 
+## Writing a Post ##
+
+Run the command:
+
+```bash
+$ hugo serve -D --config minimo.config.toml
+```
+
 ## Releasing The Site ##
 
 1. Make sure Hugo is installed. https://gohugo.io/getting-started/installing/
@@ -32,14 +40,6 @@ Enjoy!
 * Mobile looks like shit. Make new theme time?
 * Give this blog the Attribution 4.0 Internation Creative Commons License
     * https://creativecommons.org/choose/
-
-## Writing a Post ##
-
-Run the command:
-
-```bash
-$ hugo serve -D --config minimo.config.toml
-```
 
 This will create a test-server to write new posts and content in. -D will publish drafts.
 

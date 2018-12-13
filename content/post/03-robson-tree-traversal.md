@@ -46,7 +46,7 @@ File systems use [B-trees](https://en.wikipedia.org/wiki/B-tree)
 to [store their data](https://github.com/postgres/postgres/tree/master/src/backend/access/nbtree).
 Text editors use [ropes](https://en.wikipedia.org/wiki/Rope_(data_structure))
 to [organize their text](https://github.com/google/xi-editor/tree/master/rust/rope).
-Tree’s power the world, inside and outside of computers.
+Trees power the world, inside and outside of computers.
 We will be using a simple binary tree for this post.
 
 Here is a common binary tree definition. We will be using C for the whole of this post:
@@ -145,13 +145,13 @@ Well I say no! We can do better! I say we can do it in ***constant O(1) time***!
 
 That means we can do it using the same amount of memory, no matter how big the tree gets!
 
-Lets do it!
+Let's do it!
 
 ## How can we do better than that!?!?! ##
 
 Here is the thing about trees: they can be quite wasteful!
 
-Lets look at a tree-structure:
+Let's look at a tree-structure:
 
 {{% fluid_img "/img/post/robson-traversal/wasteful.png" %}}
 
@@ -169,6 +169,8 @@ That is how we are going to get to our solution, but first we need to understand
 As mentioned in the introductory sections, the standard tree traversal requries a stack to traverse the tree.
 This is becuase we need to 'pop' back up the tree once we reach a leaf. Using a stack is super easy to understand,
 and it makes for a clean algorithm.
+
+explain stack for a minute here or in the big-O section. Chef says, at least explain a 'pop'.
 
 In 1968, Donald Knuth asked the computer science community if there existed a method for computing
 tree traversals without a stack, while also leaving the tree unmodified. Lets discuss some methods for
