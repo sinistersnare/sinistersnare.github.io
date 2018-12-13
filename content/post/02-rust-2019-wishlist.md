@@ -33,7 +33,7 @@ Rust on WASM has been really cool! It has also, as I understand it, helped the e
 
 # Slowdown on Sugar #
 
-Finally, I would like to talk abuot my most important with for Rust 2019. Rust needs to relax on adding syntactic sugar in 2019. Since 1.0, a lot of sugar has been added to Rust in the name of convenience. We need to get an idea of what Rust feels like now. Is Rust still too pointy in some places? Or does it simply feel like that because we haven't gotten used to the recently added sugar yet? If we place a moratorium on adding sugar to Rust for the year, we can truly direct ourselves to the most pressing warts.
+Finally, I would like to talk about my most personal wish for Rust in 2019. Rust needs to relax on adding syntactic sugar in the coming year. Since 1.0, a lot of sugar has been added to Rust in the name of convenience. We need to get an idea of what Rust feels like now. Is Rust still too pointy in some places? Or does it simply feel like that because we haven't gotten used to the recently added sugar yet? If we place a moratorium on adding sugar to Rust for the year, we can truly direct ourselves to the most pressing warts.
 
 Personally, I am a conservative guy when it comes to syntax. I believe that if we keep adding sugar, we will boil ourselves, much like we do to a frog. We should regularly pause and take stock of where we are, to refocus our needs.
 
