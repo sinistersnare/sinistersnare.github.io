@@ -12,13 +12,13 @@ This is my response to the
 [Call for Rust 2019 Roadmap](https://blog.rust-lang.org/2018/12/06/call-for-rust-2019-roadmap-blogposts.html).
 Thanks for reading!
 
-I think Rust needs to focus on less flashy things for 2019. We have added a lot of great features since 1.0, but I think we need to address the warts that we have had for a long time. I will mostly echo sentiments from
-[Jonathan Turner](https://www.jonathanturner.org/2018/12/the-fallow-year.html) (please read, its great!),
-[Nathan Vegdahl](https://blog.cessen.com/post/2018_12_12_rust_2019_its_the_little_things), and many others in my 'fallow-year' sentiments. Overall, I think that compilation speed and type-level constants are the two most important issues to tackle. On top of that, I would like to see more ecosystem work to make embedded applications more feasible and easy to use. Finally, I would like a moratorium on syntactic sugar for 2019.
+Rust needs to focus on less glamorous features in 2019. We have added a lot of great features since 1.0, but we need to address the warts that we have had for a long time. I mostly echo sentiments from
+[Jonathan Turner](https://www.jonathanturner.org/2018/12/the-fallow-year.html),
+[Nathan Vegdahl](https://blog.cessen.com/post/2018_12_12_rust_2019_its_the_little_things), and many others in my 'fallow-year' sentiments. Overall, Compilation speed and type-level constants are my two most wished-for features. On top of that, I would like to see more ecosystem work to make embedded applications more feasible and easy to use. Finally, Rust needs a moratorium on adding syntactic sugar for 2019.
 
 # The Compiler #
 
-The coming year should be us grabbing a ladder, reaching for some of the higher-hanging fruit of Rust issues. The compiler team has been heroic in their work since pre 1.0. Things like incremental builds, caching (through the likes of sscache), and using `cargo check` when you just need to see if it builds, have helped the community work faster. However, a longstanding bottleneck in compilation is the code we give to LLVM. As I understand it, we have been waiting on MIR to start work on this. I would love to see Rust improve its LLVM-IR codegen. Perhaps if we give LLVM less work to do, we can gain back a large chunk of time wasted.
+The coming year should be us grabbing a ladder, reaching for some of the higher-hanging fruit of Rust issues. The compiler team has been heroic in their work since the beginning. Things like incremental builds, caching (through the likes of sscache), and using `cargo check` when you just need to see if it builds, have helped the community work faster. However, a longstanding bottleneck in compilation is the code we give to LLVM. As I understand it, we have been waiting on MIR to start work on this. I would love to see Rust improve its LLVM-IR codegen. Perhaps if we give LLVM less work to do, we can gain back a large chunk of time wasted.
 
 On a personal note, my 2019 programming resolution is to start more serious work on compilers. I would love to help the compilers team on this effort! I hope 2019 can significantly improve the compilation story for Rust.
 
