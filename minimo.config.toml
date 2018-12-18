@@ -94,6 +94,11 @@ name = "Contact"
 weight = 3
 url = "/contact"
 
+[[menu.main]]
+name = "Projects"
+weight = 4
+url = "/projects"
+
 
 [blackfriday]
 hrefTargetBlank = true
