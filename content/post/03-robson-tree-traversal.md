@@ -82,10 +82,13 @@ It gets the job done, and yet here we are, trying to complicate things!
 
 # Stackless Traversals #
 
-The standard tree traversal uses a stack. In the algorithm above, the stack used is implicit, the program stack. A stack is a data-structure that can be thought of like a stack of plates. You can only access the one on top, and you can only add one to the top. To get to the bottom, you must 'pop' plates off of the stack until you get to the desired plate. '_The_ stack' refers to a computer programs internal stack. This structure tracks a functions local variables, or where to return to. '_The_ stack' is a stack, so we must keep it in mind when performing algorithmic analysis.
+When we use that standard traversal algorithm, we utilize the power of stacks! Stacks are a wonderful and simple datastructure. Imagine first: a _stack_ of plates in your cupboard. You cant pick a plate from the center of that stack, you must go from the top. This Last-In-First-Out ordering is great for traversing trees too! Now, lets imagine the left-edge of the tree to be our plate-stack. As we traverse down, we push nodes onto the stack. When we reach the bottom of the tree, we need a way to get back up. The solution is to simply 'pop' off the node-stack, and then we are at the `second-to-last` node!
 
+Next, we go right. Add the right-child of the `second-to-last` node to the stack. We now have to traverse that sub-tree, the same way as before, all the way to the left, til we reach the bottom. Eventually, after going up and right, and down and left enough, we will have traversed the entire tree. And now we hve it, a semi-rigorous explanation of stackful tree traversals!
 
-You can re-write that algorithm to use an explicit stack, but it is there no matter how you look at it. Of course, there is nothing wrong with using a stack. Using stacks grant quite an intuitive model for beginner programmers to grok. For a long time, we only knew how to traverse trees using stacks. Computer scientists felt this was a silly limitation, and sought to fix that.
+You can re-write that code in the previous section to use an explicit stack, if you wanted. It is still there, however, implicitly. When a function recurses, it uses a computers internal stack to store information about the current function running. When we go down the tree, we add a 'stack-frame', which we use to traverse the tree.
+
+Stacks are amazing! Using a stack grants quite an intuitive model for beginner programmers to grok. For a long time, we only knew how to traverse trees using stacks. It was a sad world though. Punch-cards, no Wikipedia, and Algol... I shudder at the very thought. Anyways, computer scientists felt this was a silly limitation, and sought to fix that, creating the world we see today through their hatred of stacks.
 
 In 1968, famous computer scientist Donald Knuth gave his community a problem. He wanted an algorithm for traversing trees without using a stack, which does not modify the tree in any way. I will present two algorithms that were not the first, nor the best methods for traversing trees. I like them, though, and feel like they provide some good ideas for computer scientists to learn from.
 
@@ -144,7 +147,7 @@ I won't do a full walkthrough of the threaded traversal, but here is an image of
 
 {{% fluid_img "/img/post/robson-traversal/threaded01.png" %}}
 
-To start, go to the leftmost node, which is the minimum of an inorder traversal. To find the successor, if the right pointer is a thread, follow it, and that is the successor. If it is not, take it, and then go left as much as possible, that is the next node in-order.
+To start, go to the leftmost node, which is the minimum of an in-order traversal. To find the successor, if the right pointer is a thread, follow it, and that is the successor. If it is not, take it, and then go left as much as possible, that is the next node in-order.
 
 ### Analysis ###
 
@@ -159,13 +162,9 @@ For me, the biggest downside of this algorithm is that it only works for in-orde
 
 ## The Link-Inversion Model ##
 
-Link Inversion is a key ingredient to our final algorithm. Link-Inversion is a process where we
-use a marker-bit on each node to tell if we should continue to traverse up, or traverse rightward
-when going up a tree.
+Link Inversion is a key ingredient to our final algorithm. Link-Inversion is a process where we use a marker-bit on each node to tell if we should continue to traverse up, or traverse rightward when going up a tree.
 
-This method is stackless, like in the threaded tree, and solves Knuth's question.
-It does not solve our dilemma though, we need O(1) worst-case space complexity!
-Lets talk about how and why it works, which will lead us to Robson.
+This method is stackless, like the threaded tree traversal. The trick is that we jumble the pointers, to thwart hacking attempts. Just kidding! We only seemingly jumble pointers! Also, its not to thwart hackers, its to show us the way back up the tree!
 
 ```c
 typedef struct Tree {
@@ -232,13 +231,13 @@ the same way we walked down. As we go up, we need to un-invert the links so that
 is back as it started. The marker bit is used so that when we go back up, we know if we are
 ascending from the left or from the right.
 
-Lets talk about each of these steps.
+Let's talk about each of these steps.
 
 1) We must start by traversing leftwards as much as possible.
 Keeping pointers to the current and previously visited nodes.
 As we traverse, we invert the links. That means that cur->left will be changed to point to the parent.
 
-2) Next may not make sense, so if it doesnt make perfect sense, come to it after step 3.
+2) Next may not make sense, so if it doesn't make perfect sense, come to it after step 3.
 Here, we are done with this subtree, so we want to get to the subtree's root.
 We do this by ascending from the right until we get to the root of the traversed part of the tree.
 This ensures the tree is in a state that step 3 can deal with.
@@ -264,7 +263,7 @@ Here, the tree has been traversed almost completely down the side.
 Each time we step downwards, we invert the links to point to the parent.
 The next step will be to venture into the NULL left-child from the current point.
 
-This image has not even finished the first run of step 1 from above yet, so lets continue.
+This image has not even finished the first run of step 1 from above yet, so let's continue.
 
 {{% fluid_img "/img/post/robson-traversal/inversion02.png" %}}
 
@@ -277,7 +276,7 @@ We do some swaps and end up here:
 {{% fluid_img "/img/post/robson-traversal/inversion03.png" %}}
 
 Okay, the exchange succeeded! We are back at step 1, because `prev != NULL`.
-Lets ignore the red circle for just a moment and execute step 1.
+Let's ignore the red circle for just a moment and execute step 1.
 Done! Did you see it? Nothing!
 Of course, `cur == NULL`, so step 1 is not run. Time for step 2! We must go up until we reach the root!
 We run this until `prev->went_right == false`, in this case one time.
@@ -307,7 +306,7 @@ tree any more!
 
 We still have not yet improved on the algorithmic cost of the standard depth-first search.
 We have been doing quite well on solving Knuth's challenge, but thats only a minor goal!
-Lets get to the real thing now, the Robson traversal.
+Let's get to the real thing now, the Robson traversal.
 
 
 ## Conclusion ##
