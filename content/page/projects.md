@@ -18,7 +18,7 @@ A probably not-standard-compliant Scheme implementation, written in Racket with 
 
 Probably should not be used by your company, but I would love to keep working on it, and add cool features! I also hope to write about its compilation model, and the theory under it, in this blog. Let me know if you want to read such a blog post!
 
-# [Royale With Cheese](https://www.youtube.com/watch?v=fvq58xaoRl8) #
+# [Royale With Cheese](https://github.com/sinistersnare/RoyaleWithCheese) #
 
 A game I wrote in Unity for a class. It uses runtime nav-meshes, which were unavailable in Unity when I wrote this. It was quite a bit of fun to get it working!
 
