@@ -2,7 +2,7 @@
 slug = "fancy-tree-traversals"
 title = "Fancy Tree Traversals"
 description = "Threaded Trees and Link Inversion Traversals"
-date = 2018-12-16T10:10:44-05:00
+date = 2019-01-02T10:10:44-05:00
 draft = false
 tags = ["Data-Structures", "Algorithms", "Trees"]
 categories = ["Software"]
@@ -82,13 +82,13 @@ It gets the job done, and yet here we are, trying to complicate things!
 
 # Stackless Traversals #
 
-When we use that standard traversal algorithm, we utilize the power of stacks! Stacks are a wonderful and simple datastructure. Imagine first: a _stack_ of plates in your cupboard. You cant pick a plate from the center of that stack, you must go from the top. This Last-In-First-Out ordering is great for traversing trees too! Now, lets imagine the left-edge of the tree to be our plate-stack. As we traverse down, we push nodes onto the stack. When we reach the bottom of the tree, we need a way to get back up. The solution is to simply 'pop' off the node-stack, and then we are at the `second-to-last` node!
+When we use that standard traversal algorithm, we utilize the power of stacks! Stacks are a wonderful and simple datastructure. Imagine first: a _stack_ of plates in your cupboard. You can not pick a plate from the center of that stack, you must go from the top. This Last-In-First-Out ordering is great for traversing trees too! Now, lets imagine the left-edge of the tree to be our plate-stack. As we traverse down, we push nodes onto the stack. When we reach the bottom of the tree, we need a way to get back up. The solution is to simply 'pop' off the node-stack, and then we are at the `second-to-last` node!
 
-Next, we go right. Add the right-child of the `second-to-last` node to the stack. We now have to traverse that sub-tree, the same way as before, all the way to the left, til we reach the bottom. Eventually, after going up and right, and down and left enough, we will have traversed the entire tree. And now we hve it, a semi-rigorous explanation of stackful tree traversals!
+Next, we go right. Add the right-child of the `second-to-last` node to the stack. We now have to traverse that sub-tree, the same way as before, all the way to the left, until we reach the bottom. Eventually, after going up and right, and down and left enough, we will have traversed the entire tree. And now we have it, a semi-rigorous explanation of stackful tree traversals!
 
-You can re-write that code in the previous section to use an explicit stack, if you wanted. It is still there, however, implicitly. When a function recurses, it uses a computers internal stack to store information about the current function running. When we go down the tree, we add a 'stack-frame', which we use to traverse the tree.
+You can re-write that code in the previous section to use an explicit stack, if you wanted. It is still there, however, implicitly. When a function recurses, it uses a computer's internal stack to store information about the current function running. When we go down the tree, we add a 'stack-frame', which we use to traverse the tree.
 
-Stacks are amazing! Using a stack grants quite an intuitive model for beginner programmers to grok. For a long time, we only knew how to traverse trees using stacks. It was a sad world though. Punch-cards, no Wikipedia, and Algol... I shudder at the very thought. Anyways, computer scientists felt this was a silly limitation, and sought to fix that, creating the world we see today through their hatred of stacks.
+Stacks are amazing! Using a stack grants quite an intuitive model for beginner programmers to grok. For a long time, we only knew how to traverse trees using stacks. It was a sad world though. Punch-cards, no Wikipedia, and Algol... I shudder at the very thought, but I digress. Computer scientists felt this was a silly limitation, and sought to fix that, creating the world we see today through their hatred of stacks.
 
 In 1968, famous computer scientist Donald Knuth gave his community a problem. He wanted an algorithm for traversing trees without using a stack, which does not modify the tree in any way. I will present two algorithms that were not the first, nor the best methods for traversing trees. I like them, though, and feel like they provide some good ideas for computer scientists to learn from.
 
@@ -164,7 +164,7 @@ For me, the biggest downside of this algorithm is that it only works for in-orde
 
 Link Inversion is a key ingredient to our final algorithm. Link-Inversion is a process where we use a marker-bit on each node to tell if we should continue to traverse up, or traverse rightward when going up a tree.
 
-This method is stackless, like the threaded tree traversal. The trick is that we jumble the pointers, to thwart hacking attempts. Just kidding! We only seemingly jumble pointers! Also, its not to thwart hackers, its to show us the way back up the tree!
+This method is stackless, like the threaded tree traversal. The trick is that we jumble the pointers, to thwart hacking attempts. Just kidding! We only seemingly jumble pointers! Also, it is not to thwart hackers, its to show us the way back up the tree!
 
 ```c
 typedef struct Tree {
@@ -296,7 +296,7 @@ Link inversion is relatively complex when compared to the standard method, but d
 
 This algorithm is _dangerous_! If you attempt to modify the tree while it is being
 traversed, pointers will be a complete mess! Make sure this algorithm completes before altering the
-tree any more!
+tree anymore!
 
 ### Analysis ###
 

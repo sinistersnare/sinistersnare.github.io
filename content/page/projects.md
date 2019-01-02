@@ -23,3 +23,7 @@ Probably should not be used by your company, but I would love to keep working on
 A game I wrote in Unity for a class. It uses runtime nav-meshes, which were unavailable in Unity when I wrote this. It was quite a bit of fun to get it working!
 
 Currently this is not open sourced, but I would like to open-source it soon. If you would like to see its code, let me know!
+
+# [A Rusty `.DS_Store` Parser](https://github.com/sinistersnare/ds_store) #
+
+The .DS_Store file is quite interesting! It is how the Finder application on MacOS keeps track of files. I wrote a parser for it in Rust, so you can learn about a directories contents, through the inspection of this single file. It is a bona-fide Rust library, available on [crates.io](https://crates.io/crates/ds_store).
