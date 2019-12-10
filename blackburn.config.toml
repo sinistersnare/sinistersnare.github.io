@@ -14,7 +14,7 @@ pygmentsOptions = "linenos=table"
    topic = "topics"
 
 [params]
-   subtitle = "Coder / Gamer / Something-Witty-er"
+   subtitle = "Programming Languages / Game-Dev / All-Out Fun"
    brand = "Sin's Blog!"
    dateFormat = "Jan 02, 2006"
    # googleAnalytics = "google analytics tracking ID"

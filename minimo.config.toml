@@ -20,7 +20,7 @@ pygmentsCodefences = true
 defaultContentLanguage = "en"
 
 [params.info]
-description = "Coder / Gamer / Something Witty-er"
+description = "Programming Languages / Game-Dev / All-Out Fun"
 title404 = "Nothing's here! 404, could not find selected resource! Please contact me!"
 
 [params.assets]
