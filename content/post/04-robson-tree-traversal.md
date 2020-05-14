@@ -2,7 +2,7 @@
 slug = "robson-traversal"
 title = "The Robson Tree Traversal"
 description = "Traversing Trees, The Hard Way."
-date = 2018-01-01T08:10:44-05:00
+date = 2019-11-01T08:10:44-05:00
 draft = true
 tags = ["Data-Structures", "Algorithms"]
 categories = ["Software"]
