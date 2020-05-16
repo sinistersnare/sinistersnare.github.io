@@ -59,4 +59,16 @@ This will create a test-server to write new posts and content in. -D will publis
 
 ## LICENSE ##
 
-All stuff here is MIT licensed, as is all my code. Enjoy <3
+All stuff here is MIT licensed,
+as is all my code used within unless otherwise noted by its source.
+Enjoy <3
+
+
+### TODO: ###
+
+* Option to dynamically set current year in copyright notice.
+* Copy Minima ideals, maybe dark theme though.
+* Time to read marker.
+* Make sure good font used...? Keep minima one?
+* Look at [Sam](https://www.getzola.org/themes/sam/) for guidance.
+    * Maybe a fork? Only thing Id keep is the reading time and the dark theme. Just inspiration too.
