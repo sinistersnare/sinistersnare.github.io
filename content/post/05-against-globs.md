@@ -2,14 +2,11 @@
 slug = "against-globs"
 title = "Against Glob Imports"
 description = "Make your code easy to read."
-date = 2019-12-31T12:00:00-05:00
+date = 2020-05-15T12:00:00-05:00
 draft = false
 tags = ["Rust", "Python", "Engineering", "Pet-Peeves"]
 categories = ["Software"]
 +++
-
-NOTE: the publish date is wrong, because I cant get Hugo to render a post from 2020...
-Zola time???
 
 Hi, I hate glob imports. When I see them it actively hurts my understanding of code.
 I know they may seem useful, but I think that, overall, they are an anti-pattern.
@@ -36,7 +33,17 @@ fn main() -> tantivy::Result<()> {
 }
 ```
 
-< why its bad here >
+This is not a more egregious example, simply the one I most recently faced.
+
+### How I read tutorial code ###
+
+***(TODO: make sure links open in new tab)***
+
+As I read tutorials, I keep a tab on [docs.rs](https://docs.rs) open.
+As I see new structs or functions used, I check up on it, to see its
+signature, constraints, etc.
+
+The imports are a _huge_ help for me in understanding what to look for.
 
 Many tutorials / example code blocks start this way (hopefully they include the imports at all!
 But thats a whole 'nother rant! Thanks for including them in the first place, Tantivy)
@@ -44,7 +51,14 @@ But thats a whole 'nother rant! Thanks for including them in the first place, Ta
 I dont mean to pick on Tantivy, a very large percentage of tutorial code I have seen uses globs.
 Tantivy was wonderful to work with, a great piece of software!
 
+What I mean to say is, tutorials should not use glob imports.
+They should explicitly import all their items.
+
+`This section isnt good! Make it better!`
+
 ## Globs in preludes ##
+
+Preludes in Rust are a bit overused in my opinion.
 
 Preludes are supposed to only have 'invisible imports' IMO, not real structs. Those should always
 be explicitly imported.

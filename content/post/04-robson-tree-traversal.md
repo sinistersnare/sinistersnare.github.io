@@ -2,8 +2,8 @@
 slug = "robson-traversal"
 title = "The Robson Tree Traversal"
 description = "Traversing Trees, The Hard Way."
-date = 2019-11-01T08:10:44-05:00
-draft = true
+date = 2019-12-05T08:10:44-05:00
+draft = false
 tags = ["Data-Structures", "Algorithms"]
 categories = ["Software"]
 +++
@@ -21,7 +21,6 @@ Hiya, this is a draft! Please read and give me feedback! Thanks!
 * StackOverflow posts:
     * https://stackoverflow.com/questions/31323283/incomplete-traversal-using-link-inversion-of-binary-tree
     * https://stackoverflow.com/questions/22288074/robson-tree-traversal-algorithm
-
 
 # Introduction #
 
