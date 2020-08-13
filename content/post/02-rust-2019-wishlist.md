@@ -9,12 +9,12 @@ categories = ["Software"]
 +++
 
 This is my response to the
-[Call for Rust 2019 Roadmap](https://blog.rust-lang.org/2018/12/06/call-for-rust-2019-roadmap-blogposts.html).
+{{ elink(text="Call for Rust 2019 Roadmap", to="https://blog.rust-lang.org/2018/12/06/call-for-rust-2019-roadmap-blogposts.html") }}.
 Thanks for reading!
 
 Rust needs to focus on less glamorous features in 2019. We have added a lot of great features since 1.0, but we need to address the warts that we have had for a long time. I mostly echo sentiments from
-[Jonathan Turner](https://www.jonathanturner.org/2018/12/the-fallow-year.html),
-[Nathan Vegdahl](https://blog.cessen.com/post/2018_12_12_rust_2019_its_the_little_things), and many others in my 'fallow-year' sentiments. Overall, Compilation speed and generic constants are my two most wished-for features. On top of that, I would like to see more ecosystem work to make embedded applications more feasible and easy to use. Finally, Rust needs a moratorium on adding syntactic sugar for 2019.
+{{ elink(text="Jonathan Turner", to="https://www.jonathanturner.org/2018/12/the-fallow-year.html") }},
+{{ elink(text="Nathan Vegdahl", to="https://blog.cessen.com/post/2018_12_12_rust_2019_its_the_little_things") }}, and many others in my 'fallow-year' sentiments. Overall, Compilation speed and generic constants are my two most wished-for features. On top of that, I would like to see more ecosystem work to make embedded applications more feasible and easy to use. Finally, Rust needs a moratorium on adding syntactic sugar for 2019.
 
 # The Compiler #
 

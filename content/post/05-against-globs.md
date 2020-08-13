@@ -3,7 +3,7 @@ slug = "against-globs"
 title = "Against Glob Imports"
 description = "Make your code easy to read."
 date = 2020-05-15T12:00:00-05:00
-draft = false
+draft = true
 tags = ["Rust", "Python", "Engineering", "Pet-Peeves"]
 categories = ["Software"]
 +++
@@ -16,7 +16,7 @@ I know they may seem useful, but I think that, overall, they are an anti-pattern
 Tutorials are supposed to be jumping off points! They should give the user enough information
 to be a little dangerous. They should encourage the user to keep learning after the tutorial
 is finised. When I find myself reading tutorials, many look like this
-(from the wonderful [Tantivy Documentation](https://tantivy-search.github.io/examples/basic_search.html)):
+(from the wonderful {{ elink(to="https://tantivy-search.github.io/examples/basic_search.html", text="Tantivy Documentation") }}):
 
 ```rust
 #[macro_use]
@@ -37,9 +37,7 @@ This is not a more egregious example, simply the one I most recently faced.
 
 ### How I read tutorial code ###
 
-***(TODO: make sure links open in new tab)***
-
-As I read tutorials, I keep a tab on [docs.rs](https://docs.rs) open.
+As I read tutorials, I keep a tab on {{ elink(text="docs.rs", to="https://docs.rs") }} open.
 As I see new structs or functions used, I check up on it, to see its
 signature, constraints, etc.
 

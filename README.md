@@ -1,5 +1,7 @@
 # Blog of the Sinistersnare #
 
+TODO: THIS SHIT IS OUT OF DATE SINCE ZOLA MIGRATION!
+
 Find the real site [HERE!](https://drs.is)
 
 Hey, this is my Blog's repository.
@@ -33,6 +35,7 @@ $ hugo serve -D --config minimo.config.toml
 
 ## TODO: ##
 
+* (post-zola): Use Zola Table-of-Contents support
 * I copied-over fluid-img{s} but they use pure-css stuff. Maybe port to vanilla CSS somehow?
 * main.f0e8df71.css file currently has max-width at 740px. is there a better way to set this?
 * Make everything Bigger. I have this site at 140% for chrissake!
