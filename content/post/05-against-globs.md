@@ -47,9 +47,9 @@ I know its going to cause an issue for me. What context will I need this import 
 Is it just traits I am importing? Or important structs/enums that I will need?
 
 Many tutorials / example code blocks start this way (hopefully they include the imports at all!
-But thats a whole 'nother rant! Thanks for including them in the first place, Tantivy)
+But that's a whole 'nother rant! Thanks for including them in the first place, Tantivy)
 
-I dont mean to pick on Tantivy, a very large percentage of tutorial code I have seen uses globs.
+I do not mean to pick on Tantivy, a very large percentage of tutorial code I have seen uses globs.
 Tantivy was wonderful to work with, a great piece of software!
 
 I have the same problem in Python code. When I code in Java, I configure my
@@ -61,13 +61,13 @@ has the same issue.
 Preludes should be the only place that globs are used. Preludes are for, in my opinion,
 extension traits, and invisible traits that will not be named in the program otherwise.
 
-Preludes are a very priveledged thing, and you should think twice about adding one to your
+Preludes are a very privileged thing, and you should think twice about adding one to your
 library. It may be easier to simply
 
 # Conclusion #
 
 Code is only written once, and it is read countless times after. Just spend the few minutes
-to write out the imports, make future you, and future readers live's easier.
+to write out the imports, make future you, and future readers' lives easier.
 
 Tutorials should not use globs. Production code should not use globs.
 The only exception I find is for preludes, and preludes should be used _extremely_ sparingly.
