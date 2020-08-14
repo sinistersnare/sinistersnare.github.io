@@ -28,4 +28,25 @@
     <url>
         <loc>https://drs.is/projects/</loc>
     </url>
+    <url>
+        <loc>https://drs.is/tags/</loc>
+    </url>
+    <url>
+        <loc>https://drs.is/tags/algorithms/</loc>
+    </url>
+    <url>
+        <loc>https://drs.is/tags/c/</loc>
+    </url>
+    <url>
+        <loc>https://drs.is/tags/data-structures/</loc>
+    </url>
+    <url>
+        <loc>https://drs.is/tags/meta/</loc>
+    </url>
+    <url>
+        <loc>https://drs.is/tags/rust/</loc>
+    </url>
+    <url>
+        <loc>https://drs.is/tags/trees/</loc>
+    </url>
 </urlset>

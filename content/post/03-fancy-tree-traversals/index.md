@@ -4,8 +4,8 @@ title = "Fancy Tree Traversals"
 description = "Threaded Trees and Link Inversion Traversals"
 date = 2019-01-02T10:10:44-05:00
 draft = false
-tags = ["Data-Structures", "Algorithms", "Trees"]
-categories = ["Software"]
+[taxonomies]
+tags = ["Data-Structures", "Algorithms", "Trees", "C"]
 +++
 
 # Introduction #

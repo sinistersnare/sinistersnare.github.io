@@ -4,8 +4,8 @@ title = "Crates.io Will Not Be 'Fixed'"
 description = "And stop asking to fix it."
 date = 2020-08-13T12:01:00-05:00
 draft = true
+[taxonomies]
 tags = ["Rust", "Engineering", "Pet-Peeves"]
-categories = ["Software"]
 +++
 
 Okay, I know that was a strong title, but this is a personal blog, I can be strong opinioned!

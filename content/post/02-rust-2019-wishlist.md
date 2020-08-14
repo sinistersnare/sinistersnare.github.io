@@ -4,8 +4,8 @@ title = "Sinistersnare's Rust 2019 Wishlist"
 description = "Finding and Strengthening Rust's Weaknesses"
 date = 2018-12-12T08:10:44-05:00
 draft = false
+[taxonomies]
 tags = ["Rust"]
-categories = ["Software"]
 +++
 
 This is my response to the

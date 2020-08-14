@@ -4,8 +4,8 @@ title = "Against Glob Imports"
 description = "Make your code easy to read."
 date = 2020-05-15T12:00:00-05:00
 draft = true
+[taxonomies]
 tags = ["Rust", "Python", "Engineering", "Pet-Peeves"]
-categories = ["Software"]
 +++
 
 Hi, I hate glob imports. When I see them it actively hurts my understanding of code.

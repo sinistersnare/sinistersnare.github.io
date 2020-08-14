@@ -4,8 +4,8 @@ title = "WTF Are Continuations?"
 description = "The control flow operator no one teaches you."
 date = 2020-08-12T12:15:00-05:00
 draft = true
+[taxonomies]
 tags = ["PLT", "Lisp", "Continuations"]
-categories = ["Software"]
 +++
 
 

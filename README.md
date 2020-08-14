@@ -34,7 +34,7 @@ Now write, and changes will be reflected.
 
 ## LICENSE ##
 
-* All source code that generates this site is MIT licensed,
+* All of MY source code (basically, the markdown files) that generates this site is MIT licensed.
 * All source code provided by posts is MIT licensed (unless cribbed from a project,
 in which case it is that license).
 * All non-code content that I own the copyright to is

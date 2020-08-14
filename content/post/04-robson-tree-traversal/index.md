@@ -4,8 +4,8 @@ title = "The Robson Tree Traversal (DRAFT)"
 description = "Traversing Trees, The Hard Way."
 date = 2019-12-05T08:10:44-05:00
 draft = false
-tags = ["Data-Structures", "Algorithms"]
-categories = ["Software"]
+[taxonomies]
+tags = ["Data-Structures", "Algorithms", "Trees", "C"]
 +++
 
 # THIS IS A DRAFT #
