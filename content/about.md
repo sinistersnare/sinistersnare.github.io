@@ -23,15 +23,12 @@ I like to work in Python, Java, Rust, and functional languages.
 
 ## Contact ##
 
-I am 'Sinistersnare' on both
-[Github](https://github.com/sinistersnare)
-and
-[Twitter](https://twitter.com/sinistersnare)
+I am 'Sinistersnare' on both {{ elink(text="Github", to="https://github.com/sinistersnare") }} and {{ elink(text="Twitter", to="https://twitter.com/sinistersnare") }}
 
 My email is my username @ gmail.
 
 ## About This Site ##
 
-This site is powered by [Zola](https://www.getzola.org)
-and the [TODO THEME](http://example.com).
+This site is powered by {{ elink(text="Zola", to="https://www.getzola.org") }} and the {{ elink(text="Sam Theme", to="https://www.getzola.org/themes/sam/") }}.
+
 Zola was easy to set up and use on Windows, which was nice!
