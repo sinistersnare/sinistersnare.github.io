@@ -10,6 +10,10 @@
         <loc>https://drs.is/post/</loc>
     </url>
     <url>
+        <loc>https://drs.is/post/against-globs/</loc>
+        <lastmod>2020-08-14</lastmod>
+    </url>
+    <url>
         <loc>https://drs.is/post/fancy-tree-traversals/</loc>
         <lastmod>2019-01-02T10:10:44-05:00</lastmod>
     </url>
@@ -41,7 +45,19 @@
         <loc>https://drs.is/tags/data-structures/</loc>
     </url>
     <url>
+        <loc>https://drs.is/tags/engineering/</loc>
+    </url>
+    <url>
+        <loc>https://drs.is/tags/java/</loc>
+    </url>
+    <url>
         <loc>https://drs.is/tags/meta/</loc>
+    </url>
+    <url>
+        <loc>https://drs.is/tags/pet-peeves/</loc>
+    </url>
+    <url>
+        <loc>https://drs.is/tags/python/</loc>
     </url>
     <url>
         <loc>https://drs.is/tags/rust/</loc>

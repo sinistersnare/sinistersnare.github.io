@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="chrome=1">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="referrer" content="no-referrer">
+
+        <link rel="stylesheet" href="https:&#x2F;&#x2F;drs.is&#x2F;fonts.css">
+        <link rel="stylesheet" href="https:&#x2F;&#x2F;drs.is&#x2F;style.css">
+
+        <title>
+    Against Glob Imports  · Sin&#x27;s Blog
+</title>
+
+        
+    </head>
+    <body>
+        
+    <div class="wrap">
+        <div class="section" id="top-link-home">
+            <a href="/">Home</a>
+        </div>
+        <div class="section" id="title">
+            
+    Against Glob Imports
+
+        </div>
+        <div class="section" id="content">
+            
+    
+        
+            
+    
+    Aug 14, 2020
+
+        
+        
+        
+            
+            
+                &#183; 3 min
+            
+        
+        
+            <div class="tag-container">
+                
+                    <span class="tag">
+                        <a href="https:&#x2F;&#x2F;drs.is&#x2F;tags&#x2F;rust&#x2F;">
+                            Rust
+                        </a>
+                    </span>
+                
+                    <span class="tag">
+                        <a href="https:&#x2F;&#x2F;drs.is&#x2F;tags&#x2F;python&#x2F;">
+                            Python
+                        </a>
+                    </span>
+                
+                    <span class="tag">
+                        <a href="https:&#x2F;&#x2F;drs.is&#x2F;tags&#x2F;java&#x2F;">
+                            Java
+                        </a>
+                    </span>
+                
+                    <span class="tag">
+                        <a href="https:&#x2F;&#x2F;drs.is&#x2F;tags&#x2F;engineering&#x2F;">
+                            Engineering
+                        </a>
+                    </span>
+                
+                    <span class="tag">
+                        <a href="https:&#x2F;&#x2F;drs.is&#x2F;tags&#x2F;pet-peeves&#x2F;">
+                            Pet-Peeves
+                        </a>
+                    </span>
+                
+            </div>
+        
+        <hr/>
+    
+    <p>Hi, I hate glob imports. When I see them it actively hurts my understanding of code.
+I know they may seem useful, but I think that, overall, they are an anti-pattern.</p>
+<h1 id="reading-code">Reading Code</h1>
+<p>Using globs is a detriment to reading code. If I see some code using a type I have not seen
+before, I go to the imports to find where it is defined, and then look it up in
+<a href="https:&#x2F;&#x2F;docs.rs" target="_blank">docs.rs↪</a>
+or the std-docs.
+If I cant find the item thanks to a glob, then it makes it an annoying game of 'find the type'.</p>
+<h1 id="example">Example</h1>
+<p>Tutorials are supposed to be jumping off points! They should give the user enough information
+to be a little dangerous. They should encourage the user to keep learning after the tutorial
+is finished. When I find myself reading tutorials, many look like this
+(from the wonderful <a href="https:&#x2F;&#x2F;tantivy-search.github.io&#x2F;examples&#x2F;basic_search.html" target="_blank">Tantivy Documentation↪</a>
+):</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#c0c5ce;">#[</span><span style="color:#bf616a;">macro_use</span><span style="color:#c0c5ce;">]</span><span style="color:#c0c5ce;">
+</span><span style="color:#b48ead;">extern crate</span><span style="color:#c0c5ce;"> tantivy;</span><span style="color:#c0c5ce;">
+</span><span style="color:#b48ead;">use </span><span style="color:#c0c5ce;">tantivy::collector::TopDocs;</span><span style="color:#c0c5ce;">
+</span><span style="color:#b48ead;">use </span><span style="color:#c0c5ce;">tantivy::query::QueryParser;</span><span style="color:#c0c5ce;">
+</span><span style="color:#b48ead;">use </span><span style="color:#c0c5ce;">tantivy::schema::*;</span><span style="color:#c0c5ce;">
+</span><span style="color:#b48ead;">use </span><span style="color:#c0c5ce;">tantivy::Index;</span><span style="color:#c0c5ce;">
+</span><span style="color:#b48ead;">use </span><span style="color:#c0c5ce;">tantivy::ReloadPolicy;</span><span style="color:#c0c5ce;">
+</span><span style="color:#b48ead;">use </span><span style="color:#c0c5ce;">tempdir::TempDir;</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">main</span><span style="color:#c0c5ce;">() -&gt; tantivy::Result&lt;()&gt; {</span><span style="color:#c0c5ce;">
+    ... </span><span style="color:#65737e;">// rest of tutorial</span><span style="color:#c0c5ce;">
+}</span><span style="color:#c0c5ce;">
+</span></code></pre>
+<p>This is not a more egregious example, simply the one I most recently faced.</p>
+<p>The first thing I do when reading a tutorial is scan the imports. When I see the glob here,
+I know its going to cause an issue for me. What context will I need this import in my own code?
+Is it just traits I am importing? Or important structs/enums that I will need?</p>
+<p>Many tutorials / example code blocks start this way (hopefully they include the imports at all!
+But thats a whole 'nother rant! Thanks for including them in the first place, Tantivy)</p>
+<p>I dont mean to pick on Tantivy, a very large percentage of tutorial code I have seen uses globs.
+Tantivy was wonderful to work with, a great piece of software!</p>
+<p>I have the same problem in Python code. When I code in Java, I configure my
+import-formatter to expand all glob-imports. But reading tutorial Java code
+has the same issue.</p>
+<h1 id="globs-in-preludes">Globs in preludes</h1>
+<p>Preludes should be the only place that globs are used. Preludes are for, in my opinion,
+extension traits, and invisible traits that will not be named in the program otherwise.</p>
+<p>Preludes are a very priveledged thing, and you should think twice about adding one to your
+library. It may be easier to simply</p>
+<h1 id="conclusion">Conclusion</h1>
+<p>Code is only written once, and it is read countless times after. Just spend the few minutes
+to write out the imports, make future you, and future readers live's easier.</p>
+<p>Tutorials should not use globs. Production code should not use globs.
+The only exception I find is for preludes, and preludes should be used <em>extremely</em> sparingly.</p>
+
+
+        </div>
+        
+    
+    <div class="section bottom-menu">
+        <hr />
+        <nav class="bottom-menu-nav">
+            <ul class="bottom-nav-list">
+                <li class="bottom-nav-item">
+                    <a class="bottom-nav-link" href="https:&#x2F;&#x2F;drs.is">
+                        Home
+                    </a>
+                </li>
+                
+                    
+                    <li class="bottom-nav-item">
+                        <a class="bottom-nav-link" href="&#x2F;post" >Posts</a>
+                    </li>
+                    
+                    <li class="bottom-nav-item">
+                        <a class="bottom-nav-link" href="&#x2F;about" >About</a>
+                    </li>
+                    
+                    <li class="bottom-nav-item">
+                        <a class="bottom-nav-link" href="&#x2F;projects" >Projects</a>
+                    </li>
+                    
+                    <li class="bottom-nav-item">
+                        <a class="bottom-nav-link" href="https:&#x2F;&#x2F;github.com&#x2F;sinistersnare" target="_blank" >Github↪</a>
+                    </li>
+                    
+                
+            </ul>
+        </nav>
+    </div>
+
+        
+    
+        <div class="section footer">
+            ©2017-2020 Davis Silverman
+            <div class="copyright">
+                <a rel="license" target="_blank" href="http://creativecommons.org/licenses/by/4.0/">
+                    <img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/80x15.png" />
+                </a>
+            </div>
+        </div>
+    
+
+    </div>
+
+    </body>
+</html>

@@ -3,19 +3,26 @@ slug = "against-globs"
 title = "Against Glob Imports"
 description = "Make your code easy to read."
 date = 2020-08-14
-draft = true
+draft = false
 [taxonomies]
-tags = ["Rust", "Python", "Engineering", "Pet-Peeves"]
+tags = ["Rust", "Python", "Java", "Engineering", "Pet-Peeves"]
 +++
 
 Hi, I hate glob imports. When I see them it actively hurts my understanding of code.
 I know they may seem useful, but I think that, overall, they are an anti-pattern.
 
-## Globs in tutorials ##
+# Reading Code #
+
+Using globs is a detriment to reading code. If I see some code using a type I have not seen
+before, I go to the imports to find where it is defined, and then look it up in
+{{ elink(text="docs.rs", to="https://docs.rs") }} or the std-docs.
+If I cant find the item thanks to a glob, then it makes it an annoying game of 'find the type'.
+
+# Example #
 
 Tutorials are supposed to be jumping off points! They should give the user enough information
 to be a little dangerous. They should encourage the user to keep learning after the tutorial
-is finised. When I find myself reading tutorials, many look like this
+is finished. When I find myself reading tutorials, many look like this
 (from the wonderful {{ elink(to="https://tantivy-search.github.io/examples/basic_search.html", text="Tantivy Documentation") }}):
 
 ```rust
@@ -35,13 +42,9 @@ fn main() -> tantivy::Result<()> {
 
 This is not a more egregious example, simply the one I most recently faced.
 
-### How I read tutorial code ###
-
-As I read tutorials, I keep a tab on {{ elink(text="docs.rs", to="https://docs.rs") }} open.
-As I see new structs or functions used, I check up on it, to see its
-signature, constraints, etc.
-
-The imports are a _huge_ help for me in understanding what to look for.
+The first thing I do when reading a tutorial is scan the imports. When I see the glob here,
+I know its going to cause an issue for me. What context will I need this import in my own code?
+Is it just traits I am importing? Or important structs/enums that I will need?
 
 Many tutorials / example code blocks start this way (hopefully they include the imports at all!
 But thats a whole 'nother rant! Thanks for including them in the first place, Tantivy)
@@ -49,28 +52,22 @@ But thats a whole 'nother rant! Thanks for including them in the first place, Ta
 I dont mean to pick on Tantivy, a very large percentage of tutorial code I have seen uses globs.
 Tantivy was wonderful to work with, a great piece of software!
 
-What I mean to say is, tutorials should not use glob imports.
-They should explicitly import all their items.
+I have the same problem in Python code. When I code in Java, I configure my
+import-formatter to expand all glob-imports. But reading tutorial Java code
+has the same issue.
 
-`This section isnt good! Make it better!`
+# Globs in preludes #
 
-## Globs in preludes ##
+Preludes should be the only place that globs are used. Preludes are for, in my opinion,
+extension traits, and invisible traits that will not be named in the program otherwise.
 
-Preludes in Rust are a bit overused in my opinion.
+Preludes are a very priveledged thing, and you should think twice about adding one to your
+library. It may be easier to simply
 
-Preludes are supposed to only have 'invisible imports' IMO, not real structs. Those should always
-be explicitly imported.
+# Conclusion #
 
-### Invisible Imports ###
+Code is only written once, and it is read countless times after. Just spend the few minutes
+to write out the imports, make future you, and future readers live's easier.
 
-i.e. Extension ("`FooExt`") traits, does this need a whole section? YES. WRITE MOAR
-
-## Globs in 'real code' ##
-
-Rustdoc is a great tool, and I love using it. Glob imports make it harder to use it. Should this be
-in the overall appeal? Its not directly related to 'real code'.
-
-## Conclusion ##
-
-Globs should only be used in preludes. BUT preludes should only contain extension traits.
-But again, that topic is a whole 'nother post about Rust anti-patterns.
+Tutorials should not use globs. Production code should not use globs.
+The only exception I find is for preludes, and preludes should be used _extremely_ sparingly.

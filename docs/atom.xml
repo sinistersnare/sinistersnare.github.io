@@ -4,8 +4,65 @@
 	<link href="https://drs.is/atom.xml" rel="self" type="application/atom+xml"/>
 	<link href="https://drs.is"/>
 	<generator uri="https://www.getzola.org/">Zola</generator>
-	<updated>2019-12-05T08:10:44-05:00</updated>
+	<updated>2020-08-14T00:00:00+00:00</updated>
 	<id>https://drs.is/atom.xml</id>
+	<entry xml:lang="en">
+		<title>Against Glob Imports</title>
+		<published>2020-08-14T00:00:00+00:00</published>
+		<updated>2020-08-14T00:00:00+00:00</updated>
+		<link href="https://drs.is/post/against-globs/" type="text/html"/>
+		<id>https://drs.is/post/against-globs/</id>
+		<content type="html">&lt;p&gt;Hi, I hate glob imports. When I see them it actively hurts my understanding of code.
+I know they may seem useful, but I think that, overall, they are an anti-pattern.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;reading-code&quot;&gt;Reading Code&lt;&#x2F;h1&gt;
+&lt;p&gt;Using globs is a detriment to reading code. If I see some code using a type I have not seen
+before, I go to the imports to find where it is defined, and then look it up in
+&lt;a href=&quot;https:&amp;#x2F;&amp;#x2F;docs.rs&quot; target=&quot;_blank&quot;&gt;docs.rs↪&lt;&#x2F;a&gt;
+or the std-docs.
+If I cant find the item thanks to a glob, then it makes it an annoying game of &#x27;find the type&#x27;.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;example&quot;&gt;Example&lt;&#x2F;h1&gt;
+&lt;p&gt;Tutorials are supposed to be jumping off points! They should give the user enough information
+to be a little dangerous. They should encourage the user to keep learning after the tutorial
+is finished. When I find myself reading tutorials, many look like this
+(from the wonderful &lt;a href=&quot;https:&amp;#x2F;&amp;#x2F;tantivy-search.github.io&amp;#x2F;examples&amp;#x2F;basic_search.html&quot; target=&quot;_blank&quot;&gt;Tantivy Documentation↪&lt;&#x2F;a&gt;
+):&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;#[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;macro_use&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;]&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;extern crate&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; tantivy;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;tantivy::collector::TopDocs;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;tantivy::query::QueryParser;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;tantivy::schema::*;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;tantivy::Index;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;tantivy::ReloadPolicy;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;tempdir::TempDir;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;() -&amp;gt; tantivy::Result&amp;lt;()&amp;gt; {&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    ... &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; rest of tutorial&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This is not a more egregious example, simply the one I most recently faced.&lt;&#x2F;p&gt;
+&lt;p&gt;The first thing I do when reading a tutorial is scan the imports. When I see the glob here,
+I know its going to cause an issue for me. What context will I need this import in my own code?
+Is it just traits I am importing? Or important structs&#x2F;enums that I will need?&lt;&#x2F;p&gt;
+&lt;p&gt;Many tutorials &#x2F; example code blocks start this way (hopefully they include the imports at all!
+But thats a whole &#x27;nother rant! Thanks for including them in the first place, Tantivy)&lt;&#x2F;p&gt;
+&lt;p&gt;I dont mean to pick on Tantivy, a very large percentage of tutorial code I have seen uses globs.
+Tantivy was wonderful to work with, a great piece of software!&lt;&#x2F;p&gt;
+&lt;p&gt;I have the same problem in Python code. When I code in Java, I configure my
+import-formatter to expand all glob-imports. But reading tutorial Java code
+has the same issue.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;globs-in-preludes&quot;&gt;Globs in preludes&lt;&#x2F;h1&gt;
+&lt;p&gt;Preludes should be the only place that globs are used. Preludes are for, in my opinion,
+extension traits, and invisible traits that will not be named in the program otherwise.&lt;&#x2F;p&gt;
+&lt;p&gt;Preludes are a very priveledged thing, and you should think twice about adding one to your
+library. It may be easier to simply&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h1&gt;
+&lt;p&gt;Code is only written once, and it is read countless times after. Just spend the few minutes
+to write out the imports, make future you, and future readers live&#x27;s easier.&lt;&#x2F;p&gt;
+&lt;p&gt;Tutorials should not use globs. Production code should not use globs.
+The only exception I find is for preludes, and preludes should be used &lt;em&gt;extremely&lt;&#x2F;em&gt; sparingly.&lt;&#x2F;p&gt;
+</content>
+	</entry>
 	<entry xml:lang="en">
 		<title>The Robson Tree Traversal (DRAFT)</title>
 		<published>2019-12-05T08:10:44-05:00</published>
