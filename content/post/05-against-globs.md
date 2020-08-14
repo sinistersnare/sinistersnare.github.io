@@ -47,8 +47,7 @@ I know its going to cause an issue for me. What context will I need this import 
 Is it just traits I am importing? Or important structs/enums that I will need?
 
 Many tutorials / example code blocks start this way (hopefully they include the imports at all!
-But that's a whole 'nother rant! Thanks for including them in the first place, Tantivy)
-
+But that's a whole 'nother rant! Thanks for including them in the first place, Tantivy).
 I do not mean to pick on Tantivy, a very large percentage of tutorial code I have seen uses globs.
 Tantivy was wonderful to work with, a great piece of software!
 
