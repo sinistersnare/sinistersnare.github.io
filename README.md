@@ -1,7 +1,5 @@
 # Blog of the Sinistersnare #
 
-TODO: THIS SHIT IS OUT OF DATE SINCE ZOLA MIGRATION!
-
 Find the real site [HERE!](https://drs.is)
 
 Hey, this is my Blog's repository.
@@ -15,14 +13,18 @@ Enjoy!
 Run the command:
 
 ```bash
-$ hugo serve -D --config minimo.config.toml
+$ zola serve
 ```
+
+This will create a test-server to write new posts and content in. --drafts will show drafts.
+
+Now write, and changes will be reflected.
 
 ## Releasing The Site ##
 
-1. Make sure Hugo is installed. https://gohugo.io/getting-started/installing/
-1. From the source directory, make sure all changes are committed.
-1. `$ hugo --config minimo.config.toml`
+1. Make sure Zola is installed. https://www.getzola.org/documentation/getting-started/installation/
+1. From the `source` branch, make sure all changes are committed.
+1. `$ zola build`
 1. `$ git checkout master` This will bring the `public/` directory to `master`
 1. `$ shopt -s extglob` or `$ setopt extended_glob` for zsh. This allows the next command
 1. `$ rm -rf !(public)` or `$ rm -rf ^public` for zsh.
@@ -36,42 +38,12 @@ $ hugo serve -D --config minimo.config.toml
 ## TODO: ##
 
 * (post-zola): Use Zola Table-of-Contents support
-* I copied-over fluid-img{s} but they use pure-css stuff. Maybe port to vanilla CSS somehow?
-* main.f0e8df71.css file currently has max-width at 740px. is there a better way to set this?
-* Make everything Bigger. I have this site at 140% for chrissake!
-* Fix bug where RSS sidebar link goes missing on about and contact pages. Currently it is disabled.
-* IDK how to get other styles. pygmentsStyle=STYLE not working.
-* Mobile looks like shit. Make new theme time?
+* RSS + Atom.xml
 * Give this blog the Attribution 4.0 Internation Creative Commons License
     * https://creativecommons.org/choose/
-
-This will create a test-server to write new posts and content in. -D will publish drafts.
-
-* The below thing is outdated (from blackburn theme times)
-* When writing code blocks:
-    * Use simple three-backticks for simple linenumbered code. Use the following for no line numbers.
-    * use {{< highlight LANGNAME >}} to start a code-block, and {{< /highlight >}} to end the codeblock.
-    * "linenos=table" adds line numbers in such a way they wont be highlighted. Remove if line numbers are unneeded.
-
-## Adding New Fonts ##
-
-1. Import config on static/icons/fontello-config.json onto http://fontello.com
-2. Use https://icomoon.io to all files including `.eot` `.svg` `.ttf` `.woff` and `.woff2`
-3. Download into static/icons (Keep the new config.json from Fontello)
-
 
 ## LICENSE ##
 
 All stuff here is MIT licensed,
 as is all my code used within unless otherwise noted by its source.
 Enjoy <3
-
-
-### TODO: ###
-
-* Option to dynamically set current year in copyright notice.
-* Copy Minima ideals, maybe dark theme though.
-* Time to read marker.
-* Make sure good font used...? Keep minima one?
-* Look at [Sam](https://www.getzola.org/themes/sam/) for guidance.
-    * Maybe a fork? Only thing Id keep is the reading time and the dark theme. Just inspiration too.
