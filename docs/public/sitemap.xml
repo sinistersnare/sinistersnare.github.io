@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+        <loc>https://drs.is/</loc>
+    </url>
+    <url>
+        <loc>https://drs.is/about/</loc>
+    </url>
+    <url>
+        <loc>https://drs.is/post/</loc>
+    </url>
+    <url>
+        <loc>https://drs.is/post/fancy-tree-traversals/</loc>
+        <lastmod>2019-01-02T10:10:44-05:00</lastmod>
+    </url>
+    <url>
+        <loc>https://drs.is/post/hello-world/</loc>
+        <lastmod>2017-12-24T05:50:44-05:00</lastmod>
+    </url>
+    <url>
+        <loc>https://drs.is/post/robson-traversal/</loc>
+        <lastmod>2019-12-05T08:10:44-05:00</lastmod>
+    </url>
+    <url>
+        <loc>https://drs.is/post/rust-wishlist-2019/</loc>
+        <lastmod>2018-12-12T08:10:44-05:00</lastmod>
+    </url>
+    <url>
+        <loc>https://drs.is/projects/</loc>
+    </url>
+</urlset>

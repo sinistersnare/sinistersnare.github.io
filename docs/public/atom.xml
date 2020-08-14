@@ -1,0 +1,829 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+	<title>Sin&#x27;s Blog</title>
+	<link href="https://drs.is/atom.xml" rel="self" type="application/atom+xml"/>
+	<link href="https://drs.is"/>
+	<generator uri="https://www.getzola.org/">Zola</generator>
+	<updated>2019-12-05T08:10:44-05:00</updated>
+	<id>https://drs.is/atom.xml</id>
+	<entry xml:lang="en">
+		<title>The Robson Tree Traversal (DRAFT)</title>
+		<published>2019-12-05T08:10:44-05:00</published>
+		<updated>2019-12-05T08:10:44-05:00</updated>
+		<link href="https://drs.is/post/robson-traversal/" type="text/html"/>
+		<id>https://drs.is/post/robson-traversal/</id>
+		<content type="html">&lt;h1 id=&quot;this-is-a-draft&quot;&gt;THIS IS A DRAFT&lt;&#x2F;h1&gt;
+&lt;p&gt;Hiya, this is a draft! Please read and give me feedback! Thanks!&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;todo&quot;&gt;TODO&lt;&#x2F;h2&gt;
+&lt;ul&gt;
+&lt;li&gt;prune images that aren&#x27;t needed.&lt;&#x2F;li&gt;
+&lt;li&gt;make outbound links open in new tab.&lt;&#x2F;li&gt;
+&lt;li&gt;Make sure Table of Contents is correct when post is over&lt;&#x2F;li&gt;
+&lt;li&gt;Add pictures of tree&#x27;s being traversed!!!
+&lt;ul&gt;
+&lt;li&gt;Create shitty pictures and ask Audrey to make pretty ones later.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;StackOverflow posts:
+&lt;ul&gt;
+&lt;li&gt;https:&#x2F;&#x2F;stackoverflow.com&#x2F;questions&#x2F;31323283&#x2F;incomplete-traversal-using-link-inversion-of-binary-tree&lt;&#x2F;li&gt;
+&lt;li&gt;https:&#x2F;&#x2F;stackoverflow.com&#x2F;questions&#x2F;22288074&#x2F;robson-tree-traversal-algorithm&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h1 id=&quot;introduction&quot;&gt;Introduction&lt;&#x2F;h1&gt;
+&lt;p&gt;In this post, we will discuss a novel tree traversal algorithm.
+The standard traversal method operates with a &lt;em&gt;linear&lt;&#x2F;em&gt; spatial cost.
+The Robson traversal counters with a cool &lt;em&gt;&lt;strong&gt;constant&lt;&#x2F;strong&gt;&lt;&#x2F;em&gt; space!&lt;&#x2F;p&gt;
+&lt;p&gt;The final code is on &lt;a href=&quot;https:&amp;#x2F;&amp;#x2F;github.com&amp;#x2F;sinistersnare&amp;#x2F;robson&quot; target=&quot;_blank&quot;&gt;github↪&lt;&#x2F;a&gt;
+,
+but I encourage you to read this post!
+The table of contents may help for people that may want to skip a bit :)&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;table-of-contents&quot;&gt;Table of Contents&lt;&#x2F;h1&gt;
+&lt;p&gt;TODO&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;the-famous-tree&quot;&gt;The Famous Tree&lt;&#x2F;h1&gt;
+&lt;p&gt;The tree is an incredibly important data structure.
+A great learning tool for beginning computer scientists, starting to understand the science.
+Trees are also used throughout the real-world.
+File systems use &lt;a href=&quot;https:&amp;#x2F;&amp;#x2F;en.wikipedia.org&amp;#x2F;wiki&amp;#x2F;B-tree&quot; target=&quot;_blank&quot;&gt;B-trees↪&lt;&#x2F;a&gt;
+to
+&lt;a href=&quot;https:&amp;#x2F;&amp;#x2F;github.com&amp;#x2F;postgres&amp;#x2F;postgres&amp;#x2F;tree&amp;#x2F;master&amp;#x2F;src&amp;#x2F;backend&amp;#x2F;access&amp;#x2F;nbtree&quot; target=&quot;_blank&quot;&gt;store their data↪&lt;&#x2F;a&gt;
+. Text editors use
+&lt;a href=&quot;https:&amp;#x2F;&amp;#x2F;en.wikipedia.org&amp;#x2F;wiki&amp;#x2F;Rope_(data_structure)&quot; target=&quot;_blank&quot;&gt;ropes↪&lt;&#x2F;a&gt;
+to
+&lt;a href=&quot;https:&amp;#x2F;&amp;#x2F;github.com&amp;#x2F;google&amp;#x2F;xi-editor&amp;#x2F;tree&amp;#x2F;master&amp;#x2F;rust&amp;#x2F;rope&quot; target=&quot;_blank&quot;&gt;organize their text↪&lt;&#x2F;a&gt;
+.
+Trees power the world, inside and outside of computers.
+We will be using a simple binary tree for this post.&lt;&#x2F;p&gt;
+&lt;p&gt;Here is a common binary tree definition. We will be using C for the whole of this post:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* We will use this type definition later. *&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+typedef &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;void &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(*VisitFunc)(Tree*);&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+typedef &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; Tree {&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;int&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; data;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; Tree* left;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; Tree* right;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+} Tree;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;We can use the tree like so:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;int &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;void&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;) {&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    Tree root, root_left;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    root_left.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;data &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    root_left.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;left &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    root_left.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;right &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    root.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;data &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    root.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;left &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;= &amp;amp;root_left;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    root.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;right &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;We will  specifically be using
+&lt;a href=&quot;https:&amp;#x2F;&amp;#x2F;en.wikipedia.org&amp;#x2F;wiki&amp;#x2F;Binary_search_tree&quot; target=&quot;_blank&quot;&gt;Binary Search Trees↪&lt;&#x2F;a&gt;
+,
+so that way in-order traversal works.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;how-do-we-traverse-a-tree&quot;&gt;How Do We Traverse a tree?&lt;&#x2F;h2&gt;
+&lt;p&gt;Traversing a tree means accessing each node&#x27;s data in the whole tree.
+This is obviously a critically important function of a tree,
+we should be able to access all elements if we need to.&lt;&#x2F;p&gt;
+&lt;p&gt;Luckily, traversing a tree is super easy!&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;void &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;traverse&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(Tree* &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;cur&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;) {&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur == &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;pre_visit&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur); &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* pre-order traversal *&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;traverse&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur-&amp;gt;left);&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;in_visit&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur); &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* in-order traversal *&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;traverse&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur-&amp;gt;right);&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;post_visit&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur); &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* post-order traversal *&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This algorithm is universally taught in beginning CS courses at universities.
+It gets the job done, but I think we can do better.&lt;&#x2F;p&gt;
+&lt;p&gt;Tree traversals can be adapted for use in memory management.
+Many garbage collectors represent their memory pool using tree-like structures,
+and when they are marking live memory, they traverse that tree.&lt;&#x2F;p&gt;
+&lt;p&gt;Pre-order traversal always visits a parent before its child. This is very useful
+when you want to copy a tree, maintaining its order. In-order is mostly used for
+sorted trees, as it will visit nodes in order! A node will be visited in post-order
+only after its children have been visited. This means that post-order is best used
+for tasks such as deleting the tree, freeing its memory without dangling pointers left over.
+If we made &lt;code&gt;free&lt;&#x2F;code&gt; our pre-visit function, then we would never be able to traverse right children!&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;why-is-the-standard-method-bad&quot;&gt;Why is the &#x27;standard&#x27; method bad?&lt;&#x2F;h1&gt;
+&lt;p&gt;To get into how algorithms are rated against eachother, we need to talk about &amp;quot;Big-O notation&amp;quot;,
+and that is a little bit out of scope for this already long blog-post, so...
+Take an algorithms course I guess? I&#x27;ll give a quick paragraph.&lt;&#x2F;p&gt;
+&lt;p&gt;Big-O uses a polynomial to describe how the function performs with relation to input size.
+If we are talking about speed, an &lt;code&gt;O(n)&lt;&#x2F;code&gt; function will perform linearly with regards to input.
+An &lt;code&gt;O(1)&lt;&#x2F;code&gt; function will always perform the same no matter how big the input gets. You should try
+to avoid &lt;code&gt;O(n!)&lt;&#x2F;code&gt; functions, too... These functions are used for &#x27;time&#x27; and &#x27;space&#x27;. If you
+are interested in this stuff, please check out
+&lt;a href=&quot;https:&amp;#x2F;&amp;#x2F;en.wikipedia.org&amp;#x2F;wiki&amp;#x2F;Introduction_to_Algorithms&quot; target=&quot;_blank&quot;&gt;CLRS↪&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;chapter 3 for more information, or ask me to write a post on it!&lt;&#x2F;p&gt;
+&lt;p&gt;The &#x27;standard&#x27; traversal method is as efficient as possible, time-wise.
+We need to traverse all &lt;code&gt;n&lt;&#x2F;code&gt;-nodes of a tree, and the algorithm has &lt;code&gt;O(n)&lt;&#x2F;code&gt;
+run-time complexity. You cant get any better than that!&lt;&#x2F;p&gt;
+&lt;p&gt;A reader may think that you also cant get better space-wise.
+The algorithm is like 4 lines long, how can we get better than that!?
+Well, if you paid attention in (or had taken an) algorithms class,
+you would know that stack space counts! Even though this algorithm
+looks small and perfect, it uses up a whole stack-frame each time the algorithm recurses!
+If you turn this recursive code into an iterative, explicit-stack based, solution,
+you would see that you need some memory for each level, and in the worst-case,
+we need &lt;code&gt;O(n)&lt;&#x2F;code&gt; memory!&lt;&#x2F;p&gt;
+&lt;p&gt;You may be saying now, &amp;quot;O(n) is not that bad! It seems as good as it can get!&amp;quot;
+Well I say no! We can do better! I say we can do it in &lt;em&gt;&lt;strong&gt;constant O(1) time&lt;&#x2F;strong&gt;&lt;&#x2F;em&gt;!&lt;&#x2F;p&gt;
+&lt;p&gt;That means we can do it using the same amount of memory, no matter how big the tree gets!&lt;&#x2F;p&gt;
+&lt;p&gt;Let&#x27;s do it!&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;how-can-we-do-better-than-that&quot;&gt;How can we do better than that!?!?!&lt;&#x2F;h2&gt;
+&lt;p&gt;Here is the thing about trees: they can be quite wasteful!&lt;&#x2F;p&gt;
+&lt;p&gt;Let&#x27;s look at a tree-structure:&lt;&#x2F;p&gt;
+&lt;div class=&quot;img-tpl&quot;&gt;
+    &lt;img src=&quot;wasteful.png&quot; alt=&quot;TODO-SORRY!&quot;&gt;
+&lt;&#x2F;div&gt;
+&lt;p&gt;You see, the leaf-nodes have 2 pointers that are just &lt;em&gt;&lt;strong&gt;null&lt;&#x2F;strong&gt;&lt;&#x2F;em&gt;!
+What a waste! Thats so much space we are wasting! For any given tree of &lt;code&gt;n&lt;&#x2F;code&gt; nodes,
+there will be &lt;code&gt;n + 1&lt;&#x2F;code&gt; null pointers.&lt;&#x2F;p&gt;
+&lt;p&gt;Here is the theory. We use that freely-available space for our traversal.
+That way, we use as little extra memory as possible!&lt;&#x2F;p&gt;
+&lt;p&gt;That is how we are going to get to our solution, but first we need to understand some preliminary concepts.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;stackless-traversals&quot;&gt;Stackless Traversals&lt;&#x2F;h1&gt;
+&lt;p&gt;As mentioned in the introductory sections, the standard tree traversal requries a stack to traverse the tree.
+This is becuase we need to &#x27;pop&#x27; back up the tree once we reach a leaf. Using a stack is super easy to understand,
+and it makes for a clean algorithm.&lt;&#x2F;p&gt;
+&lt;p&gt;explain stack for a minute here or in the big-O section. Chef says, at least explain a &#x27;pop&#x27;.&lt;&#x2F;p&gt;
+&lt;p&gt;In 1968, Donald Knuth asked the computer science community if there existed a method for computing
+tree traversals without a stack, while also leaving the tree unmodified. Lets discuss some methods for
+doing just that, ending in the Robson traversal.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;the-link-inversion-model&quot;&gt;The Link-Inversion Model&lt;&#x2F;h2&gt;
+&lt;p&gt;Link Inversion is a key ingredient to our final algorithm. Link-Inversion is a process where we
+use a marker-bit on each node to tell if we should continue to traverse up, or traverse rightward
+when going up a tree.&lt;&#x2F;p&gt;
+&lt;p&gt;This method is stackless, like in the threaded tree, and solves Knuth&#x27;s question.
+It does not solve our dilemma though, we need O(1) worst-case space complexity!
+Lets talk about how and why it works, which will lead us to Robson.&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;typedef struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; Tree {&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;int&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; data;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    Tree* left;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    Tree* right;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;bool&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; went_right;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+} Tree;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;void &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;link_inversion&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(Tree* &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;cur&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;, VisitFunc &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;pre_order&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;,&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+                               VisitFunc &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;in_order&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;,&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+                               VisitFunc &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;post_order&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;) {&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    Tree* prev = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    Tree* old_prev;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    Tree* old_prev_left;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    Tree* old_cur;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur == &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;do &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;{&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* 1) Descend leftward as much as possible. *&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;while &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur != &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;) {&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;pre_order&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur);&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+            cur-&amp;gt;went_right = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;false&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+            old_cur = cur;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+            cur = old_cur-&amp;gt;left;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+            old_cur-&amp;gt;left = prev;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+            prev = old_cur;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+        }&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* 2) ascend from right as much as we can. *&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;while &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(prev != &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;NULL &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;amp;&amp;amp; prev-&amp;gt;went_right) {&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+            old_prev = prev;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+            prev = prev-&amp;gt;right;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+            old_prev-&amp;gt;right = cur;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+            cur = old_prev;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;post_order&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur);&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+        }&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* 3)&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;
+            If prev is null after coming back up from the right,&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;
+                it means that we have finished traversal,&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;
+                so head back to the while-condition and get outta here!&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;
+            Else, we will do an exchange here,&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;
+                swap to right child of parent. *&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(prev != &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;) {&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* Switch from the left side of prev to the right&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;
+               Also, mark prev as went_right so we know to traverse&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;
+               upwards using right pointer. *&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;in_order&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(prev);&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+            old_prev_left = prev-&amp;gt;left;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+            prev-&amp;gt;went_right = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;true&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+            prev-&amp;gt;left = cur;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+            cur = prev-&amp;gt;right;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+            prev-&amp;gt;right = old_prev_left;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+        }&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    } &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;while &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(prev != &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;);&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The core algorithm is in the name, we must invert the links. As we push down the tree,
+we invert the links so that way the child points to the parent, and we can walk up the tree
+the same way we walked down. As we go up, we need to un-invert the links so that way the tree
+is back as it started. The marker bit is used so that when we go back up, we know if we are
+ascending from the left or from the right.&lt;&#x2F;p&gt;
+&lt;p&gt;Lets talk about each of these steps.&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;We must start by traversing leftwards as much as possible.
+Keeping pointers to the current and previously visited nodes.
+As we traverse, we invert the links. That means that cur-&amp;gt;left will be changed to point to the parent.&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;Next may not make sense, so if it doesnt make perfect sense, come to it after step 3.
+Here, we are done with this subtree, so we want to get to the subtree&#x27;s root.
+We do this by ascending from the right until we get to the root of the traversed part of the tree.
+This ensures the tree is in a state that step 3 can deal with.&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;Thirdly, we do an exchange. Here, we are assuredly in a left child, thanks to step 2.
+We can safely traverse to the parents right child and
+forget completely about the previous subtree forever!
+This exchange marks a completion of the left subtree of the new root,
+now we must traverse the right subtree of the new root. Back to step 1!&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;p&gt;Here, we are skipping some of the technicalities, like what is &lt;code&gt;went_right&lt;&#x2F;code&gt; for?
+It is so that we know when we get to the end of the subtree in step 2.
+Hopefully, I will elucidate why its necessary with pictures very soon.
+After I elucidate that, I will later explain why it&#x27;s not necessary (hint: Robson!).&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;walk-through&quot;&gt;Walk-through&lt;&#x2F;h3&gt;
+&lt;p&gt;The algorithm is weird, but I think it&#x27;ll help by showing it!&lt;&#x2F;p&gt;
+&lt;div class=&quot;img-tpl&quot;&gt;
+    &lt;img src=&quot;inversion01.png&quot; alt=&quot;TODO-SORRY!&quot;&gt;
+&lt;&#x2F;div&gt;
+&lt;p&gt;Here, the tree has been traversed almost completely down the side.
+Each time we step downwards, we invert the links to point to the parent.
+The next step will be to venture into the NULL left-child from the current point.&lt;&#x2F;p&gt;
+&lt;p&gt;This image has not even finished the first run of step 1 from above yet, so lets continue.&lt;&#x2F;p&gt;
+&lt;div class=&quot;img-tpl&quot;&gt;
+    &lt;img src=&quot;inversion02.png&quot; alt=&quot;TODO-SORRY!&quot;&gt;
+&lt;&#x2F;div&gt;
+&lt;p&gt;Okay, we have successfully finished part 1 of the algorithm: &#x27;go leftward a lot&#x27;!
+Now step 2 does not apply, &lt;code&gt;went_right&lt;&#x2F;code&gt; has been set for exactly 0 nodes at this point in execution.
+We swiftly move to step 3! Here, we perform an exchange.
+We have finished traversing the left child of the current subtree (the leaf), and now we must traverse the left.
+We do some swaps and end up here:&lt;&#x2F;p&gt;
+&lt;div class=&quot;img-tpl&quot;&gt;
+    &lt;img src=&quot;inversion03.png&quot; alt=&quot;TODO-SORRY!&quot;&gt;
+&lt;&#x2F;div&gt;
+&lt;p&gt;Okay, the exchange succeeded! We are back at step 1, because &lt;code&gt;prev != NULL&lt;&#x2F;code&gt;.
+Lets ignore the red circle for just a moment and execute step 1.
+Done! Did you see it? Nothing!
+Of course, &lt;code&gt;cur == NULL&lt;&#x2F;code&gt;, so step 1 is not run. Time for step 2! We must go up until we reach the root!
+We run this until &lt;code&gt;prev-&amp;gt;went_right == false&lt;&#x2F;code&gt;, in this case one time.
+Running this step means we are prepared to forget about the current subtree.
+Step 3 will exchange once more, getting us to the parents right child:&lt;&#x2F;p&gt;
+&lt;div class=&quot;img-tpl&quot;&gt;
+    &lt;img src=&quot;inversion04.png&quot; alt=&quot;TODO-SORRY!&quot;&gt;
+&lt;&#x2F;div&gt;
+&lt;p&gt;If you are keen, you may have noticed that this is a strikingly similar image to the first one in the series.
+The only difference is the red marker in the &lt;code&gt;prev&lt;&#x2F;code&gt; node. If you apply the operations I have listed since the
+start of this subsection, you can fully traverse this tree. Making enough images to illustrate all of that
+is an exercise left to the reader.&lt;&#x2F;p&gt;
+&lt;p&gt;Link inversion is relatively complex when compared to the standard method, but definitely more fun!&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;warning&quot;&gt;Warning&lt;&#x2F;h3&gt;
+&lt;p&gt;This algorithm is &lt;em&gt;dangerous&lt;&#x2F;em&gt;! If you attempt to modify the tree while it is being
+traversed, pointers will be a complete mess! Make sure this algorithm completes before altering the
+tree any more!&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;analysis&quot;&gt;Analysis&lt;&#x2F;h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Space-Complexity: &lt;code&gt;O(n)&lt;&#x2F;code&gt;
+&lt;ul&gt;
+&lt;li&gt;This is because each tree node needs a marker, so linear cost.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;Time complexity: &lt;code&gt;O(n)&lt;&#x2F;code&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;We still have not yet improved on the algorithmic cost of the standard depth-first search.
+We have been doing quite well on solving Knuth&#x27;s challenge, but thats only a minor goal!
+Lets get to the real thing now, the Robson traversal.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;the-threaded-tree&quot;&gt;The Threaded Tree&lt;&#x2F;h2&gt;
+&lt;p&gt;J. H. Morris presented the threaded tree in 1979, and it involves using those wasteful null nodes
+at the ends of the tree. However, you will see it does not solve all of our problems.&lt;&#x2F;p&gt;
+&lt;p&gt;Threaded trees have two bits, one for each direction, telling whether the pointer is a thread.
+If the left pointer is a thread (&lt;code&gt;cur-&amp;gt;left_thread&lt;&#x2F;code&gt;), then &lt;code&gt;cur-&amp;gt;left&lt;&#x2F;code&gt; points to the in-order
+predecessor. The same is true for &lt;code&gt;cur-&amp;gt;right_thread&lt;&#x2F;code&gt; pointing to the in-order successor.
+Following threads is a constant operation to the predecessor&#x2F;successor, which speeds up in-order
+traversals.&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;typedef struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; Tree {&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;int&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; data;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; Tree* left;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; Tree* right;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;bool&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; left_thread;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;bool&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; right_thread;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+} Tree;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* Takes the root of the tree (we call it cur for readability in the function itself) *&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;void &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;threaded_traversal&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(Tree* &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;cur&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;) {&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* Go all the way down to the smallest number in the tree. *&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;while &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(!cur-&amp;gt;is_thread) {&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+        cur = cur-&amp;gt;left;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    }&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* Now all we have to do is go rightwards until the end! *&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;while &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur != &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;) {&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;inorder_visit&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur);&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+        cur = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;tree_successor&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur);&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    }&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* Returns a successor to any given node, `node`.*&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+Tree* &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;tree_successor&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(Tree* &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;node&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;) {&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    Tree* cur;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* fast path! *&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(node-&amp;gt;right_thread) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; node-&amp;gt;right;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* else return leftmost child of right subtree! *&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    cur = node-&amp;gt;right;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;while &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(!cur-&amp;gt;left_thread) {&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+        cur = cur-&amp;gt;left;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    }&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; cur;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This &lt;code&gt;Tree&lt;&#x2F;code&gt; struct includes a boolean field to tell whether the current tree node has an in-order thread.
+When we search for the in-order successor to the current node, and find that it is a thread, we take the
+right node to get the immediate successor! This is always a single operation, AKA O(1) time!&lt;&#x2F;p&gt;
+&lt;p&gt;You note, of course, that to support this method, we need to add a boolean field for each and every node in the tree!
+This means we are stuck with a linear space cost for this traversal.&lt;&#x2F;p&gt;
+&lt;p&gt;Threaded trees are super cool, and I would love for people to know them. Luckily, there is a great
+&lt;a href=&quot;https:&amp;#x2F;&amp;#x2F;en.wikipedia.org&amp;#x2F;wiki&amp;#x2F;Threaded_binary_tree&quot; target=&quot;_blank&quot;&gt;Wikipedia page↪&lt;&#x2F;a&gt;
+on the subject. If there was not, I would definitely write more.&lt;&#x2F;p&gt;
+&lt;p&gt;I won&#x27;t do a full walkthrough of the threaded traversal, but here is an image of a threaded tree:&lt;&#x2F;p&gt;
+&lt;div class=&quot;img-tpl&quot;&gt;
+    &lt;img src=&quot;threaded01.png&quot; alt=&quot;TODO-SORRY!&quot;&gt;
+&lt;&#x2F;div&gt;
+&lt;p&gt;To start, go to the leftmost node, which is the minimum of an inorder traversal.
+To find the successor, if the right pointer is a thread, follow it, and that is the successor.
+If it is not, take it, and then go left as much as possible, that is the next node in-order.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;analysis-1&quot;&gt;Analysis&lt;&#x2F;h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Space-Complexity: &lt;code&gt;O(n)&lt;&#x2F;code&gt;
+&lt;ul&gt;
+&lt;li&gt;This is because each tree node needs 2 markers, so linear cost&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;Time complexity: &lt;code&gt;O(n)&lt;&#x2F;code&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;Time complexity for finding a single successor: &lt;em&gt;Amortized&lt;&#x2F;em&gt; &lt;code&gt;O(1)&lt;&#x2F;code&gt;!
+&lt;ul&gt;
+&lt;li&gt;Ask for that algorithmic analysis post if you want me to explain this!&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;So we have found a cool algorithm that makes use of those dumb null pointers at the fringes of
+the tree. It does not seem like we gain much, though, as it still comes at a linear spatial cost.
+If you want amortized constant successor finding, then this is a great algorithm for you!&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;the-robson-tree-traversal&quot;&gt;The Robson Tree Traversal&lt;&#x2F;h2&gt;
+&lt;p&gt;Here we are! The Robson Tree Traversal is a method for traversing trees in linear time, and in &lt;em&gt;&lt;strong&gt;constant space&lt;&#x2F;strong&gt;&lt;&#x2F;em&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;Robson learns from the threaded and link-inversion models. By using the leaf-pointers as pseudo marker-bits,
+we create an awesome tree-traversal.&lt;&#x2F;p&gt;
+&lt;p&gt;The downside of the threaded-tree was that it is linear-space.
+Yet, it successfully used those null pointers that we lamented of their waste.
+The downside of the link-inversion model is that it is worst-case linear-space.
+We had to add an extra bit of memory to each node.
+Robson solves both problems by playing to the strength&#x27;s of both!&lt;&#x2F;p&gt;
+&lt;h5 id=&quot;boom-end-of-blog-post&quot;&gt;&lt;em&gt;&lt;strong&gt;BOOM end of blog post.&lt;&#x2F;strong&gt;&lt;&#x2F;em&gt;&lt;&#x2F;h5&gt;
+&lt;p&gt;Just kidding heres how it works...&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;the-algorithm&quot;&gt;The Algorithm&lt;&#x2F;h3&gt;
+&lt;p&gt;Lets start by talking about the memory usage. We need a few bytes of memory for this to work,
+here is what we will be using those bytes for:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;a &lt;code&gt;cur&lt;&#x2F;code&gt; pointer. This will be the current node that we are algorithmizing.&lt;&#x2F;li&gt;
+&lt;li&gt;a &lt;code&gt;parent&lt;&#x2F;code&gt; pointer. Fairly self explanatory, we need to know the parent of the current node at any given time.
+This does not need to be part of the data structure, we will just update our single pointer as the algorithm runs.&lt;&#x2F;li&gt;
+&lt;li&gt;a pointer we call &lt;code&gt;available&lt;&#x2F;code&gt;. This will be used to point to a node that we can use in our &#x27;leaf-stack&#x27;,
+that I will describe later.&lt;&#x2F;li&gt;
+&lt;li&gt;A pointer called &lt;code&gt;top&lt;&#x2F;code&gt;. This will be the top of the aforementioned and still mysterious leaf-stack.&lt;&#x2F;li&gt;
+&lt;li&gt;a temporary pointer used for exchanging nodes similarly to link-inversion.&lt;&#x2F;li&gt;
+&lt;li&gt;a bool used to keep some state regarding how we have been traversing the tree.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;These variables are kept in the function, and other than them, the only memory needed is the tree itself!
+Unlike the other algorithms mentioned in this post, this tree is completely basic. There are no changes
+to the underlying data structure from what you learn in CS102. Now, lets move to the algorithm itself.
+The core algorithm is split into two parts: pushing down the tree, and finding the next subtree.&lt;&#x2F;p&gt;
+&lt;p&gt;First, we push down the tree while inverting the pointers, a la link-inversion.
+We go down the tree not until we hit the left-most node, like in link-inversion,
+but when we hit a fully fledged leaf. The inversions themselves are a bit different than in link-inversion.
+There are a few couple to consider:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;There is a left child. Here, we follow the the left child.
+The left pointer is set to the parent of the current node, and the right is unaltered.
+This follows link-inversion, nothing to change here.&lt;&#x2F;li&gt;
+&lt;li&gt;There is no left child, but there is a right child. Here we do the same as case 1, but
+we set the current right pointer to the parent. This is very important, we leave the left child&#x27;s
+pointer alone as null. When we go back up the tree, we will see that the parent&#x27;s left is null,
+and know that we are ascending via the right tree. This is important in preserving the tree&#x27;s structure.&lt;&#x2F;li&gt;
+&lt;li&gt;There are no children (as in cur is a leaf). This is the start of the interesting stuff!
+Robson uses the leaf nodes as a sort of pseudo-stack. The leaf-stack tells us where to ascend from when
+we dont know if we are ascending from left or right. Here, we simply will track the leaf as &#x27;available&#x27;.
+Wow! We are at a leaf! That means it&#x27;s time to go up!&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;p&gt;Lets discuss these states with pictures! If someone wants to write an interactive javascript demo of this,
+be my guest!&lt;&#x2F;p&gt;
+&lt;p&gt;Going up the tree, we have 4 cases, some mundane, and some interesting!&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;The parent&#x27;s right pointer is null. Here, we must be ascending from the left. We un-invert the
+pointers, as in link-inversion. No funny business yet!&lt;&#x2F;li&gt;
+&lt;li&gt;The parent&#x27;s left pointer is null. This is a mirror of the previous case, so ascend using
+the right pointers instead of the left.&lt;&#x2F;li&gt;
+&lt;li&gt;Now, the tree has both pointers, how do we know if we are ascending from the left or right?
+Here we are getting a bit interesting! We are at an &#x27;exchange point&#x27;, where we do not know
+if we should ascend from the left or from the right. Lets move out of this list
+and talk about the leaf stack, and its relation to exchange points.&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;h4 id=&quot;the-leaf-stack&quot;&gt;The Leaf Stack&lt;&#x2F;h4&gt;
+&lt;p&gt;TODO: saying the word stack too much?&lt;&#x2F;p&gt;
+&lt;p&gt;The leaf stack is not a real stack, but a linked list, composed of tree leaves.
+The &lt;code&gt;right&lt;&#x2F;code&gt; pointer of each leaf&#x2F;stack-element points to an &#x27;exchange point&#x27;.
+Each left pointer points to the next element of the list&#x2F;stack.
+We call it a stack because we only access the top element, and therefore it is treated as a stack.
+Also, its a cheeky &#x27;im not touching you&#x27; to Knuth&#x27;s challenge. Anyways, these exchange points are used
+to tell if we are ascending from the left or right. Lets get back into the cases!&lt;&#x2F;p&gt;
+&lt;p&gt;The &lt;code&gt;available&lt;&#x2F;code&gt; pointer&#x27;s destiny is to be the new head of the leaf-stack.
+Before we add it to the stack though, we must find an exchange point.
+I&#x27;ll leave the answer for not immediately adding it to the stack as an exercise to the reader.
+Once we find an exchange point we will set &lt;code&gt;available&lt;&#x2F;code&gt; to the head of the leaf-stack.&lt;&#x2F;p&gt;
+&lt;p&gt;Okay! Now lets get back to finding the next subtree to traverse!&lt;&#x2F;p&gt;
+&lt;p&gt;TODO: does this last sentence need more reasons&#x2F;usage?
+I feel like people will get caught up on what an exchange point is,
+and lose grasp of the section.&lt;&#x2F;p&gt;
+&lt;p&gt;TODO: make this &lt;code&gt;ol&lt;&#x2F;code&gt; a shortcode so markdown can render inside of it.&lt;&#x2F;p&gt;
+&lt;!-- Have to re-start the ol from before. --&gt;
+&lt;ol start=&quot;3&quot; class=&quot;numbered&quot;&gt;
+    &lt;li&gt;
+        Back at the old #3, we were discussing what to do when the parent has both children.
+        Let&#x27;s discuss the more difficult and more fun case here. When `top` is null,
+        or when `top-&gt;right` does not point to the parent, we know we are ascending from the left.
+        This is what we refer to as the exchange point, where the leaf stack first comes into play!
+        We will use `available` now and then go down the right subtree. We set `available-&gt;right` to
+        the parent, `available-&gt;left` to `top`, and then `top` to `available`. Woohoo, its a linked list!
+        After these shenanigans, there are more shenanigans! We can not fix the pointers as in
+        link inversion, as `parent-&gt;left` is currently pointing to `parent`&#x27;s parent!
+        What we will do is set `parent-&gt;right` to `cur`, and `cur` to `parent-&gt;right`!
+        It looks funky when you draw it out, but it works! Now we are on an un-traversed
+        section of the tree, so we can resume the go-down part of the algorithm!
+        In the next case, we will make use of the leaf stack!
+    &lt;&#x2F;li&gt;
+    &lt;li&gt;
+        Okay! In this final case, we are pushing up the tree, and find that `parent == top-&gt;right`!
+        This tells us we are on ascending from the right, and have thus completed the left and right side&#x27;s
+        of this subtree! Congratulations! Now, we &#x27;pop&#x27; off of the  leaf-stack, and fix the pointers.
+        Remember how the parents right pointer is pointing to the left child? Yeah, now we re-set that!
+        We set `parent` (the root of the subtree), to `cur` and continue pushing up the stack using the rules
+        I just laid out!
+    &lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;p&gt;The algorithm really isnt that hard, but when you look at the tree mid-algorithm, it can be really funky.
+Pointers just completely out of place, but still kind of beautiful in a way!
+Oh yeah, another reminder to not edit the tree while running this algorithm!
+The tree is &lt;em&gt;&lt;strong&gt;not&lt;&#x2F;strong&gt;&lt;&#x2F;em&gt; in a safe, workable, state during these traversals!&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;analysis-2&quot;&gt;Analysis&lt;&#x2F;h3&gt;
+&lt;p&gt;Amazing.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h2&gt;
+&lt;p&gt;Ending Text!&lt;&#x2F;p&gt;
+&lt;p&gt;If you liked this post, please feel free to connect with me at any of the links on the footer of this site!&lt;&#x2F;p&gt;
+&lt;p&gt;If anyone knows who JM Robson is please tell me, I&#x27;ve tried searching for him, but to no avail. Also,x
+if anyone uses this algorithm, please let me know, I&#x27;d be super interested to see it used somewhere real.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;p-s&quot;&gt;P.S.&lt;&#x2F;h3&gt;
+&lt;p&gt;On x86 systems at least, the least-significant bit of a pointer will always be 0, so you could theoretically store
+anything there, as long as you swap it for 0 when you need to actually use the pointer. So maybe
+as another way to do this stuff, you can just use one of the pointers&#x27; low bits as the follow pointer
+in link inversion. However, that would be really ugly to code, and then I would have had less to write about :(&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a href=&quot;https:&amp;#x2F;&amp;#x2F;stackoverflow.com&amp;#x2F;questions&amp;#x2F;19991506&amp;#x2F;how-portable-is-using-the-low-bit-of-a-pointer-as-a-flag&quot; target=&quot;_blank&quot;&gt;relevant discussion↪&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;when-not-to-use-robson&quot;&gt;When not to use robson&lt;&#x2F;h3&gt;
+&lt;p&gt;Robson only works on binary trees i think(!)&lt;&#x2F;p&gt;
+&lt;p&gt;if you need to stop the algorithm at any time the tree will be in a terrible state,
+you need to run the algorithm completely before doing anything else with the tree.&lt;&#x2F;p&gt;
+</content>
+	</entry>
+	<entry xml:lang="en">
+		<title>Fancy Tree Traversals</title>
+		<published>2019-01-02T10:10:44-05:00</published>
+		<updated>2019-01-02T10:10:44-05:00</updated>
+		<link href="https://drs.is/post/fancy-tree-traversals/" type="text/html"/>
+		<id>https://drs.is/post/fancy-tree-traversals/</id>
+		<content type="html">&lt;h1 id=&quot;introduction&quot;&gt;Introduction&lt;&#x2F;h1&gt;
+&lt;p&gt;In this post, we will discuss a couple of novel methods for traversing trees.
+The threaded tree offers amortized constant access to the successor of a tree-node.
+The link-inversion traversal offers a stackless traversal of binary trees.&lt;&#x2F;p&gt;
+&lt;p&gt;The final code is in &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;sinistersnare&#x2F;robson&quot;&gt;this repository&lt;&#x2F;a&gt;.
+Please read on for some history, and some novel algorithms you may have never heard of!&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;the-famous-tree&quot;&gt;The Famous Tree&lt;&#x2F;h1&gt;
+&lt;p&gt;The tree is an incredibly important data structure.
+A great learning tool for beginning computer scientists, starting to understand the science.
+Trees are also used throughout the real-world.
+File systems use &lt;a href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;B-tree&quot;&gt;B-trees&lt;&#x2F;a&gt;
+to &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;postgres&#x2F;postgres&#x2F;tree&#x2F;master&#x2F;src&#x2F;backend&#x2F;access&#x2F;nbtree&quot;&gt;store their data&lt;&#x2F;a&gt;.
+Text editors use &lt;a href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Rope_(data_structure)&quot;&gt;ropes&lt;&#x2F;a&gt;
+to &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;google&#x2F;xi-editor&#x2F;tree&#x2F;master&#x2F;rust&#x2F;rope&quot;&gt;organize their text&lt;&#x2F;a&gt;.
+Trees power the world, inside and outside of computers.
+We will be using a simple binary tree for this post.&lt;&#x2F;p&gt;
+&lt;p&gt;Here is a common binary tree definition. We will be using C for the whole of this post:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* We will use this type definition later. *&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+typedef &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;void &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(*VisitFunc)(Tree*);&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+typedef &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; Tree {&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;int&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; data;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; Tree* left;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; Tree* right;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+} Tree;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;We can create the tree like so:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;int &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;void&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;) {&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    Tree root, root_left;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    root_left.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;data &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    root_left.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;left &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    root_left.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;right &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    root.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;data &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    root.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;left &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;= &amp;amp;root_left;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    root.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;right &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;&lt;h2 id=&quot;how-do-we-traverse-a-tree&quot;&gt;How Do We Traverse a tree?&lt;&#x2F;h2&gt;
+&lt;p&gt;Traversing a tree is accessing each node&#x27;s data in the whole tree.
+This is obviously a critically important function of a tree,
+we should be able to access all elements if we need to.&lt;&#x2F;p&gt;
+&lt;p&gt;Luckily, traversing a tree is super easy!&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;void &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;traverse&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(Tree* &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;cur&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;) {&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur == &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;pre_visit&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur); &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* pre-order traversal *&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;traverse&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur-&amp;gt;left);&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;in_visit&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur); &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* in-order traversal *&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;traverse&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur-&amp;gt;right);&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;post_visit&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur); &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* post-order traversal *&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Pre-order traversal always visits a parent before its child. This is very useful when you want to copy a tree, maintaining its order. In-order is mostly used for sorted trees, as it will visit nodes in order! A node will be visited in post-order only after its children have been visited. This means that post-order is best used for tasks such as deleting the tree, freeing its memory without dangling pointers left over. If we made &lt;code&gt;free&lt;&#x2F;code&gt; our pre-visit function, then we would never be able to traverse right children!&lt;&#x2F;p&gt;
+&lt;p&gt;This algorithm is universally taught in beginning CS courses at universities.
+It gets the job done, and yet here we are, trying to complicate things!&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;stackless-traversals&quot;&gt;Stackless Traversals&lt;&#x2F;h1&gt;
+&lt;p&gt;When we use that standard traversal algorithm, we utilize the power of stacks! Stacks are a wonderful and simple datastructure. Imagine first: a &lt;em&gt;stack&lt;&#x2F;em&gt; of plates in your cupboard. You can not pick a plate from the center of that stack, you must go from the top. This Last-In-First-Out ordering is great for traversing trees too! Now, lets imagine the left-edge of the tree to be our plate-stack. As we traverse down, we push nodes onto the stack. When we reach the bottom of the tree, we need a way to get back up. The solution is to simply &#x27;pop&#x27; off the node-stack, and then we are at the &lt;code&gt;second-to-last&lt;&#x2F;code&gt; node!&lt;&#x2F;p&gt;
+&lt;p&gt;Next, we go right. Add the right-child of the &lt;code&gt;second-to-last&lt;&#x2F;code&gt; node to the stack. We now have to traverse that sub-tree, the same way as before, all the way to the left, until we reach the bottom. Eventually, after going up and right, and down and left enough, we will have traversed the entire tree. And now we have it, a semi-rigorous explanation of stackful tree traversals!&lt;&#x2F;p&gt;
+&lt;p&gt;You can re-write that code in the previous section to use an explicit stack, if you wanted. It is still there, however, implicitly. When a function recurses, it uses a computer&#x27;s internal stack to store information about the current function running. When we go down the tree, we add a &#x27;stack-frame&#x27;, which we use to traverse the tree.&lt;&#x2F;p&gt;
+&lt;p&gt;Stacks are amazing! Using a stack grants quite an intuitive model for beginner programmers to grok. For a long time, we only knew how to traverse trees using stacks. It was a sad world though. Punch-cards, no Wikipedia, and Algol... I shudder at the very thought, but I digress. Computer scientists felt this was a silly limitation, and sought to fix that, creating the world we see today through their hatred of stacks.&lt;&#x2F;p&gt;
+&lt;p&gt;In 1968, famous computer scientist Donald Knuth gave his community a problem. He wanted an algorithm for traversing trees without using a stack, which does not modify the tree in any way. I will present two algorithms that were not the first, nor the best methods for traversing trees. I like them, though, and feel like they provide some good ideas for computer scientists to learn from.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;the-threaded-tree&quot;&gt;The Threaded Tree&lt;&#x2F;h2&gt;
+&lt;p&gt;J.H. Morris presented the threaded tree in 1979. It utilizes the wasteful NULL nodes at the end of trees, for great profit. Using this algorithm will allow us to perform the &lt;code&gt;successor&lt;&#x2F;code&gt; operation of an in-order traversal in &lt;em&gt;amortized constant&lt;&#x2F;em&gt; time.&lt;&#x2F;p&gt;
+&lt;p&gt;A Threaded tree has two extra bits of information. One bit informs whether the left pointer is actually a &lt;em&gt;thread&lt;&#x2F;em&gt;, and the other for the right pointer. A thread is &lt;em&gt;not&lt;&#x2F;em&gt; an OS thread, think of it more like a pointer to a seemingly random part of the tree, and not a child. If we follow a thread, what we find is the in-order successor to a node. Here is the code for our Threaded Tree. I will describe the algorithm under the code-block.&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;typedef struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; Tree {&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;int&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; data;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; Tree* left;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; Tree* right;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;bool&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; right_thread;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+} Tree;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* Takes the root of the tree (we call it cur for readability in the function itself) *&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;void &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;threaded_traversal&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(Tree* &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;cur&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;) {&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* Go all the way down to the smallest number in the tree. *&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;while &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(!cur-&amp;gt;is_thread) {&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+        cur = cur-&amp;gt;left;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    }&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* Now all we have to do is go rightwards until the end! *&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;while &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur != &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;) {&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;inorder_visit&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur);&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+        cur = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;tree_successor&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur);&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    }&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* Returns a successor to any given node, `node`.*&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+Tree* &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;tree_successor&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(Tree* &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;node&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;) {&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    Tree* cur;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* fast path! *&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(node-&amp;gt;right_thread) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; node-&amp;gt;right;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* else return leftmost child of right subtree! *&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    cur = node-&amp;gt;right;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;while &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(!cur-&amp;gt;left) {&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+        cur = cur-&amp;gt;left;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    }&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; cur;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This &lt;code&gt;Tree&lt;&#x2F;code&gt; struct includes a boolean field to tell whether the current tree node has an in-order thread. When we search for the in-order successor to the current node, and find that it is a thread, we take the right node to get the immediate successor! This is always a single operation. If we traverse an entire tree this way, we find that the &lt;code&gt;tree_successor&lt;&#x2F;code&gt; function is running in &lt;em&gt;amortized &lt;code&gt;O(1)&lt;&#x2F;code&gt;&lt;&#x2F;em&gt; speed.&lt;&#x2F;p&gt;
+&lt;p&gt;However, to support this method, we must add a boolean field for each and every node in this tree. This means that the spatial cost for this algorithm is linear.&lt;&#x2F;p&gt;
+&lt;p&gt;Threaded trees are super cool, and I would love for people to know them. Luckily, there is a great &lt;a href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Threaded_binary_tree&quot;&gt;Wikipedia page&lt;&#x2F;a&gt; on the subject. If there was not, I would definitely write more.&lt;&#x2F;p&gt;
+&lt;p&gt;I won&#x27;t do a full walkthrough of the threaded traversal, but here is an image of a threaded tree:&lt;&#x2F;p&gt;
+&lt;div class=&quot;img-tpl&quot;&gt;
+    &lt;img src=&quot;threaded01.png&quot; alt=&quot;TODO-SORRY!&quot;&gt;
+&lt;&#x2F;div&gt;
+&lt;p&gt;To start, go to the leftmost node, which is the minimum of an in-order traversal. To find the successor, if the right pointer is a thread, follow it, and that is the successor. If it is not, take it, and then go left as much as possible, that is the next node in-order.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;analysis&quot;&gt;Analysis&lt;&#x2F;h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Space-Complexity: &lt;code&gt;O(n)&lt;&#x2F;code&gt;
+&lt;ul&gt;
+&lt;li&gt;This is because each tree node needs 2 markers, so linear cost&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;Time complexity: &lt;code&gt;O(n)&lt;&#x2F;code&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;Time complexity for finding a single successor: &lt;em&gt;Amortized &lt;code&gt;O(1)&lt;&#x2F;code&gt;&lt;&#x2F;em&gt;!&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;So we have found a cool algorithm that makes use of those dumb null pointers at the fringes of the tree. It does not seem like we gain much, though, as it still comes at a linear spatial cost. If you want amortized constant successor finding, then this is a great algorithm for you!&lt;&#x2F;p&gt;
+&lt;p&gt;For me, the biggest downside of this algorithm is that it only works for in-order traversals. If you want pre- or post-order traversals, this algorithm is not for you.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;the-link-inversion-model&quot;&gt;The Link-Inversion Model&lt;&#x2F;h2&gt;
+&lt;p&gt;Link Inversion is a key ingredient to our final algorithm. Link-Inversion is a process where we use a marker-bit on each node to tell if we should continue to traverse up, or traverse rightward when going up a tree.&lt;&#x2F;p&gt;
+&lt;p&gt;This method is stackless, like the threaded tree traversal. The trick is that we jumble the pointers, to thwart hacking attempts. Just kidding! We only seemingly jumble pointers! Also, it is not to thwart hackers, its to show us the way back up the tree!&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;typedef struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; Tree {&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;int&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; data;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    Tree* left;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    Tree* right;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;bool&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; went_right;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+} Tree;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;void &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;link_inversion&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(Tree* &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;cur&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;, VisitFunc &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;pre_order&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;,&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+                               VisitFunc &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;in_order&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;,&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+                               VisitFunc &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;post_order&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;) {&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    Tree* prev = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    Tree* old_prev;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    Tree* old_prev_left;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    Tree* old_cur;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur == &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;do &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;{&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* 1) Descend leftward as much as possible. *&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;while &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur != &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;) {&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;pre_order&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur);&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+            cur-&amp;gt;went_right = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;false&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+            old_cur = cur;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+            cur = old_cur-&amp;gt;left;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+            old_cur-&amp;gt;left = prev;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+            prev = old_cur;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+        }&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* 2) ascend from right as much as we can. *&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;while &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(prev != &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;NULL &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;amp;&amp;amp; prev-&amp;gt;went_right) {&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+            old_prev = prev;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+            prev = prev-&amp;gt;right;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+            old_prev-&amp;gt;right = cur;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+            cur = old_prev;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;post_order&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur);&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+        }&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* 3)&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;
+            If prev is null after coming back up from the right,&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;
+                it means that we have finished traversal,&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;
+                so head back to the while-condition and get outta here!&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;
+            Else, we will do an exchange here,&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;
+                swap to right child of parent. *&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(prev != &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;) {&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* Switch from the left side of prev to the right&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;
+               Also, mark prev as went_right so we know to traverse&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;
+               upwards using right pointer. *&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;in_order&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(prev);&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+            old_prev_left = prev-&amp;gt;left;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+            prev-&amp;gt;went_right = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;true&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+            prev-&amp;gt;left = cur;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+            cur = prev-&amp;gt;right;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+            prev-&amp;gt;right = old_prev_left;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+        }&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    } &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;while &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(prev != &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;);&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The core algorithm is in the name, we must invert the links. As we push down the tree,
+we invert the links so that way the child points to the parent, and we can walk up the tree
+the same way we walked down. As we go up, we need to un-invert the links so that way the tree
+is back as it started. The marker bit is used so that when we go back up, we know if we are
+ascending from the left or from the right.&lt;&#x2F;p&gt;
+&lt;p&gt;Let&#x27;s talk about each of these steps.&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;We must start by traversing leftwards as much as possible.
+Keeping pointers to the current and previously visited nodes.
+As we traverse, we invert the links. That means that cur-&amp;gt;left will be changed to point to the parent.&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;Next may not make sense, so if it doesn&#x27;t make perfect sense, come to it after step 3.
+Here, we are done with this subtree, so we want to get to the subtree&#x27;s root.
+We do this by ascending from the right until we get to the root of the traversed part of the tree.
+This ensures the tree is in a state that step 3 can deal with.&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;Thirdly, we do an exchange. Here, we are assuredly in a left child, thanks to step 2.
+We can safely traverse to the parents right child and
+forget completely about the previous subtree forever!
+This exchange marks a completion of the left subtree of the new root,
+now we must traverse the right subtree of the new root. Back to step 1!&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;p&gt;Here, we are skipping some of the technicalities, like what is &lt;code&gt;went_right&lt;&#x2F;code&gt; for?
+It is so that we know when we get to the end of the subtree in step 2.
+Hopefully, I will elucidate why its necessary with pictures very soon.
+After I elucidate that, I will later explain why it&#x27;s not necessary (hint: Robson!).&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;walk-through&quot;&gt;Walk-through&lt;&#x2F;h3&gt;
+&lt;p&gt;The algorithm is weird, but I think it&#x27;ll help by showing it!&lt;&#x2F;p&gt;
+&lt;div class=&quot;img-tpl&quot;&gt;
+    &lt;img src=&quot;inversion01.png&quot; alt=&quot;TODO-SORRY!&quot;&gt;
+&lt;&#x2F;div&gt;
+&lt;p&gt;Here, the tree has been traversed almost completely down the side.
+Each time we step downwards, we invert the links to point to the parent.
+The next step will be to venture into the NULL left-child from the current point.&lt;&#x2F;p&gt;
+&lt;p&gt;This image has not even finished the first run of step 1 from above yet, so let&#x27;s continue.&lt;&#x2F;p&gt;
+&lt;div class=&quot;img-tpl&quot;&gt;
+    &lt;img src=&quot;inversion02.png&quot; alt=&quot;TODO-SORRY!&quot;&gt;
+&lt;&#x2F;div&gt;
+&lt;p&gt;Okay, we have successfully finished part 1 of the algorithm: &#x27;go leftward a lot&#x27;!
+Now step 2 does not apply, &lt;code&gt;went_right&lt;&#x2F;code&gt; has been set for exactly 0 nodes at this point in execution.
+We swiftly move to step 3! Here, we perform an exchange.
+We have finished traversing the left child of the current subtree (the leaf), and now we must traverse the left.
+We do some swaps and end up here:&lt;&#x2F;p&gt;
+&lt;div class=&quot;img-tpl&quot;&gt;
+    &lt;img src=&quot;inversion03.png&quot; alt=&quot;TODO-SORRY!&quot;&gt;
+&lt;&#x2F;div&gt;
+&lt;p&gt;Okay, the exchange succeeded! We are back at step 1, because &lt;code&gt;prev != NULL&lt;&#x2F;code&gt;.
+Let&#x27;s ignore the red circle for just a moment and execute step 1.
+Done! Did you see it? Nothing!
+Of course, &lt;code&gt;cur == NULL&lt;&#x2F;code&gt;, so step 1 is not run. Time for step 2! We must go up until we reach the root!
+We run this until &lt;code&gt;prev-&amp;gt;went_right == false&lt;&#x2F;code&gt;, in this case one time.
+Running this step means we are prepared to forget about the current subtree.
+Step 3 will exchange once more, getting us to the parents right child:&lt;&#x2F;p&gt;
+&lt;div class=&quot;img-tpl&quot;&gt;
+    &lt;img src=&quot;inversion04.png&quot; alt=&quot;TODO-SORRY!&quot;&gt;
+&lt;&#x2F;div&gt;
+&lt;p&gt;If you are keen, you may have noticed that this is a strikingly similar image to the first one in the series.
+The only difference is the red marker in the &lt;code&gt;prev&lt;&#x2F;code&gt; node. If you apply the operations I have listed since the
+start of this subsection, you can fully traverse this tree. Making enough images to illustrate all of that
+is an exercise left to the reader.&lt;&#x2F;p&gt;
+&lt;p&gt;Link inversion is relatively complex when compared to the standard method, but definitely more fun!&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;warning&quot;&gt;Warning&lt;&#x2F;h3&gt;
+&lt;p&gt;This algorithm is &lt;em&gt;dangerous&lt;&#x2F;em&gt;! If you attempt to modify the tree while it is being
+traversed, pointers will be a complete mess! Make sure this algorithm completes before altering the
+tree anymore!&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;analysis-1&quot;&gt;Analysis&lt;&#x2F;h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Space-Complexity: &lt;code&gt;O(n)&lt;&#x2F;code&gt;
+&lt;ul&gt;
+&lt;li&gt;This is because each tree node needs a marker, so linear cost.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;Time complexity: &lt;code&gt;O(n)&lt;&#x2F;code&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;We still have not yet improved on the algorithmic cost of the standard depth-first search.
+We have been doing quite well on solving Knuth&#x27;s challenge, but thats only a minor goal!
+Let&#x27;s get to the real thing now, the Robson traversal.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h2&gt;
+&lt;p&gt;The threaded tree is a great structure for in-order traversal. Use it when you need to find the successor to a node lickity-split. The link-inversion method is quite strange, almost alien. However, it is used as the basis for a much cooler algorithm, The Robson Traversal. This post does not cover this traversal, but maybe a future one will.&lt;&#x2F;p&gt;
+&lt;p&gt;These algorithms are quite interesting to me. Finding novel ways to do simple tasks can lead to some interesting findings. Even if we re-invent the wheel sometimes, knowing how to make a wheel is important! I hope you find a cool use for these algorithms in the future. They have provided me with quite a bit of help, I would like to think.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;p-s&quot;&gt;P.S.&lt;&#x2F;h3&gt;
+&lt;p&gt;I have another blog post in the works, detailing an even cooler tree traversal. This Robson traversal is little known, but traverses trees in &lt;em&gt;&lt;strong&gt;constant space&lt;&#x2F;strong&gt;&lt;&#x2F;em&gt;. Please keep an eye out for this forthcoming blog post.&lt;&#x2F;p&gt;
+&lt;p&gt;If you liked this post, and want to see the new one even sooner, shoot me an email or a tweet for encouragement! I hope you learned something great today!&lt;&#x2F;p&gt;
+</content>
+	</entry>
+	<entry xml:lang="en">
+		<title>Sinistersnare&#x27;s Rust 2019 Wishlist</title>
+		<published>2018-12-12T08:10:44-05:00</published>
+		<updated>2018-12-12T08:10:44-05:00</updated>
+		<link href="https://drs.is/post/rust-wishlist-2019/" type="text/html"/>
+		<id>https://drs.is/post/rust-wishlist-2019/</id>
+		<content type="html">&lt;p&gt;This is my response to the
+&lt;a href=&quot;https:&amp;#x2F;&amp;#x2F;blog.rust-lang.org&amp;#x2F;2018&amp;#x2F;12&amp;#x2F;06&amp;#x2F;call-for-rust-2019-roadmap-blogposts.html&quot; target=&quot;_blank&quot;&gt;Call for Rust 2019 Roadmap↪&lt;&#x2F;a&gt;
+.
+Thanks for reading!&lt;&#x2F;p&gt;
+&lt;p&gt;Rust needs to focus on less glamorous features in 2019. We have added a lot of great features since 1.0, but we need to address the warts that we have had for a long time. I mostly echo sentiments from
+&lt;a href=&quot;https:&amp;#x2F;&amp;#x2F;www.jonathanturner.org&amp;#x2F;2018&amp;#x2F;12&amp;#x2F;the-fallow-year.html&quot; target=&quot;_blank&quot;&gt;Jonathan Turner↪&lt;&#x2F;a&gt;
+,
+&lt;a href=&quot;https:&amp;#x2F;&amp;#x2F;blog.cessen.com&amp;#x2F;post&amp;#x2F;2018_12_12_rust_2019_its_the_little_things&quot; target=&quot;_blank&quot;&gt;Nathan Vegdahl↪&lt;&#x2F;a&gt;
+, and many others in my &#x27;fallow-year&#x27; sentiments. Overall, Compilation speed and generic constants are my two most wished-for features. On top of that, I would like to see more ecosystem work to make embedded applications more feasible and easy to use. Finally, Rust needs a moratorium on adding syntactic sugar for 2019.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;the-compiler&quot;&gt;The Compiler&lt;&#x2F;h1&gt;
+&lt;p&gt;The coming year should be us grabbing a ladder, reaching for some of the higher-hanging fruit of Rust issues. The compiler team has been heroic in their work since the beginning. Things like incremental builds, caching (through the likes of sscache), and using &lt;code&gt;cargo check&lt;&#x2F;code&gt; when you just need to see if it builds, have helped the community work faster. However, a longstanding bottleneck in compilation is the code we give to LLVM. As I understand it, we have been waiting on MIR to start work on this. I would love to see Rust improve its LLVM-IR codegen. Perhaps if we give LLVM less work to do, we can gain back a large chunk of time wasted.&lt;&#x2F;p&gt;
+&lt;p&gt;On a personal note, my 2019 programming resolution is to start more serious work on compilers. I would love to help the compilers team on this effort! I hope 2019 can significantly improve the compilation story for Rust.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;generic-constants&quot;&gt;Generic Constants&lt;&#x2F;h1&gt;
+&lt;p&gt;This seems like a heavily requested feature in Rust. Many other posts have talked about this, so I will just leave it be. Generic constants are high up on my Rust 2019 wishlist. I am not sure if type-level integers are enough, or we should be able to use any constant. Regardless, I have seen some great ideas that could use this feature.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;more-work-on-embedded&quot;&gt;More Work On Embedded&lt;&#x2F;h1&gt;
+&lt;p&gt;Rust on WASM has been really cool! It has also, as I understand it, helped the embedded folks too. I would like to see Rust start to &lt;em&gt;really&lt;&#x2F;em&gt; compete with C in embedded in 2019. Even if we do not have &lt;em&gt;all&lt;&#x2F;em&gt; the architectures, there are many places we can beat C in embedded. We can be &lt;em&gt;better&lt;&#x2F;em&gt; in the platforms that we support. Rust can provide a more streamlined introduction to embedded programming. We can provide an amazing catalogue of &lt;code&gt;no_std&lt;&#x2F;code&gt; libraries, unparalleled by C. We should start with a comprehensive analysis of where exactly we &lt;em&gt;are&lt;&#x2F;em&gt; in terms of embedded-Rust. We can provide guarantees that only the most hardcore C users strive for. We should lean into this space, it could be a big boon for Rust adoption!&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;slowdown-on-sugar&quot;&gt;Slowdown on Sugar&lt;&#x2F;h1&gt;
+&lt;p&gt;Finally, I would like to talk about my most personal wish for Rust in 2019. Rust needs to relax on adding syntactic sugar in the coming year. Since 1.0, a lot of sugar has been added to Rust in the name of convenience. We need to get an idea of what Rust feels like now. Is Rust still too pointy in some places? Or does it simply feel like that because we haven&#x27;t gotten used to the recently added sugar yet? If we place a moratorium on adding sugar to Rust for the year, we can truly direct ourselves to the most pressing warts.&lt;&#x2F;p&gt;
+&lt;p&gt;Personally, I am a conservative guy when it comes to syntax. I believe that if we keep adding sugar, we will boil ourselves, much like we do to a frog. We should regularly pause and take stock of where we are, to refocus our needs.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h1&gt;
+&lt;p&gt;Thank you so much for reading this! Rust is an amazing language, and has been since I started using it in 2013. The 2019 year will create the springboard we need to have an amazing Rust 2021 edition.&lt;&#x2F;p&gt;
+</content>
+	</entry>
+	<entry xml:lang="en">
+		<title>Hello, World!</title>
+		<published>2017-12-24T05:50:44-05:00</published>
+		<updated>2017-12-24T05:50:44-05:00</updated>
+		<link href="https://drs.is/post/hello-world/" type="text/html"/>
+		<id>https://drs.is/post/hello-world/</id>
+		<content type="html">&lt;p&gt;Hey! Intro Post!&lt;&#x2F;p&gt;
+&lt;p&gt;I have got some great ideas for blog posts&#x2F;series. Here is a couple:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;The Robson Tree Traversal Algorithm.&lt;&#x2F;li&gt;
+&lt;li&gt;Functional Language Compilers (Series)&lt;&#x2F;li&gt;
+&lt;li&gt;Tesselation in Computer Graphics&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;p&gt;Numbers 1 and 2 are very interesting to me, and I have work on both of them on my Github,
+but I would love to make a post explaining the CS behind it.&lt;&#x2F;p&gt;
+&lt;p&gt;Tesselation just seems really cool and I would love to talk about that.&lt;&#x2F;p&gt;
+</content>
+	</entry>
+</feed>

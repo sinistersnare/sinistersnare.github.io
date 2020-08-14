@@ -23,16 +23,10 @@ Now write, and changes will be reflected.
 ## Releasing The Site ##
 
 1. Make sure Zola is installed. https://www.getzola.org/documentation/getting-started/installation/
-1. From the `source` branch, make sure all changes are committed.
 1. `$ zola build`
-1. `$ git checkout master` This will bring the `public/` directory to `master`
-1. `$ shopt -s extglob` or `$ setopt extended_glob` for zsh. This allows the next command
-1. `$ rm -rf !(public)` or `$ rm -rf ^public` for zsh.
-1. `$ mv public/* .`
-1. `$ git add --all`
-1. `$ git commit -m "Releasing new awesome blog post! "`
-1. `$ git push origin master`
-1. `$ git checkout source` Go back to the source of this blog.
+1. `$ mv public docs` # shortcut to make GH pages easier to use
+1. `$ echo 'drs.is' > docs/CNAME`
+1. `git add . ; git commit ; git push` # you know the drill!
 
 ## TODO: ##
 

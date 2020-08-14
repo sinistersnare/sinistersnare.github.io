@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="chrome=1">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="referrer" content="no-referrer">
+
+        <link rel="stylesheet" href="https:&#x2F;&#x2F;drs.is&#x2F;fonts.css">
+        <link rel="stylesheet" href="https:&#x2F;&#x2F;drs.is&#x2F;style.css">
+
+        <title>
+    Fancy Tree Traversals  · Sin&#x27;s Blog
+</title>
+
+        
+    </head>
+    <body>
+        
+    <div class="wrap">
+        <div class="section" id="title">
+            
+    Fancy Tree Traversals
+
+        </div>
+        <div class="section" id="content">
+            
+    
+        
+            
+    
+    Jan  2, 2019
+
+        
+        
+        
+            
+            
+                &#183; 14 min
+            
+        
+        
+        <hr/>
+    
+    <h1 id="introduction">Introduction</h1>
+<p>In this post, we will discuss a couple of novel methods for traversing trees.
+The threaded tree offers amortized constant access to the successor of a tree-node.
+The link-inversion traversal offers a stackless traversal of binary trees.</p>
+<p>The final code is in <a href="https://github.com/sinistersnare/robson">this repository</a>.
+Please read on for some history, and some novel algorithms you may have never heard of!</p>
+<h1 id="the-famous-tree">The Famous Tree</h1>
+<p>The tree is an incredibly important data structure.
+A great learning tool for beginning computer scientists, starting to understand the science.
+Trees are also used throughout the real-world.
+File systems use <a href="https://en.wikipedia.org/wiki/B-tree">B-trees</a>
+to <a href="https://github.com/postgres/postgres/tree/master/src/backend/access/nbtree">store their data</a>.
+Text editors use <a href="https://en.wikipedia.org/wiki/Rope_(data_structure)">ropes</a>
+to <a href="https://github.com/google/xi-editor/tree/master/rust/rope">organize their text</a>.
+Trees power the world, inside and outside of computers.
+We will be using a simple binary tree for this post.</p>
+<p>Here is a common binary tree definition. We will be using C for the whole of this post:</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#65737e;">/* We will use this type definition later. */</span><span style="color:#c0c5ce;">
+typedef </span><span style="color:#b48ead;">void </span><span style="color:#c0c5ce;">(*VisitFunc)(Tree*);</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">
+typedef </span><span style="color:#b48ead;">struct</span><span style="color:#c0c5ce;"> Tree {</span><span style="color:#c0c5ce;">
+    </span><span style="color:#b48ead;">int</span><span style="color:#c0c5ce;"> data;</span><span style="color:#c0c5ce;">
+    </span><span style="color:#b48ead;">struct</span><span style="color:#c0c5ce;"> Tree* left;</span><span style="color:#c0c5ce;">
+    </span><span style="color:#b48ead;">struct</span><span style="color:#c0c5ce;"> Tree* right;</span><span style="color:#c0c5ce;">
+} Tree;</span><span style="color:#c0c5ce;">
+</span></code></pre>
+<p>We can create the tree like so:</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#b48ead;">int </span><span style="color:#8fa1b3;">main</span><span style="color:#c0c5ce;">(</span><span style="color:#b48ead;">void</span><span style="color:#c0c5ce;">) {</span><span style="color:#c0c5ce;">
+    Tree root, root_left;</span><span style="color:#c0c5ce;">
+    root_left.</span><span style="color:#bf616a;">data </span><span style="color:#c0c5ce;">= </span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">;</span><span style="color:#c0c5ce;">
+    root_left.</span><span style="color:#bf616a;">left </span><span style="color:#c0c5ce;">= </span><span style="color:#d08770;">NULL</span><span style="color:#c0c5ce;">;</span><span style="color:#c0c5ce;">
+    root_left.</span><span style="color:#bf616a;">right </span><span style="color:#c0c5ce;">= </span><span style="color:#d08770;">NULL</span><span style="color:#c0c5ce;">;</span><span style="color:#c0c5ce;">
+    root.</span><span style="color:#bf616a;">data </span><span style="color:#c0c5ce;">= </span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">;</span><span style="color:#c0c5ce;">
+    root.</span><span style="color:#bf616a;">left </span><span style="color:#c0c5ce;">= &amp;root_left;</span><span style="color:#c0c5ce;">
+    root.</span><span style="color:#bf616a;">right </span><span style="color:#c0c5ce;">= </span><span style="color:#d08770;">NULL</span><span style="color:#c0c5ce;">;</span><span style="color:#c0c5ce;">
+}</span><span style="color:#c0c5ce;">
+</span></code></pre><h2 id="how-do-we-traverse-a-tree">How Do We Traverse a tree?</h2>
+<p>Traversing a tree is accessing each node's data in the whole tree.
+This is obviously a critically important function of a tree,
+we should be able to access all elements if we need to.</p>
+<p>Luckily, traversing a tree is super easy!</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#b48ead;">void </span><span style="color:#8fa1b3;">traverse</span><span style="color:#c0c5ce;">(Tree* </span><span style="color:#bf616a;">cur</span><span style="color:#c0c5ce;">) {</span><span style="color:#c0c5ce;">
+    </span><span style="color:#b48ead;">if </span><span style="color:#c0c5ce;">(cur == </span><span style="color:#d08770;">NULL</span><span style="color:#c0c5ce;">) </span><span style="color:#b48ead;">return</span><span style="color:#c0c5ce;">;</span><span style="color:#c0c5ce;">
+    </span><span style="color:#bf616a;">pre_visit</span><span style="color:#c0c5ce;">(cur); </span><span style="color:#65737e;">/* pre-order traversal */</span><span style="color:#c0c5ce;">
+    </span><span style="color:#bf616a;">traverse</span><span style="color:#c0c5ce;">(cur-&gt;left);</span><span style="color:#c0c5ce;">
+    </span><span style="color:#bf616a;">in_visit</span><span style="color:#c0c5ce;">(cur); </span><span style="color:#65737e;">/* in-order traversal */</span><span style="color:#c0c5ce;">
+    </span><span style="color:#bf616a;">traverse</span><span style="color:#c0c5ce;">(cur-&gt;right);</span><span style="color:#c0c5ce;">
+    </span><span style="color:#bf616a;">post_visit</span><span style="color:#c0c5ce;">(cur); </span><span style="color:#65737e;">/* post-order traversal */</span><span style="color:#c0c5ce;">
+}</span><span style="color:#c0c5ce;">
+</span></code></pre>
+<p>Pre-order traversal always visits a parent before its child. This is very useful when you want to copy a tree, maintaining its order. In-order is mostly used for sorted trees, as it will visit nodes in order! A node will be visited in post-order only after its children have been visited. This means that post-order is best used for tasks such as deleting the tree, freeing its memory without dangling pointers left over. If we made <code>free</code> our pre-visit function, then we would never be able to traverse right children!</p>
+<p>This algorithm is universally taught in beginning CS courses at universities.
+It gets the job done, and yet here we are, trying to complicate things!</p>
+<h1 id="stackless-traversals">Stackless Traversals</h1>
+<p>When we use that standard traversal algorithm, we utilize the power of stacks! Stacks are a wonderful and simple datastructure. Imagine first: a <em>stack</em> of plates in your cupboard. You can not pick a plate from the center of that stack, you must go from the top. This Last-In-First-Out ordering is great for traversing trees too! Now, lets imagine the left-edge of the tree to be our plate-stack. As we traverse down, we push nodes onto the stack. When we reach the bottom of the tree, we need a way to get back up. The solution is to simply 'pop' off the node-stack, and then we are at the <code>second-to-last</code> node!</p>
+<p>Next, we go right. Add the right-child of the <code>second-to-last</code> node to the stack. We now have to traverse that sub-tree, the same way as before, all the way to the left, until we reach the bottom. Eventually, after going up and right, and down and left enough, we will have traversed the entire tree. And now we have it, a semi-rigorous explanation of stackful tree traversals!</p>
+<p>You can re-write that code in the previous section to use an explicit stack, if you wanted. It is still there, however, implicitly. When a function recurses, it uses a computer's internal stack to store information about the current function running. When we go down the tree, we add a 'stack-frame', which we use to traverse the tree.</p>
+<p>Stacks are amazing! Using a stack grants quite an intuitive model for beginner programmers to grok. For a long time, we only knew how to traverse trees using stacks. It was a sad world though. Punch-cards, no Wikipedia, and Algol... I shudder at the very thought, but I digress. Computer scientists felt this was a silly limitation, and sought to fix that, creating the world we see today through their hatred of stacks.</p>
+<p>In 1968, famous computer scientist Donald Knuth gave his community a problem. He wanted an algorithm for traversing trees without using a stack, which does not modify the tree in any way. I will present two algorithms that were not the first, nor the best methods for traversing trees. I like them, though, and feel like they provide some good ideas for computer scientists to learn from.</p>
+<h2 id="the-threaded-tree">The Threaded Tree</h2>
+<p>J.H. Morris presented the threaded tree in 1979. It utilizes the wasteful NULL nodes at the end of trees, for great profit. Using this algorithm will allow us to perform the <code>successor</code> operation of an in-order traversal in <em>amortized constant</em> time.</p>
+<p>A Threaded tree has two extra bits of information. One bit informs whether the left pointer is actually a <em>thread</em>, and the other for the right pointer. A thread is <em>not</em> an OS thread, think of it more like a pointer to a seemingly random part of the tree, and not a child. If we follow a thread, what we find is the in-order successor to a node. Here is the code for our Threaded Tree. I will describe the algorithm under the code-block.</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#b48ead;">typedef struct</span><span style="color:#c0c5ce;"> Tree {</span><span style="color:#c0c5ce;">
+    </span><span style="color:#b48ead;">int</span><span style="color:#c0c5ce;"> data;</span><span style="color:#c0c5ce;">
+    </span><span style="color:#b48ead;">struct</span><span style="color:#c0c5ce;"> Tree* left;</span><span style="color:#c0c5ce;">
+    </span><span style="color:#b48ead;">struct</span><span style="color:#c0c5ce;"> Tree* right;</span><span style="color:#c0c5ce;">
+    </span><span style="color:#b48ead;">bool</span><span style="color:#c0c5ce;"> right_thread;</span><span style="color:#c0c5ce;">
+} Tree;</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#65737e;">/* Takes the root of the tree (we call it cur for readability in the function itself) */</span><span style="color:#c0c5ce;">
+</span><span style="color:#b48ead;">void </span><span style="color:#8fa1b3;">threaded_traversal</span><span style="color:#c0c5ce;">(Tree* </span><span style="color:#bf616a;">cur</span><span style="color:#c0c5ce;">) {</span><span style="color:#c0c5ce;">
+    </span><span style="color:#65737e;">/* Go all the way down to the smallest number in the tree. */</span><span style="color:#c0c5ce;">
+    </span><span style="color:#b48ead;">while </span><span style="color:#c0c5ce;">(!cur-&gt;is_thread) {</span><span style="color:#c0c5ce;">
+        cur = cur-&gt;left;</span><span style="color:#c0c5ce;">
+    }</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">
+    </span><span style="color:#65737e;">/* Now all we have to do is go rightwards until the end! */</span><span style="color:#c0c5ce;">
+    </span><span style="color:#b48ead;">while </span><span style="color:#c0c5ce;">(cur != </span><span style="color:#d08770;">NULL</span><span style="color:#c0c5ce;">) {</span><span style="color:#c0c5ce;">
+        </span><span style="color:#bf616a;">inorder_visit</span><span style="color:#c0c5ce;">(cur);</span><span style="color:#c0c5ce;">
+        cur = </span><span style="color:#bf616a;">tree_successor</span><span style="color:#c0c5ce;">(cur);</span><span style="color:#c0c5ce;">
+    }</span><span style="color:#c0c5ce;">
+}</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#65737e;">/* Returns a successor to any given node, `node`.*/</span><span style="color:#c0c5ce;">
+Tree* </span><span style="color:#8fa1b3;">tree_successor</span><span style="color:#c0c5ce;">(Tree* </span><span style="color:#bf616a;">node</span><span style="color:#c0c5ce;">) {</span><span style="color:#c0c5ce;">
+    Tree* cur;</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">
+    </span><span style="color:#65737e;">/* fast path! */</span><span style="color:#c0c5ce;">
+    </span><span style="color:#b48ead;">if </span><span style="color:#c0c5ce;">(node-&gt;right_thread) </span><span style="color:#b48ead;">return</span><span style="color:#c0c5ce;"> node-&gt;right;</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">
+    </span><span style="color:#65737e;">/* else return leftmost child of right subtree! */</span><span style="color:#c0c5ce;">
+    cur = node-&gt;right;</span><span style="color:#c0c5ce;">
+    </span><span style="color:#b48ead;">while </span><span style="color:#c0c5ce;">(!cur-&gt;left) {</span><span style="color:#c0c5ce;">
+        cur = cur-&gt;left;</span><span style="color:#c0c5ce;">
+    }</span><span style="color:#c0c5ce;">
+    </span><span style="color:#b48ead;">return</span><span style="color:#c0c5ce;"> cur;</span><span style="color:#c0c5ce;">
+}</span><span style="color:#c0c5ce;">
+</span></code></pre>
+<p>This <code>Tree</code> struct includes a boolean field to tell whether the current tree node has an in-order thread. When we search for the in-order successor to the current node, and find that it is a thread, we take the right node to get the immediate successor! This is always a single operation. If we traverse an entire tree this way, we find that the <code>tree_successor</code> function is running in <em>amortized <code>O(1)</code></em> speed.</p>
+<p>However, to support this method, we must add a boolean field for each and every node in this tree. This means that the spatial cost for this algorithm is linear.</p>
+<p>Threaded trees are super cool, and I would love for people to know them. Luckily, there is a great <a href="https://en.wikipedia.org/wiki/Threaded_binary_tree">Wikipedia page</a> on the subject. If there was not, I would definitely write more.</p>
+<p>I won't do a full walkthrough of the threaded traversal, but here is an image of a threaded tree:</p>
+<div class="img-tpl">
+    <img src="threaded01.png" alt="TODO-SORRY!">
+</div>
+<p>To start, go to the leftmost node, which is the minimum of an in-order traversal. To find the successor, if the right pointer is a thread, follow it, and that is the successor. If it is not, take it, and then go left as much as possible, that is the next node in-order.</p>
+<h3 id="analysis">Analysis</h3>
+<ul>
+<li>Space-Complexity: <code>O(n)</code>
+<ul>
+<li>This is because each tree node needs 2 markers, so linear cost</li>
+</ul>
+</li>
+<li>Time complexity: <code>O(n)</code></li>
+<li>Time complexity for finding a single successor: <em>Amortized <code>O(1)</code></em>!</li>
+</ul>
+<p>So we have found a cool algorithm that makes use of those dumb null pointers at the fringes of the tree. It does not seem like we gain much, though, as it still comes at a linear spatial cost. If you want amortized constant successor finding, then this is a great algorithm for you!</p>
+<p>For me, the biggest downside of this algorithm is that it only works for in-order traversals. If you want pre- or post-order traversals, this algorithm is not for you.</p>
+<h2 id="the-link-inversion-model">The Link-Inversion Model</h2>
+<p>Link Inversion is a key ingredient to our final algorithm. Link-Inversion is a process where we use a marker-bit on each node to tell if we should continue to traverse up, or traverse rightward when going up a tree.</p>
+<p>This method is stackless, like the threaded tree traversal. The trick is that we jumble the pointers, to thwart hacking attempts. Just kidding! We only seemingly jumble pointers! Also, it is not to thwart hackers, its to show us the way back up the tree!</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#b48ead;">typedef struct</span><span style="color:#c0c5ce;"> Tree {</span><span style="color:#c0c5ce;">
+    </span><span style="color:#b48ead;">int</span><span style="color:#c0c5ce;"> data;</span><span style="color:#c0c5ce;">
+    Tree* left;</span><span style="color:#c0c5ce;">
+    Tree* right;</span><span style="color:#c0c5ce;">
+    </span><span style="color:#b48ead;">bool</span><span style="color:#c0c5ce;"> went_right;</span><span style="color:#c0c5ce;">
+} Tree;</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#b48ead;">void </span><span style="color:#8fa1b3;">link_inversion</span><span style="color:#c0c5ce;">(Tree* </span><span style="color:#bf616a;">cur</span><span style="color:#c0c5ce;">, VisitFunc </span><span style="color:#bf616a;">pre_order</span><span style="color:#c0c5ce;">,</span><span style="color:#c0c5ce;">
+                               VisitFunc </span><span style="color:#bf616a;">in_order</span><span style="color:#c0c5ce;">,</span><span style="color:#c0c5ce;">
+                               VisitFunc </span><span style="color:#bf616a;">post_order</span><span style="color:#c0c5ce;">) {</span><span style="color:#c0c5ce;">
+    Tree* prev = </span><span style="color:#d08770;">NULL</span><span style="color:#c0c5ce;">;</span><span style="color:#c0c5ce;">
+    Tree* old_prev;</span><span style="color:#c0c5ce;">
+    Tree* old_prev_left;</span><span style="color:#c0c5ce;">
+    Tree* old_cur;</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">
+    </span><span style="color:#b48ead;">if </span><span style="color:#c0c5ce;">(cur == </span><span style="color:#d08770;">NULL</span><span style="color:#c0c5ce;">) </span><span style="color:#b48ead;">return</span><span style="color:#c0c5ce;">;</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">
+    </span><span style="color:#b48ead;">do </span><span style="color:#c0c5ce;">{</span><span style="color:#c0c5ce;">
+        </span><span style="color:#65737e;">/* 1) Descend leftward as much as possible. */</span><span style="color:#c0c5ce;">
+        </span><span style="color:#b48ead;">while </span><span style="color:#c0c5ce;">(cur != </span><span style="color:#d08770;">NULL</span><span style="color:#c0c5ce;">) {</span><span style="color:#c0c5ce;">
+            </span><span style="color:#bf616a;">pre_order</span><span style="color:#c0c5ce;">(cur);</span><span style="color:#c0c5ce;">
+            cur-&gt;went_right = </span><span style="color:#d08770;">false</span><span style="color:#c0c5ce;">;</span><span style="color:#c0c5ce;">
+            old_cur = cur;</span><span style="color:#c0c5ce;">
+            cur = old_cur-&gt;left;</span><span style="color:#c0c5ce;">
+            old_cur-&gt;left = prev;</span><span style="color:#c0c5ce;">
+            prev = old_cur;</span><span style="color:#c0c5ce;">
+        }</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">
+        </span><span style="color:#65737e;">/* 2) ascend from right as much as we can. */</span><span style="color:#c0c5ce;">
+        </span><span style="color:#b48ead;">while </span><span style="color:#c0c5ce;">(prev != </span><span style="color:#d08770;">NULL </span><span style="color:#c0c5ce;">&amp;&amp; prev-&gt;went_right) {</span><span style="color:#c0c5ce;">
+            old_prev = prev;</span><span style="color:#c0c5ce;">
+            prev = prev-&gt;right;</span><span style="color:#c0c5ce;">
+            old_prev-&gt;right = cur;</span><span style="color:#c0c5ce;">
+            cur = old_prev;</span><span style="color:#c0c5ce;">
+            </span><span style="color:#bf616a;">post_order</span><span style="color:#c0c5ce;">(cur);</span><span style="color:#c0c5ce;">
+        }</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">
+        </span><span style="color:#65737e;">/* 3)</span><span style="color:#65737e;">
+            If prev is null after coming back up from the right,</span><span style="color:#65737e;">
+                it means that we have finished traversal,</span><span style="color:#65737e;">
+                so head back to the while-condition and get outta here!</span><span style="color:#65737e;">
+            Else, we will do an exchange here,</span><span style="color:#65737e;">
+                swap to right child of parent. */</span><span style="color:#c0c5ce;">
+        </span><span style="color:#b48ead;">if </span><span style="color:#c0c5ce;">(prev != </span><span style="color:#d08770;">NULL</span><span style="color:#c0c5ce;">) {</span><span style="color:#c0c5ce;">
+            </span><span style="color:#65737e;">/* Switch from the left side of prev to the right</span><span style="color:#65737e;">
+               Also, mark prev as went_right so we know to traverse</span><span style="color:#65737e;">
+               upwards using right pointer. */</span><span style="color:#c0c5ce;">
+            </span><span style="color:#bf616a;">in_order</span><span style="color:#c0c5ce;">(prev);</span><span style="color:#c0c5ce;">
+            old_prev_left = prev-&gt;left;</span><span style="color:#c0c5ce;">
+            prev-&gt;went_right = </span><span style="color:#d08770;">true</span><span style="color:#c0c5ce;">;</span><span style="color:#c0c5ce;">
+            prev-&gt;left = cur;</span><span style="color:#c0c5ce;">
+            cur = prev-&gt;right;</span><span style="color:#c0c5ce;">
+            prev-&gt;right = old_prev_left;</span><span style="color:#c0c5ce;">
+        }</span><span style="color:#c0c5ce;">
+    } </span><span style="color:#b48ead;">while </span><span style="color:#c0c5ce;">(prev != </span><span style="color:#d08770;">NULL</span><span style="color:#c0c5ce;">);</span><span style="color:#c0c5ce;">
+}</span><span style="color:#c0c5ce;">
+</span></code></pre>
+<p>The core algorithm is in the name, we must invert the links. As we push down the tree,
+we invert the links so that way the child points to the parent, and we can walk up the tree
+the same way we walked down. As we go up, we need to un-invert the links so that way the tree
+is back as it started. The marker bit is used so that when we go back up, we know if we are
+ascending from the left or from the right.</p>
+<p>Let's talk about each of these steps.</p>
+<ol>
+<li>
+<p>We must start by traversing leftwards as much as possible.
+Keeping pointers to the current and previously visited nodes.
+As we traverse, we invert the links. That means that cur-&gt;left will be changed to point to the parent.</p>
+</li>
+<li>
+<p>Next may not make sense, so if it doesn't make perfect sense, come to it after step 3.
+Here, we are done with this subtree, so we want to get to the subtree's root.
+We do this by ascending from the right until we get to the root of the traversed part of the tree.
+This ensures the tree is in a state that step 3 can deal with.</p>
+</li>
+<li>
+<p>Thirdly, we do an exchange. Here, we are assuredly in a left child, thanks to step 2.
+We can safely traverse to the parents right child and
+forget completely about the previous subtree forever!
+This exchange marks a completion of the left subtree of the new root,
+now we must traverse the right subtree of the new root. Back to step 1!</p>
+</li>
+</ol>
+<p>Here, we are skipping some of the technicalities, like what is <code>went_right</code> for?
+It is so that we know when we get to the end of the subtree in step 2.
+Hopefully, I will elucidate why its necessary with pictures very soon.
+After I elucidate that, I will later explain why it's not necessary (hint: Robson!).</p>
+<h3 id="walk-through">Walk-through</h3>
+<p>The algorithm is weird, but I think it'll help by showing it!</p>
+<div class="img-tpl">
+    <img src="inversion01.png" alt="TODO-SORRY!">
+</div>
+<p>Here, the tree has been traversed almost completely down the side.
+Each time we step downwards, we invert the links to point to the parent.
+The next step will be to venture into the NULL left-child from the current point.</p>
+<p>This image has not even finished the first run of step 1 from above yet, so let's continue.</p>
+<div class="img-tpl">
+    <img src="inversion02.png" alt="TODO-SORRY!">
+</div>
+<p>Okay, we have successfully finished part 1 of the algorithm: 'go leftward a lot'!
+Now step 2 does not apply, <code>went_right</code> has been set for exactly 0 nodes at this point in execution.
+We swiftly move to step 3! Here, we perform an exchange.
+We have finished traversing the left child of the current subtree (the leaf), and now we must traverse the left.
+We do some swaps and end up here:</p>
+<div class="img-tpl">
+    <img src="inversion03.png" alt="TODO-SORRY!">
+</div>
+<p>Okay, the exchange succeeded! We are back at step 1, because <code>prev != NULL</code>.
+Let's ignore the red circle for just a moment and execute step 1.
+Done! Did you see it? Nothing!
+Of course, <code>cur == NULL</code>, so step 1 is not run. Time for step 2! We must go up until we reach the root!
+We run this until <code>prev-&gt;went_right == false</code>, in this case one time.
+Running this step means we are prepared to forget about the current subtree.
+Step 3 will exchange once more, getting us to the parents right child:</p>
+<div class="img-tpl">
+    <img src="inversion04.png" alt="TODO-SORRY!">
+</div>
+<p>If you are keen, you may have noticed that this is a strikingly similar image to the first one in the series.
+The only difference is the red marker in the <code>prev</code> node. If you apply the operations I have listed since the
+start of this subsection, you can fully traverse this tree. Making enough images to illustrate all of that
+is an exercise left to the reader.</p>
+<p>Link inversion is relatively complex when compared to the standard method, but definitely more fun!</p>
+<h3 id="warning">Warning</h3>
+<p>This algorithm is <em>dangerous</em>! If you attempt to modify the tree while it is being
+traversed, pointers will be a complete mess! Make sure this algorithm completes before altering the
+tree anymore!</p>
+<h3 id="analysis-1">Analysis</h3>
+<ul>
+<li>Space-Complexity: <code>O(n)</code>
+<ul>
+<li>This is because each tree node needs a marker, so linear cost.</li>
+</ul>
+</li>
+<li>Time complexity: <code>O(n)</code></li>
+</ul>
+<p>We still have not yet improved on the algorithmic cost of the standard depth-first search.
+We have been doing quite well on solving Knuth's challenge, but thats only a minor goal!
+Let's get to the real thing now, the Robson traversal.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>The threaded tree is a great structure for in-order traversal. Use it when you need to find the successor to a node lickity-split. The link-inversion method is quite strange, almost alien. However, it is used as the basis for a much cooler algorithm, The Robson Traversal. This post does not cover this traversal, but maybe a future one will.</p>
+<p>These algorithms are quite interesting to me. Finding novel ways to do simple tasks can lead to some interesting findings. Even if we re-invent the wheel sometimes, knowing how to make a wheel is important! I hope you find a cool use for these algorithms in the future. They have provided me with quite a bit of help, I would like to think.</p>
+<h3 id="p-s">P.S.</h3>
+<p>I have another blog post in the works, detailing an even cooler tree traversal. This Robson traversal is little known, but traverses trees in <em><strong>constant space</strong></em>. Please keep an eye out for this forthcoming blog post.</p>
+<p>If you liked this post, and want to see the new one even sooner, shoot me an email or a tweet for encouragement! I hope you learned something great today!</p>
+
+
+        </div>
+        
+    
+    <div class="section bottom-menu">
+        <hr />
+        <nav class="bottom-menu-nav">
+            <ul class="bottom-nav-list">
+                <li class="bottom-nav-item">
+                    <a class="bottom-nav-link" href="https:&#x2F;&#x2F;drs.is">
+                        Home
+                    </a>
+                </li>
+                
+                    
+                    <li class="bottom-nav-item">
+                        <a class="bottom-nav-link" href="&#x2F;post" >Posts</a>
+                    </li>
+                    
+                    <li class="bottom-nav-item">
+                        <a class="bottom-nav-link" href="&#x2F;about" >About</a>
+                    </li>
+                    
+                    <li class="bottom-nav-item">
+                        <a class="bottom-nav-link" href="&#x2F;projects" >Projects</a>
+                    </li>
+                    
+                    <li class="bottom-nav-item">
+                        <a class="bottom-nav-link" href="https:&#x2F;&#x2F;github.com&#x2F;sinistersnare" target="_blank" >Github↪</a>
+                    </li>
+                    
+                
+            </ul>
+        </nav>
+    </div>
+
+        
+    
+        <div class="section footer">
+            ©2017-2020 Davis Silverman
+        </div>
+    
+
+    </div>
+
+    </body>
+</html>
