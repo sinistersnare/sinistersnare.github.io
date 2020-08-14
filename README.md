@@ -23,6 +23,7 @@ Now write, and changes will be reflected.
 ## Releasing The Site ##
 
 1. Make sure Zola is installed. https://www.getzola.org/documentation/getting-started/installation/
+1. `$ rm -rf public docs`
 1. `$ zola build`
 1. `$ mv public docs` # shortcut to make GH pages easier to use
 1. `$ echo 'drs.is' > docs/CNAME`
