@@ -37,8 +37,7 @@ Now write, and changes will be reflected.
 
 ## TODO: ##
 
-* (post-zola): Use Zola Table-of-Contents support
-* RSS + Atom.xml
+* Edit theme to use [ToC support](https://www.getzola.org/documentation/content/table-of-contents/).
 * Give this blog the Attribution 4.0 Internation Creative Commons License
     * https://creativecommons.org/choose/
 
