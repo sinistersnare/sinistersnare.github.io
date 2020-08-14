@@ -25,12 +25,12 @@ Now write, and changes will be reflected.
 1. Make sure Zola is installed. https://www.getzola.org/documentation/getting-started/installation/
 1. `$ rm -rf public docs`
 1. `$ zola build --output-dir docs` # Use docs/ for easier GH pages usage.
-1. `$ echo 'drs.is' > docs/CNAME` # Add CNAME so GH redirects for us.
 1. `git add . ; git commit ; git push origin master` # you know the drill!
 
 ## TODO: ##
 
 * Edit theme to use [ToC support](https://www.getzola.org/documentation/content/table-of-contents/) for posts.
+* Automate build/deploy with GH actions or something? https://www.getzola.org/documentation/deployment/github-pages/
 
 ## LICENSE ##
 

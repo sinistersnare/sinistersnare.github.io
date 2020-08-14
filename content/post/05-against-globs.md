@@ -2,7 +2,7 @@
 slug = "against-globs"
 title = "Against Glob Imports"
 description = "Make your code easy to read."
-date = 2020-05-15T12:00:00-05:00
+date = 2020-08-14
 draft = true
 [taxonomies]
 tags = ["Rust", "Python", "Engineering", "Pet-Peeves"]
