@@ -26,17 +26,6 @@ ignored_content = ["inversion.xml", "threaded.xml"]
 
 [extra]
 
-anpu_menu_links = [
-    { url = "$BASE_URL/", name = "Home" },
-    { url = "$BASE_URL/post/", name = "Posts" },
-    { url = "$BASE_URL/about/", name = "About" },
-    { url = "$BASE_URL/projects/", name = "Projects" },
-    { url = "https://github.com/sinistersnare", name = "Github↪" },
-]
-anpu_date_format = "%a %b %e, %Y"
-anpu_start_year = "2017"
-
-
 # Sam Config
 sam_menu = [
     { text = "Posts", link = "/post" },
@@ -46,7 +35,7 @@ sam_menu = [
 ]
 sam_bottom_menu = true
 home = "Home" # Name for home page links.
-date_format = "%b %e, %Y"
+date_format = "%b %d, %Y"
 show_reading_time = true
 show_word_count = false
 no_header = false

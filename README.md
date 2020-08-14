@@ -27,7 +27,7 @@ Now write, and changes will be reflected.
 1. `$ zola build`
 1. `$ mv public docs` # shortcut to make GH pages easier to use
 1. `$ echo 'drs.is' > docs/CNAME`
-1. `git add . ; git commit ; git push` # you know the drill!
+1. `git add . ; git commit ; git push origin master` # you know the drill!
 
 ## TODO: ##
 
