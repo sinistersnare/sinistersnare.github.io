@@ -58,10 +58,11 @@ has the same issue.
 # Globs in preludes #
 
 Preludes should be the only place that globs are used. Preludes are for, in my opinion,
-extension traits, and invisible traits that will not be named in the program otherwise.
+extension traits and invisible traits that will not be named in the program otherwise.
 
 Preludes are a very privileged thing, and you should think twice about adding one to your
-library. It may be easier to simply
+library. I would say avoid adding one unless you are building a large framework
+that has a lot of extension traits.
 
 # Conclusion #
 

@@ -53,9 +53,10 @@ import-formatter to expand all glob-imports. But reading tutorial Java code
 has the same issue.&lt;&#x2F;p&gt;
 &lt;h1 id=&quot;globs-in-preludes&quot;&gt;Globs in preludes&lt;&#x2F;h1&gt;
 &lt;p&gt;Preludes should be the only place that globs are used. Preludes are for, in my opinion,
-extension traits, and invisible traits that will not be named in the program otherwise.&lt;&#x2F;p&gt;
+extension traits and invisible traits that will not be named in the program otherwise.&lt;&#x2F;p&gt;
 &lt;p&gt;Preludes are a very privileged thing, and you should think twice about adding one to your
-library. It may be easier to simply&lt;&#x2F;p&gt;
+library. I would say avoid adding one unless you are building a large framework
+that has a lot of extension traits.&lt;&#x2F;p&gt;
 &lt;h1 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h1&gt;
 &lt;p&gt;Code is only written once, and it is read countless times after. Just spend the few minutes
 to write out the imports, make future you, and future readers&#x27; lives easier.&lt;&#x2F;p&gt;
