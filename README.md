@@ -34,7 +34,6 @@ Now write, and changes will be reflected.
 1. `$ git push origin master`
 1. `$ git checkout source` Go back to the source of this blog.
 
-
 ## TODO: ##
 
 * Edit theme to use [ToC support](https://www.getzola.org/documentation/content/table-of-contents/).
