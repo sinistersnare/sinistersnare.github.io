@@ -85,12 +85,18 @@
             border: 1px solid $links
     & li
         line-height: 2
-        padding-left: 0.4rem
-        &:last-child
-            margin-bottom: 1rem
+        // padding-left: 0.4rem
+        // &:last-child
+            // margin-bottom: 1rem
     & ul
         list-style: disc outside
-        padding-left: 2rem
+        // removed this padding because it was making
+        // tags padding look ugly AF.
+        // but it makes actualy <ul> on this site
+        // look good, sooooo idk lol.
+        // markdown sucks cause its classless
+        // and makes this hard.
+        // padding-left: 2rem
     & ol
         list-style: decimal outside
         padding-left: 2rem
@@ -106,8 +112,6 @@
                 color: $body-text
 
 .tag
-    padding: 0.25em 0em
-    margin-right: 0.5em
     opacity: 0.6
 
 .grid

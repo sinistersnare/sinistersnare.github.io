@@ -32,9 +32,11 @@ Now write, and changes will be reflected.
 * Edit theme to use [ToC support](https://www.getzola.org/documentation/content/table-of-contents/) for posts.
 * Automate build/deploy with GH actions or something? https://www.getzola.org/documentation/deployment/github-pages/
 * Delimit tags in posts with a comma or something.
+* Make blockquote look less SHIT
+* I fucked up default list styles making ToC looking good. Unfuckup while keeping ToCs pretty.
+    * maybe just add inline-style to ToC HTML so i can unfuck the stuff in `_element.sass`?
 
 ## LICENSE ##
-
 * All of MY source code (basically, the markdown files) that generates this site is MIT licensed.
 * All source code provided by posts is MIT licensed (unless cribbed from a project,
 in which case it is that license).
@@ -48,5 +50,5 @@ Changes I have made to sam include:
 * Tweaked some CSS
 * Added a 'home' link to the top of non-home pages.
 * Probably some other small things, run a diff if you want.
-
+* Changed the HTML of the tags to use a `<nav>` element.
 Enjoy <3

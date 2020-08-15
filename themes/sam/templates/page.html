@@ -31,18 +31,39 @@
             {% endif %}
         {% endif %}
         {% if page.taxonomies.tags %}
-            <div class="tag-container">
+        <nav class="tag-container">
+            <ul>
                 {% for tag in page.taxonomies.tags %}
-                    <span class="tag">
-                        <a href="{{ get_taxonomy_url(kind='tags', name=tag) }}">
-                            {{ tag }}
-                        </a>
-                    </span>
+                <li class="tag">
+                    <a href="{{ get_taxonomy_url(kind='tags', name=tag) }}">
+                        {{ tag }}
+                    </a>
+                </li>
                 {% endfor %}
-            </div>
+            </ul>
+        </nav>
         {% endif %}
         <hr/>
-    {% else %}
+    {% endif %}
+    {% if page.extra.generate_toc %}
+    <h1 class="toc-header">Table of Contents</h1>
+    <div class="toc">
+        <ul class="toc-level-1">
+            {% for h1 in page.toc %}
+            <li>
+                <a href="{{ h1.permalink | safe }}">{{ h1.title }}</a>
+                {% if h1.children %}
+                    <ul class="toc-level-2">
+                        {% for h2 in h1.children %}
+                        <li><a href="{{ h2.permalink | safe }}">{{ h2.title }}</a></li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <hr/>
     {% endif %}
     {{ page.content | safe }}
 {% endblock content %}
