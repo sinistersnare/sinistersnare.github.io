@@ -18,6 +18,13 @@
         
             <link rel="alternate" type="application/rss+xml" title="RSS" href="https:&#x2F;&#x2F;drs.is&#x2F;atom.xml">
         
+
+        <!-- TODO: apparently CDNs arent good anymore. -->
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.js" integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/contrib/mathtex-script-type.min.js" integrity="sha384-zWYbd0NBwgTsgIdFKVprSfTh1mbMPe5Hz1X3yY4Sd1h/K1cQoUe36OGwAGz/PcDy" crossorigin="anonymous"></script>
+        
     </head>
     <body>
         
@@ -90,29 +97,27 @@
 I know they may seem useful, but I think that, overall, they are an anti-pattern.</p>
 <h1 id="reading-code">Reading Code</h1>
 <p>Using globs is a detriment to reading code. If I see some code using a type I have not seen
-before, I go to the imports to find where it is defined, and then look it up in
-<a href="https:&#x2F;&#x2F;docs.rs" target="_blank">docs.rs↪</a>
-or the std-docs.
-If I cant find the item thanks to a glob, then it makes it an annoying game of 'find the type'.</p>
+before, I go to the imports to find where it is defined, and then look it up in</p>
+<a href="https:&#x2F;&#x2F;docs.rs" target="_blank">docs.rs↪</a> or the std-docs.
+<p>If I cant find the item thanks to a glob, then it makes it an annoying game of 'find the type'.</p>
 <h1 id="example">Example</h1>
 <p>Tutorials are supposed to be jumping off points! They should give the user enough information
 to be a little dangerous. They should encourage the user to keep learning after the tutorial
 is finished. When I find myself reading tutorials, many look like this
-(from the wonderful <a href="https:&#x2F;&#x2F;tantivy-search.github.io&#x2F;examples&#x2F;basic_search.html" target="_blank">Tantivy Documentation↪</a>
-):</p>
+(from the wonderful <a href="https:&#x2F;&#x2F;tantivy-search.github.io&#x2F;examples&#x2F;basic_search.html" target="_blank">Tantivy Documentation↪</a>):</p>
 <pre style="background-color:#2b303b;">
-<code><span style="color:#c0c5ce;">#[</span><span style="color:#bf616a;">macro_use</span><span style="color:#c0c5ce;">]</span><span style="color:#c0c5ce;">
-</span><span style="color:#b48ead;">extern crate</span><span style="color:#c0c5ce;"> tantivy;</span><span style="color:#c0c5ce;">
-</span><span style="color:#b48ead;">use </span><span style="color:#c0c5ce;">tantivy::collector::TopDocs;</span><span style="color:#c0c5ce;">
-</span><span style="color:#b48ead;">use </span><span style="color:#c0c5ce;">tantivy::query::QueryParser;</span><span style="color:#c0c5ce;">
-</span><span style="color:#b48ead;">use </span><span style="color:#c0c5ce;">tantivy::schema::*;</span><span style="color:#c0c5ce;">
-</span><span style="color:#b48ead;">use </span><span style="color:#c0c5ce;">tantivy::Index;</span><span style="color:#c0c5ce;">
-</span><span style="color:#b48ead;">use </span><span style="color:#c0c5ce;">tantivy::ReloadPolicy;</span><span style="color:#c0c5ce;">
-</span><span style="color:#b48ead;">use </span><span style="color:#c0c5ce;">tempdir::TempDir;</span><span style="color:#c0c5ce;">
-</span><span style="color:#c0c5ce;">
-</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">main</span><span style="color:#c0c5ce;">() -&gt; tantivy::Result&lt;()&gt; {</span><span style="color:#c0c5ce;">
-    ... </span><span style="color:#65737e;">// rest of tutorial</span><span style="color:#c0c5ce;">
-}</span><span style="color:#c0c5ce;">
+<code><span style="color:#c0c5ce;">#[</span><span style="color:#bf616a;">macro_use</span><span style="color:#c0c5ce;">]
+</span><span style="color:#b48ead;">extern crate</span><span style="color:#c0c5ce;"> tantivy;
+</span><span style="color:#b48ead;">use </span><span style="color:#c0c5ce;">tantivy::collector::TopDocs;
+</span><span style="color:#b48ead;">use </span><span style="color:#c0c5ce;">tantivy::query::QueryParser;
+</span><span style="color:#b48ead;">use </span><span style="color:#c0c5ce;">tantivy::schema::*;
+</span><span style="color:#b48ead;">use </span><span style="color:#c0c5ce;">tantivy::Index;
+</span><span style="color:#b48ead;">use </span><span style="color:#c0c5ce;">tantivy::ReloadPolicy;
+</span><span style="color:#b48ead;">use </span><span style="color:#c0c5ce;">tempdir::TempDir;
+
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">main</span><span style="color:#c0c5ce;">() -&gt; tantivy::Result&lt;()&gt; {
+    ... </span><span style="color:#65737e;">// rest of tutorial
+</span><span style="color:#c0c5ce;">}
 </span></code></pre>
 <p>This is not a more egregious example, simply the one I most recently faced.</p>
 <p>The first thing I do when reading a tutorial is scan the imports. When I see the glob here,

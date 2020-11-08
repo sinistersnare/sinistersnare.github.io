@@ -18,6 +18,13 @@
         
             <link rel="alternate" type="application/rss+xml" title="RSS" href="https:&#x2F;&#x2F;drs.is&#x2F;atom.xml">
         
+
+        <!-- TODO: apparently CDNs arent good anymore. -->
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.js" integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/contrib/mathtex-script-type.min.js" integrity="sha384-zWYbd0NBwgTsgIdFKVprSfTh1mbMPe5Hz1X3yY4Sd1h/K1cQoUe36OGwAGz/PcDy" crossorigin="anonymous"></script>
+        
     </head>
     <body>
         
@@ -62,15 +69,12 @@
         <hr/>
     
     
-    <p>This is my response to the
-<a href="https:&#x2F;&#x2F;blog.rust-lang.org&#x2F;2018&#x2F;12&#x2F;06&#x2F;call-for-rust-2019-roadmap-blogposts.html" target="_blank">Call for Rust 2019 Roadmap↪</a>
-.
-Thanks for reading!</p>
-<p>Rust needs to focus on less glamorous features in 2019. We have added a lot of great features since 1.0, but we need to address the warts that we have had for a long time. I mostly echo sentiments from
-<a href="https:&#x2F;&#x2F;www.jonathanturner.org&#x2F;2018&#x2F;12&#x2F;the-fallow-year.html" target="_blank">Jonathan Turner↪</a>
-,
-<a href="https:&#x2F;&#x2F;blog.cessen.com&#x2F;post&#x2F;2018_12_12_rust_2019_its_the_little_things" target="_blank">Nathan Vegdahl↪</a>
-, and many others in my 'fallow-year' sentiments. Overall, Compilation speed and generic constants are my two most wished-for features. On top of that, I would like to see more ecosystem work to make embedded applications more feasible and easy to use. Finally, Rust needs a moratorium on adding syntactic sugar for 2019.</p>
+    <p>This is my response to the</p>
+<a href="https:&#x2F;&#x2F;blog.rust-lang.org&#x2F;2018&#x2F;12&#x2F;06&#x2F;call-for-rust-2019-roadmap-blogposts.html" target="_blank">Call for Rust 2019 Roadmap↪</a>.
+<p>Thanks for reading!</p>
+<p>Rust needs to focus on less glamorous features in 2019. We have added a lot of great features since 1.0, but we need to address the warts that we have had for a long time. I mostly echo sentiments from</p>
+<a href="https:&#x2F;&#x2F;www.jonathanturner.org&#x2F;2018&#x2F;12&#x2F;the-fallow-year.html" target="_blank">Jonathan Turner↪</a>,
+<a href="https:&#x2F;&#x2F;blog.cessen.com&#x2F;post&#x2F;2018_12_12_rust_2019_its_the_little_things" target="_blank">Nathan Vegdahl↪</a>, and many others in my 'fallow-year' sentiments. Overall, Compilation speed and generic constants are my two most wished-for features. On top of that, I would like to see more ecosystem work to make embedded applications more feasible and easy to use. Finally, Rust needs a moratorium on adding syntactic sugar for 2019.
 <h1 id="the-compiler">The Compiler</h1>
 <p>The coming year should be us grabbing a ladder, reaching for some of the higher-hanging fruit of Rust issues. The compiler team has been heroic in their work since the beginning. Things like incremental builds, caching (through the likes of sscache), and using <code>cargo check</code> when you just need to see if it builds, have helped the community work faster. However, a longstanding bottleneck in compilation is the code we give to LLVM. As I understand it, we have been waiting on MIR to start work on this. I would love to see Rust improve its LLVM-IR codegen. Perhaps if we give LLVM less work to do, we can gain back a large chunk of time wasted.</p>
 <p>On a personal note, my 2019 programming resolution is to start more serious work on compilers. I would love to help the compilers team on this effort! I hope 2019 can significantly improve the compilation story for Rust.</p>
