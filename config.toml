@@ -25,6 +25,9 @@ ignored_content = ["inversion.xml", "threaded.xml"]
 
 [extra]
 
+# Moderately-pilfered from the Even Theme
+katex_enable = true
+
 # Sam Config
 sam_menu = [
     { text = "Posts", link = "/post" },
