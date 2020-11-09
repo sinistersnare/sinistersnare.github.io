@@ -4,21 +4,15 @@
 	<link href="https://drs.is/atom.xml" rel="self" type="application/atom+xml"/>
   <link href="https://drs.is"/>
 	<generator uri="https://www.getzola.org/">Zola</generator>
-	<updated>2020-11-08T12:15:00-05:00</updated>
+	<updated>2020-11-09T12:15:00-05:00</updated>
 	<id>https://drs.is/atom.xml</id>
 	<entry xml:lang="en">
 		<title>Abstract Machines: Interpreters for Computer Scientists</title>
-		<published>2020-11-08T12:15:00-05:00</published>
-		<updated>2020-11-08T12:15:00-05:00</updated>
+		<published>2020-11-09T12:15:00-05:00</published>
+		<updated>2020-11-09T12:15:00-05:00</updated>
 		<link href="https://drs.is/post/abstract-machines/" type="text/html"/>
 		<id>https://drs.is/post/abstract-machines/</id>
-		<content type="html">&lt;p&gt;THIS IS A DRAFT! It&#x27;ll be published &#x27;for real&#x27; soon. If you have feedback,
-let me know!&lt;&#x2F;p&gt;
-&lt;p&gt;TODO:&lt;&#x2F;p&gt;
-&lt;ul&gt;
-&lt;li&gt;Use \Downarrow for big step?&lt;&#x2F;li&gt;
-&lt;&#x2F;ul&gt;
-&lt;hr &#x2F;&gt;
+		<content type="html">&lt;h1 id=&quot;introduction&quot;&gt;Introduction&lt;&#x2F;h1&gt;
 &lt;p&gt;So im a PhD student now, so I need to write about cool computer science things!
 As part of my learnings, I have been writing a bunch of &#x27;Abstract Machines&#x27;.
 I think of them as how computer scientists do programming languages research without computers.
@@ -71,7 +65,7 @@ There will be a few different rules.&lt;&#x2F;p&gt;
 &lt;li&gt;If cond is an atomic value, and that value is &lt;code&gt;false&lt;&#x2F;code&gt;, the resulting state is &lt;code&gt;e_false&lt;&#x2F;code&gt;.&lt;&#x2F;li&gt;
 &lt;li&gt;If cond is not an atommic value, then evaluate it to &lt;code&gt;cond&#x27;&lt;&#x2F;code&gt; , and return &lt;code&gt;if cond&#x27; then e_true else e_false&lt;&#x2F;code&gt;.&lt;&#x2F;li&gt;
 &lt;&#x2F;ol&gt;
-&lt;p&gt;An atomic value is a value that can not be broken up any more. This means a datatype, not a complex expression. In these simple machines I show, the only datatype is a number.&lt;&#x2F;p&gt;
+&lt;p&gt;An atomic value is a value that can not be broken up any more. This means a datatype, not a complex expression. In these simple machines, the only atomic datatype is a number. Don&#x27;t tell computer scientists about quarks, they may go insane.&lt;&#x2F;p&gt;
 &lt;p&gt;By going from a state to a next state, small step mechanics more closely follow
 how our computers work. They dont evaluate to values directly, they just... keep going.&lt;&#x2F;p&gt;
 &lt;p&gt;This may confuse a new reader, if it keeps going, how do we know its done? Big step rules
@@ -87,11 +81,11 @@ operators&#x27;. Control is the currently running &#x27;thing&#x27; in your prog
 the C machine because you only need control to represent the state of the entire program.&lt;&#x2F;p&gt;
 &lt;p&gt;C machines are not capable of much, only simple rewriting of expresions, because they dont have any information other than the program&#x27;s control itself to go off of.
 One kind of language we can formalize with a C machine is that of mathematical expressions.&lt;&#x2F;p&gt;
-&lt;p&gt;Here is a big-step semantics of type &lt;script type=&quot;math&#x2F;tex&quot;&gt;MathExp \rightarrow Number&lt;&#x2F;script&gt; (takes a math expression and returns a number). This means that the control we choose to use is a math expression. The result of evaluating a math expression is a number, of course, so thats the value.&lt;&#x2F;p&gt;
+&lt;p&gt;Here is a big-step semantics of type &lt;script type=&quot;math&#x2F;tex&quot;&gt;MathExp \Downarrow Number&lt;&#x2F;script&gt; (takes a math expression and returns a number). This means that the control we choose to use is a math expression. The result of evaluating a math expression is a number, of course, so thats the value.&lt;&#x2F;p&gt;
 &lt;script type=&quot;math&#x2F;tex&quot;&gt;Addition:&lt;&#x2F;script&gt;
-&lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;\frac{e_1 \rightarrow n_1 \;,\; e_2 \rightarrow n_2 \;,\; n_1+n_2 = n }
-     {e_1+e_2 \rightarrow n}&lt;&#x2F;script&gt;
-&lt;p&gt;This rule shows how to add expressions to end up with a number. You can understand it by reading the half under the bar as &#x27;this is what we start and end with&#x27; and the half above the bar as &#x27;these must be true to use these semantics&#x27;. You read &lt;script type=&quot;math&#x2F;tex&quot;&gt;\rightarrow&lt;&#x2F;script&gt; as &#x27;evalutes to&#x27;.&lt;&#x2F;p&gt;
+&lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;\frac{e_1 \Downarrow n_1 \;,\; e_2 \Downarrow n_2 \;,\; n_1+n_2 = n }
+     {e_1+e_2 \Downarrow n}&lt;&#x2F;script&gt;
+&lt;p&gt;This rule shows how to add expressions to end up with a number. You can understand it by reading the half under the bar as &#x27;this is what we start and end with&#x27; and the half above the bar as &#x27;these must be true to use these semantics&#x27;. You read &lt;script type=&quot;math&#x2F;tex&quot;&gt;\Downarrow&lt;&#x2F;script&gt; as &#x27;evalutes to&#x27;.&lt;&#x2F;p&gt;
 &lt;p&gt;You can read this rule like so:&lt;&#x2F;p&gt;
 &lt;ol&gt;
 &lt;li&gt;If we have some control that looks like &lt;script type=&quot;math&#x2F;tex&quot;&gt;e_1 + e_2&lt;&#x2F;script&gt; (this is from the bottom left, before the arrow)&lt;&#x2F;li&gt;
@@ -101,20 +95,20 @@ One kind of language we can formalize with a C machine is that of mathematical e
 &lt;li&gt;THEN we know that the expression in step 1 evaluates to &lt;script type=&quot;math&#x2F;tex&quot;&gt;n&lt;&#x2F;script&gt;.&lt;&#x2F;li&gt;
 &lt;&#x2F;ol&gt;
 &lt;p&gt;This may seem a bit backwards, we implement adding by adding? Well, the key is that expressions are complex, they can be composed of other expressions or just values. These rules show how to do math on expressions by first evaluating them to values. Then once they are values, it is quite easy to do math operations on them.&lt;&#x2F;p&gt;
-&lt;p&gt;Note the distinction between the arrow &lt;script type=&quot;math&#x2F;tex&quot;&gt;\rightarrow&lt;&#x2F;script&gt; and &lt;script type=&quot;math&#x2F;tex&quot;&gt;=&lt;&#x2F;script&gt; here. &lt;script type=&quot;math&#x2F;tex&quot;&gt;\rightarrow&lt;&#x2F;script&gt; is saying &amp;quot;left evaluates to right by virtue of applying this machine&#x27;s rules.&amp;quot; and &lt;script type=&quot;math&#x2F;tex&quot;&gt;=&lt;&#x2F;script&gt; is saying &amp;quot;you can substitute left for right&amp;quot;.&lt;&#x2F;p&gt;
-&lt;p&gt;Authors of semantics like these love to use different cool looking arrow symbols, they all mean the same thing. Usually in big step they use a cool down-facing arrow like &lt;script type=&quot;math&#x2F;tex&quot;&gt;\Downarrow&lt;&#x2F;script&gt;, and in small step they will use a more boring arrow like &lt;script type=&quot;math&#x2F;tex&quot;&gt;\rightarrow&lt;&#x2F;script&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;Note the distinction between the arrow &lt;script type=&quot;math&#x2F;tex&quot;&gt;\Downarrow&lt;&#x2F;script&gt; and &lt;script type=&quot;math&#x2F;tex&quot;&gt;=&lt;&#x2F;script&gt; here. &lt;script type=&quot;math&#x2F;tex&quot;&gt;\Downarrow&lt;&#x2F;script&gt; is saying &amp;quot;left evaluates to right by virtue of applying this machine&#x27;s rules.&amp;quot; and &lt;script type=&quot;math&#x2F;tex&quot;&gt;=&lt;&#x2F;script&gt; is saying &amp;quot;you can substitute left for right&amp;quot;.&lt;&#x2F;p&gt;
+&lt;p&gt;Authors of semantics like these love to use different looking arrow symbols, they all mean the same thing. Usually in big step they use a cool down-facing arrow like &lt;script type=&quot;math&#x2F;tex&quot;&gt;\Downarrow&lt;&#x2F;script&gt;. In small step they will use a more boring arrow like &lt;script type=&quot;math&#x2F;tex&quot;&gt;\rightarrow&lt;&#x2F;script&gt;.&lt;&#x2F;p&gt;
 &lt;h3 id=&quot;example&quot;&gt;Example&lt;&#x2F;h3&gt;
 &lt;p&gt;Lets evaluate a simple math expression to show how you can use these rules to prove that expressions are evaluated correctly using a machines rules.&lt;&#x2F;p&gt;
-&lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;\frac{\frac{7 \rightarrow 7 \; 3 \rightarrow 3 \; 7 + 3 = 10}{7 + 3\rightarrow 10}  \scriptsize{\mathbf{Addition}} \;\;\; \frac{}{4 \rightarrow 4} \;\;\; 10 + 4 = 14}
-     {7+3+4 \rightarrow 14} \scriptsize{\mathbf{Addition}}&lt;&#x2F;script&gt;
+&lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;\frac{\frac{7 \Downarrow 7 \; 3 \Downarrow 3 \; 7 + 3 = 10}{7 + 3 \Downarrow 10}  \scriptsize{\mathbf{Addition}} \;\;\; \frac{}{4 \Downarrow 4} \;\;\; 10 + 4 = 14}
+     {7+3+4 \Downarrow 14} \scriptsize{\mathbf{Addition}}&lt;&#x2F;script&gt;
 &lt;p&gt;Here, at the first, bottom most level, &lt;script type=&quot;math&#x2F;tex&quot;&gt;e_1 = 7 + 3&lt;&#x2F;script&gt; and &lt;script type=&quot;math&#x2F;tex&quot;&gt;e_2 = 4&lt;&#x2F;script&gt;. Then we need to prove that &lt;code&gt;7 + 3 = 10&lt;&#x2F;code&gt;, and we do that with another application of the addition rule! We could have chosen &lt;code&gt;3 + 4&lt;&#x2F;code&gt; to be be &lt;script type=&quot;math&#x2F;tex&quot;&gt;e_2&lt;&#x2F;script&gt;, but it doesnt matter for addition, and we leave issues like that to a parser. I noted each level with the rule that was used to evaluate it. It is generally showed like this, but I usually dont show them. I only have so much horizontal space on this webpage!&lt;&#x2F;p&gt;
 &lt;p&gt;To evaluate simple mathematical expressions, we only need a control for the state. C machines are only capable of evaluating simple programs. What if we want to add a simple programming construct like variables? For that, we need a place to store them. And so, the CE machine is born!&lt;&#x2F;p&gt;
 &lt;h1 id=&quot;environments-with-the-ce-machine&quot;&gt;Environments with the CE machine.&lt;&#x2F;h1&gt;
 &lt;p&gt;To evaluate variables, we need to be able to keep track of what value they hold at a given program point. in a C machine, if we are given &lt;code&gt;a + 2&lt;&#x2F;code&gt;, we have no way of know what &lt;code&gt;a&lt;&#x2F;code&gt; is, because its not a number, and we can only deal with syntax as we see it. But if we gave a machine both &lt;code&gt;a + 2&lt;&#x2F;code&gt;, the control, and a mapping &lt;code&gt;{a : 4}&lt;&#x2F;code&gt;, an environment, we can evaluate the expression to 6!&lt;&#x2F;p&gt;
-&lt;p&gt;So, a big-step CE machine doesnt just have &lt;code&gt;MathExp&lt;&#x2F;code&gt; (C) for state anymore, we need an &lt;code&gt;Env&lt;&#x2F;code&gt; (E) to accompany it! The function is now of type &lt;script type=&quot;math&#x2F;tex&quot;&gt;(MathExp \times Env) \rightarrow Number&lt;&#x2F;script&gt;. This means that our machine will take 2 arguments, a math expression and an environment, and it will return a computed number.&lt;&#x2F;p&gt;
+&lt;p&gt;So, a big-step CE machine doesnt just have &lt;code&gt;MathExp&lt;&#x2F;code&gt; (C) for state anymore, we need an &lt;code&gt;Env&lt;&#x2F;code&gt; (E) to accompany it! The function is now of type &lt;script type=&quot;math&#x2F;tex&quot;&gt;(MathExp \times Env) \Downarrow Number&lt;&#x2F;script&gt;. This means that our machine will take 2 arguments, a math expression and an environment, and it will return a computed number.&lt;&#x2F;p&gt;
 &lt;script type=&quot;math&#x2F;tex&quot;&gt;Var-Lookup:&lt;&#x2F;script&gt;
 &lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;\frac{\rho[var] = n}
-     {(var, \rho) \rightarrow n}&lt;&#x2F;script&gt;
+     {(var, \rho) \Downarrow n}&lt;&#x2F;script&gt;
 &lt;p&gt;This simply states that if the expression is a variable, not an artithmetic expression,
 the value it returns is what the environment says it is. We use the greek
 letter rho (&#x27;ρ&#x27;) (not the letter &#x27;p&#x27;) to represent the environment. This is what is used
@@ -123,16 +117,16 @@ in the literature, and its always best to follow along with norms to avoid confu
 &lt;code&gt;m*c*c&lt;&#x2F;code&gt; with an environment &lt;code&gt;{m : 12 c : 299792458}&lt;&#x2F;code&gt;, which will return some number for us.
 We have made a calculator with predefined constants! We can put pi in there,
 or tau if you are a lunatic...&lt;&#x2F;p&gt;
-&lt;h1 id=&quot;we-have-everything-we-need-now&quot;&gt;We have EVERYTHING we need now!&lt;&#x2F;h1&gt;
+&lt;h1 id=&quot;real-looking-programs&quot;&gt;Real Looking Programs&lt;&#x2F;h1&gt;
 &lt;p&gt;Wow, it seems like we can do a lot with just a control and an environment. We could further extend this to things like variable assignment (again, these are big-step semantics):&lt;&#x2F;p&gt;
 &lt;script type=&quot;math&#x2F;tex&quot;&gt;\mathbf{Assignment:}&lt;&#x2F;script&gt;
-&lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;\frac{e_1 \rightarrow n_2 \;,\; \rho_2 = (\rho + \{var : n_2\}) \;,\; (e_2, \rho_2) \rightarrow n}
-     {(var := e_1 \;\text{in}\; e_2 \;,\; \rho) \rightarrow n}&lt;&#x2F;script&gt;
+&lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;\frac{e_1 \Downarrow n_2 \;,\; \rho_2 = (\rho + \{var : n_2\}) \;,\; (e_2, \rho_2) \Downarrow n}
+     {(var := e_1 \;\text{in}\; e_2 \;,\; \rho) \Downarrow n}&lt;&#x2F;script&gt;
 &lt;p&gt;This tells us that when we assign a variable, it will be available in the next expression.&lt;&#x2F;p&gt;
 &lt;p&gt;It seems that these two components of a state are enough to be wildly dangerous with. Soon enough, your semantics will be modeling a real language, with conditions, and inequalities, oh my! But, there are two big problems that you may face.&lt;&#x2F;p&gt;
 &lt;p&gt;First, your big step semantics may limit you. Their stringent requirements that their sub-expressions be terminating can cause issues in a turing-complete environment. And a small-step semantics can provide more granularity of control. For that reason, we will be using small-step semantics from now on.&lt;&#x2F;p&gt;
 &lt;p&gt;Also, as your language gets more and more complicated, the constructs of control and environment may be overburdened with responsibility. What can we do to simplify our understanding of these machines?&lt;&#x2F;p&gt;
-&lt;h1 id=&quot;what-next-kontinuations&quot;&gt;What next? Kontinuations!&lt;&#x2F;h1&gt;
+&lt;h1 id=&quot;what-next-kontinuations-cek&quot;&gt;What next? Kontinuations! CEK&lt;&#x2F;h1&gt;
 &lt;p&gt;One way to alleviate the burden is to add a new construct to our machines: The continuation.
 A continuation is a way of showing &#x27;future work&#x27; to be done. For example, when we implement
 our assignment operation, we can delegate the work of executing the second expression to the
@@ -186,7 +180,7 @@ that a continuation does is store the previous one, like a linked-list. Continua
 -&amp;gt; (x , {z : 3 , y : 3 , x : 6} , NONE)
 -&amp;gt; (6 , {z : 3 , y : 3 , x : 6} , NONE)
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;&lt;h3 id=&quot;interlude-injection&quot;&gt;Interlude: Injection&lt;&#x2F;h3&gt;
-&lt;p&gt;Note above that there is an &#x27;initial&#x27; state that we use when we start evaluating an expression. We wrap the expression with an empty environment (&#x27;{}&#x27;), and an &#x27;empty&#x27; contination (&#x27;NONE&#x27;). This is usually done with whats called an injection function:&lt;&#x2F;p&gt;
+&lt;p&gt;Note above that there is an &#x27;initial&#x27; state that we use when we start evaluating an expression. We wrap the expression with an empty environment (&#x27;{}&#x27;), and an &#x27;empty&#x27; contination (&#x27;NONE&#x27;). This is usually done with whats called an &lt;em&gt;injection function&lt;&#x2F;em&gt;:&lt;&#x2F;p&gt;
 &lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;inject(e) = (e \;,\; \{\} \;,\; \text{NONE})&lt;&#x2F;script&gt;
 &lt;p&gt;This gives us the initial state from an expression. The initial state can of course be changed to your needs. adding initial environment values or constants, for example.&lt;&#x2F;p&gt;
 &lt;h3 id=&quot;back-to-the-example&quot;&gt;Back To The Example&lt;&#x2F;h3&gt;
@@ -257,6 +251,10 @@ operational semantics can help you to formalize how your language evalautes, and
 &lt;script type=&quot;math&#x2F;tex&quot;&gt;&lt;&#x2F;script&gt;
 &lt;script type=&quot;math&#x2F;tex&quot;&gt;\rho:&lt;&#x2F;script&gt; &#x27;rho&#x27;, is an environment, used to map variables to values.
 &lt;script type=&quot;math&#x2F;tex&quot;&gt;\kappa:&lt;&#x2F;script&gt; &#x27;kappa&#x27;, is a continuation, which represents the rest of the program. We consult this after the current control is fully evaluated.
+&lt;script type=&quot;math&#x2F;tex&quot;&gt;\Sigma:&lt;&#x2F;script&gt; &#x27;Sigma&#x27; (uppercase). Although not used in this post, this character often is used to represent the `State` type of the machine.
+&lt;script type=&quot;math&#x2F;tex&quot;&gt;\varsigma:&lt;&#x2F;script&gt; &#x27;sigma&#x27; (lowercase in &#x27;final word position&#x27;). This is known as &#x27;varsigma&#x27;. You may find this used as an instance of a state. A small step machine goes from some state to a next state, so we can codify that as
+&lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;\varsigma_i \rightarrow \varsigma_{i+1}&lt;&#x2F;script&gt;
+&lt;script type=&quot;math&#x2F;tex&quot;&gt;\sigma:&lt;&#x2F;script&gt; &#x27;sigma&#x27; (lowercase). Although not used in this post, this character is used to represent the `store` component of a machine. If we would have made a CESK machine,  then the S would be this.
 </content>
 	</entry>
 	<entry xml:lang="en">
