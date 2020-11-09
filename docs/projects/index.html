@@ -46,8 +46,10 @@
 <p>This <em>tree traversal algorithm</em> is quite interesting. It is capable of pre-, in-, and post-order traversals, all while maintaining <code>O(1)</code> space consumption!</p>
 <p>I have a blog post in the works detailing this algorithm. Until then, check out my repository for it!</p>
 <h1 id="sinscheme"><a href="https:&#x2F;&#x2F;github.com&#x2F;sinistersnare&#x2F;SinScheme" target="_blank">SinScheme↪</a></h1>
-<p>A probably not-standard-compliant Scheme implementation, written in Racket with a C++ runtime. It compiles to LLVM, and uses the Boehm GC for... GC.</p>
-<p>Probably should not be used by your company, but I would love to keep working on it, and add cool features! I also hope to write about its compilation model, and the theory under it, in this blog. Let me know if you want to read such a blog post!</p>
+<p>A not-standard-compliant Scheme implementation, written in Racket with a C++ runtime. It compiles to LLVM, and uses the Boehm GC for... GC.</p>
+<p>It uses a nano-pass style architecture and continuation-passing style to ensure tail-calls.
+I also plan on adding optimizations to it by utilizing <a href="https://en.wikipedia.org/wiki/Control_flow_analysis">Control Flow Analysis</a> (Wow! What a depressing Wikipedia page. Maybe I should write a post on CFA's too!)</p>
+<p>It Should <em>not</em> be used by your company, but I would love to keep working on it, and add cool features! I also hope to write about its compilation model, and the theory under it, in this blog. Let me know if you want to read such a blog post!</p>
 <h1 id="royale-with-cheese"><a href="https:&#x2F;&#x2F;github.com&#x2F;sinistersnare&#x2F;RoyaleWithCheese" target="_blank">Royale With Cheese↪</a></h1>
 <p>A game I wrote in Unity for a class. It uses runtime nav-meshes, which were unavailable in Unity when I wrote this. It was quite a bit of fun to get it working!</p>
 <p>Currently this is not open sourced, but I would like to open-source it soon. If you would like to see its code, let me know!</p>

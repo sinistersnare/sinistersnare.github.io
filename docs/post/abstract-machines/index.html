@@ -43,14 +43,14 @@
         
             
     
-    Nov 03, 2020
+    Nov 08, 2020
 
         
         
         
             
             
-                &#183; 20 min
+                &#183; 21 min
             
         
         
@@ -93,13 +93,17 @@
         <hr/>
     
     
-    <h2 id="this-is-a-draft-it-ll-be-published-for-real-soon-if-you-have-feedback-let-me-know">THIS IS A DRAFT! It'll be published 'for real' soon. If you have feedback,
-let me know!</h2>
+    <p>THIS IS A DRAFT! It'll be published 'for real' soon. If you have feedback,
+let me know!</p>
+<p>TODO:</p>
+<ul>
+<li>Use \Downarrow for big step?</li>
+</ul>
+<hr />
 <p>So im a PhD student now, so I need to write about cool computer science things!
 As part of my learnings, I have been writing a bunch of 'Abstract Machines'.
-The way that I think of Abstract machines is that they are are how
-computer scientists do programming languages research without computers.
-I mean, they have to use <em>something</em> to write their papers.</p>
+I think of them as how computer scientists do programming languages research without computers.
+I mean, they have to use <em>something</em> to write their super complex papers.</p>
 <blockquote>
 <p>&quot;Computer Science is no more about computers than astronomy is about telescopes&quot;</p>
 <ul>
@@ -108,22 +112,22 @@ I mean, they have to use <em>something</em> to write their papers.</p>
 </blockquote>
 <p>We love computers, but they are merely a tool of computing. The real study
 of computation can be done without them, and the theories of how programming
-languages function is not discluded from that. So how do computer scientists
+languages function is not excluded from that. So how do computer scientists
 study interpreters without a computer? The theory of
-abstract machines is a big way in doing that.</p>
+abstract machines is one of the more popular ways.</p>
 <h1 id="how-to-compute">How to Compute</h1>
 <p>What does it mean to compute something? Humans are pretty good at just looking at things
-and formulating an answer. For example, you dont use a sorting algorithm when matching
-socks after your laundry is finished. But computers can't. They are given
+and formulating an answer. For example, a person does not use a sorting algorithm when matching
+socks after their laundry is finished. But computers can't just intuit a solution. They are given
 precise instructions on what to do to accomplish something. So how can we model that,
 and use it to inform the science behind computation?</p>
-<p>We can use 'abstract machines' to model computation. They are functions that take program states, and return some value. Program states can be composed of many different things. The simplest abstract machines simply use the syntax of the language. Others include a mapping of variables to values, so we can keep state around. We will describe such machines, and what kind of languages they can describe.</p>
-<p>These machines are interpreters. They are called 'abstract machines' because the theory on them is not specific to any exact language. You can make an abstract machine for whatever you want: Lisp, Java bytecode, RISC-V assembly language...</p>
+<p>'Abstract Machines' were created to model real computation strategies. These are functions that take program states, and return some value. Program states can be composed of many different things. The simplest abstract machines simply use the current point that the program is at. Others include a mapping of variables to values, so we can keep state around. We will describe such machines, and what kind of languages they can describe.</p>
+<p>These machines, in practice, are interpreters. They are called 'abstract' because the theory on them is not specific to any exact language. You can make an abstract machine for whatever you could want: Lisp, Java bytecode, RISC-V assembly language...</p>
 <h1 id="digression-operational-semantics">Digression: Operational Semantics</h1>
 <p>Operational Semantics are how we can write semantics of a language
 using pen and paper. Using a simple syntax, we can get the idea of
 'if the syntax looks like this, it can be evaluated into this'.</p>
-<p>The ideas of semantics work for both compilers and interpreters. It is pretty easy to take the operational semantics and turn them into 'real' functions in your implementation language of choice.</p>
+<p>The idea of semantics is separate from execution of a program. Semantics describe what something 'means', based on how it looks. Here are two different kinds of 'operational semantics', big-step and small-step.</p>
 <h2 id="big-step">Big Step</h2>
 <p>Big step evaluations have the type <code>State -&gt; Value</code>,
 meaning that you give them a state, and it will tell you which value
@@ -135,9 +139,7 @@ there are two rules that will be used.</p>
 <li>If cond evaluates to <code>true</code>, then the result is what <code>e_true</code> evaluates to.</li>
 <li>If cond evaluates to <code>false</code>, then the result is what <code>e_false</code> evaluates to.</li>
 </ol>
-<p>So it fully evaluates all expressions, and returns the result in a single step.
-A pretty large step, as it recursively spirals into its constituent parts. But,
-a single step nontheless!</p>
+<p>These rules assume that we have some way to fully evaluate whatever <code>cond</code> is. But whatever that way is is unimportant to the rule of evaluating <code>if</code> statements. This separation is very important for operational semantics. We can write small rules for specific parts of the language, all of which get composed together into a fully formalized machine.</p>
 <p>I like using big step when thinking exactly about what expressions <em>do</em>.</p>
 <h2 id="small-step">Small Step</h2>
 <p>Small step semantics have the type <code>State -&gt; State</code>. They will
@@ -154,57 +156,50 @@ There will be a few different rules.</p>
 <p>By going from a state to a next state, small step mechanics more closely follow
 how our computers work. They dont evaluate to values directly, they just... keep going.</p>
 <p>This may confuse a new reader, if it keeps going, how do we know its done? Big step rules
-directly result in a value, full stop. How do we know a state in small step semantics are finished?
-Well, we use what is called a 'fixpoint', or more simply, we evaluate until there isnt a meaningful change in the state after running. If we evaluate a math expression enough times,
+directly result in a value, full stop. How do we know a state in small step semantics is the one with the value? We use what is called a 'fixpoint', or more simply, we evaluate until there isnt a meaningful change in the state after running. If we evaluate a math expression enough times,
 it will decompose into a single number, upon which evaluation will lead to itself. That means there is no more work to be done, and evaluation stops.</p>
+<p>The same is true in a language like <code>C</code>, after the final instruction in <code>main</code>, if we try to evaluate any more, nothing will happen, theres nothing left to do. That is a fixpoint.</p>
 <p>Small step semantics are a bit more precise in my opinion, and they are much easier to translate
 to <em>real</em> interpreters. But it is very useful to understand both styles, they have different uses. Using small steps, we can also more closely trace how an expression is evaluated.</p>
 <h1 id="a-simple-abstract-machine-c">A Simple Abstract Machine, C</h1>
 <p>I dont mean the the C language, especially because I would not use simple to describe it!
 C in this case stands for 'control'. You may remember things like 'if' are called 'control flow
-operators'. Control is the currently running 'thing' in your program. This machine will be called
-the C machine because you only need control to represent the state of the program.</p>
+operators'. Control is the currently running 'thing' in your program. The <code>if</code> operator, is a way to change the control based on a condition. This machine will be called
+the C machine because you only need control to represent the state of the entire program.</p>
 <p>C machines are not capable of much, only simple rewriting of expresions, because they dont have any information other than the program's control itself to go off of.
 One kind of language we can formalize with a C machine is that of mathematical expressions.</p>
-<p>Here is a big-step semantics of type <script type="math/tex">MathExp \rightarrow \mathbb{Z}</script> (takes a math expression and returns an integer). With the <code>State</code> being only a math expression, we can already do simple math:</p>
+<p>Here is a big-step semantics of type <script type="math/tex">MathExp \rightarrow Number</script> (takes a math expression and returns a number). This means that the control we choose to use is a math expression. The result of evaluating a math expression is a number, of course, so thats the value.</p>
 <script type="math/tex">Addition:</script>
 <script type="math/tex;mode=display">\frac{e_1 \rightarrow n_1 \;,\; e_2 \rightarrow n_2 \;,\; n_1+n_2 = n }
-	 {e_1+e_2 \rightarrow n}</script>
-<!--
-<script type="math/tex">Multiplication:</script>
-<script type="math/tex;mode=display">\frac{e_1 \rightarrow n_1 \;,\; e_2 \rightarrow n_2 \;,\; n_1 * n_2 = n }
-	 {e_1+e_2 \rightarrow n}</script>
--->
-<p>This rule, of which machines are composed of many, shows how to add expressions to end up with a number. You can understand it by reading the half under the bar as 'this is what we start and end with' and the half above the bar as 'these must be true to use these semantics'. You read <script type="math/tex">\rightarrow</script> as 'evalutes to'.</p>
-<p>So for addition (and similarly for the multiplication rule):</p>
+     {e_1+e_2 \rightarrow n}</script>
+<p>This rule shows how to add expressions to end up with a number. You can understand it by reading the half under the bar as 'this is what we start and end with' and the half above the bar as 'these must be true to use these semantics'. You read <script type="math/tex">\rightarrow</script> as 'evalutes to'.</p>
+<p>You can read this rule like so:</p>
 <ol>
-<li>If we have some 'control' that looks like '<script type="math/tex">e_1 + e_2</script>' (this is from the bottom left, before the arrow)</li>
+<li>If we have some control that looks like <script type="math/tex">e_1 + e_2</script> (this is from the bottom left, before the arrow)</li>
 <li>if <script type="math/tex">e_1</script> evaluates to some number <script type="math/tex">n_1</script> (the first expression above the bar),</li>
 <li>if <script type="math/tex">e_2</script> evaluates to some number <script type="math/tex">n_2</script> (the second expression above the bar),</li>
 <li>if <script type="math/tex">n_1</script> added to <script type="math/tex">n_2</script> is equal to some number <script type="math/tex">n</script> (the third expression above the bar).</li>
 <li>THEN we know that the expression in step 1 evaluates to <script type="math/tex">n</script>.</li>
 </ol>
-<p>This may seem a bit backwards, we implement adding by adding? Well, the key is that expressions are complex, they can be composed of other expressions, or just be values. These rules show how to do math on expressions, by first evaluating them to values. Then once they are values, it is quite easy to do math operations on them.</p>
-<p>Note the distinction between the arrow <script type="math/tex">\rightarrow</script> and <script type="math/tex">=</script> here. <script type="math/tex">\rightarrow</script> is saying &quot;left evaluates to right by virtue of applying this machine's rules.&quot; and <script type="math/tex">=</script> is saying &quot;you can substitute this expression for this value&quot;. Authors of semantics like these love to use different cool looking arrow symbols, they all mean the same thing. Usually in big step they use a cool down-facing arrow like <script type="math/tex">\Downarrow</script>, and in small step they will use a more boring arrow like <script type="math/tex">\rightarrow</script>.</p>
-<p>You could also encode some rules for precendence (so that <code>1 + 2 * 3</code> evaluates correctly), but I would leave that to a parser, which feeds a normalized tree into an abstract machine. In these examples, I will use simple text-based controls, but they dont have to be text! More on that later.</p>
-<p>So, this machine only needs 'control' to properly evaluate its programs, but the programs
-need be very trivial in a C machine. What if we want to add variables? Well, to have
-variables we need a place to store them. And so, the CE machine is born.</p>
+<p>This may seem a bit backwards, we implement adding by adding? Well, the key is that expressions are complex, they can be composed of other expressions or just values. These rules show how to do math on expressions by first evaluating them to values. Then once they are values, it is quite easy to do math operations on them.</p>
+<p>Note the distinction between the arrow <script type="math/tex">\rightarrow</script> and <script type="math/tex">=</script> here. <script type="math/tex">\rightarrow</script> is saying &quot;left evaluates to right by virtue of applying this machine's rules.&quot; and <script type="math/tex">=</script> is saying &quot;you can substitute left for right&quot;.</p>
+<p>Authors of semantics like these love to use different cool looking arrow symbols, they all mean the same thing. Usually in big step they use a cool down-facing arrow like <script type="math/tex">\Downarrow</script>, and in small step they will use a more boring arrow like <script type="math/tex">\rightarrow</script>.</p>
 <h3 id="example">Example</h3>
 <p>Lets evaluate a simple math expression to show how you can use these rules to prove that expressions are evaluated correctly using a machines rules.</p>
 <script type="math/tex;mode=display">\frac{\frac{7 \rightarrow 7 \; 3 \rightarrow 3 \; 7 + 3 = 10}{7 + 3\rightarrow 10}  \scriptsize{\mathbf{Addition}} \;\;\; \frac{}{4 \rightarrow 4} \;\;\; 10 + 4 = 14}
-	 {7+3+4 \rightarrow 14} \scriptsize{\mathbf{Addition}}</script>
+     {7+3+4 \rightarrow 14} \scriptsize{\mathbf{Addition}}</script>
 <p>Here, at the first, bottom most level, <script type="math/tex">e_1 = 7 + 3</script> and <script type="math/tex">e_2 = 4</script>. Then we need to prove that <code>7 + 3 = 10</code>, and we do that with another application of the addition rule! We could have chosen <code>3 + 4</code> to be be <script type="math/tex">e_2</script>, but it doesnt matter for addition, and we leave issues like that to a parser. I noted each level with the rule that was used to evaluate it. It is generally showed like this, but I usually dont show them. I only have so much horizontal space on this webpage!</p>
+<p>To evaluate simple mathematical expressions, we only need a control for the state. C machines are only capable of evaluating simple programs. What if we want to add a simple programming construct like variables? For that, we need a place to store them. And so, the CE machine is born!</p>
 <h1 id="environments-with-the-ce-machine">Environments with the CE machine.</h1>
 <p>To evaluate variables, we need to be able to keep track of what value they hold at a given program point. in a C machine, if we are given <code>a + 2</code>, we have no way of know what <code>a</code> is, because its not a number, and we can only deal with syntax as we see it. But if we gave a machine both <code>a + 2</code>, the control, and a mapping <code>{a : 4}</code>, an environment, we can evaluate the expression to 6!</p>
-<p>So, a big-step CE machine doesnt just have <code>MathExp</code> (C) for state anymore, we need an <code>Env</code> (E) to accompany it! The function is now of type <script type="math/tex">(MathExp \times Env) \rightarrow Z</script>. This means that our machine will take 2 arguments, a math expression and an environment, and it will return a computed value.</p>
+<p>So, a big-step CE machine doesnt just have <code>MathExp</code> (C) for state anymore, we need an <code>Env</code> (E) to accompany it! The function is now of type <script type="math/tex">(MathExp \times Env) \rightarrow Number</script>. This means that our machine will take 2 arguments, a math expression and an environment, and it will return a computed number.</p>
 <script type="math/tex">Var-Lookup:</script>
 <script type="math/tex;mode=display">\frac{\rho[var] = n}
-	 {(var, \rho) \rightarrow n}</script>
+     {(var, \rho) \rightarrow n}</script>
 <p>This simply states that if the expression is a variable, not an artithmetic expression,
 the value it returns is what the environment says it is. We use the greek
 letter rho ('ρ') (not the letter 'p') to represent the environment. This is what is used
-in the literature, and its always best to follow along with norms to avoid confusion!</p>
+in the literature, and its always best to follow along with norms to avoid confusion! For the history on why they used <script type="math/tex">\rho</script> for this task, you will have to ask someone smarter than me.</p>
 <p>We dont have variable binding yet, but you can imagine an expression like:
 <code>m*c*c</code> with an environment <code>{m : 12 c : 299792458}</code>, which will return some number for us.
 We have made a calculator with predefined constants! We can put pi in there,
@@ -213,7 +208,7 @@ or tau if you are a lunatic...</p>
 <p>Wow, it seems like we can do a lot with just a control and an environment. We could further extend this to things like variable assignment (again, these are big-step semantics):</p>
 <script type="math/tex">\mathbf{Assignment:}</script>
 <script type="math/tex;mode=display">\frac{e_1 \rightarrow n_2 \;,\; \rho_2 = (\rho + \{var : n_2\}) \;,\; (e_2, \rho_2) \rightarrow n}
-	 {(var := e_1 \;\text{in}\; e_2 \;,\; \rho) \rightarrow n}</script>
+     {(var := e_1 \;\text{in}\; e_2 \;,\; \rho) \rightarrow n}</script>
 <p>This tells us that when we assign a variable, it will be available in the next expression.</p>
 <p>It seems that these two components of a state are enough to be wildly dangerous with. Soon enough, your semantics will be modeling a real language, with conditions, and inequalities, oh my! But, there are two big problems that you may face.</p>
 <p>First, your big step semantics may limit you. Their stringent requirements that their sub-expressions be terminating can cause issues in a turing-complete environment. And a small-step semantics can provide more granularity of control. For that reason, we will be using small-step semantics from now on.</p>
@@ -226,18 +221,19 @@ continuation:</p>
 <script type="math/tex">\footnotesize{\mathbf{Assign-Exp}}:</script>
 <script type="math/tex;mode=display">\footnotesize{
 \frac{}
-	 {(v := e_1 \;\text{in}\; e_2 , \rho , \kappa)
-	 \rightarrow (e_1 , \rho , \text{assign}(v, e_2, \kappa))}
+     {(v := e_1 \;\text{in}\; e_2 , \rho , \kappa)
+     \rightarrow (e_1 , \rho , \text{assign}(v, e_2, \kappa))}
 }</script>
 <script type="math/tex">\footnotesize{\mathbf{Assign-Kont}}:</script>
 <script type="math/tex;mode=display">\frac{e \text{ is atomic} , \rho_2 = (\rho + \{v : \text{e} \})}
-	 {(e , \rho , \text{assign}(v, e_2 , k_{next} ))
-		\rightarrow (e_2 , \rho_2 , k_{next})}</script>
-<p>There is quite a bit more to unpack here! First, our state has a third argument. Our type signature is now <script type="math/tex">(C, E, K) \rightarrow (C, E, K)</script>. The third argument is a continuation, it is
+     {(e , \rho , \text{assign}(v, e_2 , k_{next} ))
+        \rightarrow (e_2 , \rho_2 , k_{next})}</script>
+<p>There is quite a bit more to unpack here!</p>
+<p>First, we switched to a small step semantics. Instead of returning a fully evaluated value as before, we now return states. Big step semantics are nice for simple programs, but when things get more complex, we want finer-grained control, so we switch to small-step.</p>
+<p>Next, our state has a third argument. Our type signature is now <script type="math/tex">(C, E, K) \rightarrow (C, E, K)</script>. The third argument is a continuation, it is
 useful in small step semantics, so we can focus on evaluating expressions. When we are done, we know what to do next.</p>
-<p>Next, the change to small step brings a couple of differences. Instead of returning a fully evaluated value as before, we now return states. Big step semantics are nice for simple programs, but when things get more complex, we want finer-grained control, so we switch to small-step.</p>
-<p>The above semantics show that when we see an assignment expression, we simply return the <script type="math/tex">e_1</script> expression as the control for the next state. The key is that we save a new 'continuation frame' along with that control. This signifies that after that expression is fully evaluated, we continue by assigning it to a variable, and then execute the expression <script type="math/tex">e_2</script>.</p>
-<p>Another notable thing is that, inside of that 'assign' continuation frame, we store the old continuation. This recursive format is necessary when nesting complex expressions. Next, we use an example with nested assignment expressions, and the recursive nature of the continuations is our life-jacket.</p>
+<p>Finaly, The above semantics show that when we see an assignment expression, we simply return the <script type="math/tex">e_1</script> expression as the control for the next state. The key is that we save a new 'continuation frame' along with that control. This signifies that after that expression is fully evaluated, we continue by assigning it to a variable, and then execute the expression <script type="math/tex">e_2</script>.</p>
+<p>Another notable thing is that, inside of that 'assign' continuation frame, we store the old continuation. This recursive format is necessary when nesting complex expressions. Let's use an example with nested assignment expressions, with the recursive nature of the continuations being our life-jacket.</p>
 <h2 id="example-1">Example</h2>
 <p>If we had some expression:</p>
 <p><code>x := 4 in (x + 1)</code>, we would start with the <code>assign-exp</code> rule,
@@ -250,7 +246,8 @@ We immediately see that the <code>assign-kont</code> rule can be applied, as the
 and we have an <code>assign</code> continuation in the <code>K</code> position. So by applying that,
 a state <code>(x + 1, env2 , old_kont)</code> is given to us, and with <code>x</code> in the environment mapped to <code>4</code>.</p>
 <p>What is <code>old_kont</code> in this example? As you see from the <code>assign-exp</code> rule, one of the main things
-that a continuation does is store the previous one, like a linked-list. Continuations are the 'next thing to do', so after the current continuation is used, we do what the old continuation was.</p>
+that a continuation does is store the previous one, like a linked-list. Continuations are the
+'rest of the program', so after the current continuation is used, we do what the old continuation was.</p>
 <p>For example, an program that looks like:</p>
 <script type="math/tex;mode=display">x := (y := (z := 3 \;\text{in}\; z) \;\text{in}\; (y + y)) \;\text{in}\; x</script>
 <p>Here is what the states will look like over the course of 3 applications of <code>assign-exp</code>:</p>
@@ -276,9 +273,7 @@ that a continuation does is store the previous one, like a linked-list. Continua
 <h3 id="back-to-the-example">Back To The Example</h3>
 <p>We started with a NONE continuation, meaning have nothing to do next (end of program!).
 We then slowly build up continuations. <em>Continuations are turned to for guidance once control is atomic</em>. Atomic here means that it cant be broken down any more (computer scientists dont have quarks yet). Once we evaluate a continuation, the cycle continues, evaluate the control until it is atomic again. Eventually (if your program terminates!), we will be faced with an atomic control, and a NONE continuation. This means that we have finished evaluation, as there is nothing left to do! That is known as a fixpoint, which is a term taken from math meaning, if we run it another step, nothing will change: <code>f(x)</code> evaluated to <code>x</code>.</p>
-<p>This is a good example of the differences between small and big step evalaution models.
-Small step is a scalpel, where big is a cudgel. They may be more effective than the other, depending
-on what youre doing.</p>
+<p>This is a good example of the differences between small and big step evalaution models. Small step is a scalpel, where big is a cudgel. They may be more effective than the other, depending on what youre doing.</p>
 <h1 id="other-continuation-types">Other Continuation Types</h1>
 <p>We have demonstrated two different continuation types, &quot;NONE&quot;, and &quot;ASSIGN&quot;.
 One signifies the end of computation, and one tells us how to add variables to the environment.
@@ -288,16 +283,16 @@ What if we want to add a conditional to our language? It is very easy with our l
 <p>This will evaluate <code>c</code>, and once a value is computed, it checks its value. If the value is <code>0</code>, it will take the <code>else</code> branch, otherwise it will take the <code>then</code> branch. If we had a more complex language with booleans, we could use those. Or really, we could do almost anything! Make your own language, make it weird!</p>
 <script type="math/tex">\text{if-exp}:</script>
 <script type="math/tex;mode=display">\frac{}
-	 {((\text{if}\; c \;\text{then}\; t \;\text{else}\; f) \;,\; \rho , \kappa)
-	 \rightarrow (c , \rho , \text{ifk}(t , f , \kappa))}</script>
+     {((\text{if}\; c \;\text{then}\; t \;\text{else}\; f) \;,\; \rho , \kappa)
+     \rightarrow (c , \rho , \text{ifk}(t , f , \kappa))}</script>
 <script type="math/tex">\text{if-kont-t}:</script>
 <script type="math/tex;mode=display">\frac{v \text{ is atomic} , v \;\text{!=}\; 0}
-	 {(v , \rho , \text{ifk}(t , f , \kappa_{next}))
-	 \rightarrow (t , \rho , \kappa_{next})}</script>
+     {(v , \rho , \text{ifk}(t , f , \kappa_{next}))
+     \rightarrow (t , \rho , \kappa_{next})}</script>
 <script type="math/tex">\text{if-kont-f}:</script>
 <script type="math/tex;mode=display">\frac{v \text{ is atomic} , v = 0}
-	 {(v , \rho , \text{ifk}(t , f , \kappa_{next}))
-	 \rightarrow (f , \rho , \kappa_{next})}</script>
+     {(v , \rho , \text{ifk}(t , f , \kappa_{next}))
+     \rightarrow (f , \rho , \kappa_{next})}</script>
 <p>Here, when it is time to check the continuation for guidance, we will next evaluate
 one of the branches from the <code>ifk</code> continuation 'frame' based on the controls value.</p>
 <p>The idea of small step + continuation can be very similar to big-step. this CEK machine
@@ -309,8 +304,8 @@ big bar.</p>
 <p>We will show that:</p>
 <script type="math/tex;mode=display">\scriptsize{
 \frac{}
-	 {(x := (\text{if} \; (1 + 1) \; \text{then} \;7\; \text{else} \;12) \; \text{in} \; x \;,\; \{\} \;,\; NONE)
-	 	\rightarrow (7, \{\}, NONE)}
+     {(x := (\text{if} \; (1 + 1) \; \text{then} \;7\; \text{else} \;12) \; \text{in} \; x \;,\; \{\} \;,\; NONE)
+        \rightarrow (7, \{\}, NONE)}
 }</script>
 <pre style="background-color:#2b303b;">
 <code><span style="color:#c0c5ce;">(x := (if (1 + 1) then 7 else 12) , {} , NONE)
@@ -320,34 +315,29 @@ big bar.</p>
 -&gt; (7 , {} , assign(x, x, NONE))
 -&gt; (x , {x : 7} , NONE)
 -&gt; (7 , {} , NONE)
-</span></code></pre>
-<p>If you have been paying close attention to continuations, they kind of act like a fine-grained <em>stack</em>. Instead of functions being the level that we create frames of, its individual instructions. The idea of continuations</p>
+</span></code></pre><h3 id="fun-insight">Fun Insight!</h3>
+<p>If you have been paying close attention to the continuations, they kind of act like a fine-grained <em>stack</em>. Traditional stacks are at the level of funtions. You call a function, and a stack-frame is pushed. After a <code>return</code> is issued (in our case, reaching an atomic value), that frame is popped. The idea with continuations here is very similar, but at the level of instructions (like conditionals, assignments, etc.), not just functions.</p>
+<p>I didnt want to get into the weeds of <em>real progrmaming</em> in this post, but if that helps you understand more, great! If not, dont fret! But think on the recursive nature of continuations, it can really give shed new light on how to model computation!</p>
+<p>In practice, recursive continnuations can be made efficient by using tail-call eliminations, but thats a subject for a whole 'nother post!</p>
 <h1 id="the-big-idea">The Big Idea</h1>
 <p>The abstract machines are the C, CE, and CEK <em>ideas</em> that we have talked about.
 They are the types of state used when implementing an abstract machine. The resulting
 machine, however, is a <em>concrete interpreter</em> for your programming language.</p>
 <p>So what is wih all this trouble? Creating a tiny interpreter is easy! Using abstract machines
 offers us a way to build new features incrementally, and concisely.</p>
-<p>The key is that most 'simple' interpreters are 'meta-circular', meaning they are implemented
-using the features and runtime of the host language. <em>MORE EXAMPLES?</em>.
-<code>(loop (print (eval (read))))</code> is a lisp interpreter in lisp, but it requires a bunch of lisp machinery, and assumes a lot about the lisp runtime. This is very limiting!</p>
 <p>These Abstract Machines provide a way to form an independent interpreter for your language,
 that doesnt necessarily depend on the runtime of your host language. Also, using
 operational semantics can help you to formalize how your language evalautes, and be sure that your implementation is correct!</p>
-<p>But more than all of that, this is how computer scientists can model computation and semantics.
-Computer science is older than computers. One of the oldest 'languages' that we have is the <a href="https://drs.is/post/abstract-machines/wiki-lambda-calc">lambda calculus</a>, which was originally a pen-and-paper tool for modeling computation. It is now the primary system that computer scientists use when discussing new basic machinery for studying computation.</p>
+<p>But more than all of that, this is how computer scientists can model real languages. To accomodate that, other components can be added to the state, such as a 'store', for modeling the heap. A CESK machine changes the environment to be a mapping from variables to 'addresses', and the store becomes a mapping from addresses to the values. This is helpful for modeling mutation, and has implications in computability when doing static program analysis.</p>
 <h1 id="the-future">The Future</h1>
 <p>Adding even more complex language features is a necessity for formalizing a real language. One key feature is of exception handling: try-catch and the like. A solution used for advanced control flow such as try-catch is to bring continuations to first-class status. Continuations are very powerful constructs, and can be used to implement exception handling schemes. I am writing another post on what continuations <em>are</em>, becuase they are very poorly known in the world outside of programming panguages research.</p>
 <p>Abstract Machines can themselves be abstracted, to form interpreters that are non-deterministic. These interpreters can be used to see what possible states a program can reach. Using this information, static analyses of programs can be conducted, meaning optimizations, warnings, etc.. The ideas of abstract AMs is still new, and a topic of current research.</p>
 <h1 id="conclusion">Conclusion</h1>
-<p>Abstract Machines are a way to formally define computation for terms. When mapped to 'the real world' that means an interpreter for your language. They are a wonderful way of explicitly showing how programs are executed to reach a final value.</p>
+<p>Abstract Machines are a way to formally define computation for terms. When mapped to 'the real world' that means an interpreter for your programming language. They are a wonderful way of explicitly showing how programs are executed, and computation is performed.</p>
 <h1 id="appendix">Appendix</h1>
 <script type="math/tex"></script>
 <script type="math/tex">\rho:</script> 'rho', is an environment, used to map variables to values.
-<script type="math/tex">\kappa:</script> 'kappa', is a continuation, the next thing to do, after the current thing is evaluated.
-<script type="math/tex"></script>
-<script type="math/tex"></script>
-<script type="math/tex"></script>
+<script type="math/tex">\kappa:</script> 'kappa', is a continuation, which represents the rest of the program. We consult this after the current control is fully evaluated.
 
 
         </div>
