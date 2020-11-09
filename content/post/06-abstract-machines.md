@@ -2,18 +2,15 @@
 slug = "abstract-machines"
 title = "Abstract Machines: Interpreters for Computer Scientists"
 description = "Abstract Machines from C to Z"
-date = 2020-11-08T12:15:00-05:00
+date = 2020-11-09T12:15:00-05:00
 draft = false
+[extra]
+generate_toc = true
 [taxonomies]
 tags = ["PLT", "Computer Science", "Interpreters", "Abstract Machines", "Continuations"]
 +++
 
-THIS IS A DRAFT! It'll be published 'for real' soon. If you have feedback,
-let me know!
-
-TODO:
-* Use \Downarrow for big step?
-------
+# Introduction
 
 So im a PhD student now, so I need to write about cool computer science things!
 As part of my learnings, I have been writing a bunch of 'Abstract Machines'.
@@ -80,7 +77,7 @@ There will be a few different rules.
 2. If cond is an atomic value, and that value is `false`, the resulting state is `e_false`.
 3. If cond is not an atommic value, then evaluate it to `cond'` , and return `if cond' then e_true else e_false`.
 
-An atomic value is a value that can not be broken up any more. This means a datatype, not a complex expression. In these simple machines I show, the only datatype is a number.
+An atomic value is a value that can not be broken up any more. This means a datatype, not a complex expression. In these simple machines, the only atomic datatype is a number. Don't tell computer scientists about quarks, they may go insane.
 
 By going from a state to a next state, small step mechanics more closely follow
 how our computers work. They dont evaluate to values directly, they just... keep going.
@@ -105,15 +102,15 @@ the C machine because you only need control to represent the state of the entire
 C machines are not capable of much, only simple rewriting of expresions, because they dont have any information other than the program's control itself to go off of.
 One kind of language we can formalize with a C machine is that of mathematical expressions.
 
-Here is a big-step semantics of type {{ katex(body="MathExp \rightarrow Number") }} (takes a math expression and returns a number). This means that the control we choose to use is a math expression. The result of evaluating a math expression is a number, of course, so thats the value.
+Here is a big-step semantics of type {{ katex(body="MathExp \Downarrow Number") }} (takes a math expression and returns a number). This means that the control we choose to use is a math expression. The result of evaluating a math expression is a number, of course, so thats the value.
 
 {{ katex(body="Addition:") }}
 {% katex(block=true) %}
-\frac{e_1 \rightarrow n_1 \;,\; e_2 \rightarrow n_2 \;,\; n_1+n_2 = n }
-     {e_1+e_2 \rightarrow n}
+\frac{e_1 \Downarrow n_1 \;,\; e_2 \Downarrow n_2 \;,\; n_1+n_2 = n }
+     {e_1+e_2 \Downarrow n}
 {% end %}
 
-This rule shows how to add expressions to end up with a number. You can understand it by reading the half under the bar as 'this is what we start and end with' and the half above the bar as 'these must be true to use these semantics'. You read {{ katex(body="\rightarrow") }} as 'evalutes to'.
+This rule shows how to add expressions to end up with a number. You can understand it by reading the half under the bar as 'this is what we start and end with' and the half above the bar as 'these must be true to use these semantics'. You read {{ katex(body="\Downarrow") }} as 'evalutes to'.
 
 You can read this rule like so:
 
@@ -126,9 +123,9 @@ You can read this rule like so:
 
 This may seem a bit backwards, we implement adding by adding? Well, the key is that expressions are complex, they can be composed of other expressions or just values. These rules show how to do math on expressions by first evaluating them to values. Then once they are values, it is quite easy to do math operations on them.
 
-Note the distinction between the arrow {{ katex(body="\rightarrow") }} and {{ katex(body="=") }} here. {{ katex(body="\rightarrow") }} is saying "left evaluates to right by virtue of applying this machine's rules." and {{ katex(body="=") }} is saying "you can substitute left for right".
+Note the distinction between the arrow {{ katex(body="\Downarrow") }} and {{ katex(body="=") }} here. {{ katex(body="\Downarrow") }} is saying "left evaluates to right by virtue of applying this machine's rules." and {{ katex(body="=") }} is saying "you can substitute left for right".
 
-Authors of semantics like these love to use different cool looking arrow symbols, they all mean the same thing. Usually in big step they use a cool down-facing arrow like {{ katex(body="\Downarrow") }}, and in small step they will use a more boring arrow like {{ katex(body="\rightarrow") }}.
+Authors of semantics like these love to use different looking arrow symbols, they all mean the same thing. Usually in big step they use a cool down-facing arrow like {{ katex(body="\Downarrow") }}. In small step they will use a more boring arrow like {{ katex(body="\rightarrow") }}.
 
 ### Example ###
 
@@ -136,8 +133,8 @@ Lets evaluate a simple math expression to show how you can use these rules to pr
 
 
 {% katex(block=true) %}
-\frac{\frac{7 \rightarrow 7 \; 3 \rightarrow 3 \; 7 + 3 = 10}{7 + 3\rightarrow 10}  \scriptsize{\mathbf{Addition}} \;\;\; \frac{}{4 \rightarrow 4} \;\;\; 10 + 4 = 14}
-     {7+3+4 \rightarrow 14} \scriptsize{\mathbf{Addition}}
+\frac{\frac{7 \Downarrow 7 \; 3 \Downarrow 3 \; 7 + 3 = 10}{7 + 3 \Downarrow 10}  \scriptsize{\mathbf{Addition}} \;\;\; \frac{}{4 \Downarrow 4} \;\;\; 10 + 4 = 14}
+     {7+3+4 \Downarrow 14} \scriptsize{\mathbf{Addition}}
 {% end %}
 
 Here, at the first, bottom most level, {{ katex(body="e_1 = 7 + 3")}} and {{ katex(body="e_2 = 4")}}. Then we need to prove that `7 + 3 = 10`, and we do that with another application of the addition rule! We could have chosen `3 + 4` to be be {{ katex(body="e_2")}}, but it doesnt matter for addition, and we leave issues like that to a parser. I noted each level with the rule that was used to evaluate it. It is generally showed like this, but I usually dont show them. I only have so much horizontal space on this webpage!
@@ -148,12 +145,12 @@ To evaluate simple mathematical expressions, we only need a control for the stat
 
 To evaluate variables, we need to be able to keep track of what value they hold at a given program point. in a C machine, if we are given `a + 2`, we have no way of know what `a` is, because its not a number, and we can only deal with syntax as we see it. But if we gave a machine both `a + 2`, the control, and a mapping `{a : 4}`, an environment, we can evaluate the expression to 6!
 
-So, a big-step CE machine doesnt just have `MathExp` (C) for state anymore, we need an `Env` (E) to accompany it! The function is now of type {{ katex(body="(MathExp \times Env) \rightarrow Number") }}. This means that our machine will take 2 arguments, a math expression and an environment, and it will return a computed number.
+So, a big-step CE machine doesnt just have `MathExp` (C) for state anymore, we need an `Env` (E) to accompany it! The function is now of type {{ katex(body="(MathExp \times Env) \Downarrow Number") }}. This means that our machine will take 2 arguments, a math expression and an environment, and it will return a computed number.
 
 {{ katex(body="Var-Lookup:") }}
 {% katex(block=true) %}
 \frac{\rho[var] = n}
-     {(var, \rho) \rightarrow n}
+     {(var, \rho) \Downarrow n}
 {% end %}
 
 This simply states that if the expression is a variable, not an artithmetic expression,
@@ -166,14 +163,14 @@ We dont have variable binding yet, but you can imagine an expression like:
 We have made a calculator with predefined constants! We can put pi in there,
 or tau if you are a lunatic...
 
-# We have EVERYTHING we need now! #
+# Real Looking Programs #
 
 Wow, it seems like we can do a lot with just a control and an environment. We could further extend this to things like variable assignment (again, these are big-step semantics):
 
 {{ katex(body="\mathbf{Assignment:}") }}
 {% katex(block=true) %}
-\frac{e_1 \rightarrow n_2 \;,\; \rho_2 = (\rho + \{var : n_2\}) \;,\; (e_2, \rho_2) \rightarrow n}
-     {(var := e_1 \;\text{in}\; e_2 \;,\; \rho) \rightarrow n}
+\frac{e_1 \Downarrow n_2 \;,\; \rho_2 = (\rho + \{var : n_2\}) \;,\; (e_2, \rho_2) \Downarrow n}
+     {(var := e_1 \;\text{in}\; e_2 \;,\; \rho) \Downarrow n}
 {% end %}
 
 This tells us that when we assign a variable, it will be available in the next expression.
@@ -184,7 +181,7 @@ First, your big step semantics may limit you. Their stringent requirements that 
 
 Also, as your language gets more and more complicated, the constructs of control and environment may be overburdened with responsibility. What can we do to simplify our understanding of these machines?
 
-# What next? Kontinuations! #
+# What next? Kontinuations! CEK #
 
 One way to alleviate the burden is to add a new construct to our machines: The continuation.
 A continuation is a way of showing 'future work' to be done. For example, when we implement
@@ -268,7 +265,7 @@ Then if we apply `assign-kont` a couple times, with omitted `addition` and `var-
 
 ### Interlude: Injection ###
 
-Note above that there is an 'initial' state that we use when we start evaluating an expression. We wrap the expression with an empty environment ('{}'), and an 'empty' contination ('NONE'). This is usually done with whats called an injection function:
+Note above that there is an 'initial' state that we use when we start evaluating an expression. We wrap the expression with an empty environment ('{}'), and an 'empty' contination ('NONE'). This is usually done with whats called an _injection function_:
 
 {% katex(block=true) %}
 inject(e) = (e \;,\; \{\} \;,\; \text{NONE})
@@ -391,3 +388,13 @@ Abstract Machines are a way to formally define computation for terms. When mappe
 {{ katex(body="\rho:") }} 'rho', is an environment, used to map variables to values.
 
 {{ katex(body="\kappa:") }} 'kappa', is a continuation, which represents the rest of the program. We consult this after the current control is fully evaluated.
+
+{{ katex(body="\Sigma:") }} 'Sigma' (uppercase). Although not used in this post, this character often is used to represent the `State` type of the machine.
+
+{{ katex(body="\varsigma:") }} 'sigma' (lowercase in 'final word position'). This is known as 'varsigma'. You may find this used as an instance of a state. A small step machine goes from some state to a next state, so we can codify that as
+
+{% katex(block=true) %}
+\varsigma_i \rightarrow \varsigma_{i+1}
+{% end %}
+
+{{ katex(body="\sigma:") }} 'sigma' (lowercase). Although not used in this post, this character is used to represent the `store` component of a machine. If we would have made a CESK machine,  then the S would be this.
