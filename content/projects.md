@@ -16,9 +16,12 @@ I have a blog post in the works detailing this algorithm. Until then, check out 
 
 # {{ elink(text="SinScheme", to="https://github.com/sinistersnare/SinScheme") }}
 
-A probably not-standard-compliant Scheme implementation, written in Racket with a C++ runtime. It compiles to LLVM, and uses the Boehm GC for... GC.
+A not-standard-compliant Scheme implementation, written in Racket with a C++ runtime. It compiles to LLVM, and uses the Boehm GC for... GC.
 
-Probably should not be used by your company, but I would love to keep working on it, and add cool features! I also hope to write about its compilation model, and the theory under it, in this blog. Let me know if you want to read such a blog post!
+It uses a nano-pass style architecture and continuation-passing style to ensure tail-calls.
+I also plan on adding optimizations to it by utilizing [Control Flow Analysis](https://en.wikipedia.org/wiki/Control_flow_analysis) (Wow! What a depressing Wikipedia page. Maybe I should write a post on CFA's too!)
+
+It Should _not_ be used by your company, but I would love to keep working on it, and add cool features! I also hope to write about its compilation model, and the theory under it, in this blog. Let me know if you want to read such a blog post!
 
 # {{ elink(text="Royale With Cheese", to="https://github.com/sinistersnare/RoyaleWithCheese") }}
 
