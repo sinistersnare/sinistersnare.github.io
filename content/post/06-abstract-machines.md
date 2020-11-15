@@ -75,7 +75,7 @@ There will be a few different rules.
 
 1. If cond is an atomic value, and that value is `true`, the resulting state is `e_true`.
 2. If cond is an atomic value, and that value is `false`, the resulting state is `e_false`.
-3. If cond is not an atommic value, then evaluate it to `cond'` , and return `if cond' then e_true else e_false`.
+3. If cond is not an atomic value, then evaluate it to `cond'` , and return `if cond' then e_true else e_false`.
 
 An atomic value is a value that can not be broken up any more. This means a datatype, not a complex expression. In these simple machines, the only atomic datatype is a number. Don't tell computer scientists about quarks, they may go insane.
 
