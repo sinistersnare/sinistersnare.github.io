@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="chrome=1">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="referrer" content="no-referrer">
+
+        <link rel="stylesheet" href="https:&#x2F;&#x2F;drs.is&#x2F;fonts.css">
+        <link rel="stylesheet" href="https:&#x2F;&#x2F;drs.is&#x2F;style.css">
+
+        <title>
+    Continuations as First Class Return  · Sin&#x27;s Blog
+</title>
+
+        
+            <link rel="alternate" type="application/rss+xml" title="RSS" href="https:&#x2F;&#x2F;drs.is&#x2F;atom.xml">
+        
+
+        <!-- TODO: apparently CDNs arent good anymore. -->
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.js" integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/contrib/mathtex-script-type.min.js" integrity="sha384-zWYbd0NBwgTsgIdFKVprSfTh1mbMPe5Hz1X3yY4Sd1h/K1cQoUe36OGwAGz/PcDy" crossorigin="anonymous"></script>
+        
+    </head>
+    <body>
+        
+    <div class="wrap">
+        <div class="section" id="top-link-home">
+            <a href="/">Home</a>
+        </div>
+        <div class="section" id="title">
+            
+    Continuations as First Class Return
+
+        </div>
+        <div class="section" id="content">
+            
+    
+        
+            
+    
+    Nov 30, 2020
+
+        
+        
+        
+            
+            
+                &#183; 5 min
+            
+        
+        
+        <nav class="tag-container">
+            <ul>
+                
+                <li class="tag">
+                    <a href="https:&#x2F;&#x2F;drs.is&#x2F;tags&#x2F;plt&#x2F;">
+                        PLT
+                    </a>
+                </li>
+                
+                <li class="tag">
+                    <a href="https:&#x2F;&#x2F;drs.is&#x2F;tags&#x2F;computer-science&#x2F;">
+                        Computer Science
+                    </a>
+                </li>
+                
+                <li class="tag">
+                    <a href="https:&#x2F;&#x2F;drs.is&#x2F;tags&#x2F;continuations&#x2F;">
+                        Continuations
+                    </a>
+                </li>
+                
+            </ul>
+        </nav>
+        
+        <hr/>
+    
+    
+    <p>This post can serve as an extra-light introduction to continuations.
+If you have not heard of, or are confused by continuations,
+this post may be for you!</p>
+<p>This will be the first post of a series on continuations.
+We start with a short introduction to the idea of first-class control.
+In the future, I may introduce topics like <code>dynamic-wind</code>, or maybe just more interesting uses of continuations, like ambiguous functions.
+I eventually want to get to the downsides of these undelimited continuations, and then introduce
+delimited continuations. If none of that made sense, awesome! Enjoy!</p>
+<h1 id="first-class">First Class</h1>
+<p>You may be familiar with the concept of first class functions. Where you can use functions as regular-old values, and treat them like anything else in a language.</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#b48ead;">def </span><span style="color:#8fa1b3;">foo</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">a</span><span style="color:#c0c5ce;">):
+    </span><span style="color:#d08770;">...
+</span><span style="color:#b48ead;">def </span><span style="color:#8fa1b3;">bar</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">b</span><span style="color:#c0c5ce;">):
+    </span><span style="color:#d08770;">...
+...
+</span><span style="color:#b48ead;">if </span><span style="color:#c0c5ce;">x &lt; y:
+    which = foo
+</span><span style="color:#b48ead;">else</span><span style="color:#c0c5ce;">:
+    which = bar
+
+value = </span><span style="color:#bf616a;">which</span><span style="color:#c0c5ce;">(x)
+</span></code></pre>
+<p>Here we decide which function to use based on some condition. We can also have functions take functions as arguments.</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#b48ead;">def </span><span style="color:#8fa1b3;">add1</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">x</span><span style="color:#c0c5ce;">):
+    </span><span style="color:#b48ead;">return </span><span style="color:#c0c5ce;">x + </span><span style="color:#d08770;">1
+
+</span><span style="color:#c0c5ce;">better = </span><span style="color:#96b5b4;">map</span><span style="color:#c0c5ce;">(add1, [</span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">,</span><span style="color:#d08770;">2</span><span style="color:#c0c5ce;">,</span><span style="color:#d08770;">3</span><span style="color:#c0c5ce;">,</span><span style="color:#d08770;">4</span><span style="color:#c0c5ce;">])
+</span><span style="color:#65737e;"># better == [2,3,4,5]
+</span></code></pre>
+<p>Functions are just like any other value in many modern languages. They are at the same status as integers, or strings.
+This is really nice, and programmers have decided that this is overall a nice-to-have feature.</p>
+<p>So, lets go further! Let's make more things first-class.</p>
+<h1 id="return">Return</h1>
+<p>What does it mean to have a first class return? It means promoting an important control-flow primitive into something that programmers have power over.
+By having a first class return, we turn the idea of returning into a value that can be passed around, same as an integer, or a function.</p>
+<p>Lets pretend our language no longer has a return statement, and we can only return by using first-class return values. Lets have <code>return</code> be the
+final argument to any function.</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#65737e;"># We call the return argument `exit`
+# in the main function.
+</span><span style="color:#b48ead;">def </span><span style="color:#8fa1b3;">main</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">exit</span><span style="color:#c0c5ce;">):
+    </span><span style="color:#bf616a;">compute</span><span style="color:#c0c5ce;">(</span><span style="color:#d08770;">12</span><span style="color:#c0c5ce;">, exit)
+
+</span><span style="color:#b48ead;">def </span><span style="color:#8fa1b3;">compute</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">x</span><span style="color:#c0c5ce;">, </span><span style="background-color:#bf616a;color:#2b303b;">return</span><span style="color:#c0c5ce;">):
+    y = x / </span><span style="color:#d08770;">3
+    </span><span style="color:#b48ead;">return</span><span style="color:#c0c5ce;">(y)
+</span></code></pre>
+<p>In the <code>main</code> function, we are given a value that we named <code>exit</code> instead of <code>return</code>. Of course, these are variables so we can call them whatever
+they want. This <code>exit</code> argument, when called, will take you to the exited state of the program, when given a return value. Much like how
+in <code>C</code> we can return an integer at the end of the <code>main</code> procedure, and the caller of the C program can use that value however it wants.</p>
+<p>The <code>compute</code> function is almost identical to one in a current programming language. The difference is that we have <code>return</code> as an argument now,
+a value. We call the <code>return</code> argument like a function, <em><strong>but they are different</strong></em>. these values do not go back eventually like a function would.
+When we call <code>y = foo(x)</code>, eventually <code>foo</code> will return and <code>y</code> will be filled with some value. But in these special <code>return</code> things,
+we alter the 'control' of the program to somewhere else.</p>
+<p>Lets call these values <code>continuations</code>. As in, where to 'continue' to by calling it.</p>
+<p>A great thing about having continuations is that they can be passed around like any value, so we can return from some deeply nested function easily if need be.</p>
+<p>However, right now, the only continuation we have seen is the <code>exit</code> continuation, that is provided as a way to quit the program.
+How do we get any continuation? If I want to call <code>var = foo(42, ???)</code> How do I get a continuation that will return and then fill in <code>var</code>?
+Lets use an operator called <code>cc</code>, the 'current continuation':</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#b48ead;">def </span><span style="color:#8fa1b3;">compute</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">x</span><span style="color:#c0c5ce;">, </span><span style="background-color:#bf616a;color:#2b303b;">return</span><span style="color:#c0c5ce;">):
+    y = x / </span><span style="color:#d08770;">3
+    </span><span style="color:#b48ead;">return</span><span style="color:#c0c5ce;">(y)
+
+</span><span style="color:#b48ead;">def </span><span style="color:#8fa1b3;">main</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">exit</span><span style="color:#c0c5ce;">):
+    y = </span><span style="color:#bf616a;">compute</span><span style="color:#c0c5ce;">(</span><span style="color:#d08770;">12</span><span style="color:#c0c5ce;">, cc)
+    </span><span style="color:#96b5b4;">print</span><span style="color:#c0c5ce;">(&quot;</span><span style="color:#a3be8c;">Got: </span><span style="color:#d08770;">{y}</span><span style="color:#c0c5ce;">&quot;, cc)
+    </span><span style="color:#bf616a;">exit</span><span style="color:#c0c5ce;">(</span><span style="color:#d08770;">9001</span><span style="color:#c0c5ce;">)
+</span></code></pre>
+<p>This <code>cc</code> operator reckons what the current computation is, and creates a continuation for that. In our line <code>y = compute(12, cc)</code>, <code>cc</code> knows that after
+the function ends, it is going to place the returned value into the variable <code>y</code>. The <code>cc</code> in the call to <code>print</code> is used so that the program
+will simply continue running, as no variable is assigned anywhere. Then we use the <code>exit</code> continuation to end the program with a nice and big number.</p>
+<p>With the <code>cc</code> operator, we can now fulfill our goal of 'early return' semantics.</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#65737e;"># In the world where this program exists,
+# 73 is a _VERY BAD NUMBER_, dont trust it.
+# We must make sure all input does not contain 73.
+
+# If an illegal number is found, we bail
+# out to `bad_return` with an error message
+# Otherwise, we return to `good_return`
+# with the value.
+</span><span style="color:#b48ead;">def </span><span style="color:#8fa1b3;">sanitize</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">x</span><span style="color:#c0c5ce;">, </span><span style="color:#bf616a;">bad_return</span><span style="color:#c0c5ce;">, </span><span style="color:#bf616a;">good_return</span><span style="color:#c0c5ce;">):
+    </span><span style="color:#b48ead;">if </span><span style="color:#c0c5ce;">x - </span><span style="color:#d08770;">1 </span><span style="color:#c0c5ce;">== </span><span style="color:#d08770;">72</span><span style="color:#c0c5ce;">:
+        </span><span style="color:#bf616a;">bad_return</span><span style="color:#c0c5ce;">(&quot;</span><span style="color:#a3be8c;">NO EVIL ALLOWED HERE</span><span style="color:#c0c5ce;">&quot;)
+    </span><span style="color:#b48ead;">else</span><span style="color:#c0c5ce;">:
+        </span><span style="color:#bf616a;">good_return</span><span style="color:#c0c5ce;">(x)
+
+</span><span style="color:#b48ead;">def </span><span style="color:#8fa1b3;">get_value_from_world</span><span style="color:#c0c5ce;">(</span><span style="background-color:#bf616a;color:#2b303b;">return</span><span style="color:#c0c5ce;">):
+    value = </span><span style="color:#bf616a;">get_maybe_dangerous_input</span><span style="color:#c0c5ce;">(cc)
+    good = </span><span style="color:#bf616a;">sanitize</span><span style="color:#c0c5ce;">(value, </span><span style="background-color:#bf616a;color:#2b303b;">return</span><span style="color:#c0c5ce;">, cc</span><span style="background-color:#bf616a;color:#2b303b;">)</span><span style="color:#c0c5ce;">
+    </span><span style="color:#b48ead;">return</span><span style="color:#c0c5ce;">(&quot;</span><span style="color:#a3be8c;">Got good value </span><span style="color:#d08770;">{good}</span><span style="color:#a3be8c;">!</span><span style="color:#c0c5ce;">&quot;)
+
+</span><span style="color:#b48ead;">def </span><span style="color:#8fa1b3;">main</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">exit</span><span style="color:#c0c5ce;">):
+    important_val = </span><span style="color:#bf616a;">get_value_from_world</span><span style="color:#c0c5ce;">(cc)
+    </span><span style="color:#bf616a;">prin</span><span style="color:#c0c5ce;">(important_val, cc)
+    </span><span style="color:#bf616a;">exit</span><span style="color:#c0c5ce;">(&quot;</span><span style="color:#a3be8c;">nothing bad going on here</span><span style="color:#c0c5ce;">&quot;)
+</span></code></pre>
+<p>Here, we are able to exit out of our computation if we find ourselves in a tricky situation.
+Normally, we may accomplish this through an exception-based system. You would have a convoluted
+try-catch system just to watch for a single error-case... good luck getting through code review!
+But now, we have the power to bail out without having an extra system!</p>
+<h1 id="conclusion">Conclusion</h1>
+<p>Continuations are really powerful, and still under active research!
+Having first-class control is really cool. They are basically a <code>goto</code>,
+but more computer-sciencey.</p>
+<p>Current research on continuations includes making them safer and more efficient.
+Perhaps in the future, <code>return</code> statements will simply be a syntactic sugar
+for an implicit argument given to functions. That way, you can take multiple
+return points as arguments, and then decide where you want to go next,</p>
+
+
+        </div>
+        
+    
+    <div class="section bottom-menu">
+        <hr />
+        <nav class="bottom-menu-nav">
+            <ul class="bottom-nav-list">
+                <li class="bottom-nav-item">
+                    <a class="bottom-nav-link" href="https:&#x2F;&#x2F;drs.is">
+                        Home
+                    </a>
+                </li>
+                
+                    
+                    <li class="bottom-nav-item">
+                        <a class="bottom-nav-link" href="&#x2F;post" >Posts</a>
+                    </li>
+                    
+                    <li class="bottom-nav-item">
+                        <a class="bottom-nav-link" href="&#x2F;about" >About</a>
+                    </li>
+                    
+                    <li class="bottom-nav-item">
+                        <a class="bottom-nav-link" href="&#x2F;projects" >Projects</a>
+                    </li>
+                    
+                    <li class="bottom-nav-item">
+                        <a class="bottom-nav-link" href="https:&#x2F;&#x2F;github.com&#x2F;sinistersnare" target="_blank" >Github↪</a>
+                    </li>
+                    
+                
+            </ul>
+        </nav>
+    </div>
+
+        
+    
+        <div class="section footer">
+            ©2017-2020 Davis Silverman
+            <div class="copyright">
+                <a rel="license" target="_blank" href="http://creativecommons.org/licenses/by/4.0/">
+                    <img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/80x15.png" />
+                </a>
+            </div>
+        </div>
+    
+
+    </div>
+
+    </body>
+</html>

@@ -4,8 +4,128 @@
 	<link href="https://drs.is/atom.xml" rel="self" type="application/atom+xml"/>
   <link href="https://drs.is"/>
 	<generator uri="https://www.getzola.org/">Zola</generator>
-	<updated>2020-11-09T12:15:00-05:00</updated>
+	<updated>2020-11-30T12:15:00-05:00</updated>
 	<id>https://drs.is/atom.xml</id>
+	<entry xml:lang="en">
+		<title>Continuations as First Class Return</title>
+		<published>2020-11-30T12:15:00-05:00</published>
+		<updated>2020-11-30T12:15:00-05:00</updated>
+		<link href="https://drs.is/post/continuations-as-return/" type="text/html"/>
+		<id>https://drs.is/post/continuations-as-return/</id>
+		<content type="html">&lt;p&gt;This post can serve as an extra-light introduction to continuations.
+If you have not heard of, or are confused by continuations,
+this post may be for you!&lt;&#x2F;p&gt;
+&lt;p&gt;This will be the first post of a series on continuations.
+We start with a short introduction to the idea of first-class control.
+In the future, I may introduce topics like &lt;code&gt;dynamic-wind&lt;&#x2F;code&gt;, or maybe just more interesting uses of continuations, like ambiguous functions.
+I eventually want to get to the downsides of these undelimited continuations, and then introduce
+delimited continuations. If none of that made sense, awesome! Enjoy!&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;first-class&quot;&gt;First Class&lt;&#x2F;h1&gt;
+&lt;p&gt;You may be familiar with the concept of first class functions. Where you can use functions as regular-old values, and treat them like anything else in a language.&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;foo&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;a&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;):
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;...
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;bar&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;b&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;):
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;...
+...
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;x &amp;lt; y:
+    which = foo
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;else&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:
+    which = bar
+
+value = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;which&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(x)
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Here we decide which function to use based on some condition. We can also have functions take functions as arguments.&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;add1&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;x&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;):
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;x + &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;1
+
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;better = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;map&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(add1, [&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;,&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;2&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;,&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;3&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;,&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;4&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;])
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;# better == [2,3,4,5]
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Functions are just like any other value in many modern languages. They are at the same status as integers, or strings.
+This is really nice, and programmers have decided that this is overall a nice-to-have feature.&lt;&#x2F;p&gt;
+&lt;p&gt;So, lets go further! Let&#x27;s make more things first-class.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;return&quot;&gt;Return&lt;&#x2F;h1&gt;
+&lt;p&gt;What does it mean to have a first class return? It means promoting an important control-flow primitive into something that programmers have power over.
+By having a first class return, we turn the idea of returning into a value that can be passed around, same as an integer, or a function.&lt;&#x2F;p&gt;
+&lt;p&gt;Lets pretend our language no longer has a return statement, and we can only return by using first-class return values. Lets have &lt;code&gt;return&lt;&#x2F;code&gt; be the
+final argument to any function.&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;# We call the return argument `exit`
+# in the main function.
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;exit&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;):
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;compute&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;12&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;, exit)
+
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;compute&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;x&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;background-color:#bf616a;color:#2b303b;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;):
+    y = x &#x2F; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;3
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(y)
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;In the &lt;code&gt;main&lt;&#x2F;code&gt; function, we are given a value that we named &lt;code&gt;exit&lt;&#x2F;code&gt; instead of &lt;code&gt;return&lt;&#x2F;code&gt;. Of course, these are variables so we can call them whatever
+they want. This &lt;code&gt;exit&lt;&#x2F;code&gt; argument, when called, will take you to the exited state of the program, when given a return value. Much like how
+in &lt;code&gt;C&lt;&#x2F;code&gt; we can return an integer at the end of the &lt;code&gt;main&lt;&#x2F;code&gt; procedure, and the caller of the C program can use that value however it wants.&lt;&#x2F;p&gt;
+&lt;p&gt;The &lt;code&gt;compute&lt;&#x2F;code&gt; function is almost identical to one in a current programming language. The difference is that we have &lt;code&gt;return&lt;&#x2F;code&gt; as an argument now,
+a value. We call the &lt;code&gt;return&lt;&#x2F;code&gt; argument like a function, &lt;em&gt;&lt;strong&gt;but they are different&lt;&#x2F;strong&gt;&lt;&#x2F;em&gt;. these values do not go back eventually like a function would.
+When we call &lt;code&gt;y = foo(x)&lt;&#x2F;code&gt;, eventually &lt;code&gt;foo&lt;&#x2F;code&gt; will return and &lt;code&gt;y&lt;&#x2F;code&gt; will be filled with some value. But in these special &lt;code&gt;return&lt;&#x2F;code&gt; things,
+we alter the &#x27;control&#x27; of the program to somewhere else.&lt;&#x2F;p&gt;
+&lt;p&gt;Lets call these values &lt;code&gt;continuations&lt;&#x2F;code&gt;. As in, where to &#x27;continue&#x27; to by calling it.&lt;&#x2F;p&gt;
+&lt;p&gt;A great thing about having continuations is that they can be passed around like any value, so we can return from some deeply nested function easily if need be.&lt;&#x2F;p&gt;
+&lt;p&gt;However, right now, the only continuation we have seen is the &lt;code&gt;exit&lt;&#x2F;code&gt; continuation, that is provided as a way to quit the program.
+How do we get any continuation? If I want to call &lt;code&gt;var = foo(42, ???)&lt;&#x2F;code&gt; How do I get a continuation that will return and then fill in &lt;code&gt;var&lt;&#x2F;code&gt;?
+Lets use an operator called &lt;code&gt;cc&lt;&#x2F;code&gt;, the &#x27;current continuation&#x27;:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;compute&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;x&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;background-color:#bf616a;color:#2b303b;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;):
+    y = x &#x2F; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;3
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(y)
+
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;exit&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;):
+    y = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;compute&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;12&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;, cc)
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;print&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Got: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;{y}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot;, cc)
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;exit&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;9001&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;)
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This &lt;code&gt;cc&lt;&#x2F;code&gt; operator reckons what the current computation is, and creates a continuation for that. In our line &lt;code&gt;y = compute(12, cc)&lt;&#x2F;code&gt;, &lt;code&gt;cc&lt;&#x2F;code&gt; knows that after
+the function ends, it is going to place the returned value into the variable &lt;code&gt;y&lt;&#x2F;code&gt;. The &lt;code&gt;cc&lt;&#x2F;code&gt; in the call to &lt;code&gt;print&lt;&#x2F;code&gt; is used so that the program
+will simply continue running, as no variable is assigned anywhere. Then we use the &lt;code&gt;exit&lt;&#x2F;code&gt; continuation to end the program with a nice and big number.&lt;&#x2F;p&gt;
+&lt;p&gt;With the &lt;code&gt;cc&lt;&#x2F;code&gt; operator, we can now fulfill our goal of &#x27;early return&#x27; semantics.&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;# In the world where this program exists,
+# 73 is a _VERY BAD NUMBER_, dont trust it.
+# We must make sure all input does not contain 73.
+
+# If an illegal number is found, we bail
+# out to `bad_return` with an error message
+# Otherwise, we return to `good_return`
+# with the value.
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;sanitize&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;x&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;bad_return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;good_return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;):
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;x - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;1 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;== &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;72&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;bad_return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;NO EVIL ALLOWED HERE&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot;)
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;else&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;good_return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(x)
+
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;get_value_from_world&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;background-color:#bf616a;color:#2b303b;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;):
+    value = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;get_maybe_dangerous_input&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cc)
+    good = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;sanitize&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(value, &lt;&#x2F;span&gt;&lt;span style=&quot;background-color:#bf616a;color:#2b303b;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;, cc&lt;&#x2F;span&gt;&lt;span style=&quot;background-color:#bf616a;color:#2b303b;&quot;&gt;)&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Got good value &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;{good}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;!&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot;)
+
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;exit&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;):
+    important_val = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;get_value_from_world&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cc)
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;prin&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(important_val, cc)
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;exit&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;nothing bad going on here&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot;)
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Here, we are able to exit out of our computation if we find ourselves in a tricky situation.
+Normally, we may accomplish this through an exception-based system. You would have a convoluted
+try-catch system just to watch for a single error-case... good luck getting through code review!
+But now, we have the power to bail out without having an extra system!&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h1&gt;
+&lt;p&gt;Continuations are really powerful, and still under active research!
+Having first-class control is really cool. They are basically a &lt;code&gt;goto&lt;&#x2F;code&gt;,
+but more computer-sciencey.&lt;&#x2F;p&gt;
+&lt;p&gt;Current research on continuations includes making them safer and more efficient.
+Perhaps in the future, &lt;code&gt;return&lt;&#x2F;code&gt; statements will simply be a syntactic sugar
+for an implicit argument given to functions. That way, you can take multiple
+return points as arguments, and then decide where you want to go next,&lt;&#x2F;p&gt;
+</content>
+	</entry>
 	<entry xml:lang="en">
 		<title>Abstract Machines: Interpreters for Computer Scientists</title>
 		<published>2020-11-09T12:15:00-05:00</published>
@@ -63,7 +183,7 @@ There will be a few different rules.&lt;&#x2F;p&gt;
 &lt;ol&gt;
 &lt;li&gt;If cond is an atomic value, and that value is &lt;code&gt;true&lt;&#x2F;code&gt;, the resulting state is &lt;code&gt;e_true&lt;&#x2F;code&gt;.&lt;&#x2F;li&gt;
 &lt;li&gt;If cond is an atomic value, and that value is &lt;code&gt;false&lt;&#x2F;code&gt;, the resulting state is &lt;code&gt;e_false&lt;&#x2F;code&gt;.&lt;&#x2F;li&gt;
-&lt;li&gt;If cond is not an atommic value, then evaluate it to &lt;code&gt;cond&#x27;&lt;&#x2F;code&gt; , and return &lt;code&gt;if cond&#x27; then e_true else e_false&lt;&#x2F;code&gt;.&lt;&#x2F;li&gt;
+&lt;li&gt;If cond is not an atomic value, then evaluate it to &lt;code&gt;cond&#x27;&lt;&#x2F;code&gt; , and return &lt;code&gt;if cond&#x27; then e_true else e_false&lt;&#x2F;code&gt;.&lt;&#x2F;li&gt;
 &lt;&#x2F;ol&gt;
 &lt;p&gt;An atomic value is a value that can not be broken up any more. This means a datatype, not a complex expression. In these simple machines, the only atomic datatype is a number. Don&#x27;t tell computer scientists about quarks, they may go insane.&lt;&#x2F;p&gt;
 &lt;p&gt;By going from a state to a next state, small step mechanics more closely follow

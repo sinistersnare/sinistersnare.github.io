@@ -238,7 +238,7 @@ There will be a few different rules.</p>
 <ol>
 <li>If cond is an atomic value, and that value is <code>true</code>, the resulting state is <code>e_true</code>.</li>
 <li>If cond is an atomic value, and that value is <code>false</code>, the resulting state is <code>e_false</code>.</li>
-<li>If cond is not an atommic value, then evaluate it to <code>cond'</code> , and return <code>if cond' then e_true else e_false</code>.</li>
+<li>If cond is not an atomic value, then evaluate it to <code>cond'</code> , and return <code>if cond' then e_true else e_false</code>.</li>
 </ol>
 <p>An atomic value is a value that can not be broken up any more. This means a datatype, not a complex expression. In these simple machines, the only atomic datatype is a number. Don't tell computer scientists about quarks, they may go insane.</p>
 <p>By going from a state to a next state, small step mechanics more closely follow
