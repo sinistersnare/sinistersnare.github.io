@@ -72,8 +72,8 @@ def compute(x, return):
 ```
 
 In the `main` function, we are given a value that we named `exit` instead of `return`. Of course, these are variables so we can call them whatever
-they want. This `exit` argument, when called, will take you to the exited state of the program, when given a return value. Much like how
-in `C` we can return an integer at the end of the `main` procedure, and the caller of the C program can use that value however it wants.
+we want. This `exit` argument, when called, will take you to the exited state of the program, when given a return value. Much like how
+in C we can return an integer at the end of the `main` procedure, and the caller of the C program can use that value however it wants.
 
 The `compute` function is almost identical to one in a current programming language. The difference is that we have `return` as an argument now,
 a value. We call the `return` argument like a function, ***but they are different***. these values do not go back eventually like a function would.
@@ -84,8 +84,8 @@ Lets call these values `continuations`. As in, where to 'continue' to by calling
 
 A great thing about having continuations is that they can be passed around like any value, so we can return from some deeply nested function easily if need be.
 
-However, right now, the only continuation we have seen is the `exit` continuation, that is provided as a way to quit the program.
-How do we get any continuation? If I want to call `var = foo(42, ???)` How do I get a continuation that will return and then fill in `var`?
+However, right now, the only actual continuation value we have seen is the `exit` continuation, that is provided as a way to quit the program. We have been passing it around, but, how do we get any continuation?
+If I want to call `var = foo(42, ???)` How do I get a continuation that will return and then fill in `var`?
 Lets use an operator called `cc`, the 'current continuation':
 
 ```python
@@ -147,3 +147,5 @@ Current research on continuations includes making them safer and more efficient.
 Perhaps in the future, `return` statements will simply be a syntactic sugar
 for an implicit argument given to functions. That way, you can take multiple
 return points as arguments, and then decide where you want to go next,
+
+If this blog post interested you, but didnt have enough info, stay tuned!

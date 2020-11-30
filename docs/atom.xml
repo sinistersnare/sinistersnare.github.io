@@ -62,16 +62,16 @@ final argument to any function.&lt;&#x2F;p&gt;
     &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(y)
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;In the &lt;code&gt;main&lt;&#x2F;code&gt; function, we are given a value that we named &lt;code&gt;exit&lt;&#x2F;code&gt; instead of &lt;code&gt;return&lt;&#x2F;code&gt;. Of course, these are variables so we can call them whatever
-they want. This &lt;code&gt;exit&lt;&#x2F;code&gt; argument, when called, will take you to the exited state of the program, when given a return value. Much like how
-in &lt;code&gt;C&lt;&#x2F;code&gt; we can return an integer at the end of the &lt;code&gt;main&lt;&#x2F;code&gt; procedure, and the caller of the C program can use that value however it wants.&lt;&#x2F;p&gt;
+we want. This &lt;code&gt;exit&lt;&#x2F;code&gt; argument, when called, will take you to the exited state of the program, when given a return value. Much like how
+in C we can return an integer at the end of the &lt;code&gt;main&lt;&#x2F;code&gt; procedure, and the caller of the C program can use that value however it wants.&lt;&#x2F;p&gt;
 &lt;p&gt;The &lt;code&gt;compute&lt;&#x2F;code&gt; function is almost identical to one in a current programming language. The difference is that we have &lt;code&gt;return&lt;&#x2F;code&gt; as an argument now,
 a value. We call the &lt;code&gt;return&lt;&#x2F;code&gt; argument like a function, &lt;em&gt;&lt;strong&gt;but they are different&lt;&#x2F;strong&gt;&lt;&#x2F;em&gt;. these values do not go back eventually like a function would.
 When we call &lt;code&gt;y = foo(x)&lt;&#x2F;code&gt;, eventually &lt;code&gt;foo&lt;&#x2F;code&gt; will return and &lt;code&gt;y&lt;&#x2F;code&gt; will be filled with some value. But in these special &lt;code&gt;return&lt;&#x2F;code&gt; things,
 we alter the &#x27;control&#x27; of the program to somewhere else.&lt;&#x2F;p&gt;
 &lt;p&gt;Lets call these values &lt;code&gt;continuations&lt;&#x2F;code&gt;. As in, where to &#x27;continue&#x27; to by calling it.&lt;&#x2F;p&gt;
 &lt;p&gt;A great thing about having continuations is that they can be passed around like any value, so we can return from some deeply nested function easily if need be.&lt;&#x2F;p&gt;
-&lt;p&gt;However, right now, the only continuation we have seen is the &lt;code&gt;exit&lt;&#x2F;code&gt; continuation, that is provided as a way to quit the program.
-How do we get any continuation? If I want to call &lt;code&gt;var = foo(42, ???)&lt;&#x2F;code&gt; How do I get a continuation that will return and then fill in &lt;code&gt;var&lt;&#x2F;code&gt;?
+&lt;p&gt;However, right now, the only actual continuation value we have seen is the &lt;code&gt;exit&lt;&#x2F;code&gt; continuation, that is provided as a way to quit the program. We have been passing it around, but, how do we get any continuation?
+If I want to call &lt;code&gt;var = foo(42, ???)&lt;&#x2F;code&gt; How do I get a continuation that will return and then fill in &lt;code&gt;var&lt;&#x2F;code&gt;?
 Lets use an operator called &lt;code&gt;cc&lt;&#x2F;code&gt;, the &#x27;current continuation&#x27;:&lt;&#x2F;p&gt;
 &lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
 &lt;code&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;compute&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;x&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;background-color:#bf616a;color:#2b303b;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;):
@@ -124,6 +124,7 @@ but more computer-sciencey.&lt;&#x2F;p&gt;
 Perhaps in the future, &lt;code&gt;return&lt;&#x2F;code&gt; statements will simply be a syntactic sugar
 for an implicit argument given to functions. That way, you can take multiple
 return points as arguments, and then decide where you want to go next,&lt;&#x2F;p&gt;
+&lt;p&gt;If this blog post interested you, but didnt have enough info, stay tuned!&lt;&#x2F;p&gt;
 </content>
 	</entry>
 	<entry xml:lang="en">

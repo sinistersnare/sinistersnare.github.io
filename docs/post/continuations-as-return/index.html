@@ -131,16 +131,16 @@ final argument to any function.</p>
     </span><span style="color:#b48ead;">return</span><span style="color:#c0c5ce;">(y)
 </span></code></pre>
 <p>In the <code>main</code> function, we are given a value that we named <code>exit</code> instead of <code>return</code>. Of course, these are variables so we can call them whatever
-they want. This <code>exit</code> argument, when called, will take you to the exited state of the program, when given a return value. Much like how
-in <code>C</code> we can return an integer at the end of the <code>main</code> procedure, and the caller of the C program can use that value however it wants.</p>
+we want. This <code>exit</code> argument, when called, will take you to the exited state of the program, when given a return value. Much like how
+in C we can return an integer at the end of the <code>main</code> procedure, and the caller of the C program can use that value however it wants.</p>
 <p>The <code>compute</code> function is almost identical to one in a current programming language. The difference is that we have <code>return</code> as an argument now,
 a value. We call the <code>return</code> argument like a function, <em><strong>but they are different</strong></em>. these values do not go back eventually like a function would.
 When we call <code>y = foo(x)</code>, eventually <code>foo</code> will return and <code>y</code> will be filled with some value. But in these special <code>return</code> things,
 we alter the 'control' of the program to somewhere else.</p>
 <p>Lets call these values <code>continuations</code>. As in, where to 'continue' to by calling it.</p>
 <p>A great thing about having continuations is that they can be passed around like any value, so we can return from some deeply nested function easily if need be.</p>
-<p>However, right now, the only continuation we have seen is the <code>exit</code> continuation, that is provided as a way to quit the program.
-How do we get any continuation? If I want to call <code>var = foo(42, ???)</code> How do I get a continuation that will return and then fill in <code>var</code>?
+<p>However, right now, the only actual continuation value we have seen is the <code>exit</code> continuation, that is provided as a way to quit the program. We have been passing it around, but, how do we get any continuation?
+If I want to call <code>var = foo(42, ???)</code> How do I get a continuation that will return and then fill in <code>var</code>?
 Lets use an operator called <code>cc</code>, the 'current continuation':</p>
 <pre style="background-color:#2b303b;">
 <code><span style="color:#b48ead;">def </span><span style="color:#8fa1b3;">compute</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">x</span><span style="color:#c0c5ce;">, </span><span style="background-color:#bf616a;color:#2b303b;">return</span><span style="color:#c0c5ce;">):
@@ -193,6 +193,7 @@ but more computer-sciencey.</p>
 Perhaps in the future, <code>return</code> statements will simply be a syntactic sugar
 for an implicit argument given to functions. That way, you can take multiple
 return points as arguments, and then decide where you want to go next,</p>
+<p>If this blog post interested you, but didnt have enough info, stay tuned!</p>
 
 
         </div>
