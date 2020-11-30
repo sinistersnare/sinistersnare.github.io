@@ -3,7 +3,7 @@ slug = "abstract-interpretation"
 title = "Static Analysis with Abstract Interpretation"
 description = "No one reads these anyways"
 date = 2020-11-13T12:15:00-05:00
-draft = false
+draft = true
 [extra]
 generate_toc = true
 [taxonomies]
