@@ -16,9 +16,9 @@ If you have not read the introductory post, you can find it [here](@/post/08-cra
 
 # Intro #
 
-Hi, in this post we will be implementing a CESK Abstract Machine for the lambda calculus (or simply 'λ'). First, we need to define all of what an 'abstract machine' is, what semantics are, and the syntax we will be using. So this post may be a bit long.
+Hi, in this post we will be implementing a CESK Abstract Machine for the lambda calculus (or simply 'λ'). First, we need to define all of what an 'abstract machine' is, what semantics are, and the syntax we will be using. So this post may be a bit long. Future posts are likely to be shorter!
 
-If you know all of the intro stuff already, but dont know how to define semantics for the lambda calculus, feel free to skip to [here](@/post/09-crafting-semantics-1.md#transitions)
+If you know all of the intro stuff already, but dont know how to define semantics for the lambda calculus, feel free to skip to [here](@/post/09-crafting-semantics-1.md#the-machine)
 
 # CESK #
 
@@ -126,7 +126,7 @@ Values in this machine are '[closures](https://en.wikipedia.org/wiki/Closure_(co
 
 Finally, our definition of continuations. If you look closely, its a kind of linked list, meaning that a continuation has another continuation attached to it, until you get to the `mt` continuation, the end. Other than `mt`, there are two important 'continuation frame' types. The `arg` continuation means that after we finish the current computation, we must evaluate the argument to the application. The `fn` frame tells us that after the current computation, we need to execute the function with the argument.
 
-## Injection And Allocation##
+## Injection And Allocation ##
 
 As I mentioned earlier, our machine takes a state and returns a state, so how do we know what the 'first' state is? To determine that, we create an 'injection function'. This takes the program text as input, and returns the initial machine state that will evaluate it. Ours is quite simple:
 
