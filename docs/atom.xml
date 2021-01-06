@@ -26,16 +26,17 @@
 &lt;h1 id=&quot;l&quot;&gt;λ&lt;&#x2F;h1&gt;
 &lt;p&gt;The lambda calculus is a very simple language. Created before modern computers, its goal was to express logic formally. Now, we can use it as a basis for a small and simple programming language. Its &lt;a href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Lambda_calculus&quot;&gt;Wikipedia Page&lt;&#x2F;a&gt; is chock-full of great stuff, but I will give it a quick introduction.&lt;&#x2F;p&gt;
 &lt;p&gt;The lambda calculus has 3 forms&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;e ::= x
-	| (e e)
-	| (λ (x) e)
-x ::= some variable.
-&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;\begin{aligned}
+% expressions
+e &amp;::= x  \\
+  &amp; | \; (e\;e) \\
+  &amp; | \; (\lambda \; (x) \; e) \\
+x &amp;::= \; \text{some variable} \\
+\end{aligned}&lt;&#x2F;script&gt;
 &lt;p&gt;This syntax means, an expression (we are just calling it &lt;code&gt;e&lt;&#x2F;code&gt;) can be three things. It could be some variable, that we are calling &lt;code&gt;x&lt;&#x2F;code&gt;. It could also be an &#x27;application&#x27; with 2 expressions in it. Finally, It may be an &#x27;abstraction&#x27; that takes some variable and some expression.&lt;&#x2F;p&gt;
 &lt;p&gt;Both &lt;code&gt;e&lt;&#x2F;code&gt; and &lt;code&gt;x&lt;&#x2F;code&gt; are what are called &#x27;metavariables&#x27;, meaning they are variables to be used in the grammar, and will be replaced in a real text. An example λ-calculus program may be:&lt;&#x2F;p&gt;
-&lt;p&gt;&lt;code&gt;((λ (q) (λ (b) q)) (λ (blerp) WORD))&lt;&#x2F;code&gt;&lt;&#x2F;p&gt;
-&lt;p&gt;This is a program! At this moment, it doesnt do anything, beacuse we have not given it any &lt;em&gt;semantics&lt;&#x2F;em&gt;! Semantics are what give program text meaning. Maybe in my semantics, I can say, &amp;quot;If a program looks like &lt;code&gt;((λ (q) (λ (b) q)) (λ (z) z))&lt;&#x2F;code&gt;, then format the Hard Drive!&amp;quot;. I would not say thats a very moral semantics, and it places a weird dependency on something called a &#x27;hard&#x27;... &#x27;drive&#x27;... but its a semantics!&lt;&#x2F;p&gt;
+&lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;((\lambda \; (q) \; (\lambda \; (b) \; q)) \; (\lambda \; (\text{blerp}) \; \text{WORD}))&lt;&#x2F;script&gt;
+&lt;p&gt;This is a program! At this moment, it doesnt do anything, beacuse we have not given it any &lt;em&gt;semantics&lt;&#x2F;em&gt;! Semantics are what give program text meaning. Maybe in my semantics, I will say, &amp;quot;If a program looks like &lt;code&gt;((λ (q) (λ (b) q)) (λ (z) z))&lt;&#x2F;code&gt;, then format the Hard Drive!&amp;quot;. I would not say thats a very moral semantics, and it places a weird dependency on something called a &#x27;hard&#x27;... &#x27;drive&#x27;... but it&#x27;s a semantics!&lt;&#x2F;p&gt;
 &lt;p&gt;Given a reasonable (and standard, time honored) semantics, these three can perform any computation. We will implement semantics for the lambda calculus in this post, and add on to it in the future to make an actually useful language.&lt;&#x2F;p&gt;
 &lt;p&gt;So lets get started!&lt;&#x2F;p&gt;
 &lt;h1 id=&quot;the-machine&quot;&gt;The Machine&lt;&#x2F;h1&gt;

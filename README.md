@@ -23,9 +23,8 @@ Now write, and changes will be reflected.
 ## Releasing The Site ##
 
 1. Make sure Zola is installed. https://www.getzola.org/documentation/getting-started/installation/
-1. `$ rm -rf public docs`
-1. `$ zola build --output-dir docs` # Use docs/ for easier GH pages usage.
-1. `git add . ; git commit ; git push origin master` # you know the drill!
+2. `$ zola build --output-dir docs` # GH Pages uses `docs/` for output.
+3. commit and push.
 
 ## TODO: ##
 

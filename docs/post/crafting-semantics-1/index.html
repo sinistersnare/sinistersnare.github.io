@@ -101,16 +101,17 @@
 <h1 id="l">λ</h1>
 <p>The lambda calculus is a very simple language. Created before modern computers, its goal was to express logic formally. Now, we can use it as a basis for a small and simple programming language. Its <a href="https://en.wikipedia.org/wiki/Lambda_calculus">Wikipedia Page</a> is chock-full of great stuff, but I will give it a quick introduction.</p>
 <p>The lambda calculus has 3 forms</p>
-<pre style="background-color:#2b303b;">
-<code><span style="color:#c0c5ce;">e ::= x
-	| (e e)
-	| (λ (x) e)
-x ::= some variable.
-</span></code></pre>
+<script type="math/tex;mode=display">\begin{aligned}
+% expressions
+e &::= x  \\
+  & | \; (e\;e) \\
+  & | \; (\lambda \; (x) \; e) \\
+x &::= \; \text{some variable} \\
+\end{aligned}</script>
 <p>This syntax means, an expression (we are just calling it <code>e</code>) can be three things. It could be some variable, that we are calling <code>x</code>. It could also be an 'application' with 2 expressions in it. Finally, It may be an 'abstraction' that takes some variable and some expression.</p>
 <p>Both <code>e</code> and <code>x</code> are what are called 'metavariables', meaning they are variables to be used in the grammar, and will be replaced in a real text. An example λ-calculus program may be:</p>
-<p><code>((λ (q) (λ (b) q)) (λ (blerp) WORD))</code></p>
-<p>This is a program! At this moment, it doesnt do anything, beacuse we have not given it any <em>semantics</em>! Semantics are what give program text meaning. Maybe in my semantics, I can say, &quot;If a program looks like <code>((λ (q) (λ (b) q)) (λ (z) z))</code>, then format the Hard Drive!&quot;. I would not say thats a very moral semantics, and it places a weird dependency on something called a 'hard'... 'drive'... but its a semantics!</p>
+<script type="math/tex;mode=display">((\lambda \; (q) \; (\lambda \; (b) \; q)) \; (\lambda \; (\text{blerp}) \; \text{WORD}))</script>
+<p>This is a program! At this moment, it doesnt do anything, beacuse we have not given it any <em>semantics</em>! Semantics are what give program text meaning. Maybe in my semantics, I will say, &quot;If a program looks like <code>((λ (q) (λ (b) q)) (λ (z) z))</code>, then format the Hard Drive!&quot;. I would not say thats a very moral semantics, and it places a weird dependency on something called a 'hard'... 'drive'... but it's a semantics!</p>
 <p>Given a reasonable (and standard, time honored) semantics, these three can perform any computation. We will implement semantics for the lambda calculus in this post, and add on to it in the future to make an actually useful language.</p>
 <p>So lets get started!</p>
 <h1 id="the-machine">The Machine</h1>

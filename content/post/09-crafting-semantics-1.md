@@ -38,23 +38,27 @@ The lambda calculus is a very simple language. Created before modern computers, 
 
 The lambda calculus has 3 forms
 
-```
-e ::= x
-	| (e e)
-	| (λ (x) e)
-x ::= some variable.
-```
+{% katex(block=true) %}
+\begin{aligned}
+% expressions
+e &::= x  \\
+  & | \; (e\;e) \\
+  & | \; (\lambda \; (x) \; e) \\
+x &::= \; \text{some variable} \\
+\end{aligned}
+{% end %}
 
 This syntax means, an expression (we are just calling it `e`) can be three things. It could be some variable, that we are calling `x`. It could also be an 'application' with 2 expressions in it. Finally, It may be an 'abstraction' that takes some variable and some expression.
 
 Both `e` and `x` are what are called 'metavariables', meaning they are variables to be used in the grammar, and will be replaced in a real text. An example λ-calculus program may be:
 
-`((λ (q) (λ (b) q)) (λ (blerp) WORD))`
+{% katex(block=true) %}
+((\lambda \; (q) \; (\lambda \; (b) \; q)) \; (\lambda \; (\text{blerp}) \; \text{WORD}))
+{% end %}
 
-This is a program! At this moment, it doesnt do anything, beacuse we have not given it any _semantics_! Semantics are what give program text meaning. Maybe in my semantics, I can say, "If a program looks like `((λ (q) (λ (b) q)) (λ (z) z))`, then format the Hard Drive!". I would not say thats a very moral semantics, and it places a weird dependency on something called a 'hard'... 'drive'... but its a semantics!
+This is a program! At this moment, it doesnt do anything, beacuse we have not given it any _semantics_! Semantics are what give program text meaning. Maybe in my semantics, I will say, "If a program looks like `((λ (q) (λ (b) q)) (λ (z) z))`, then format the Hard Drive!". I would not say thats a very moral semantics, and it places a weird dependency on something called a 'hard'... 'drive'... but it's a semantics!
 
 Given a reasonable (and standard, time honored) semantics, these three can perform any computation. We will implement semantics for the lambda calculus in this post, and add on to it in the future to make an actually useful language.
-
 
 So lets get started!
 
