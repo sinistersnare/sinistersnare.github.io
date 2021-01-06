@@ -116,8 +116,7 @@ x ::= some variable.
 <h1 id="the-machine">The Machine</h1>
 <p>First, we need to define our <em>domains</em>. These are the things that we actually use to implement our machines. A simple domain that you may be familiar with is the set of Integers. starting at 0, you can go forward by 1, or backwards by 1, to infinity (and negative infinity). Our domains include 'syntactic domains', which are domains seen in the progrm text, and 'semantic domains', for determining meaning.</p>
 <h2 id="syntax">Syntax</h2>
-<p>The snyactic domain is our grammar from above, but lets expand on it a bit for our sake.
-We will also be using a more mathy notation, in addition to the <a href="https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form">BNF</a> above.</p>
+<p>The syntactic domain is our grammar from above, but lets expand on it a bit for our sake. We will also be using a more mathy notation, in addition to the <a href="https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form">BNF</a> above.</p>
 <script type="math/tex;mode=display">\begin{aligned}
 % expressions
 e \in \textsf{Exp} &::= x  \\
@@ -154,7 +153,7 @@ v \in \textsf{Val} &\triangleq \textit{Clo} \\
 \end{aligned}</script>
 <p>So there are a lot of pieces here! Lets go through them! Dont worry if they dont make perfect sense just yet, it will make more sense when they are used in context in the next section.</p>
 <p>First, the state definition itself. We have 4 components as previously defined. We use a '<a href="https://en.wikipedia.org/wiki/Product_type">product type</a>' to say 'One of each'. The domain is called Σ, or 'sigma' (uppercase). When we only have one state, (much as we would have one number in the domain of 'Integer'), we use ς, or 'varsigma' (i dont understand ancient greek enough to get why its called that). To form a state, you take one of each of the constituent parts. Our machine takes a state as input, and returns a state.</p>
-<p>Next, we need to define the environment and store. In computer science jargon, a map is simply a 'partial function' from the input to the output. For the environment, the function takes a <code>Var</code>, and returns its <code>Addr</code>. The same is true of the store, which takes the address, and returns the value that it points to. The store isnt particularly useful in this machine, but when we implement things like mutation, it will be good to have around.</p>
+<p>Next, we need to define the environment and store. In computer science jargon, a map is simply a 'partial function' from the input to the output. For the environment, the function takes a <code>Var</code>, and returns its <code>Addr</code>. The same is true of the store, which takes the address, and returns the value that it points to. The store isn't particularly useful in this machine, but when we implement things like mutation, it will be good to have around.</p>
 <p>Third, the address and value sets. In this simple machine, addresses will be very simple, we will use numbers to define them (the set with the fancy <code>N</code> is integers starting at 0 and going up to infinity).</p>
 <p>Values in this machine are '[closures](https://en.wikipedia.org/wiki/Closure_(computer_programming)'. Closures are a key part of higher order languages, such as Scheme, and are defined as a syntactic function (in our case the abstraction form), and an environment. In more advanced machines, values will be able to take on many different types, including numbers, strings, even continuations!</p>
 <p>Finally, our definition of continuations. If you look closely, its a kind of linked list, meaning that a continuation has another continuation attached to it, until you get to the <code>mt</code> continuation, the end. Other than <code>mt</code>, there are two important 'continuation frame' types. The <code>arg</code> continuation means that after we finish the current computation, we must evaluate the argument to the application. The <code>fn</code> frame tells us that after the current computation, we need to execute the function with the argument.</p>
@@ -192,8 +191,8 @@ alloc(\sigma) \triangleq |\sigma| \\</script>
 <p>We also change the continuation in the resultant state. The new continuation contains the second expression of the application, and the environment in which to evaluate the expression. It also contains the old continuation, so we can know what to do after we finish evaluating the current control.</p>
 <script type="math/tex;mode=display">(lam , \rho , \sigma , \textbf{arg}(e_a , \rho' , \kappa))
 \leadsto (e_a , \rho' , \sigma , \textbf{fn}(lam , \rho , \kappa)) \\</script>
-<p>This input state is more complex than the prior. If we have a value for the control (in our case, the control is a lambda), and if the current continuation is an <code>arg</code> frame, then we transition as shown. Wht this transition 'means', is that we are finished evaluting the left side of the application, and are now going to evaluate the right side.</p>
-<p>Also pay attention to the environments, and what goes where. For the resulting state, we use the env found in the continuation, but in the resulting continuation, we use the environment given in the state. This is because the closure we are creating by pairing the lambda (control) requires the env it was found in.  But when we evalute the right side of the application (e<sub>a</sub>), we need to use the same environment that we originally used when evaluating the left side.</p>
+<p>This input state is more complex than the prior. If we have a value for the control (in our case, the control is a lambda), and if the current continuation is an <code>arg</code> frame, then we transition as shown. Wht this transition 'means', is that we are finished evaluating the left side of the application, and are now going to evaluate the right side.</p>
+<p>Also pay attention to the environments, and what goes where. For the resulting state, we use the env found in the continuation, but in the resulting continuation, we use the environment given in the state. This is because the closure we are creating by pairing the lambda (control) requires the env it was found in.  But when we evaluate the right side of the application (e<sub>a</sub>), we need to use the same environment that we originally used when evaluating the left side.</p>
 <p>Take a little bit to think on that. The fact that we need to use the same environment for both elements of the application, and why the env that gets paired with the lambda is the one that it is.</p>
 <p>After you understand that, lets finish this out with the final transition function for today.</p>
 <script type="math/tex;mode=display">(lam , \rho , \sigma , \textbf{fn}(lam' , \rho' , \kappa))
@@ -241,7 +240,7 @@ alloc(\sigma) \triangleq |\sigma| \\</script>
 %
 \varsigma_3 = ((\lambda \; (b) \; q) , \{q : 0\} , \{0 : (\lambda \; (\text{blerp}) \; \text{WORD})\} , \textbf{mt}) \\</script>
 <p>ς<sub>3</sub> is the final state, if we run <code>step</code> again, no applicable input is found. Try to write the steps out more explicitly on some paper, and see for yourself that this is the final state.</p>
-<p>The key insight to understand that  ς<sub>3</sub> is the final state is that we are at an 'atomic' value with an empty continuation. Atomic in this case means we cant break it down further, like we could a variable or and application form.</p>
+<p>The key insight to understand that  ς<sub>3</sub> is the final state is that we are at an 'atomic' value with an empty continuation. Atomic in this case means we can't break it down further, like we could a variable or and application form.</p>
 <h1 id="whats-next">Whats next</h1>
 <p>Well, we have a turing complete language, what's the point in doing anything else? Language features to make this machine usable?? Fine! Stay tuned and next time we will implement 'useful' things, like numbers, and <code>if</code>. I promise that it will be shorter than this post.</p>
 <p>See you next time!</p>
@@ -274,7 +273,7 @@ alloc(\sigma) \triangleq |\sigma| \\</script>
                     </li>
                     
                     <li class="bottom-nav-item">
-                        <a class="bottom-nav-link" href="https:&#x2F;&#x2F;github.com&#x2F;sinistersnare" target="_blank" >Github↪</a>
+                        <a class="bottom-nav-link" href="https:&#x2F;&#x2F;github.com&#x2F;sinistersnare" target="_blank" >GitHub↪</a>
                     </li>
                     
                 

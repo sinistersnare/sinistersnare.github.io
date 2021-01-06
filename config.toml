@@ -33,7 +33,7 @@ sam_menu = [
     { text = "Posts", link = "/post" },
     { text = "About", link = "/about" },
     { text = "Projects", link = "/projects" },
-    { text = "Github↪", link = "https://github.com/sinistersnare" }
+    { text = "GitHub↪", link = "https://github.com/sinistersnare" }
 ]
 sam_bottom_menu = true
 home = "Home" # Name for home page links.

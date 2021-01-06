@@ -14,7 +14,7 @@ generate_toc = false
 
 Hi, this is the first post on a series about creating semantics for a programming language. We will be using Scheme as a reference point, and slowly building more and more features for it.
 
-We will be using '_computer science notation_' (specifically an operational semantics) for every post. We wont be implementing these semantics formally in a language, but you could quite easily if you wanted to.
+We will be using '_computer science notation_' (specifically an operational semantics) for every post. We won't be implementing these semantics in a 'real' programming language, but you could quite easily if you wanted to.
 
 If you want to get started in Programming Language Theory, and want to understand how to define a programming language formally, this is the series for you! If you want to understand abstract machines better, this is the series for you!
 
@@ -28,7 +28,7 @@ For a mostly 'finished' product, I have semantics for many forms of Scheme [here
 
 The semantics of a language are how its syntax is interpreted by a reader (either human or machine). Like many things in Programming Language Theory, we have stolen this term from the field of linguistics (thanks!). Computer scientists use semantics to study programming languages. You can learn more about them in my ['Abstract Machines' post](@/post/06-abstract-machines.md).
 
-# Pre-Requisites #
+# Prerequisites #
 
 There will be no 'programming' in this series, only notation. I will try to explain all notation as it is first used.
 

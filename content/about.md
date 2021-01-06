@@ -23,7 +23,7 @@ I like to work in Python, Java, Rust, and functional languages.
 
 ## Contact ##
 
-I am 'Sinistersnare' on both {{ elink(text="Github", to="https://github.com/sinistersnare") }} and {{ elink(text="Twitter", to="https://twitter.com/sinistersnare") }}
+I am 'Sinistersnare' on both {{ elink(text="GitHub", to="https://github.com/sinistersnare") }} and {{ elink(text="Twitter", to="https://twitter.com/sinistersnare") }}
 
 My email is my username @ gmail.
 

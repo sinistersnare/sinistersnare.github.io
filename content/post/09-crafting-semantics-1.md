@@ -64,8 +64,7 @@ First, we need to define our _domains_. These are the things that we actually us
 
 ## Syntax ##
 
-The snyactic domain is our grammar from above, but lets expand on it a bit for our sake.
-We will also be using a more mathy notation, in addition to the [BNF](https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form) above.
+The syntactic domain is our grammar from above, but lets expand on it a bit for our sake. We will also be using a more mathy notation, in addition to the [BNF](https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form) above.
 
 
 {% katex(block=true) %}
@@ -119,7 +118,7 @@ So there are a lot of pieces here! Lets go through them! Dont worry if they dont
 
 First, the state definition itself. We have 4 components as previously defined. We use a '[product type](https://en.wikipedia.org/wiki/Product_type)' to say 'One of each'. The domain is called Σ, or 'sigma' (uppercase). When we only have one state, (much as we would have one number in the domain of 'Integer'), we use ς, or 'varsigma' (i dont understand ancient greek enough to get why its called that). To form a state, you take one of each of the constituent parts. Our machine takes a state as input, and returns a state.
 
-Next, we need to define the environment and store. In computer science jargon, a map is simply a 'partial function' from the input to the output. For the environment, the function takes a `Var`, and returns its `Addr`. The same is true of the store, which takes the address, and returns the value that it points to. The store isnt particularly useful in this machine, but when we implement things like mutation, it will be good to have around.
+Next, we need to define the environment and store. In computer science jargon, a map is simply a 'partial function' from the input to the output. For the environment, the function takes a `Var`, and returns its `Addr`. The same is true of the store, which takes the address, and returns the value that it points to. The store isn't particularly useful in this machine, but when we implement things like mutation, it will be good to have around.
 
 Third, the address and value sets. In this simple machine, addresses will be very simple, we will use numbers to define them (the set with the fancy `N` is integers starting at 0 and going up to infinity).
 
@@ -197,9 +196,9 @@ We also change the continuation in the resultant state. The new continuation con
 \leadsto (e_a , \rho' , \sigma , \textbf{fn}(lam , \rho , \kappa)) \\
 {% end %}
 
-This input state is more complex than the prior. If we have a value for the control (in our case, the control is a lambda), and if the current continuation is an `arg` frame, then we transition as shown. Wht this transition 'means', is that we are finished evaluting the left side of the application, and are now going to evaluate the right side.
+This input state is more complex than the prior. If we have a value for the control (in our case, the control is a lambda), and if the current continuation is an `arg` frame, then we transition as shown. Wht this transition 'means', is that we are finished evaluating the left side of the application, and are now going to evaluate the right side.
 
-Also pay attention to the environments, and what goes where. For the resulting state, we use the env found in the continuation, but in the resulting continuation, we use the environment given in the state. This is because the closure we are creating by pairing the lambda (control) requires the env it was found in.  But when we evalute the right side of the application (e{{ subscript(sub="a") }}), we need to use the same environment that we originally used when evaluating the left side.
+Also pay attention to the environments, and what goes where. For the resulting state, we use the env found in the continuation, but in the resulting continuation, we use the environment given in the state. This is because the closure we are creating by pairing the lambda (control) requires the env it was found in.  But when we evaluate the right side of the application (e{{ subscript(sub="a") }}), we need to use the same environment that we originally used when evaluating the left side.
 
 Take a little bit to think on that. The fact that we need to use the same environment for both elements of the application, and why the env that gets paired with the lambda is the one that it is.
 
@@ -278,7 +277,7 @@ e_0 = ((\lambda \; (q) \; (\lambda \; (b) \; q)) \; (\lambda \; (\text{blerp}) \
 
 ς{{ subscript(sub="3") }} is the final state, if we run `step` again, no applicable input is found. Try to write the steps out more explicitly on some paper, and see for yourself that this is the final state.
 
-The key insight to understand that  ς{{ subscript(sub="3") }} is the final state is that we are at an 'atomic' value with an empty continuation. Atomic in this case means we cant break it down further, like we could a variable or and application form.
+The key insight to understand that  ς{{ subscript(sub="3") }} is the final state is that we are at an 'atomic' value with an empty continuation. Atomic in this case means we can't break it down further, like we could a variable or and application form.
 
 # Whats next #
 
