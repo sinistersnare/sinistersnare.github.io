@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="chrome=1">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="referrer" content="no-referrer">
+
+        <link rel="stylesheet" href="https:&#x2F;&#x2F;drs.is&#x2F;fonts.css">
+        <link rel="stylesheet" href="https:&#x2F;&#x2F;drs.is&#x2F;style.css">
+
+        <title>
+    Crafting Semantics 1: Lambda Calculus  · Sin&#x27;s Blog
+</title>
+
+        
+            <link rel="alternate" type="application/rss+xml" title="RSS" href="https:&#x2F;&#x2F;drs.is&#x2F;atom.xml">
+        
+
+        <!-- TODO: apparently CDNs arent good anymore. -->
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.js" integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/contrib/mathtex-script-type.min.js" integrity="sha384-zWYbd0NBwgTsgIdFKVprSfTh1mbMPe5Hz1X3yY4Sd1h/K1cQoUe36OGwAGz/PcDy" crossorigin="anonymous"></script>
+        
+    </head>
+    <body>
+        
+    <div class="wrap">
+        <div class="section" id="top-link-home">
+            <a href="/">Home</a>
+        </div>
+        <div class="section" id="title">
+            
+    Crafting Semantics 1: Lambda Calculus
+
+        </div>
+        <div class="section" id="content">
+            
+    
+        
+            
+    
+    Jan 06, 2021
+
+        
+        
+        
+            
+            
+                &#183; 18 min
+            
+        
+        
+        <nav class="tag-container">
+            <ul>
+                
+                <li class="tag">
+                    <a href="https:&#x2F;&#x2F;drs.is&#x2F;tags&#x2F;plt&#x2F;">
+                        PLT
+                    </a>
+                </li>
+                
+                <li class="tag">
+                    <a href="https:&#x2F;&#x2F;drs.is&#x2F;tags&#x2F;computer-science&#x2F;">
+                        Computer Science
+                    </a>
+                </li>
+                
+                <li class="tag">
+                    <a href="https:&#x2F;&#x2F;drs.is&#x2F;tags&#x2F;semantics&#x2F;">
+                        Semantics
+                    </a>
+                </li>
+                
+                <li class="tag">
+                    <a href="https:&#x2F;&#x2F;drs.is&#x2F;tags&#x2F;crafting-semantics&#x2F;">
+                        Crafting Semantics
+                    </a>
+                </li>
+                
+            </ul>
+        </nav>
+        
+        <hr/>
+    
+    
+    <p>This series of posts revolves around creating operational semantics of the Scheme programming language from the ground up, starting with the lambda calculus.</p>
+<p>If you have not read the introductory post, you can find it <a href="https://drs.is/post/crafting-semantics-0/">here</a>, and see the index of this series <a href="/tags/crafting-semantics/">here</a>.</p>
+<h1 id="intro">Intro</h1>
+<p>Hi, in this post we will be implementing a CESK Abstract Machine for the lambda calculus (or simply 'λ'). First, we need to define all of what an 'abstract machine' is, what semantics are, and the syntax we will be using. So this post may be a bit long.</p>
+<p>If you know all of the intro stuff already, but dont know how to define semantics for the lambda calculus, feel free to skip to <a href="https://drs.is/post/crafting-semantics-1/#transitions">here</a></p>
+<h1 id="cesk">CESK</h1>
+<p>The type of abstract machine we will be creating is called 'CESK'. It stands for <strong>C</strong>ontrol, <strong>Environment</strong>, <strong>Store</strong>, and <strong>Kontinuation</strong> (C was already taken). For a language as simple as the λ-calculus, we dont need all of this machinery, but as we build features for this machine into a real scheme, it will be nice to have the extra features provided by the Store and Kontinuation pieces.</p>
+<p>The control of a machine is the current instruction that is being evaluated. For the λ-calculus, this will simply be the syntax. For a very complex machine, like the JVM, this could be bytecodes. For a CPU, it may be an instruction pointer and the binary program text. When you hear the word 'control flow' it is referring to this component.</p>
+<p>The environment of the program is where bindings live. If you have variables <code>x</code>, <code>y</code>, and <code>z</code>, your environment will have 3 entries, one for each variable, and their address in the store. For the lambda calculus it will be a simple key-value mapping (dict, hash, etc.) from Variable to Address.</p>
+<p>The store is where values of bindings is held. Each of the variables in the environment has an address, and that address can be found in the store pointing to the value of the variable. The store models the heap of the machine. We will also be using a key-value mapping here, from Address to Value.</p>
+<p>The kontinuation is what happens 'next', after we finish evaluating an expression. We will use a special continuation frame object to track this. It is used to represent a fine grained call-stack. But instead of only keeping track of function calls, it tracks many other things, such as conditionals and let bindings.</p>
+<h1 id="l">λ</h1>
+<p>The lambda calculus is a very simple language. Created before modern computers, its goal was to express logic formally. Now, we can use it as a basis for a small and simple programming language. Its <a href="https://en.wikipedia.org/wiki/Lambda_calculus">Wikipedia Page</a> is chock-full of great stuff, but I will give it a quick introduction.</p>
+<p>The lambda calculus has 3 forms</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#c0c5ce;">e ::= x
+	| (e e)
+	| (λ (x) e)
+x ::= some variable.
+</span></code></pre>
+<p>This syntax means, an expression (we are just calling it <code>e</code>) can be three things. It could be some variable, that we are calling <code>x</code>. It could also be an 'application' with 2 expressions in it. Finally, It may be an 'abstraction' that takes some variable and some expression.</p>
+<p>Both <code>e</code> and <code>x</code> are what are called 'metavariables', meaning they are variables to be used in the grammar, and will be replaced in a real text. An example λ-calculus program may be:</p>
+<p><code>((λ (q) (λ (b) q)) (λ (blerp) WORD))</code></p>
+<p>This is a program! At this moment, it doesnt do anything, beacuse we have not given it any <em>semantics</em>! Semantics are what give program text meaning. Maybe in my semantics, I can say, &quot;If a program looks like <code>((λ (q) (λ (b) q)) (λ (z) z))</code>, then format the Hard Drive!&quot;. I would not say thats a very moral semantics, and it places a weird dependency on something called a 'hard'... 'drive'... but its a semantics!</p>
+<p>Given a reasonable (and standard, time honored) semantics, these three can perform any computation. We will implement semantics for the lambda calculus in this post, and add on to it in the future to make an actually useful language.</p>
+<p>So lets get started!</p>
+<h1 id="the-machine">The Machine</h1>
+<p>First, we need to define our <em>domains</em>. These are the things that we actually use to implement our machines. A simple domain that you may be familiar with is the set of Integers. starting at 0, you can go forward by 1, or backwards by 1, to infinity (and negative infinity). Our domains include 'syntactic domains', which are domains seen in the progrm text, and 'semantic domains', for determining meaning.</p>
+<h2 id="syntax">Syntax</h2>
+<p>The snyactic domain is our grammar from above, but lets expand on it a bit for our sake.
+We will also be using a more mathy notation, in addition to the <a href="https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form">BNF</a> above.</p>
+<script type="math/tex;mode=display">\begin{aligned}
+% expressions
+e \in \textsf{Exp} &::= x  \\
+                   &| \; (e\;e) \\
+                   &| \; lam \\
+% variables
+x \in \textsf{Var} &\triangleq \text{The set of variables} \\
+% lambdas
+lam \in \textsf{Lam} &::= (λ \; (x) \; e) \\
+\end{aligned}</script>
+<p>To read this notation, you need to take a look at the three parts. First, is the name of the metavariable. For the first line, the metavariable is <code>e</code>. When you see <code>e</code> in use, it is referring to this domain. Next is the name of the domain. Third, you have the definition. I use BNF style or 'definitional equality' by my own choice. the <code>∈</code> symbol means 'in', or 'is a member of domain'. So the first line reads, &quot;<code>e</code> is a member of the domain 'Exp', which is defined as these three productions&quot;.</p>
+<p>There are 3 domains here, expressions, variables, and lambdas. These are the same as above, but now we have the name of the sets used, instead of just the metavariable names. If we see any <code>e</code>, then it is in the <code>Exp</code> domain. The same goes for <code>x</code> and <code>Var</code>. We may see multiple <code>e</code> metavariables used, but in this context, they can be filled in with different values. Later, when we are writing the semantics, we will differentiate metavariables of the same domain with subscripts or tick-marks.</p>
+<p>I also factored the lambda 'production' in the grammar into its own domain. This will be helpful in the semantic domain definitions.</p>
+<p>The equal sign with the delta-triangle over it just means 'is defined as'. In Computer Science and Math, <code>=</code> may mean 'is the same as' or 'is defined as', so we use the Δ to differentiate the two.</p>
+<p>Sometimes <code>::=</code> is used, and sometimes our <code>=</code> with <code>Δ</code> is used, why? Because using notation in this way is helpful. There arent strict rules here, and I found it useful to use BNF style for some domains, and definitional-equality for others. If you dont like it, you could perhaps give each production in the BNF grammar its own domain, and use a '<a href="https://en.wikipedia.org/wiki/Tagged_union">sum type</a>' to define everything in terms of definitional equality.</p>
+<h2 id="semantics">Semantics</h2>
+<p>The semantic domains include the definitions for the machine parts themselves. Exciting!</p>
+<script type="math/tex;mode=display">\begin{aligned}
+% Machine
+\varsigma \in \Sigma &\triangleq \textsf{Expr} \times \textit{Env} \\
+					 & \times \textit{Store} \times \textit{Kont} \\
+% Env
+\rho \in \textit{Env} &\triangleq \textsf{Var} \rightarrow \textsf{Addr} \\
+% Store
+\sigma \in \textit{Store} &\triangleq \textsf{Addr} \rightarrow \textsf{Val} \\
+% Address
+a \in \textsf{Addr} &\triangleq \mathbb{N} \\
+% Value
+v \in \textsf{Val} &\triangleq \textit{Clo} \\
+% Continuation
+\kappa \in \textit{Kont} &::= \textbf{mt} \\
+						& | \; \textbf{arg}(e, \rho, \kappa) \\
+						& | \; \textbf{fn}(v, \rho, \kappa) \\
+\end{aligned}</script>
+<p>So there are a lot of pieces here! Lets go through them! Dont worry if they dont make perfect sense just yet, it will make more sense when they are used in context in the next section.</p>
+<p>First, the state definition itself. We have 4 components as previously defined. We use a '<a href="https://en.wikipedia.org/wiki/Product_type">product type</a>' to say 'One of each'. The domain is called Σ, or 'sigma' (uppercase). When we only have one state, (much as we would have one number in the domain of 'Integer'), we use ς, or 'varsigma' (i dont understand ancient greek enough to get why its called that). To form a state, you take one of each of the constituent parts. Our machine takes a state as input, and returns a state.</p>
+<p>Next, we need to define the environment and store. In computer science jargon, a map is simply a 'partial function' from the input to the output. For the environment, the function takes a <code>Var</code>, and returns its <code>Addr</code>. The same is true of the store, which takes the address, and returns the value that it points to. The store isnt particularly useful in this machine, but when we implement things like mutation, it will be good to have around.</p>
+<p>Third, the address and value sets. In this simple machine, addresses will be very simple, we will use numbers to define them (the set with the fancy <code>N</code> is integers starting at 0 and going up to infinity).</p>
+<p>Values in this machine are '[closures](https://en.wikipedia.org/wiki/Closure_(computer_programming)'. Closures are a key part of higher order languages, such as Scheme, and are defined as a syntactic function (in our case the abstraction form), and an environment. In more advanced machines, values will be able to take on many different types, including numbers, strings, even continuations!</p>
+<p>Finally, our definition of continuations. If you look closely, its a kind of linked list, meaning that a continuation has another continuation attached to it, until you get to the <code>mt</code> continuation, the end. Other than <code>mt</code>, there are two important 'continuation frame' types. The <code>arg</code> continuation means that after we finish the current computation, we must evaluate the argument to the application. The <code>fn</code> frame tells us that after the current computation, we need to execute the function with the argument.</p>
+<h2 id="injection-and-allocation">Injection And Allocation##</h2>
+<p>As I mentioned earlier, our machine takes a state and returns a state, so how do we know what the 'first' state is? To determine that, we create an 'injection function'. This takes the program text as input, and returns the initial machine state that will evaluate it. Ours is quite simple:</p>
+<script type="math/tex;mode=display">inj : \textsf{Exp} \rightarrow \Sigma \\
+inj(e) \triangleq (e , \emptyset , \emptyset , \textbf{mt}) \\</script>
+<p>The top line is the type of the function <code>inj</code>, which states that it is a function that takes an expression, and returns a state. The next line is the definition, you will see that it takes an <code>e</code>, and returns a state, with the <code>e</code> as the control, empty sets for the environment and store, meaning that there are no mappings. the starting continuation is 'mt', meaning that there is nothing left to do after it is encountered.</p>
+<p>We also need a way to make an address. A good allocator gives us an unused address, so that we dont step on any other variables toes. Lets define a simple alloc here:</p>
+<script type="math/tex;mode=display">alloc : \textit{Store} \rightarrow \textit{Addr} \\
+alloc(\sigma) \triangleq |\sigma| \\</script>
+<p>We define alloc as simply, 'the amount of items in the store'. If the store is empty, the address return will be <code>0</code>, if there are 12 items, the address will be <code>12</code>. As long as we never implement garbage collection, this is guaranteed to always give us a clean, unused address!</p>
+<p>The starting state is used to create the next state, and the state after that, until we reach the end of the program (or infinite loop! Thanks halting problem!). This is called a 'state machine'. If you took a few computer science courses, you may be familiar with 'finite state machines'. A programming language can be thought of as an 'infinite state machine', because we have <em>no idea</em> if it will end! Exciting! Mysterious!</p>
+<h1 id="transitions">Transitions</h1>
+<p>The machine we will be making is based off of a multitude of 'state transition functions', that say &quot;if the state looks like this, do that&quot;. When you combine all of these functions, you get a working machine, or what a lay-prorammer may call an 'interpreter'!</p>
+<p>So, without further ado, lets write out some state transition functions! We begin with something simple, variable lookup:</p>
+<script type="math/tex;mode=display">(x , \rho , \sigma , \kappa) \leadsto (lam , \rho_\lambda , \sigma , \kappa) \\
+\begin{aligned}
+\text{where } \sigma(\rho(x)) &= (lam , \rho_\lambda) \\
+\end{aligned}</script>
+<p>We have finally defined our first semantic! If our control is some variable, then we need to look it up in the environment and store. If we find that they lead to a closure (a lambda and an environment), then we use them in the resulting state. I use the funky arrow cause I think it looks funny. I call it 'drunk arrow'. You can read it as 'leads to'.</p>
+<p>Note that I used a regular <code>=</code> and i said 'if we find' above. In the 'where' clause, I am not stating what the variable lookup will be, but making a query. Luckily, the only thing that our store can hold at the moment is a closure, so its likely that the query succeeds.</p>
+<p>But there is also the case that the variable does not exist. If the variable is not found, then this transition function does not go into effect. We call such a state a 'stuck state', there is no usable transition, so the state never changes. This can mean that we are 'done', and that there is no more computation left, or it could indicate some error. You could of course implement some semantic such as:</p>
+<script type="math/tex;mode=display">(x , \rho , \sigma , \kappa) \leadsto \text{ERROR-STATE} \\
+\begin{aligned}
+\text{where } \rho(x) &= \text{NO-ENTRY-FOUND} \\
+\end{aligned}</script>
+<p>But then we would have to add error types to the state definition, and a lot more transitions to describe errors. Thats no fun, so I will leave boring stuff like that to 'real' interpreter writers. Let's just assume all programs given to our machine are 'good' and dont get into any bad stuck states.</p>
+<p>So if our machine consists only of the one semantic, it will never be used, because our environment and store are never added to, so no variable will ever be found. Let's add some more semantics to alleviate that issue.</p>
+<script type="math/tex;mode=display">((e_f \; e_a) , \rho , \sigma , \kappa) \leadsto (e_f , \rho , \sigma , \kappa') \\
+\begin{aligned}
+\text{where } \kappa' &= \textbf{arg}(e_a , \rho , \kappa) \\
+\end{aligned}</script>
+<p>Now we can evaluate an 'application' form. This is when well-defined semantics are really important. In our machine, we evaluate the first expression before the second. We are giving an explicit order of evaluation here. Why is the order of evaluation important? In more complex languages with mutable state, you can have undefined behavior if the order of evaluation is undefined. I will leave further research as an exercise to the esteemed reader.</p>
+<p>We also change the continuation in the resultant state. The new continuation contains the second expression of the application, and the environment in which to evaluate the expression. It also contains the old continuation, so we can know what to do after we finish evaluating the current control.</p>
+<script type="math/tex;mode=display">(lam , \rho , \sigma , \textbf{arg}(e_a , \rho' , \kappa))
+\leadsto (e_a , \rho' , \sigma , \textbf{fn}(lam , \rho , \kappa)) \\</script>
+<p>This input state is more complex than the prior. If we have a value for the control (in our case, the control is a lambda), and if the current continuation is an <code>arg</code> frame, then we transition as shown. Wht this transition 'means', is that we are finished evaluting the left side of the application, and are now going to evaluate the right side.</p>
+<p>Also pay attention to the environments, and what goes where. For the resulting state, we use the env found in the continuation, but in the resulting continuation, we use the environment given in the state. This is because the closure we are creating by pairing the lambda (control) requires the env it was found in.  But when we evalute the right side of the application (e<sub>a</sub>), we need to use the same environment that we originally used when evaluating the left side.</p>
+<p>Take a little bit to think on that. The fact that we need to use the same environment for both elements of the application, and why the env that gets paired with the lambda is the one that it is.</p>
+<p>After you understand that, lets finish this out with the final transition function for today.</p>
+<script type="math/tex;mode=display">(lam , \rho , \sigma , \textbf{fn}(lam' , \rho' , \kappa))
+\leadsto (e , \rho'' , \sigma' , \kappa) \\
+\begin{aligned}
+\text{where } lam' &= (λ (x) e) \\
+			  a &\triangleq alloc(\sigma) \\
+			  \rho'' &\triangleq \rho'[x \mapsto a] \\
+			  \sigma' &\triangleq \sigma[a \mapsto (lam , \rho)]
+\end{aligned}</script>
+<p>At this point, we have a lambda as the control, and a <code>fn</code> continuation frame. It is officially time to apply the application! The first part of the continuation frame is the function, and the current control is the argument. So we place the functions body as the new control, and add its argument (paired with the environment it was found in to form a closure) to the env/store.</p>
+<p>This is the most complex function in this machine. Make sure to internalize that in this machine, the only value is the closure. So, when we see a lambda, we have reached a value (when combined with an env). There <a href="https://en.wikipedia.org/wiki/Church_encoding">are ways</a> to ues closures to represent common datatypes such as numbers, or lists. These ways are how lambda calculus continues to be used as the basis for minimalistic languages such as scheme. But it makes programs hard to read, so we add integers anyways!</p>
+<h1 id="the-completed-machine">The Completed Machine</h1>
+<p>And just like that, we have the 4 transition functions that define a standard 'call-by-value' lambda calculus. Lets put them together for posterity:</p>
+<script type="math/tex;mode=display">(x , \rho , \sigma , \kappa) \leadsto (v , \rho_\lambda , \sigma , \kappa) \\
+\begin{aligned}
+\text{where } \sigma(\rho(x)) &= (v , \rho_\lambda) \\
+\end{aligned}</script>
+<script type="math/tex;mode=display">((e_f \; e_a) , \rho , \sigma , \kappa) \leadsto (e_f , \rho , \sigma , \kappa') \\
+\begin{aligned}
+\text{where } \kappa' &= \textbf{arg}(e_a , \rho , \kappa) \\
+\end{aligned}</script>
+<script type="math/tex;mode=display">(lam , \rho , \sigma , \textbf{arg}(e_a , \rho' , \kappa))
+\leadsto (e_a , \rho' , \sigma , \textbf{fn}(lam , \rho , \kappa)) \\</script>
+<script type="math/tex;mode=display">(lam , \rho , \sigma , \textbf{fn}(lam' , \rho' , \kappa))
+\leadsto (e , \rho'' , \sigma' , \kappa) \\
+\begin{aligned}
+\text{where } lam' &= (λ (x) e) \\
+			  a &\triangleq alloc(\sigma) \\
+			  \rho'' &\triangleq \rho'[x \mapsto a] \\
+			  \sigma' &\triangleq \sigma[a \mapsto (lam , \rho)]
+\end{aligned}</script>
+<p>The machine works by combining each of these into one big function, much like the <a href="https://en.wikipedia.org/wiki/Piecewise">piece-wise function</a> you learned in math class. Lets give this function the name <code>step</code>.</p>
+<h1 id="an-example-run">An Example Run</h1>
+<p>To evaluate a function, we continuously execute our transition functions until we reach a stuck-state. That final state is the return value of our program.</p>
+<p>Lets take our example from before, and run it by hand.</p>
+<script type="math/tex;mode=display">e_0 = ((\lambda \; (q) \; (\lambda \; (b) \; q)) \; (\lambda \; (\text{blerp}) \; \text{WORD})) \\
+\varsigma_0 = inj(e_0) = (e_0 , \emptyset , \emptyset , \textbf{mt}) \\
+\varsigma_n = step(\varsigma_{n-1}) \\
+\;\\
+%
+\varsigma_1 = ((\lambda \; (q) \; (\lambda \; (b) \; q)) , \emptyset , \emptyset , \textbf{arg}((\lambda \; (\text{blerp}) \; \text{WORD}) , \emptyset , \textbf{mt})) \\
+%
+\varsigma_2 = ((\lambda \; (\text{blerp}) \; \text{WORD}) , \emptyset , \emptyset , \textbf{fn}((\lambda \; (q) \; (\lambda \; (b) \; q)) , \emptyset , \textbf{mt})) \\
+%
+\varsigma_3 = ((\lambda \; (b) \; q) , \{q : 0\} , \{0 : (\lambda \; (\text{blerp}) \; \text{WORD})\} , \textbf{mt}) \\</script>
+<p>ς<sub>3</sub> is the final state, if we run <code>step</code> again, no applicable input is found. Try to write the steps out more explicitly on some paper, and see for yourself that this is the final state.</p>
+<p>The key insight to understand that  ς<sub>3</sub> is the final state is that we are at an 'atomic' value with an empty continuation. Atomic in this case means we cant break it down further, like we could a variable or and application form.</p>
+<h1 id="whats-next">Whats next</h1>
+<p>Well, we have a turing complete language, what's the point in doing anything else? Language features to make this machine usable?? Fine! Stay tuned and next time we will implement 'useful' things, like numbers, and <code>if</code>. I promise that it will be shorter than this post.</p>
+<p>See you next time!</p>
+
+
+        </div>
+        
+    
+    <div class="section bottom-menu">
+        <hr />
+        <nav class="bottom-menu-nav">
+            <ul class="bottom-nav-list">
+                <li class="bottom-nav-item">
+                    <a class="bottom-nav-link" href="https:&#x2F;&#x2F;drs.is">
+                        Home
+                    </a>
+                </li>
+                
+                    
+                    <li class="bottom-nav-item">
+                        <a class="bottom-nav-link" href="&#x2F;post" >Posts</a>
+                    </li>
+                    
+                    <li class="bottom-nav-item">
+                        <a class="bottom-nav-link" href="&#x2F;about" >About</a>
+                    </li>
+                    
+                    <li class="bottom-nav-item">
+                        <a class="bottom-nav-link" href="&#x2F;projects" >Projects</a>
+                    </li>
+                    
+                    <li class="bottom-nav-item">
+                        <a class="bottom-nav-link" href="https:&#x2F;&#x2F;github.com&#x2F;sinistersnare" target="_blank" >Github↪</a>
+                    </li>
+                    
+                
+            </ul>
+        </nav>
+    </div>
+
+        
+    
+        <div class="section footer">
+            ©2017-2021 Davis Silverman
+            <div class="copyright">
+                <a rel="license" target="_blank" href="http://creativecommons.org/licenses/by/4.0/">
+                    <img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/80x15.png" />
+                </a>
+            </div>
+        </div>
+    
+
+    </div>
+
+    </body>
+</html>

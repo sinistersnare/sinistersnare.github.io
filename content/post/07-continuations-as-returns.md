@@ -6,6 +6,8 @@ date = 2020-11-30T12:15:00-05:00
 draft = false
 [taxonomies]
 tags = ["PLT", "Computer Science", "Continuations"]
+[extra]
+generate_toc = false
 +++
 
 This post can serve as an extra-light introduction to continuations.

@@ -42,4 +42,4 @@ show_reading_time = true
 show_word_count = false
 
 [extra.sam_footer]
-text = "©2017-2020 Davis Silverman"
+text = "©2017-2021 Davis Silverman"

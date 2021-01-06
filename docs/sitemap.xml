@@ -22,6 +22,14 @@
         <lastmod>2020-11-30T12:15:00-05:00</lastmod>
     </url>
     <url>
+        <loc>https://drs.is/post/crafting-semantics-0/</loc>
+        <lastmod>2021-01-05T12:15:00-05:00</lastmod>
+    </url>
+    <url>
+        <loc>https://drs.is/post/crafting-semantics-1/</loc>
+        <lastmod>2021-01-06T12:15:00-05:00</lastmod>
+    </url>
+    <url>
         <loc>https://drs.is/post/fancy-tree-traversals/</loc>
         <lastmod>2019-01-02T10:10:44-05:00</lastmod>
     </url>
@@ -59,6 +67,9 @@
         <loc>https://drs.is/tags/continuations/</loc>
     </url>
     <url>
+        <loc>https://drs.is/tags/crafting-semantics/</loc>
+    </url>
+    <url>
         <loc>https://drs.is/tags/data-structures/</loc>
     </url>
     <url>
@@ -84,6 +95,9 @@
     </url>
     <url>
         <loc>https://drs.is/tags/rust/</loc>
+    </url>
+    <url>
+        <loc>https://drs.is/tags/semantics/</loc>
     </url>
     <url>
         <loc>https://drs.is/tags/trees/</loc>

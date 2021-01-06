@@ -12,7 +12,7 @@
         <link rel="stylesheet" href="https:&#x2F;&#x2F;drs.is&#x2F;style.css">
 
         <title>
-    Hello, World!  · Sin&#x27;s Blog
+    Crafting Semantics 0: Introduction  · Sin&#x27;s Blog
 </title>
 
         
@@ -34,7 +34,7 @@
         </div>
         <div class="section" id="title">
             
-    Hello, World!
+    Crafting Semantics 0: Introduction
 
         </div>
         <div class="section" id="content">
@@ -43,14 +43,14 @@
         
             
     
-    Dec 24, 2017
+    Jan 05, 2021
 
         
         
         
             
             
-                &#183; 1 min
+                &#183; 2 min
             
         
         
@@ -58,8 +58,26 @@
             <ul>
                 
                 <li class="tag">
-                    <a href="https:&#x2F;&#x2F;drs.is&#x2F;tags&#x2F;meta&#x2F;">
-                        Meta
+                    <a href="https:&#x2F;&#x2F;drs.is&#x2F;tags&#x2F;plt&#x2F;">
+                        PLT
+                    </a>
+                </li>
+                
+                <li class="tag">
+                    <a href="https:&#x2F;&#x2F;drs.is&#x2F;tags&#x2F;computer-science&#x2F;">
+                        Computer Science
+                    </a>
+                </li>
+                
+                <li class="tag">
+                    <a href="https:&#x2F;&#x2F;drs.is&#x2F;tags&#x2F;semantics&#x2F;">
+                        Semantics
+                    </a>
+                </li>
+                
+                <li class="tag">
+                    <a href="https:&#x2F;&#x2F;drs.is&#x2F;tags&#x2F;crafting-semantics&#x2F;">
+                        Crafting Semantics
                     </a>
                 </li>
                 
@@ -69,16 +87,20 @@
         <hr/>
     
     
-    <p>Hey! Intro Post!</p>
-<p>I have got some great ideas for blog posts/series. Here is a couple:</p>
-<ol>
-<li>The Robson Tree Traversal Algorithm.</li>
-<li>Functional Language Compilers (Series)</li>
-<li>Tesselation in Computer Graphics</li>
-</ol>
-<p>Numbers 1 and 2 are very interesting to me, and I have work on both of them on my Github,
-but I would love to make a post explaining the CS behind it.</p>
-<p>Tesselation just seems really cool and I would love to talk about that.</p>
+    <h1 id="introduction">Introduction</h1>
+<p>Hi, this is the first post on a series about creating semantics for a programming language. We will be using Scheme as a reference point, and slowly building more and more features for it.</p>
+<p>We will be using '<em>computer science notation</em>' (specifically an operational semantics) for every post. We wont be implementing these semantics formally in a language, but you could quite easily if you wanted to.</p>
+<p>If you want to get started in Programming Language Theory, and want to understand how to define a programming language formally, this is the series for you! If you want to understand abstract machines better, this is the series for you!</p>
+<h1 id="what-does-all-of-this-mean">What does all of this mean?</h1>
+<p>We will be building a programming language! But instead of writing a parser, interpreter, compiler, etc. for it, we will simply define it mathematically. When you have a rigorously defined semantics, it should be quite easy to make a 'real' interpreter out of it.</p>
+<p>For a mostly 'finished' product, I have semantics for many forms of Scheme <a href="https://github.com/sinistersnare/aams/blob/master/latex/formalism.pdf">here in a Git repository</a>. Also included in that repo are implementations in Racket and Rust. We may or may not deviate from it as I see fit, but that will be what the semantics will look like. If this series goes far enough, I may delve into the abstract semantics section of that document, and talk about static analysis!</p>
+<h1 id="semantics">Semantics</h1>
+<p>The semantics of a language are how its syntax is interpreted by a reader (either human or machine). Like many things in Programming Language Theory, we have stolen this term from the field of linguistics (thanks!). Computer scientists use semantics to study programming languages. You can learn more about them in my <a href="https://drs.is/post/abstract-machines/">'Abstract Machines' post</a>.</p>
+<h1 id="pre-requisites">Pre-Requisites</h1>
+<p>There will be no 'programming' in this series, only notation. I will try to explain all notation as it is first used.</p>
+<p>All I ask is that you are interested in the topic at hand!</p>
+<h1 id="let-s-begin">Let's begin!</h1>
+<p>We will start after that post, with a CESK machine based on the lambda calculus. See <a href="https://drs.is/post/crafting-semantics-1/">The next post</a> for the exciting start to this series!</p>
 
 
         </div>
