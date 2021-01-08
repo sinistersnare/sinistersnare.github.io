@@ -19,7 +19,7 @@
 &lt;p&gt;If you know all of the intro stuff already, but dont know how to define semantics for the lambda calculus, feel free to skip to &lt;a href=&quot;https:&#x2F;&#x2F;drs.is&#x2F;post&#x2F;crafting-semantics-1&#x2F;#the-machine&quot;&gt;here&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
 &lt;h1 id=&quot;cesk&quot;&gt;CESK&lt;&#x2F;h1&gt;
 &lt;p&gt;The type of abstract machine we will be creating is called &#x27;CESK&#x27;. It stands for &lt;strong&gt;C&lt;&#x2F;strong&gt;ontrol, &lt;strong&gt;Environment&lt;&#x2F;strong&gt;, &lt;strong&gt;Store&lt;&#x2F;strong&gt;, and &lt;strong&gt;Kontinuation&lt;&#x2F;strong&gt; (C was already taken). For a language as simple as the λ-calculus, we dont need all of this machinery, but as we build features for this machine into a real scheme, it will be nice to have the extra features provided by the Store and Kontinuation pieces.&lt;&#x2F;p&gt;
-&lt;p&gt;The control of a machine is the current instruction that is being evaluated. For the λ-calculus, this will simply be the syntax. For a very complex machine, like the JVM, this could be bytecodes. For a CPU, it may be an instruction pointer and the binary program text. When you hear the word &#x27;control flow&#x27; it is referring to this component.&lt;&#x2F;p&gt;
+&lt;p&gt;The control of a machine is the current instruction that is being evaluated. For the λ-calculus, this will simply be the syntax. For a more complex machine, like the JVM, this could be the bytecodes and and index into the current instruction. For a CPU, it may be an instruction pointer and the binary program text. When you hear the word &#x27;control flow&#x27; it is referring to this component.&lt;&#x2F;p&gt;
 &lt;p&gt;The environment of the program is where bindings live. If you have variables &lt;code&gt;x&lt;&#x2F;code&gt;, &lt;code&gt;y&lt;&#x2F;code&gt;, and &lt;code&gt;z&lt;&#x2F;code&gt;, your environment will have 3 entries, one for each variable, and their address in the store. For the lambda calculus it will be a simple key-value mapping (dict, hash, etc.) from Variable to Address.&lt;&#x2F;p&gt;
 &lt;p&gt;The store is where values of bindings is held. Each of the variables in the environment has an address, and that address can be found in the store pointing to the value of the variable. The store models the heap of the machine. We will also be using a key-value mapping here, from Address to Value.&lt;&#x2F;p&gt;
 &lt;p&gt;The kontinuation is what happens &#x27;next&#x27;, after we finish evaluating an expression. We will use a special continuation frame object to track this. It is used to represent a fine grained call-stack. But instead of only keeping track of function calls, it tracks many other things, such as conditionals and let bindings.&lt;&#x2F;p&gt;
@@ -62,16 +62,18 @@ lam \in \textsf{Lam} &amp;::= (λ \; (x) \; e) \\
 &lt;p&gt;The semantic domains include the definitions for the machine parts themselves. Exciting!&lt;&#x2F;p&gt;
 &lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;\begin{aligned}
 % Machine
-\varsigma \in \Sigma &amp;\triangleq \textsf{Expr} \times \textit{Env} \\
+\varsigma \in \Sigma &amp;\triangleq \textsf{Exp} \times \textit{Env} \\
 					 &amp; \times \textit{Store} \times \textit{Kont} \\
 % Env
 \rho \in \textit{Env} &amp;\triangleq \textsf{Var} \rightarrow \textsf{Addr} \\
 % Store
 \sigma \in \textit{Store} &amp;\triangleq \textsf{Addr} \rightarrow \textsf{Val} \\
 % Address
-a \in \textsf{Addr} &amp;\triangleq \mathbb{N} \\
+a \in \textit{Addr} &amp;\triangleq \mathbb{N} \\
 % Value
-v \in \textsf{Val} &amp;\triangleq \textit{Clo} \\
+v \in \textit{Val} &amp;\triangleq \textit{Clo} \\
+% Closures
+clo \in \textit{Clo} &amp;\triangleq \textsf{Lam} \times \textit{Env} \\
 % Continuation
 \kappa \in \textit{Kont} &amp;::= \textbf{mt} \\
 						&amp; | \; \textbf{arg}(e, \rho, \kappa) \\
@@ -111,7 +113,7 @@ alloc(\sigma) \triangleq |\sigma| \\&lt;&#x2F;script&gt;
 &lt;p&gt;So if our machine consists only of the one semantic, it will never be used, because our environment and store are never added to, so no variable will ever be found. Let&#x27;s add some more semantics to alleviate that issue.&lt;&#x2F;p&gt;
 &lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;((e_f \; e_a) , \rho , \sigma , \kappa) \leadsto (e_f , \rho , \sigma , \kappa&#x27;) \\
 \begin{aligned}
-\text{where } \kappa&#x27; &amp;= \textbf{arg}(e_a , \rho , \kappa) \\
+\text{where } \kappa&#x27; &amp;\triangleq \textbf{arg}(e_a , \rho , \kappa) \\
 \end{aligned}&lt;&#x2F;script&gt;
 &lt;p&gt;Now we can evaluate an &#x27;application&#x27; form. This is when well-defined semantics are really important. In our machine, we evaluate the first expression before the second. We are giving an explicit order of evaluation here. Why is the order of evaluation important? In more complex languages with mutable state, you can have undefined behavior if the order of evaluation is undefined. I will leave further research as an exercise to the esteemed reader.&lt;&#x2F;p&gt;
 &lt;p&gt;We also change the continuation in the resultant state. The new continuation contains the second expression of the application, and the environment in which to evaluate the expression. It also contains the old continuation, so we can know what to do after we finish evaluating the current control.&lt;&#x2F;p&gt;
@@ -124,7 +126,7 @@ alloc(\sigma) \triangleq |\sigma| \\&lt;&#x2F;script&gt;
 &lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;(lam , \rho , \sigma , \textbf{fn}(lam&#x27; , \rho&#x27; , \kappa))
 \leadsto (e , \rho&#x27;&#x27; , \sigma&#x27; , \kappa) \\
 \begin{aligned}
-\text{where } lam&#x27; &amp;= (λ (x) e) \\
+\text{where } lam&#x27; &amp;= (λ \; (x) \; e) \\
 			  a &amp;\triangleq alloc(\sigma) \\
 			  \rho&#x27;&#x27; &amp;\triangleq \rho&#x27;[x \mapsto a] \\
 			  \sigma&#x27; &amp;\triangleq \sigma[a \mapsto (lam , \rho)]
@@ -139,14 +141,14 @@ alloc(\sigma) \triangleq |\sigma| \\&lt;&#x2F;script&gt;
 \end{aligned}&lt;&#x2F;script&gt;
 &lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;((e_f \; e_a) , \rho , \sigma , \kappa) \leadsto (e_f , \rho , \sigma , \kappa&#x27;) \\
 \begin{aligned}
-\text{where } \kappa&#x27; &amp;= \textbf{arg}(e_a , \rho , \kappa) \\
+\text{where } \kappa&#x27; &amp;\triangleq \textbf{arg}(e_a , \rho , \kappa) \\
 \end{aligned}&lt;&#x2F;script&gt;
 &lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;(lam , \rho , \sigma , \textbf{arg}(e_a , \rho&#x27; , \kappa))
 \leadsto (e_a , \rho&#x27; , \sigma , \textbf{fn}(lam , \rho , \kappa)) \\&lt;&#x2F;script&gt;
 &lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;(lam , \rho , \sigma , \textbf{fn}(lam&#x27; , \rho&#x27; , \kappa))
 \leadsto (e , \rho&#x27;&#x27; , \sigma&#x27; , \kappa) \\
 \begin{aligned}
-\text{where } lam&#x27; &amp;= (λ (x) e) \\
+\text{where } lam&#x27; &amp;= (λ \; (x) \; e) \\
 			  a &amp;\triangleq alloc(\sigma) \\
 			  \rho&#x27;&#x27; &amp;\triangleq \rho&#x27;[x \mapsto a] \\
 			  \sigma&#x27; &amp;\triangleq \sigma[a \mapsto (lam , \rho)]

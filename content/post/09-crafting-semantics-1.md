@@ -24,7 +24,7 @@ If you know all of the intro stuff already, but dont know how to define semantic
 
 The type of abstract machine we will be creating is called 'CESK'. It stands for **C**ontrol, **Environment**, **Store**, and **Kontinuation** (C was already taken). For a language as simple as the λ-calculus, we dont need all of this machinery, but as we build features for this machine into a real scheme, it will be nice to have the extra features provided by the Store and Kontinuation pieces.
 
-The control of a machine is the current instruction that is being evaluated. For the λ-calculus, this will simply be the syntax. For a very complex machine, like the JVM, this could be bytecodes. For a CPU, it may be an instruction pointer and the binary program text. When you hear the word 'control flow' it is referring to this component.
+The control of a machine is the current instruction that is being evaluated. For the λ-calculus, this will simply be the syntax. For a more complex machine, like the JVM, this could be the bytecodes and and index into the current instruction. For a CPU, it may be an instruction pointer and the binary program text. When you hear the word 'control flow' it is referring to this component.
 
 The environment of the program is where bindings live. If you have variables `x`, `y`, and `z`, your environment will have 3 entries, one for each variable, and their address in the store. For the lambda calculus it will be a simple key-value mapping (dict, hash, etc.) from Variable to Address.
 
@@ -101,16 +101,18 @@ The semantic domains include the definitions for the machine parts themselves. E
 {% katex(block=true) %}
 \begin{aligned}
 % Machine
-\varsigma \in \Sigma &\triangleq \textsf{Expr} \times \textit{Env} \\
+\varsigma \in \Sigma &\triangleq \textsf{Exp} \times \textit{Env} \\
 					 & \times \textit{Store} \times \textit{Kont} \\
 % Env
 \rho \in \textit{Env} &\triangleq \textsf{Var} \rightarrow \textsf{Addr} \\
 % Store
 \sigma \in \textit{Store} &\triangleq \textsf{Addr} \rightarrow \textsf{Val} \\
 % Address
-a \in \textsf{Addr} &\triangleq \mathbb{N} \\
+a \in \textit{Addr} &\triangleq \mathbb{N} \\
 % Value
-v \in \textsf{Val} &\triangleq \textit{Clo} \\
+v \in \textit{Val} &\triangleq \textit{Clo} \\
+% Closures
+clo \in \textit{Clo} &\triangleq \textsf{Lam} \times \textit{Env} \\
 % Continuation
 \kappa \in \textit{Kont} &::= \textbf{mt} \\
 						& | \; \textbf{arg}(e, \rho, \kappa) \\
@@ -187,7 +189,7 @@ So if our machine consists only of the one semantic, it will never be used, beca
 {% katex(block=true) %}
 ((e_f \; e_a) , \rho , \sigma , \kappa) \leadsto (e_f , \rho , \sigma , \kappa') \\
 \begin{aligned}
-\text{where } \kappa' &= \textbf{arg}(e_a , \rho , \kappa) \\
+\text{where } \kappa' &\triangleq \textbf{arg}(e_a , \rho , \kappa) \\
 \end{aligned}
 {% end %}
 
@@ -212,7 +214,7 @@ After you understand that, lets finish this out with the final transition functi
 (lam , \rho , \sigma , \textbf{fn}(lam' , \rho' , \kappa))
 \leadsto (e , \rho'' , \sigma' , \kappa) \\
 \begin{aligned}
-\text{where } lam' &= (λ (x) e) \\
+\text{where } lam' &= (λ \; (x) \; e) \\
 			  a &\triangleq alloc(\sigma) \\
 			  \rho'' &\triangleq \rho'[x \mapsto a] \\
 			  \sigma' &\triangleq \sigma[a \mapsto (lam , \rho)]
@@ -238,7 +240,7 @@ And just like that, we have the 4 transition functions that define a standard 'c
 {% katex(block=true) %}
 ((e_f \; e_a) , \rho , \sigma , \kappa) \leadsto (e_f , \rho , \sigma , \kappa') \\
 \begin{aligned}
-\text{where } \kappa' &= \textbf{arg}(e_a , \rho , \kappa) \\
+\text{where } \kappa' &\triangleq \textbf{arg}(e_a , \rho , \kappa) \\
 \end{aligned}
 {% end %}
 
@@ -251,7 +253,7 @@ And just like that, we have the 4 transition functions that define a standard 'c
 (lam , \rho , \sigma , \textbf{fn}(lam' , \rho' , \kappa))
 \leadsto (e , \rho'' , \sigma' , \kappa) \\
 \begin{aligned}
-\text{where } lam' &= (λ (x) e) \\
+\text{where } lam' &= (λ \; (x) \; e) \\
 			  a &\triangleq alloc(\sigma) \\
 			  \rho'' &\triangleq \rho'[x \mapsto a] \\
 			  \sigma' &\triangleq \sigma[a \mapsto (lam , \rho)]

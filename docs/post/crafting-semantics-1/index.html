@@ -94,7 +94,7 @@
 <p>If you know all of the intro stuff already, but dont know how to define semantics for the lambda calculus, feel free to skip to <a href="https://drs.is/post/crafting-semantics-1/#the-machine">here</a></p>
 <h1 id="cesk">CESK</h1>
 <p>The type of abstract machine we will be creating is called 'CESK'. It stands for <strong>C</strong>ontrol, <strong>Environment</strong>, <strong>Store</strong>, and <strong>Kontinuation</strong> (C was already taken). For a language as simple as the λ-calculus, we dont need all of this machinery, but as we build features for this machine into a real scheme, it will be nice to have the extra features provided by the Store and Kontinuation pieces.</p>
-<p>The control of a machine is the current instruction that is being evaluated. For the λ-calculus, this will simply be the syntax. For a very complex machine, like the JVM, this could be bytecodes. For a CPU, it may be an instruction pointer and the binary program text. When you hear the word 'control flow' it is referring to this component.</p>
+<p>The control of a machine is the current instruction that is being evaluated. For the λ-calculus, this will simply be the syntax. For a more complex machine, like the JVM, this could be the bytecodes and and index into the current instruction. For a CPU, it may be an instruction pointer and the binary program text. When you hear the word 'control flow' it is referring to this component.</p>
 <p>The environment of the program is where bindings live. If you have variables <code>x</code>, <code>y</code>, and <code>z</code>, your environment will have 3 entries, one for each variable, and their address in the store. For the lambda calculus it will be a simple key-value mapping (dict, hash, etc.) from Variable to Address.</p>
 <p>The store is where values of bindings is held. Each of the variables in the environment has an address, and that address can be found in the store pointing to the value of the variable. The store models the heap of the machine. We will also be using a key-value mapping here, from Address to Value.</p>
 <p>The kontinuation is what happens 'next', after we finish evaluating an expression. We will use a special continuation frame object to track this. It is used to represent a fine grained call-stack. But instead of only keeping track of function calls, it tracks many other things, such as conditionals and let bindings.</p>
@@ -137,16 +137,18 @@ lam \in \textsf{Lam} &::= (λ \; (x) \; e) \\
 <p>The semantic domains include the definitions for the machine parts themselves. Exciting!</p>
 <script type="math/tex;mode=display">\begin{aligned}
 % Machine
-\varsigma \in \Sigma &\triangleq \textsf{Expr} \times \textit{Env} \\
+\varsigma \in \Sigma &\triangleq \textsf{Exp} \times \textit{Env} \\
 					 & \times \textit{Store} \times \textit{Kont} \\
 % Env
 \rho \in \textit{Env} &\triangleq \textsf{Var} \rightarrow \textsf{Addr} \\
 % Store
 \sigma \in \textit{Store} &\triangleq \textsf{Addr} \rightarrow \textsf{Val} \\
 % Address
-a \in \textsf{Addr} &\triangleq \mathbb{N} \\
+a \in \textit{Addr} &\triangleq \mathbb{N} \\
 % Value
-v \in \textsf{Val} &\triangleq \textit{Clo} \\
+v \in \textit{Val} &\triangleq \textit{Clo} \\
+% Closures
+clo \in \textit{Clo} &\triangleq \textsf{Lam} \times \textit{Env} \\
 % Continuation
 \kappa \in \textit{Kont} &::= \textbf{mt} \\
 						& | \; \textbf{arg}(e, \rho, \kappa) \\
@@ -186,7 +188,7 @@ alloc(\sigma) \triangleq |\sigma| \\</script>
 <p>So if our machine consists only of the one semantic, it will never be used, because our environment and store are never added to, so no variable will ever be found. Let's add some more semantics to alleviate that issue.</p>
 <script type="math/tex;mode=display">((e_f \; e_a) , \rho , \sigma , \kappa) \leadsto (e_f , \rho , \sigma , \kappa') \\
 \begin{aligned}
-\text{where } \kappa' &= \textbf{arg}(e_a , \rho , \kappa) \\
+\text{where } \kappa' &\triangleq \textbf{arg}(e_a , \rho , \kappa) \\
 \end{aligned}</script>
 <p>Now we can evaluate an 'application' form. This is when well-defined semantics are really important. In our machine, we evaluate the first expression before the second. We are giving an explicit order of evaluation here. Why is the order of evaluation important? In more complex languages with mutable state, you can have undefined behavior if the order of evaluation is undefined. I will leave further research as an exercise to the esteemed reader.</p>
 <p>We also change the continuation in the resultant state. The new continuation contains the second expression of the application, and the environment in which to evaluate the expression. It also contains the old continuation, so we can know what to do after we finish evaluating the current control.</p>
@@ -199,7 +201,7 @@ alloc(\sigma) \triangleq |\sigma| \\</script>
 <script type="math/tex;mode=display">(lam , \rho , \sigma , \textbf{fn}(lam' , \rho' , \kappa))
 \leadsto (e , \rho'' , \sigma' , \kappa) \\
 \begin{aligned}
-\text{where } lam' &= (λ (x) e) \\
+\text{where } lam' &= (λ \; (x) \; e) \\
 			  a &\triangleq alloc(\sigma) \\
 			  \rho'' &\triangleq \rho'[x \mapsto a] \\
 			  \sigma' &\triangleq \sigma[a \mapsto (lam , \rho)]
@@ -214,14 +216,14 @@ alloc(\sigma) \triangleq |\sigma| \\</script>
 \end{aligned}</script>
 <script type="math/tex;mode=display">((e_f \; e_a) , \rho , \sigma , \kappa) \leadsto (e_f , \rho , \sigma , \kappa') \\
 \begin{aligned}
-\text{where } \kappa' &= \textbf{arg}(e_a , \rho , \kappa) \\
+\text{where } \kappa' &\triangleq \textbf{arg}(e_a , \rho , \kappa) \\
 \end{aligned}</script>
 <script type="math/tex;mode=display">(lam , \rho , \sigma , \textbf{arg}(e_a , \rho' , \kappa))
 \leadsto (e_a , \rho' , \sigma , \textbf{fn}(lam , \rho , \kappa)) \\</script>
 <script type="math/tex;mode=display">(lam , \rho , \sigma , \textbf{fn}(lam' , \rho' , \kappa))
 \leadsto (e , \rho'' , \sigma' , \kappa) \\
 \begin{aligned}
-\text{where } lam' &= (λ (x) e) \\
+\text{where } lam' &= (λ \; (x) \; e) \\
 			  a &\triangleq alloc(\sigma) \\
 			  \rho'' &\triangleq \rho'[x \mapsto a] \\
 			  \sigma' &\triangleq \sigma[a \mapsto (lam , \rho)]
