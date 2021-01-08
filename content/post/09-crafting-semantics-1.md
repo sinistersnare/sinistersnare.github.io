@@ -24,17 +24,19 @@ If you know all of the intro stuff already, but dont know how to define semantic
 
 The type of abstract machine we will be creating is called 'CESK'. It stands for **C**ontrol, **Environment**, **Store**, and **Kontinuation** (C was already taken). For a language as simple as the λ-calculus, we dont need all of this machinery, but as we build features for this machine into a real scheme, it will be nice to have the extra features provided by the Store and Kontinuation pieces.
 
-The control of a machine is the current instruction that is being evaluated. For the λ-calculus, this will simply be the syntax. For a more complex machine, like the JVM, this could be the bytecodes and and index into the current instruction. For a CPU, it may be an instruction pointer and the binary program text. When you hear the word 'control flow' it is referring to this component.
+The control of a machine is the current instruction that is being evaluated. For the λ-calculus, this will simply be the syntax. For a more complex machine, like the JVM, this could be the bytecodes and an index into the current instruction. For a CPU, it may be an instruction pointer and the binary program text. When you hear the word 'control flow' it is referring to this component.
 
-The environment of the program is where bindings live. If you have variables `x`, `y`, and `z`, your environment will have 3 entries, one for each variable, and their address in the store. For the lambda calculus it will be a simple key-value mapping (dict, hash, etc.) from Variable to Address.
+The environment is the set of variables that can be referenced. We will use a simple key-value mapping (dict, hash, etc.) to represent our environment. The keys of the mapping will be the variable names, and the value will be the address of where to find that variables value.
 
-The store is where values of bindings is held. Each of the variables in the environment has an address, and that address can be found in the store pointing to the value of the variable. The store models the heap of the machine. We will also be using a key-value mapping here, from Address to Value.
+The store is where values are actually held. If you have an address, you can access the store to get its corresponding value. We again use a key-value mapping, from address to value.
 
-The kontinuation is what happens 'next', after we finish evaluating an expression. We will use a special continuation frame object to track this. It is used to represent a fine grained call-stack. But instead of only keeping track of function calls, it tracks many other things, such as conditionals and let bindings.
+The kontinuation is what happens 'next', after we finish evaluating an expression. We will use a special continuation frame object to track this. In many languages, this kind of thing is called a '{{ elink(text="call-stack", to="https://en.wikipedia.org/wiki/Call_stack") }}'. When a function is called, the 'stack' is added to with the current function. In the future, We will augment it to track more things, such as conditionals, let bindings, and variable mutation.
+
+It is used to represent a fine grained call-stack. But instead of only keeping track of function calls, it tracks many other things, such as conditionals and let bindings.
 
 # λ #
 
-The lambda calculus is a very simple language. Created before modern computers, its goal was to express logic formally. Now, we can use it as a basis for a small and simple programming language. Its [Wikipedia Page](https://en.wikipedia.org/wiki/Lambda_calculus) is chock-full of great stuff, but I will give it a quick introduction.
+The lambda calculus is a very simple language. Created before modern computers, its goal was to express logic formally. Now, we can use it as a basis for a small and simple programming language. Its {{ elink(text="Wikipedia Page", to="https://en.wikipedia.org/wiki/Lambda_calculus") }} is chock-full of great stuff, but I will give it a quick introduction.
 
 The lambda calculus has 3 forms
 
@@ -68,7 +70,7 @@ First, we need to define our _domains_. These are the things that we actually us
 
 ## Syntax ##
 
-The syntactic domain is our grammar from above, but lets expand on it a bit for our sake. We will also be using a more mathy notation, in addition to the [BNF](https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form) above.
+The syntactic domain is our grammar from above, but lets expand on it a bit for our sake. We will also be using a more mathy notation, in addition to the {{ elink(text="BNF", to="https://en.wikipedia.org/wiki/Backus–Naur_form") }} above.
 
 
 {% katex(block=true) %}
@@ -92,7 +94,7 @@ I also factored the lambda 'production' in the grammar into its own domain. This
 
 The equal sign with the delta-triangle over it just means 'is defined as'. In Computer Science and Math, `=` may mean 'is the same as' or 'is defined as', so we use the Δ to differentiate the two.
 
-Sometimes `::=` is used, and sometimes our `=` with `Δ` is used, why? Because using notation in this way is helpful. There arent strict rules here, and I found it useful to use BNF style for some domains, and definitional-equality for others. If you dont like it, you could perhaps give each production in the BNF grammar its own domain, and use a '[sum type](https://en.wikipedia.org/wiki/Tagged_union)' to define everything in terms of definitional equality.
+Sometimes `::=` is used, and sometimes our `=` with `Δ` is used, why? Because using notation in this way is helpful. There arent strict rules here, and I found it useful to use BNF style for some domains, and definitional-equality for others. If you dont like it, you could perhaps give each production in the BNF grammar its own domain, and use a '{{ elink(text="sum type", to="https://en.wikipedia.org/wiki/Tagged_union") }}' to define everything in terms of definitional equality.
 
 ## Semantics ##
 
@@ -122,13 +124,13 @@ clo \in \textit{Clo} &\triangleq \textsf{Lam} \times \textit{Env} \\
 
 So there are a lot of pieces here! Lets go through them! Dont worry if they dont make perfect sense just yet, it will make more sense when they are used in context in the next section.
 
-First, the state definition itself. We have 4 components as previously defined. We use a '[product type](https://en.wikipedia.org/wiki/Product_type)' to say 'One of each'. The domain is called Σ, or 'sigma' (uppercase). When we only have one state, (much as we would have one number in the domain of 'Integer'), we use ς, or 'varsigma' (i dont understand ancient greek enough to get why its called that). To form a state, you take one of each of the constituent parts. Our machine takes a state as input, and returns a state.
+First, the state definition itself. We have 4 components as previously defined. We use a '{{ elink(text="product type", to="https://en.wikipedia.org/wiki/Product_type") }}' to say 'One of each'. The domain is called Σ, or 'sigma' (uppercase). When we only have one state, (much as we would have one number in the domain of 'Integer'), we use ς, or 'varsigma' (i dont understand ancient greek enough to get why its called that). To form a state, you take one of each of the constituent parts. Our machine takes a state as input, and returns a state.
 
 Next, we need to define the environment and store. In computer science jargon, a map is simply a 'partial function' from the input to the output. For the environment, the function takes a `Var`, and returns its `Addr`. The same is true of the store, which takes the address, and returns the value that it points to. The store isn't particularly useful in this machine, but when we implement things like mutation, it will be good to have around.
 
 Third, the address and value sets. In this simple machine, addresses will be very simple, we will use numbers to define them (the set with the fancy `N` is integers starting at 0 and going up to infinity).
 
-Values in this machine are '[closures](https://en.wikipedia.org/wiki/Closure_(computer_programming)'. Closures are a key part of higher order languages, such as Scheme, and are defined as a syntactic function (in our case the abstraction form), and an environment. In more advanced machines, values will be able to take on many different types, including numbers, strings, even continuations!
+Values in this machine are '{{ elink(text="closures", to="https://en.wikipedia.org/wiki/Closure_(computer_programming)") }}'. Closures are a key part of higher order languages, such as Scheme, and are defined as a syntactic function (in our case the abstraction form), and an environment. In more advanced machines, values will be able to take on many different types, including numbers, strings, even continuations!
 
 Finally, our definition of continuations. If you look closely, its a kind of linked list, meaning that a continuation has another continuation attached to it, until you get to the `mt` continuation, the end. Other than `mt`, there are two important 'continuation frame' types. The `arg` continuation means that after we finish the current computation, we must evaluate the argument to the application. The `fn` frame tells us that after the current computation, we need to execute the function with the argument.
 
@@ -223,7 +225,7 @@ After you understand that, lets finish this out with the final transition functi
 
 At this point, we have a lambda as the control, and a `fn` continuation frame. It is officially time to apply the application! The first part of the continuation frame is the function, and the current control is the argument. So we place the functions body as the new control, and add its argument (paired with the environment it was found in to form a closure) to the env/store.
 
-This is the most complex function in this machine. Make sure to internalize that in this machine, the only value is the closure. So, when we see a lambda, we have reached a value (when combined with an env). There [are ways](https://en.wikipedia.org/wiki/Church_encoding) to ues closures to represent common datatypes such as numbers, or lists. These ways are how lambda calculus continues to be used as the basis for minimalistic languages such as scheme. But it makes programs hard to read, so we add integers anyways!
+This is the most complex function in this machine. Make sure to internalize that in this machine, the only value is the closure. So, when we see a lambda, we have reached a value (when combined with an env). There {{ elink(text="are ways", to="https://en.wikipedia.org/wiki/Church_encoding") }} to ues closures to represent common datatypes such as numbers, or lists. These ways are how lambda calculus continues to be used as the basis for minimalistic languages such as scheme. But it makes programs hard to read, so we add integers anyways!
 
 # The Completed Machine #
 
@@ -260,7 +262,7 @@ And just like that, we have the 4 transition functions that define a standard 'c
 \end{aligned}
 {% end %}
 
-The machine works by combining each of these into one big function, much like the [piece-wise function](https://en.wikipedia.org/wiki/Piecewise) you learned in math class. Lets give this function the name `step`.
+The machine works by combining each of these into one big function, much like the {{ elink(text="piece-wise function", to="https://en.wikipedia.org/wiki/Piecewise") }} you learned in math class. Lets give this function the name `step`.
 
 # An Example Run #
 
