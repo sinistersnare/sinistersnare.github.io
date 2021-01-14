@@ -92,7 +92,7 @@ delimited continuations. If none of that made sense, awesome! Enjoy!</p>
 <h1 id="first-class">First Class</h1>
 <p>You may be familiar with the concept of first class functions. Where you can use functions as regular-old values, and treat them like anything else in a language.</p>
 <pre style="background-color:#2b303b;">
-<code><span style="color:#b48ead;">def </span><span style="color:#8fa1b3;">foo</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">a</span><span style="color:#c0c5ce;">):
+<code class="language-python" data-lang="python"><span style="color:#b48ead;">def </span><span style="color:#8fa1b3;">foo</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">a</span><span style="color:#c0c5ce;">):
     </span><span style="color:#d08770;">...
 </span><span style="color:#b48ead;">def </span><span style="color:#8fa1b3;">bar</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">b</span><span style="color:#c0c5ce;">):
     </span><span style="color:#d08770;">...
@@ -106,7 +106,7 @@ value = </span><span style="color:#bf616a;">which</span><span style="color:#c0c5
 </span></code></pre>
 <p>Here we decide which function to use based on some condition. We can also have functions take functions as arguments.</p>
 <pre style="background-color:#2b303b;">
-<code><span style="color:#b48ead;">def </span><span style="color:#8fa1b3;">add1</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">x</span><span style="color:#c0c5ce;">):
+<code class="language-python" data-lang="python"><span style="color:#b48ead;">def </span><span style="color:#8fa1b3;">add1</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">x</span><span style="color:#c0c5ce;">):
     </span><span style="color:#b48ead;">return </span><span style="color:#c0c5ce;">x + </span><span style="color:#d08770;">1
 
 </span><span style="color:#c0c5ce;">better = </span><span style="color:#96b5b4;">map</span><span style="color:#c0c5ce;">(add1, [</span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">,</span><span style="color:#d08770;">2</span><span style="color:#c0c5ce;">,</span><span style="color:#d08770;">3</span><span style="color:#c0c5ce;">,</span><span style="color:#d08770;">4</span><span style="color:#c0c5ce;">])
@@ -121,7 +121,7 @@ By having a first class return, we turn the idea of returning into a value that 
 <p>Lets pretend our language no longer has a return statement, and we can only return by using first-class return values. Lets have <code>return</code> be the
 final argument to any function.</p>
 <pre style="background-color:#2b303b;">
-<code><span style="color:#65737e;"># We call the return argument `exit`
+<code class="language-python" data-lang="python"><span style="color:#65737e;"># We call the return argument `exit`
 # in the main function.
 </span><span style="color:#b48ead;">def </span><span style="color:#8fa1b3;">main</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">exit</span><span style="color:#c0c5ce;">):
     </span><span style="color:#bf616a;">compute</span><span style="color:#c0c5ce;">(</span><span style="color:#d08770;">12</span><span style="color:#c0c5ce;">, exit)
@@ -143,7 +143,7 @@ we alter the 'control' of the program to somewhere else.</p>
 If I want to call <code>var = foo(42, ???)</code> How do I get a continuation that will return and then fill in <code>var</code>?
 Lets use an operator called <code>cc</code>, the 'current continuation':</p>
 <pre style="background-color:#2b303b;">
-<code><span style="color:#b48ead;">def </span><span style="color:#8fa1b3;">compute</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">x</span><span style="color:#c0c5ce;">, </span><span style="background-color:#bf616a;color:#2b303b;">return</span><span style="color:#c0c5ce;">):
+<code class="language-python" data-lang="python"><span style="color:#b48ead;">def </span><span style="color:#8fa1b3;">compute</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">x</span><span style="color:#c0c5ce;">, </span><span style="background-color:#bf616a;color:#2b303b;">return</span><span style="color:#c0c5ce;">):
     y = x / </span><span style="color:#d08770;">3
     </span><span style="color:#b48ead;">return</span><span style="color:#c0c5ce;">(y)
 
@@ -157,7 +157,7 @@ the function ends, it is going to place the returned value into the variable <co
 will simply continue running, as no variable is assigned anywhere. Then we use the <code>exit</code> continuation to end the program with a nice and big number.</p>
 <p>With the <code>cc</code> operator, we can now fulfill our goal of 'early return' semantics.</p>
 <pre style="background-color:#2b303b;">
-<code><span style="color:#65737e;"># In the world where this program exists,
+<code class="language-python" data-lang="python"><span style="color:#65737e;"># In the world where this program exists,
 # 73 is a _VERY BAD NUMBER_, dont trust it.
 # We must make sure all input does not contain 73.
 

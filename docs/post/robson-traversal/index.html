@@ -127,7 +127,7 @@ File systems use <a href="https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;B-tr
 We will be using a simple binary tree for this post.</p>
 <p>Here is a common binary tree definition. We will be using C for the whole of this post:</p>
 <pre style="background-color:#2b303b;">
-<code><span style="color:#65737e;">/* We will use this type definition later. */
+<code class="language-c" data-lang="c"><span style="color:#65737e;">/* We will use this type definition later. */
 </span><span style="color:#b48ead;">typedef void </span><span style="color:#c0c5ce;">(*VisitFunc)(Tree*);
 
 typedef </span><span style="color:#b48ead;">struct</span><span style="color:#c0c5ce;"> Tree {
@@ -138,7 +138,7 @@ typedef </span><span style="color:#b48ead;">struct</span><span style="color:#c0c
 </span></code></pre>
 <p>We can use the tree like so:</p>
 <pre style="background-color:#2b303b;">
-<code><span style="color:#b48ead;">int </span><span style="color:#8fa1b3;">main</span><span style="color:#c0c5ce;">(</span><span style="color:#b48ead;">void</span><span style="color:#c0c5ce;">) {
+<code class="language-c" data-lang="c"><span style="color:#b48ead;">int </span><span style="color:#8fa1b3;">main</span><span style="color:#c0c5ce;">(</span><span style="color:#b48ead;">void</span><span style="color:#c0c5ce;">) {
     Tree root, root_left;
     root_left.</span><span style="color:#bf616a;">data </span><span style="color:#c0c5ce;">= </span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">;
     root_left.</span><span style="color:#bf616a;">left </span><span style="color:#c0c5ce;">= </span><span style="color:#d08770;">NULL</span><span style="color:#c0c5ce;">;
@@ -157,7 +157,7 @@ This is obviously a critically important function of a tree,
 we should be able to access all elements if we need to.</p>
 <p>Luckily, traversing a tree is super easy!</p>
 <pre style="background-color:#2b303b;">
-<code><span style="color:#b48ead;">void </span><span style="color:#8fa1b3;">traverse</span><span style="color:#c0c5ce;">(Tree* </span><span style="color:#bf616a;">cur</span><span style="color:#c0c5ce;">) {
+<code class="language-c" data-lang="c"><span style="color:#b48ead;">void </span><span style="color:#8fa1b3;">traverse</span><span style="color:#c0c5ce;">(Tree* </span><span style="color:#bf616a;">cur</span><span style="color:#c0c5ce;">) {
     </span><span style="color:#b48ead;">if </span><span style="color:#c0c5ce;">(cur == </span><span style="color:#d08770;">NULL</span><span style="color:#c0c5ce;">) </span><span style="color:#b48ead;">return</span><span style="color:#c0c5ce;">;
     </span><span style="color:#bf616a;">pre_visit</span><span style="color:#c0c5ce;">(cur); </span><span style="color:#65737e;">/* pre-order traversal */
     </span><span style="color:#bf616a;">traverse</span><span style="color:#c0c5ce;">(cur-&gt;left);
@@ -231,7 +231,7 @@ when going up a tree.</p>
 It does not solve our dilemma though, we need O(1) worst-case space complexity!
 Lets talk about how and why it works, which will lead us to Robson.</p>
 <pre style="background-color:#2b303b;">
-<code><span style="color:#b48ead;">typedef struct</span><span style="color:#c0c5ce;"> Tree {
+<code class="language-c" data-lang="c"><span style="color:#b48ead;">typedef struct</span><span style="color:#c0c5ce;"> Tree {
     </span><span style="color:#b48ead;">int</span><span style="color:#c0c5ce;"> data;
     Tree* left;
     Tree* right;
@@ -378,7 +378,7 @@ predecessor. The same is true for <code>cur-&gt;right_thread</code> pointing to 
 Following threads is a constant operation to the predecessor/successor, which speeds up in-order
 traversals.</p>
 <pre style="background-color:#2b303b;">
-<code><span style="color:#b48ead;">typedef struct</span><span style="color:#c0c5ce;"> Tree {
+<code class="language-c" data-lang="c"><span style="color:#b48ead;">typedef struct</span><span style="color:#c0c5ce;"> Tree {
     </span><span style="color:#b48ead;">int</span><span style="color:#c0c5ce;"> data;
     </span><span style="color:#b48ead;">struct</span><span style="color:#c0c5ce;"> Tree* left;
     </span><span style="color:#b48ead;">struct</span><span style="color:#c0c5ce;"> Tree* right;

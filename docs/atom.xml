@@ -4,8 +4,239 @@
 	<link href="https://drs.is/atom.xml" rel="self" type="application/atom+xml"/>
   <link href="https://drs.is"/>
 	<generator uri="https://www.getzola.org/">Zola</generator>
-	<updated>2021-01-06T12:15:00-05:00</updated>
+	<updated>2021-01-14T12:15:00-05:00</updated>
 	<id>https://drs.is/atom.xml</id>
+	<entry xml:lang="en">
+		<title>Crafting Semantics 2: Basic Features</title>
+		<published>2021-01-14T12:15:00-05:00</published>
+		<updated>2021-01-14T12:15:00-05:00</updated>
+		<link href="https://drs.is/post/crafting-semantics-2/" type="text/html"/>
+		<id>https://drs.is/post/crafting-semantics-2/</id>
+		<content type="html">&lt;p&gt;This series of posts revolves around creating operational semantics of the Scheme programming language from the ground up, starting with the lambda calculus.&lt;&#x2F;p&gt;
+&lt;p&gt;If you have not read the introductory post, you can find it &lt;a href=&quot;https:&#x2F;&#x2F;drs.is&#x2F;post&#x2F;crafting-semantics-0&#x2F;&quot;&gt;here&lt;&#x2F;a&gt;, and see the index of this series &lt;a href=&quot;&#x2F;tags&#x2F;crafting-semantics&#x2F;&quot;&gt;here&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;intro&quot;&gt;Intro&lt;&#x2F;h1&gt;
+&lt;p&gt;Hi! Welcome! Today, we will be extending the CESK machine from the &lt;a href=&quot;https:&#x2F;&#x2F;drs.is&#x2F;post&#x2F;crafting-semantics-1&#x2F;&quot;&gt;previous post&lt;&#x2F;a&gt;, adding some simple features that will make our language more usable. In particular, we will implement numbers and conditionals. To accomplish that, we will be partitioning the machine into 2 different types of states. This will make future extensions to our language much simpler.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;recap&quot;&gt;Recap&lt;&#x2F;h2&gt;
+&lt;p&gt;Let&#x27;s look at the machine that we have so far. These transition functions serve as the basis for the famous call-by-value lambda-calculus. If you don&#x27;t remember the domains, I will reproduce them soon, when we create our new machine.&lt;&#x2F;p&gt;
+&lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;(x , \rho , \sigma , \kappa) \leadsto (v , \rho_\lambda , \sigma , \kappa) \\
+\begin{aligned}
+\text{where } \sigma(\rho(x)) &amp;= (v , \rho_\lambda) \\
+\end{aligned}&lt;&#x2F;script&gt;
+&lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;((e_f \; e_a) , \rho , \sigma , \kappa) \leadsto (e_f , \rho , \sigma , \kappa&#x27;) \\
+\begin{aligned}
+\text{where } \kappa&#x27; &amp;\triangleq \textbf{arg}(e_a , \rho , \kappa) \\
+\end{aligned}&lt;&#x2F;script&gt;
+&lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;(lam , \rho , \sigma , \textbf{arg}(e_a , \rho&#x27; , \kappa))
+\leadsto (e_a , \rho&#x27; , \sigma , \textbf{fn}(lam , \rho , \kappa)) \\&lt;&#x2F;script&gt;
+&lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;(lam , \rho , \sigma , \textbf{fn}(lam&#x27; , \rho&#x27; , \kappa))
+\leadsto (e , \rho&#x27;&#x27; , \sigma&#x27; , \kappa) \\
+\begin{aligned}
+\text{where } lam&#x27; &amp;= (λ \; (x) \; e) \\
+			  a &amp;\triangleq alloc(\sigma) \\
+			  \rho&#x27;&#x27; &amp;\triangleq \rho&#x27;[x \mapsto a] \\
+			  \sigma&#x27; &amp;\triangleq \sigma[a \mapsto (lam , \rho)]
+\end{aligned}&lt;&#x2F;script&gt;
+&lt;h2 id=&quot;roadblock&quot;&gt;Roadblock&lt;&#x2F;h2&gt;
+&lt;p&gt;The main issue with this machine is that it is very &#x27;lambda-centric&#x27;. For example, if you pay close attention in the last post, closure creation is actually deeply embedded into the semantics. When a variable is evaluated it finds the closure and sets it to the current environment. We want a machine that is more ... &#x27;value independent&#x27;&lt;&#x2F;p&gt;
+&lt;p&gt;If we wanted to have values that are less syntactically visible, like &lt;a href=&quot;https:&#x2F;&#x2F;drs.is&#x2F;post&#x2F;continuations-as-return&#x2F;&quot;&gt;first-class continuations&lt;&#x2F;a&gt;, adding them to the current machine would overcomplicate our transitions. Instead, we will partition the machine into &#x27;eval&#x27; and &#x27;apply&#x27; states. Eval states are for &lt;em&gt;evaluating&lt;&#x2F;em&gt; syntax to get a value. Apply states are for &lt;em&gt;applying&lt;&#x2F;em&gt; the value into the current Kontinuation.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;the-next-machine&quot;&gt;The Next Machine&lt;&#x2F;h1&gt;
+&lt;p&gt;Our machine is very similar to the previous machine, with a few additions to the syntactic and semantic domains. I will point out the differences, so don&#x27;t worry about cross-referencing the last post!&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;syntax-domains&quot;&gt;Syntax Domains&lt;&#x2F;h2&gt;
+&lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;\begin{aligned}
+% expressions
+e \in \textsf{Exp} &amp;::= \text{\ae}  \\
+				   &amp;| \; (\texttt{if} \; e \; e \; e) \\
+                   &amp;| \; (e\;e) \\
+\text{\ae} \in \textsf{AExp}
+	&amp;::= x \;|\; lam \;|\; n \;|\; b \\
+% variables
+x \in \textsf{Var} &amp;\triangleq \text{The set of variables} \\
+% lambdas
+lam \in \textsf{Lam} &amp;::= (λ \; (x) \; e) \\
+n \in \mathbb{Z} &amp;\triangleq \text{The set of integers } \\
+b \in \textsf{Bool} &amp;::= \texttt{\#t} \;|\; \texttt{\#f}
+\end{aligned}&lt;&#x2F;script&gt;
+&lt;p&gt;The main chunk of change revolves around the new &lt;code&gt;æ&lt;&#x2F;code&gt; domain. Through this, we have partitioned the syntax into expressions that are complex, and require further evaluation, and &#x27;atomic expressions&#x27;, which are as small as they need to be, in order to become real values.&lt;&#x2F;p&gt;
+&lt;p&gt;The set of atomic expressions include lambdas and variables, as before, and introducing integers and booleans. I also added an &lt;code&gt;if&lt;&#x2F;code&gt; complex-expression, which we will implement today.&lt;&#x2F;p&gt;
+&lt;p&gt;Also, quick note, booleans in Scheme are &lt;code&gt;#t&lt;&#x2F;code&gt; for true, and &lt;code&gt;#f&lt;&#x2F;code&gt; for false. Just wanted to be clear on that!&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;semantic-domains&quot;&gt;Semantic Domains&lt;&#x2F;h2&gt;
+&lt;p&gt;The semantic domains are also mostly the same, but with some additions to accomodate this partition between &#x27;eval&#x27; and &#x27;apply&#x27; states.&lt;&#x2F;p&gt;
+&lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;\begin{aligned}
+% Machine
+\varsigma \in \Sigma &amp;\triangleq
+			E\langle \textit{Eval} \rangle
+			+ A\langle \textit{Apply} \rangle \\
+\textit{Eval} &amp;\triangleq \textsf{Exp} \times \textit{Env} \times \textit{Store} \times \textit{Kont} \\
+\textit{Apply} &amp;\triangleq \textit{Val} \times \textit{Env} \times \textit{Store} \times \textit{Kont} \\
+% Env
+\rho \in \textit{Env} &amp;\triangleq \textsf{Var} \rightarrow \textsf{Addr} \\
+% Store
+\sigma \in \textit{Store} &amp;\triangleq \textsf{Addr} \rightarrow \textsf{Val} \\
+% Address
+a \in \textit{Addr} &amp;\triangleq \mathbb{N} \\
+% Value
+v \in \textit{Val} &amp;\triangleq \textit{Clo}
+					+ \mathbb{Z} + \textsf{Bool} \\
+% Closures
+clo \in \textit{Clo} &amp;\triangleq \textsf{Lam} \times \textit{Env} \\
+% Continuation
+\kappa \in \textit{Kont} &amp;::= \textbf{mt} \\
+						&amp; | \; \textbf{cond}(e , e , \rho , \kappa) \\
+						&amp; | \; \textbf{arg}(e, \rho, \kappa) \\
+						&amp; | \; \textbf{fn}(v, \kappa) \\
+\end{aligned}&lt;&#x2F;script&gt;
+&lt;p&gt;The changes here were to the states, the values, and the continuations. The change to the states is the most jarring, now we can have 2 different types of sub-states. I added to the values domain, because now we have numbers and booleans! Exciting!&lt;&#x2F;p&gt;
+&lt;p&gt;We also needed a continuation type for the conditional. When is it appropriate to add a continuation type? In this machine, you have two things to look at for guidance during computation. First and foremost is the Control. When our machine starts evaluating the syntax &lt;code&gt;(if cond then else)&lt;&#x2F;code&gt;, if will place the &lt;code&gt;cond&lt;&#x2F;code&gt; into the control, and place a continuation &lt;code&gt;cond(then, else, ρ, κ)&lt;&#x2F;code&gt; at the top of our Kontinuation stack. After the control is evaluated to a value, we need to look to the Kontinuation for the next steps. For that, we use a continuation.&lt;&#x2F;p&gt;
+&lt;p&gt;So, whenever you are adding syntax that needs some state, so the machine knows what to do after the initial control is evaluated, you probably want a new continuation frame type.&lt;&#x2F;p&gt;
+&lt;p&gt;Having 2 types of states will make writing out machine rules really easy, I promise! Now, we will have rules for evaluating the control (syntax), and for what to do after its a value (through the continuation)! It is a nice give and take relationship between the states that I really enjoy from this style of machine.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;atomic-evaluation-and-other-functions&quot;&gt;Atomic Evaluation And Other Functions&lt;&#x2F;h2&gt;
+&lt;p&gt;Last before we get to the new transition rules, we need to define an &#x27;atomic evaluation&#x27; function. This function is the bridge from &#x27;eval&#x27; states into &#x27;Apply&#x27; states. When we see a &lt;code&gt;4&lt;&#x2F;code&gt; in our program, it is syntax, because its in the program text. We need to turn that syntax-&lt;code&gt;4&lt;&#x2F;code&gt; into a value-&lt;code&gt;4&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;\mathcal{A} : \textit{Eval} \rightarrow \textit{Val} \\
+\begin{aligned}
+\mathcal{A}(\langle n , \_ , \_ , \_ \rangle) &amp;\triangleq n \\
+\mathcal{A}(\langle b , \_ , \_ , \_ \rangle) &amp;\triangleq b \\
+\mathcal{A}(\langle x , \rho , \sigma , \_ \rangle) &amp;\triangleq \sigma(\rho(x)) \\
+\mathcal{A}(\langle lam , \rho , \_ , \_ \rangle) &amp;\triangleq (lam, \rho) \\
+\end{aligned}&lt;&#x2F;script&gt;
+&lt;p&gt;This function turns syntax into values! It is straightforward in the number&#x2F;bool case, and reminiscent of the machine of the last post for the other two cases.&lt;&#x2F;p&gt;
+&lt;p&gt;We use this function when the control is &#x27;atomically evaluable&#x27;, meaning we can determine its value immediately. For variables, we just need to look its value up, and for lambdas, we pair it with the current environment to form a closure. The other, &#x27;complex&#x27;, expressions need a little more work done on them before they can be atomically evaluated.&lt;&#x2F;p&gt;
+&lt;p&gt;I will also reproduce the other useful functions from the last post, for posterity:&lt;&#x2F;p&gt;
+&lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;inj : \textsf{Exp} \rightarrow \Sigma \\
+inj(e) \triangleq E\langle e , \varnothing , \varnothing , \textbf{mt} \rangle \\
+\; \\
+alloc : \textit{Store} \rightarrow \textit{Addr} \\
+alloc(\sigma) \triangleq |\sigma|&lt;&#x2F;script&gt;
+&lt;h1 id=&quot;transitions&quot;&gt;Transitions&lt;&#x2F;h1&gt;
+&lt;p&gt;Now that we have all of the supporting infrastructure, we can make the transition rules! We are going to start with all of the &#x27;eval&#x27; rules, and then do the &#x27;apply&#x27; rules.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;eval-rules&quot;&gt;Eval Rules&lt;&#x2F;h2&gt;
+&lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;E \langle \text{\ae} , \rho , \sigma , \kappa \rangle
+\leadsto
+A \langle v , \rho , \sigma , \kappa \rangle \\
+\begin{aligned}
+\text{where }
+v &amp;\triangleq \mathcal{A}(\varsigma)
+\end{aligned}&lt;&#x2F;script&gt;
+&lt;p&gt;As a refresher, you can read this rule as follows:&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;If the current state is an Eval state, and our control is atomically evaluable, then return the following Apply state, where v is defined by using the atomic-eval function on the input state.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;This rule is quite simple! If the current control is an atomically evaluable expression, use our fancy-A evaluation function to make a value of it. This rule covers when the control is a number, boolean, lambda, or variable, what a multitasker!&lt;&#x2F;p&gt;
+&lt;p&gt;As I said before, this transition rule is the bridge from eval to apply states. We will  make transition rules for apply states later, but for now, lets continue evaluating syntax!&lt;&#x2F;p&gt;
+&lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;E \langle (\texttt{if} \; e_c \; e_t \; e_f) , \rho , \sigma , \kappa \rangle
+\leadsto
+E \langle e_c , \rho , \sigma , \kappa&#x27; \rangle \\
+\begin{aligned}
+\text{where }
+\kappa&#x27; &amp;\triangleq \textbf{cond}(e_t , e_f , \rho , \kappa)
+\end{aligned}&lt;&#x2F;script&gt;
+&lt;p&gt;This is the first half of the rules required to support conditionals. When we encounter an &lt;code&gt;if&lt;&#x2F;code&gt; expression, we transition to start evaluating the condition. And later, once the condition is evaluated, we will check for a continuation and see the &lt;code&gt;cond&lt;&#x2F;code&gt; frame, and go from there! Stay tuned for the riveting conclusion to &lt;del&gt;this anime&lt;&#x2F;del&gt; interpreting conditionals.&lt;&#x2F;p&gt;
+&lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;E \langle (e_f \; e_0) , \rho , \sigma , \kappa \rangle
+\leadsto
+E \langle e_f , \rho , \sigma , \kappa&#x27; \rangle \\
+\begin{aligned}
+\text{where }
+\kappa&#x27; &amp;\triangleq \textbf{arg}(e_0 , \rho , \kappa)
+\end{aligned}&lt;&#x2F;script&gt;
+&lt;p&gt;This rule is remarkably similar to the last post&#x27;s rule, which is great! I&#x27;m not trying to overcomplicate this stuff, so I hope that things don&#x27;t get needlessly crazy. Although, small spoiler for the next post, I will be implementing multi-arg functions, so this will change slightly! Sorry for making you think that this rule would never ever change!&lt;&#x2F;p&gt;
+&lt;p&gt;We have now covered 100% of the syntax that can be found in our little language! But, there is a little more to do. Lets transition apply states!&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;apply-rules&quot;&gt;Apply Rules&lt;&#x2F;h2&gt;
+&lt;p&gt;As I alluded to before, there are 2 things that the machine uses to right itself, the control and the continuation. The Eval states are for checking the control, and the apply states are for checking the continuation. We have exhausted control, and now we must exhaust all types of continuations!&lt;&#x2F;p&gt;
+&lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;A \langle v , \rho , \sigma , \kappa \rangle
+\leadsto
+E \langle e_f , \rho_{\kappa} , \sigma , \kappa&#x27; \rangle \\
+\begin{aligned}
+\text{where }
+\kappa &amp;= \textbf{cond}(e_f , e_f , \rho_{\kappa} , \kappa&#x27;) \\
+v &amp;= \texttt{\#f}
+\end{aligned} \\
+A \langle v , \rho , \sigma , \kappa \rangle
+\leadsto
+E \langle e_t , \rho_{\kappa} , \sigma , \kappa&#x27; \rangle \\
+\begin{aligned}
+\text{where }
+\kappa &amp;= \textbf{cond}(e_t , e_f , \rho_{\kappa} , \kappa&#x27;) \\
+v &amp;\;≠ \texttt{\#f}
+\end{aligned}&lt;&#x2F;script&gt;
+&lt;p&gt;These are the final rules for dealing with conditionals. We refer to the value (which is the value of the condition) and check if it is equal to false. If so, we take the false branch. We &#x27;take it&#x27; by just setting that branch to the control of the next state. It &lt;em&gt;is&lt;&#x2F;em&gt; that easy! The opposite goes for &lt;code&gt;true&lt;&#x2F;code&gt;, if the value in the condition is simply &#x27;not false&#x27;, then we take the true branch.&lt;&#x2F;p&gt;
+&lt;p&gt;(Aside: At the time of writing, it seems the rendering for ≠ is broken, but the false branch should have &lt;code&gt;v ≠ #f&lt;&#x2F;code&gt;)&lt;&#x2F;p&gt;
+&lt;p&gt;Note the semantics here! Many languages have many different ideas of &#x27;falsy&#x27; and &#x27;truthy&#x27;. Python has a whole overridable &lt;code&gt;__bool__&lt;&#x2F;code&gt; function, and I don&#x27;t want to get &lt;em&gt;near&lt;&#x2F;em&gt; what JavaScript does. Scheme is simple. The only &#x27;falsy&#x27; value is false. Everything else is truthy. Everything. Simple!&lt;&#x2F;p&gt;
+&lt;p&gt;Its also important to &#x27;reset&#x27; the environment. During the course of evaluating the condition, the environment may have changed. We don&#x27;t want to use that environment while taking one of the resultant branches, which is why we stored the original environment in the continuation.&lt;&#x2F;p&gt;
+&lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;A \langle v , \rho , \sigma , \kappa \rangle
+\leadsto
+E \langle e , \rho_{\kappa} , \sigma , \kappa&#x27;&#x27; \rangle \\
+\begin{aligned}
+\text{where }
+\kappa &amp;= \textbf{arg}(e , \rho_{\kappa} , \kappa&#x27;) \\
+\kappa&#x27;&#x27; &amp;\triangleq \textbf{fn}(v , \kappa&#x27;)
+\end{aligned} \\
+%
+A \langle v , \rho , \sigma , \kappa \rangle
+\leadsto
+E \langle e_b , \rho_{\lambda}&#x27; , \sigma&#x27; , \kappa&#x27; \rangle \\
+\begin{aligned}
+\text{where }
+\kappa &amp;= \textbf{fn}(((\lambda \; (x) \; e_b) , \rho_{\lambda}) , \kappa&#x27;) \\
+a &amp;\triangleq alloc(\sigma) \\
+\rho_{\lambda}&#x27; &amp;\triangleq \rho_{\lambda}[x \mapsto a] \\
+\sigma&#x27; &amp;\triangleq \sigma[a \mapsto v]
+\end{aligned}&lt;&#x2F;script&gt;
+&lt;p&gt;These two rules are all we need to interpret our function calling syntax. In the first rule, we have finished evaluating the &#x27;function&#x27; half of the two expressions, and move to evaluate the argument. Then in the next rule, we have completely evaluated both the function and the argument, and we call the function! These rules are also exceedingly similar to the rules from the previous post, they should not surprise.&lt;&#x2F;p&gt;
+&lt;p&gt;I like to add this final rule, just to explicitly say &#x27;this is the end&#x27;:&lt;&#x2F;p&gt;
+&lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;A \langle \varsigma \rangle \leadsto A \langle \varsigma \rangle \\
+\begin{aligned}
+\text{where }
+\kappa &amp;= \textbf{mt}
+\end{aligned}&lt;&#x2F;script&gt;
+&lt;p&gt;Of course, this rule is vacuous, as without it, we would simply reach a stuck state in the same circumstance, and say &#x27;thats all folks&#x27;. This way though, you can feel a little safer, having a slight distinction between &#x27;stuck&#x27; and &#x27;nothing left to do&#x27;.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;example&quot;&gt;Example&lt;&#x2F;h1&gt;
+&lt;p&gt;Lets evaluate a simple program utilizing our new features!&lt;&#x2F;p&gt;
+&lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;e_0 = ((λ \; (x) \; x) \;\; (\texttt{if} \; \texttt{\#f} \; 3 \; 12)) \\
+\varsigma_0 = inj(e_0) = E\langle e_0 , \varnothing , \varnothing , \textbf{mt}\rangle \\
+\varsigma_n = step(\varsigma_{n-1}) \\
+\;\\
+%
+\varsigma_1 = E\langle (λ \; (x) \; x) , \varnothing , \varnothing  ,
+				\textbf{arg}((\texttt{if} \; \texttt{\#f} \; 3 \; 12) ,
+								\varnothing , \textbf{mt}) \rangle \\
+\varsigma_2 = A\langle
+				((λ \; (x) \; x) , \varnothing) , \varnothing , \varnothing ,
+				\textbf{arg}((\texttt{if} \; \texttt{\#f} \; 3 \; 12) ,
+								\varnothing , \textbf{mt})
+				\rangle \\
+\varsigma_3 = E\langle
+				(\texttt{if} \; \texttt{\#f} \; 3 \; 12) , \varnothing , \varnothing ,
+				\textbf{fn}(((λ \; (x) \; x) , \varnothing) , \textbf{mt})
+				\rangle \\
+\varsigma_4 = E\langle
+				\texttt{\#f} , \varnothing , \varnothing ,
+				\textbf{cond}(3 , 12 , \varnothing , \textbf{fn}(((λ \; (x) \; x) , \varnothing) , \textbf{mt}))
+				\rangle \\
+\varsigma_5 = A\langle
+				\texttt{\#f} , \varnothing , \varnothing ,
+				\textbf{cond}(3 , 12 , \varnothing , \textbf{fn}(((λ \; (x) \; x) , \varnothing) , \textbf{mt}))
+				\rangle \\
+\varsigma_6 = E\langle
+				12 , \varnothing , \varnothing ,
+				\textbf{fn}(((λ \; (x) \; x) , \varnothing) , \textbf{mt})
+				\rangle \\
+\varsigma_7 = A\langle
+				12 , \varnothing , \varnothing ,
+				\textbf{fn}(((λ \; (x) \; x) , \varnothing) , \textbf{mt})
+				\rangle \\
+\varsigma_8 = E\langle
+				x , \{x : 0 \} , \{ 0 : 12 \} , \textbf{mt}
+				\rangle \\
+\varsigma_9 = A\langle
+				12 , \{x : 0 \} , \{ 0 : 12 \} , \textbf{mt}
+				\rangle&lt;&#x2F;script&gt;
+&lt;p&gt;This example clearly shows the interchange between Eval and Apply states. You evaluate until you apply, and then you evaluate, and so on, until you reach a stuck or finished point (a fixpoint).&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h1&gt;
+&lt;p&gt;So in only these few short minutes we have added some quality-of-life features to our language, making it much more usable! The semantics grew a little in breadth and depth, but is now much more capable of supporting more advanced features.&lt;&#x2F;p&gt;
+&lt;p&gt;This post will serve as a general template for this series. We take the machine we have, decide what to add, and then add it. Further than that, the addition of features is similarly patterned. You add syntax, then make sure the semantic domains support the syntax (i.e. the Val and Kont domains), and finally add transitions.&lt;&#x2F;p&gt;
+&lt;p&gt;By utilizing this method, adding new features is simple. Also by utilizing this method, I can churn out blog posts until the sun dies! Just kidding, I have better things to do than eternally add features until we accidentally formalize Perl.&lt;&#x2F;p&gt;
+&lt;p&gt;In the next post, I will be adding multi-arg functions, and a couple of other useful features. I hope to see you there!&lt;&#x2F;p&gt;
+</content>
+	</entry>
 	<entry xml:lang="en">
 		<title>Crafting Semantics 1: Lambda Calculus</title>
 		<published>2021-01-06T12:15:00-05:00</published>
@@ -214,7 +445,7 @@ delimited continuations. If none of that made sense, awesome! Enjoy!&lt;&#x2F;p&
 &lt;h1 id=&quot;first-class&quot;&gt;First Class&lt;&#x2F;h1&gt;
 &lt;p&gt;You may be familiar with the concept of first class functions. Where you can use functions as regular-old values, and treat them like anything else in a language.&lt;&#x2F;p&gt;
 &lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;foo&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;a&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;):
+&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;foo&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;a&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;):
     &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;...
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;bar&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;b&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;):
     &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;...
@@ -228,7 +459,7 @@ value = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;which&lt;
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;Here we decide which function to use based on some condition. We can also have functions take functions as arguments.&lt;&#x2F;p&gt;
 &lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;add1&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;x&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;):
+&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;add1&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;x&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;):
     &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;x + &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;1
 
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;better = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;map&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(add1, [&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;,&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;2&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;,&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;3&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;,&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;4&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;])
@@ -243,7 +474,7 @@ By having a first class return, we turn the idea of returning into a value that 
 &lt;p&gt;Lets pretend our language no longer has a return statement, and we can only return by using first-class return values. Lets have &lt;code&gt;return&lt;&#x2F;code&gt; be the
 final argument to any function.&lt;&#x2F;p&gt;
 &lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;# We call the return argument `exit`
+&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;# We call the return argument `exit`
 # in the main function.
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;exit&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;):
     &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;compute&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;12&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;, exit)
@@ -265,7 +496,7 @@ we alter the &#x27;control&#x27; of the program to somewhere else.&lt;&#x2F;p&gt
 If I want to call &lt;code&gt;var = foo(42, ???)&lt;&#x2F;code&gt; How do I get a continuation that will return and then fill in &lt;code&gt;var&lt;&#x2F;code&gt;?
 Lets use an operator called &lt;code&gt;cc&lt;&#x2F;code&gt;, the &#x27;current continuation&#x27;:&lt;&#x2F;p&gt;
 &lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;compute&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;x&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;background-color:#bf616a;color:#2b303b;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;):
+&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;compute&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;x&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;background-color:#bf616a;color:#2b303b;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;):
     y = x &#x2F; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;3
     &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(y)
 
@@ -279,7 +510,7 @@ the function ends, it is going to place the returned value into the variable &lt
 will simply continue running, as no variable is assigned anywhere. Then we use the &lt;code&gt;exit&lt;&#x2F;code&gt; continuation to end the program with a nice and big number.&lt;&#x2F;p&gt;
 &lt;p&gt;With the &lt;code&gt;cc&lt;&#x2F;code&gt; operator, we can now fulfill our goal of &#x27;early return&#x27; semantics.&lt;&#x2F;p&gt;
 &lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;# In the world where this program exists,
+&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;# In the world where this program exists,
 # 73 is a _VERY BAD NUMBER_, dont trust it.
 # We must make sure all input does not contain 73.
 
@@ -588,7 +819,7 @@ to be a little dangerous. They should encourage the user to keep learning after 
 is finished. When I find myself reading tutorials, many look like this
 (from the wonderful &lt;a href=&quot;https:&amp;#x2F;&amp;#x2F;tantivy-search.github.io&amp;#x2F;examples&amp;#x2F;basic_search.html&quot; target=&quot;_blank&quot;&gt;Tantivy Documentation↪&lt;&#x2F;a&gt;):&lt;&#x2F;p&gt;
 &lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;#[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;macro_use&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;]
+&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;#[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;macro_use&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;]
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;extern crate&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; tantivy;
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;tantivy::collector::TopDocs;
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;tantivy::query::QueryParser;
@@ -671,7 +902,7 @@ File systems use &lt;a href=&quot;https:&amp;#x2F;&amp;#x2F;en.wikipedia.org&amp
 We will be using a simple binary tree for this post.&lt;&#x2F;p&gt;
 &lt;p&gt;Here is a common binary tree definition. We will be using C for the whole of this post:&lt;&#x2F;p&gt;
 &lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* We will use this type definition later. *&#x2F;
+&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* We will use this type definition later. *&#x2F;
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;typedef void &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(*VisitFunc)(Tree*);
 
 typedef &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; Tree {
@@ -682,7 +913,7 @@ typedef &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;struct&lt
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;We can use the tree like so:&lt;&#x2F;p&gt;
 &lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;int &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;void&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;) {
+&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;int &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;void&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;) {
     Tree root, root_left;
     root_left.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;data &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;;
     root_left.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;left &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;;
@@ -701,7 +932,7 @@ This is obviously a critically important function of a tree,
 we should be able to access all elements if we need to.&lt;&#x2F;p&gt;
 &lt;p&gt;Luckily, traversing a tree is super easy!&lt;&#x2F;p&gt;
 &lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;void &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;traverse&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(Tree* &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;cur&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;) {
+&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;void &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;traverse&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(Tree* &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;cur&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;) {
     &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur == &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;;
     &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;pre_visit&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur); &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* pre-order traversal *&#x2F;
     &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;traverse&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur-&amp;gt;left);
@@ -775,7 +1006,7 @@ when going up a tree.&lt;&#x2F;p&gt;
 It does not solve our dilemma though, we need O(1) worst-case space complexity!
 Lets talk about how and why it works, which will lead us to Robson.&lt;&#x2F;p&gt;
 &lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;typedef struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; Tree {
+&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;typedef struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; Tree {
     &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;int&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; data;
     Tree* left;
     Tree* right;
@@ -922,7 +1153,7 @@ predecessor. The same is true for &lt;code&gt;cur-&amp;gt;right_thread&lt;&#x2F;
 Following threads is a constant operation to the predecessor&#x2F;successor, which speeds up in-order
 traversals.&lt;&#x2F;p&gt;
 &lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;typedef struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; Tree {
+&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;typedef struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; Tree {
     &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;int&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; data;
     &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; Tree* left;
     &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; Tree* right;
@@ -1137,7 +1368,7 @@ Trees power the world, inside and outside of computers.
 We will be using a simple binary tree for this post.&lt;&#x2F;p&gt;
 &lt;p&gt;Here is a common binary tree definition. We will be using C for the whole of this post:&lt;&#x2F;p&gt;
 &lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* We will use this type definition later. *&#x2F;
+&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* We will use this type definition later. *&#x2F;
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;typedef void &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(*VisitFunc)(Tree*);
 
 typedef &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; Tree {
@@ -1148,7 +1379,7 @@ typedef &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;struct&lt
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;We can create the tree like so:&lt;&#x2F;p&gt;
 &lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;int &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;void&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;) {
+&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;int &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;void&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;) {
     Tree root, root_left;
     root_left.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;data &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;;
     root_left.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;left &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;;
@@ -1163,7 +1394,7 @@ This is obviously a critically important function of a tree,
 we should be able to access all elements if we need to.&lt;&#x2F;p&gt;
 &lt;p&gt;Luckily, traversing a tree is super easy!&lt;&#x2F;p&gt;
 &lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;void &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;traverse&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(Tree* &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;cur&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;) {
+&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;void &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;traverse&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(Tree* &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;cur&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;) {
     &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur == &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;;
     &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;pre_visit&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur); &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* pre-order traversal *&#x2F;
     &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;traverse&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur-&amp;gt;left);
@@ -1185,7 +1416,7 @@ It gets the job done, and yet here we are, trying to complicate things!&lt;&#x2F
 &lt;p&gt;J.H. Morris presented the threaded tree in 1979. It utilizes the wasteful NULL nodes at the end of trees, for great profit. Using this algorithm will allow us to perform the &lt;code&gt;successor&lt;&#x2F;code&gt; operation of an in-order traversal in &lt;em&gt;amortized constant&lt;&#x2F;em&gt; time.&lt;&#x2F;p&gt;
 &lt;p&gt;A Threaded tree has two extra bits of information. One bit informs whether the left pointer is actually a &lt;em&gt;thread&lt;&#x2F;em&gt;, and the other for the right pointer. A thread is &lt;em&gt;not&lt;&#x2F;em&gt; an OS thread, think of it more like a pointer to a seemingly random part of the tree, and not a child. If we follow a thread, what we find is the in-order successor to a node. Here is the code for our Threaded Tree. I will describe the algorithm under the code-block.&lt;&#x2F;p&gt;
 &lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;typedef struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; Tree {
+&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;typedef struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; Tree {
     &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;int&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; data;
     &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; Tree* left;
     &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; Tree* right;
@@ -1245,7 +1476,7 @@ It gets the job done, and yet here we are, trying to complicate things!&lt;&#x2F
 &lt;p&gt;Link Inversion is a key ingredient to our final algorithm. Link-Inversion is a process where we use a marker-bit on each node to tell if we should continue to traverse up, or traverse rightward when going up a tree.&lt;&#x2F;p&gt;
 &lt;p&gt;This method is stackless, like the threaded tree traversal. The trick is that we jumble the pointers, to thwart hacking attempts. Just kidding! We only seemingly jumble pointers! Also, it is not to thwart hackers, its to show us the way back up the tree!&lt;&#x2F;p&gt;
 &lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;typedef struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; Tree {
+&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;typedef struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; Tree {
     &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;int&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; data;
     Tree* left;
     Tree* right;

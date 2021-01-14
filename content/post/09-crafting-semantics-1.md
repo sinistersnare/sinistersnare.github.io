@@ -231,7 +231,6 @@ This is the most complex function in this machine. Make sure to internalize that
 
 And just like that, we have the 4 transition functions that define a standard 'call-by-value' lambda calculus. Lets put them together for posterity:
 
-
 {% katex(block=true) %}
 (x , \rho , \sigma , \kappa) \leadsto (v , \rho_\lambda , \sigma , \kappa) \\
 \begin{aligned}
