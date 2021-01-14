@@ -135,7 +135,7 @@ b \in \textsf{Bool} &::= \texttt{\#t} \;|\; \texttt{\#f}
 <p>The set of atomic expressions include lambdas and variables, as before, and introducing integers and booleans. I also added an <code>if</code> complex-expression, which we will implement today.</p>
 <p>Also, quick note, booleans in Scheme are <code>#t</code> for true, and <code>#f</code> for false. Just wanted to be clear on that!</p>
 <h2 id="semantic-domains">Semantic Domains</h2>
-<p>The semantic domains are also mostly the same, but with some additions to accomodate this partition between 'eval' and 'apply' states.</p>
+<p>The semantic domains are also mostly the same, but with some additions to accommodate this partition between 'eval' and 'apply' states.</p>
 <script type="math/tex;mode=display">\begin{aligned}
 % Machine
 \varsigma \in \Sigma &\triangleq
@@ -161,7 +161,7 @@ clo \in \textit{Clo} &\triangleq \textsf{Lam} \times \textit{Env} \\
 						& | \; \textbf{fn}(v, \kappa) \\
 \end{aligned}</script>
 <p>The changes here were to the states, the values, and the continuations. The change to the states is the most jarring, now we can have 2 different types of sub-states. I added to the values domain, because now we have numbers and booleans! Exciting!</p>
-<p>We also needed a continuation type for the conditional. When is it appropriate to add a continuation type? In this machine, you have two things to look at for guidance during computation. First and foremost is the Control. When our machine starts evaluating the syntax <code>(if cond then else)</code>, if will place the <code>cond</code> into the control, and place a continuation <code>cond(then, else, ρ, κ)</code> at the top of our Kontinuation stack. After the control is evaluated to a value, we need to look to the Kontinuation for the next steps. For that, we use a continuation.</p>
+<p>We also needed a continuation type for the conditional. When is it appropriate to add a continuation type? In this machine, you have two things to look at for guidance during computation. First and foremost is the Control. When our machine starts evaluating the syntax <code>(if cond then else)</code>, we will place <code>cond</code> into the control, and place a continuation <code>cond(then, else, ρ, κ)</code> at the top of our Kontinuation stack. After the control is evaluated to a value, we need to look to the Kontinuation for the next steps. For that, we use a continuation.</p>
 <p>So, whenever you are adding syntax that needs some state, so the machine knows what to do after the initial control is evaluated, you probably want a new continuation frame type.</p>
 <p>Having 2 types of states will make writing out machine rules really easy, I promise! Now, we will have rules for evaluating the control (syntax), and for what to do after its a value (through the continuation)! It is a nice give and take relationship between the states that I really enjoy from this style of machine.</p>
 <h2 id="atomic-evaluation-and-other-functions">Atomic Evaluation And Other Functions</h2>

@@ -90,7 +90,7 @@ Also, quick note, booleans in Scheme are `#t` for true, and `#f` for false. Just
 
 ## Semantic Domains ##
 
-The semantic domains are also mostly the same, but with some additions to accomodate this partition between 'eval' and 'apply' states.
+The semantic domains are also mostly the same, but with some additions to accommodate this partition between 'eval' and 'apply' states.
 
 {% katex(block=true) %}
 \begin{aligned}
@@ -121,7 +121,7 @@ clo \in \textit{Clo} &\triangleq \textsf{Lam} \times \textit{Env} \\
 
 The changes here were to the states, the values, and the continuations. The change to the states is the most jarring, now we can have 2 different types of sub-states. I added to the values domain, because now we have numbers and booleans! Exciting!
 
-We also needed a continuation type for the conditional. When is it appropriate to add a continuation type? In this machine, you have two things to look at for guidance during computation. First and foremost is the Control. When our machine starts evaluating the syntax `(if cond then else)`, if will place the `cond` into the control, and place a continuation `cond(then, else, ρ, κ)` at the top of our Kontinuation stack. After the control is evaluated to a value, we need to look to the Kontinuation for the next steps. For that, we use a continuation.
+We also needed a continuation type for the conditional. When is it appropriate to add a continuation type? In this machine, you have two things to look at for guidance during computation. First and foremost is the Control. When our machine starts evaluating the syntax `(if cond then else)`, we will place `cond` into the control, and place a continuation `cond(then, else, ρ, κ)` at the top of our Kontinuation stack. After the control is evaluated to a value, we need to look to the Kontinuation for the next steps. For that, we use a continuation.
 
 So, whenever you are adding syntax that needs some state, so the machine knows what to do after the initial control is evaluated, you probably want a new continuation frame type.
 
@@ -237,7 +237,6 @@ These are the final rules for dealing with conditionals. We refer to the value (
 Note the semantics here! Many languages have many different ideas of 'falsy' and 'truthy'. Python has a whole overridable `__bool__` function, and I don't want to get _near_ what JavaScript does. Scheme is simple. The only 'falsy' value is false. Everything else is truthy. Everything. Simple!
 
 Its also important to 'reset' the environment. During the course of evaluating the condition, the environment may have changed. We don't want to use that environment while taking one of the resultant branches, which is why we stored the original environment in the continuation.
-
 
 {% katex(block=true) %}
 A \langle v , \rho , \sigma , \kappa \rangle

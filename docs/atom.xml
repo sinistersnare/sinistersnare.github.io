@@ -60,7 +60,7 @@ b \in \textsf{Bool} &amp;::= \texttt{\#t} \;|\; \texttt{\#f}
 &lt;p&gt;The set of atomic expressions include lambdas and variables, as before, and introducing integers and booleans. I also added an &lt;code&gt;if&lt;&#x2F;code&gt; complex-expression, which we will implement today.&lt;&#x2F;p&gt;
 &lt;p&gt;Also, quick note, booleans in Scheme are &lt;code&gt;#t&lt;&#x2F;code&gt; for true, and &lt;code&gt;#f&lt;&#x2F;code&gt; for false. Just wanted to be clear on that!&lt;&#x2F;p&gt;
 &lt;h2 id=&quot;semantic-domains&quot;&gt;Semantic Domains&lt;&#x2F;h2&gt;
-&lt;p&gt;The semantic domains are also mostly the same, but with some additions to accomodate this partition between &#x27;eval&#x27; and &#x27;apply&#x27; states.&lt;&#x2F;p&gt;
+&lt;p&gt;The semantic domains are also mostly the same, but with some additions to accommodate this partition between &#x27;eval&#x27; and &#x27;apply&#x27; states.&lt;&#x2F;p&gt;
 &lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;\begin{aligned}
 % Machine
 \varsigma \in \Sigma &amp;\triangleq
@@ -86,7 +86,7 @@ clo \in \textit{Clo} &amp;\triangleq \textsf{Lam} \times \textit{Env} \\
 						&amp; | \; \textbf{fn}(v, \kappa) \\
 \end{aligned}&lt;&#x2F;script&gt;
 &lt;p&gt;The changes here were to the states, the values, and the continuations. The change to the states is the most jarring, now we can have 2 different types of sub-states. I added to the values domain, because now we have numbers and booleans! Exciting!&lt;&#x2F;p&gt;
-&lt;p&gt;We also needed a continuation type for the conditional. When is it appropriate to add a continuation type? In this machine, you have two things to look at for guidance during computation. First and foremost is the Control. When our machine starts evaluating the syntax &lt;code&gt;(if cond then else)&lt;&#x2F;code&gt;, if will place the &lt;code&gt;cond&lt;&#x2F;code&gt; into the control, and place a continuation &lt;code&gt;cond(then, else, ρ, κ)&lt;&#x2F;code&gt; at the top of our Kontinuation stack. After the control is evaluated to a value, we need to look to the Kontinuation for the next steps. For that, we use a continuation.&lt;&#x2F;p&gt;
+&lt;p&gt;We also needed a continuation type for the conditional. When is it appropriate to add a continuation type? In this machine, you have two things to look at for guidance during computation. First and foremost is the Control. When our machine starts evaluating the syntax &lt;code&gt;(if cond then else)&lt;&#x2F;code&gt;, we will place &lt;code&gt;cond&lt;&#x2F;code&gt; into the control, and place a continuation &lt;code&gt;cond(then, else, ρ, κ)&lt;&#x2F;code&gt; at the top of our Kontinuation stack. After the control is evaluated to a value, we need to look to the Kontinuation for the next steps. For that, we use a continuation.&lt;&#x2F;p&gt;
 &lt;p&gt;So, whenever you are adding syntax that needs some state, so the machine knows what to do after the initial control is evaluated, you probably want a new continuation frame type.&lt;&#x2F;p&gt;
 &lt;p&gt;Having 2 types of states will make writing out machine rules really easy, I promise! Now, we will have rules for evaluating the control (syntax), and for what to do after its a value (through the continuation)! It is a nice give and take relationship between the states that I really enjoy from this style of machine.&lt;&#x2F;p&gt;
 &lt;h2 id=&quot;atomic-evaluation-and-other-functions&quot;&gt;Atomic Evaluation And Other Functions&lt;&#x2F;h2&gt;
