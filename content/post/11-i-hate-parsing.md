@@ -3,7 +3,7 @@ slug = "i-hate-parsing"
 title = "I Hate Parsing"
 description = "Who needs it anyway"
 date = 2021-01-15T12:15:00-05:00
-draft = true
+draft = false
 [taxonomies]
 tags = ["PLT", "Computer Science", "Pet-Peeves"]
 [extra]

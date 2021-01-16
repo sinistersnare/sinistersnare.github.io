@@ -91,26 +91,26 @@ I eventually want to get to the downsides of these undelimited continuations, an
 delimited continuations. If none of that made sense, awesome! Enjoy!</p>
 <h1 id="first-class">First Class</h1>
 <p>You may be familiar with the concept of first class functions. Where you can use functions as regular-old values, and treat them like anything else in a language.</p>
-<pre style="background-color:#2b303b;">
-<code class="language-python" data-lang="python"><span style="color:#b48ead;">def </span><span style="color:#8fa1b3;">foo</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">a</span><span style="color:#c0c5ce;">):
-    </span><span style="color:#d08770;">...
-</span><span style="color:#b48ead;">def </span><span style="color:#8fa1b3;">bar</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">b</span><span style="color:#c0c5ce;">):
-    </span><span style="color:#d08770;">...
+<pre style="background-color:#282a36;">
+<code class="language-python" data-lang="python"><span style="font-style:italic;color:#ff79c6;">def </span><span style="color:#50fa7b;">foo</span><span style="color:#f8f8f2;">(</span><span style="font-style:italic;color:#ffb86c;">a</span><span style="color:#f8f8f2;">):
+    </span><span style="color:#bd93f9;">...
+</span><span style="font-style:italic;color:#ff79c6;">def </span><span style="color:#50fa7b;">bar</span><span style="color:#f8f8f2;">(</span><span style="font-style:italic;color:#ffb86c;">b</span><span style="color:#f8f8f2;">):
+    </span><span style="color:#bd93f9;">...
 ...
-</span><span style="color:#b48ead;">if </span><span style="color:#c0c5ce;">x &lt; y:
-    which = foo
-</span><span style="color:#b48ead;">else</span><span style="color:#c0c5ce;">:
-    which = bar
+</span><span style="color:#ff79c6;">if </span><span style="color:#f8f8f2;">x </span><span style="color:#ff79c6;">&lt; </span><span style="color:#f8f8f2;">y:
+    which </span><span style="color:#ff79c6;">= </span><span style="color:#f8f8f2;">foo
+</span><span style="color:#ff79c6;">else</span><span style="color:#f8f8f2;">:
+    which </span><span style="color:#ff79c6;">= </span><span style="color:#f8f8f2;">bar
 
-value = </span><span style="color:#bf616a;">which</span><span style="color:#c0c5ce;">(x)
+value </span><span style="color:#ff79c6;">= </span><span style="color:#50fa7b;">which</span><span style="color:#f8f8f2;">(x)
 </span></code></pre>
 <p>Here we decide which function to use based on some condition. We can also have functions take functions as arguments.</p>
-<pre style="background-color:#2b303b;">
-<code class="language-python" data-lang="python"><span style="color:#b48ead;">def </span><span style="color:#8fa1b3;">add1</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">x</span><span style="color:#c0c5ce;">):
-    </span><span style="color:#b48ead;">return </span><span style="color:#c0c5ce;">x + </span><span style="color:#d08770;">1
+<pre style="background-color:#282a36;">
+<code class="language-python" data-lang="python"><span style="font-style:italic;color:#ff79c6;">def </span><span style="color:#50fa7b;">add1</span><span style="color:#f8f8f2;">(</span><span style="font-style:italic;color:#ffb86c;">x</span><span style="color:#f8f8f2;">):
+    </span><span style="color:#ff79c6;">return </span><span style="color:#f8f8f2;">x </span><span style="color:#ff79c6;">+ </span><span style="color:#bd93f9;">1
 
-</span><span style="color:#c0c5ce;">better = </span><span style="color:#96b5b4;">map</span><span style="color:#c0c5ce;">(add1, [</span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">,</span><span style="color:#d08770;">2</span><span style="color:#c0c5ce;">,</span><span style="color:#d08770;">3</span><span style="color:#c0c5ce;">,</span><span style="color:#d08770;">4</span><span style="color:#c0c5ce;">])
-</span><span style="color:#65737e;"># better == [2,3,4,5]
+</span><span style="color:#f8f8f2;">better </span><span style="color:#ff79c6;">= </span><span style="color:#8be9fd;">map</span><span style="color:#f8f8f2;">(add1, [</span><span style="color:#bd93f9;">1</span><span style="color:#f8f8f2;">,</span><span style="color:#bd93f9;">2</span><span style="color:#f8f8f2;">,</span><span style="color:#bd93f9;">3</span><span style="color:#f8f8f2;">,</span><span style="color:#bd93f9;">4</span><span style="color:#f8f8f2;">])
+</span><span style="color:#6272a4;"># better == [2,3,4,5]
 </span></code></pre>
 <p>Functions are just like any other value in many modern languages. They are at the same status as integers, or strings.
 This is really nice, and programmers have decided that this is overall a nice-to-have feature.</p>
@@ -120,15 +120,15 @@ This is really nice, and programmers have decided that this is overall a nice-to
 By having a first class return, we turn the idea of returning into a value that can be passed around, same as an integer, or a function.</p>
 <p>Lets pretend our language no longer has a return statement, and we can only return by using first-class return values. Lets have <code>return</code> be the
 final argument to any function.</p>
-<pre style="background-color:#2b303b;">
-<code class="language-python" data-lang="python"><span style="color:#65737e;"># We call the return argument `exit`
+<pre style="background-color:#282a36;">
+<code class="language-python" data-lang="python"><span style="color:#6272a4;"># We call the return argument `exit`
 # in the main function.
-</span><span style="color:#b48ead;">def </span><span style="color:#8fa1b3;">main</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">exit</span><span style="color:#c0c5ce;">):
-    </span><span style="color:#bf616a;">compute</span><span style="color:#c0c5ce;">(</span><span style="color:#d08770;">12</span><span style="color:#c0c5ce;">, exit)
+</span><span style="font-style:italic;color:#ff79c6;">def </span><span style="color:#50fa7b;">main</span><span style="color:#f8f8f2;">(</span><span style="font-style:italic;color:#ffb86c;">exit</span><span style="color:#f8f8f2;">):
+    </span><span style="color:#50fa7b;">compute</span><span style="color:#f8f8f2;">(</span><span style="color:#bd93f9;">12</span><span style="color:#f8f8f2;">, exit)
 
-</span><span style="color:#b48ead;">def </span><span style="color:#8fa1b3;">compute</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">x</span><span style="color:#c0c5ce;">, </span><span style="background-color:#bf616a;color:#2b303b;">return</span><span style="color:#c0c5ce;">):
-    y = x / </span><span style="color:#d08770;">3
-    </span><span style="color:#b48ead;">return</span><span style="color:#c0c5ce;">(y)
+</span><span style="font-style:italic;color:#ff79c6;">def </span><span style="color:#50fa7b;">compute</span><span style="color:#f8f8f2;">(</span><span style="font-style:italic;color:#ffb86c;">x</span><span style="color:#f8f8f2;">, </span><span style="background-color:#ff79c6;color:#f8f8f0;">return</span><span style="color:#f8f8f2;">):
+    y </span><span style="color:#ff79c6;">= </span><span style="color:#f8f8f2;">x </span><span style="color:#ff79c6;">/ </span><span style="color:#bd93f9;">3
+    </span><span style="color:#ff79c6;">return</span><span style="color:#f8f8f2;">(y)
 </span></code></pre>
 <p>In the <code>main</code> function, we are given a value that we named <code>exit</code> instead of <code>return</code>. Of course, these are variables so we can call them whatever
 we want. This <code>exit</code> argument, when called, will take you to the exited state of the program, when given a return value. Much like how
@@ -142,22 +142,22 @@ we alter the 'control' of the program to somewhere else.</p>
 <p>However, right now, the only actual continuation value we have seen is the <code>exit</code> continuation, that is provided as a way to quit the program. We have been passing it around, but, how do we get any continuation?
 If I want to call <code>var = foo(42, ???)</code> How do I get a continuation that will return and then fill in <code>var</code>?
 Lets use an operator called <code>cc</code>, the 'current continuation':</p>
-<pre style="background-color:#2b303b;">
-<code class="language-python" data-lang="python"><span style="color:#b48ead;">def </span><span style="color:#8fa1b3;">compute</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">x</span><span style="color:#c0c5ce;">, </span><span style="background-color:#bf616a;color:#2b303b;">return</span><span style="color:#c0c5ce;">):
-    y = x / </span><span style="color:#d08770;">3
-    </span><span style="color:#b48ead;">return</span><span style="color:#c0c5ce;">(y)
+<pre style="background-color:#282a36;">
+<code class="language-python" data-lang="python"><span style="font-style:italic;color:#ff79c6;">def </span><span style="color:#50fa7b;">compute</span><span style="color:#f8f8f2;">(</span><span style="font-style:italic;color:#ffb86c;">x</span><span style="color:#f8f8f2;">, </span><span style="background-color:#ff79c6;color:#f8f8f0;">return</span><span style="color:#f8f8f2;">):
+    y </span><span style="color:#ff79c6;">= </span><span style="color:#f8f8f2;">x </span><span style="color:#ff79c6;">/ </span><span style="color:#bd93f9;">3
+    </span><span style="color:#ff79c6;">return</span><span style="color:#f8f8f2;">(y)
 
-</span><span style="color:#b48ead;">def </span><span style="color:#8fa1b3;">main</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">exit</span><span style="color:#c0c5ce;">):
-    y = </span><span style="color:#bf616a;">compute</span><span style="color:#c0c5ce;">(</span><span style="color:#d08770;">12</span><span style="color:#c0c5ce;">, cc)
-    </span><span style="color:#96b5b4;">print</span><span style="color:#c0c5ce;">(&quot;</span><span style="color:#a3be8c;">Got: </span><span style="color:#d08770;">{y}</span><span style="color:#c0c5ce;">&quot;, cc)
-    </span><span style="color:#bf616a;">exit</span><span style="color:#c0c5ce;">(</span><span style="color:#d08770;">9001</span><span style="color:#c0c5ce;">)
+</span><span style="font-style:italic;color:#ff79c6;">def </span><span style="color:#50fa7b;">main</span><span style="color:#f8f8f2;">(</span><span style="font-style:italic;color:#ffb86c;">exit</span><span style="color:#f8f8f2;">):
+    y </span><span style="color:#ff79c6;">= </span><span style="color:#50fa7b;">compute</span><span style="color:#f8f8f2;">(</span><span style="color:#bd93f9;">12</span><span style="color:#f8f8f2;">, cc)
+    </span><span style="color:#8be9fd;">print</span><span style="color:#f8f8f2;">(</span><span style="color:#f1fa8c;">&quot;Got: </span><span style="color:#bd93f9;">{y}</span><span style="color:#f1fa8c;">&quot;</span><span style="color:#f8f8f2;">, cc)
+    </span><span style="color:#50fa7b;">exit</span><span style="color:#f8f8f2;">(</span><span style="color:#bd93f9;">9001</span><span style="color:#f8f8f2;">)
 </span></code></pre>
 <p>This <code>cc</code> operator reckons what the current computation is, and creates a continuation for that. In our line <code>y = compute(12, cc)</code>, <code>cc</code> knows that after
 the function ends, it is going to place the returned value into the variable <code>y</code>. The <code>cc</code> in the call to <code>print</code> is used so that the program
 will simply continue running, as no variable is assigned anywhere. Then we use the <code>exit</code> continuation to end the program with a nice and big number.</p>
 <p>With the <code>cc</code> operator, we can now fulfill our goal of 'early return' semantics.</p>
-<pre style="background-color:#2b303b;">
-<code class="language-python" data-lang="python"><span style="color:#65737e;"># In the world where this program exists,
+<pre style="background-color:#282a36;">
+<code class="language-python" data-lang="python"><span style="color:#6272a4;"># In the world where this program exists,
 # 73 is a _VERY BAD NUMBER_, dont trust it.
 # We must make sure all input does not contain 73.
 
@@ -165,21 +165,21 @@ will simply continue running, as no variable is assigned anywhere. Then we use t
 # out to `bad_return` with an error message
 # Otherwise, we return to `good_return`
 # with the value.
-</span><span style="color:#b48ead;">def </span><span style="color:#8fa1b3;">sanitize</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">x</span><span style="color:#c0c5ce;">, </span><span style="color:#bf616a;">bad_return</span><span style="color:#c0c5ce;">, </span><span style="color:#bf616a;">good_return</span><span style="color:#c0c5ce;">):
-    </span><span style="color:#b48ead;">if </span><span style="color:#c0c5ce;">x - </span><span style="color:#d08770;">1 </span><span style="color:#c0c5ce;">== </span><span style="color:#d08770;">72</span><span style="color:#c0c5ce;">:
-        </span><span style="color:#bf616a;">bad_return</span><span style="color:#c0c5ce;">(&quot;</span><span style="color:#a3be8c;">NO EVIL ALLOWED HERE</span><span style="color:#c0c5ce;">&quot;)
-    </span><span style="color:#b48ead;">else</span><span style="color:#c0c5ce;">:
-        </span><span style="color:#bf616a;">good_return</span><span style="color:#c0c5ce;">(x)
+</span><span style="font-style:italic;color:#ff79c6;">def </span><span style="color:#50fa7b;">sanitize</span><span style="color:#f8f8f2;">(</span><span style="font-style:italic;color:#ffb86c;">x</span><span style="color:#f8f8f2;">, </span><span style="font-style:italic;color:#ffb86c;">bad_return</span><span style="color:#f8f8f2;">, </span><span style="font-style:italic;color:#ffb86c;">good_return</span><span style="color:#f8f8f2;">):
+    </span><span style="color:#ff79c6;">if </span><span style="color:#f8f8f2;">x </span><span style="color:#ff79c6;">- </span><span style="color:#bd93f9;">1 </span><span style="color:#ff79c6;">== </span><span style="color:#bd93f9;">72</span><span style="color:#f8f8f2;">:
+        </span><span style="color:#50fa7b;">bad_return</span><span style="color:#f8f8f2;">(</span><span style="color:#f1fa8c;">&quot;NO EVIL ALLOWED HERE&quot;</span><span style="color:#f8f8f2;">)
+    </span><span style="color:#ff79c6;">else</span><span style="color:#f8f8f2;">:
+        </span><span style="color:#50fa7b;">good_return</span><span style="color:#f8f8f2;">(x)
 
-</span><span style="color:#b48ead;">def </span><span style="color:#8fa1b3;">get_value_from_world</span><span style="color:#c0c5ce;">(</span><span style="background-color:#bf616a;color:#2b303b;">return</span><span style="color:#c0c5ce;">):
-    value = </span><span style="color:#bf616a;">get_maybe_dangerous_input</span><span style="color:#c0c5ce;">(cc)
-    good = </span><span style="color:#bf616a;">sanitize</span><span style="color:#c0c5ce;">(value, </span><span style="background-color:#bf616a;color:#2b303b;">return</span><span style="color:#c0c5ce;">, cc</span><span style="background-color:#bf616a;color:#2b303b;">)</span><span style="color:#c0c5ce;">
-    </span><span style="color:#b48ead;">return</span><span style="color:#c0c5ce;">(&quot;</span><span style="color:#a3be8c;">Got good value </span><span style="color:#d08770;">{good}</span><span style="color:#a3be8c;">!</span><span style="color:#c0c5ce;">&quot;)
+</span><span style="font-style:italic;color:#ff79c6;">def </span><span style="color:#50fa7b;">get_value_from_world</span><span style="color:#f8f8f2;">(</span><span style="background-color:#ff79c6;color:#f8f8f0;">return</span><span style="color:#f8f8f2;">):
+    value </span><span style="color:#ff79c6;">= </span><span style="color:#50fa7b;">get_maybe_dangerous_input</span><span style="color:#f8f8f2;">(cc)
+    good </span><span style="color:#ff79c6;">= </span><span style="color:#50fa7b;">sanitize</span><span style="color:#f8f8f2;">(value, </span><span style="background-color:#ff79c6;color:#f8f8f0;">return</span><span style="color:#f8f8f2;">, cc</span><span style="background-color:#ff79c6;color:#f8f8f0;">)</span><span style="color:#f8f8f2;">
+    </span><span style="color:#ff79c6;">return</span><span style="color:#f8f8f2;">(</span><span style="color:#f1fa8c;">&quot;Got good value </span><span style="color:#bd93f9;">{good}</span><span style="color:#f1fa8c;">!&quot;</span><span style="color:#f8f8f2;">)
 
-</span><span style="color:#b48ead;">def </span><span style="color:#8fa1b3;">main</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">exit</span><span style="color:#c0c5ce;">):
-    important_val = </span><span style="color:#bf616a;">get_value_from_world</span><span style="color:#c0c5ce;">(cc)
-    </span><span style="color:#bf616a;">prin</span><span style="color:#c0c5ce;">(important_val, cc)
-    </span><span style="color:#bf616a;">exit</span><span style="color:#c0c5ce;">(&quot;</span><span style="color:#a3be8c;">nothing bad going on here</span><span style="color:#c0c5ce;">&quot;)
+</span><span style="font-style:italic;color:#ff79c6;">def </span><span style="color:#50fa7b;">main</span><span style="color:#f8f8f2;">(</span><span style="font-style:italic;color:#ffb86c;">exit</span><span style="color:#f8f8f2;">):
+    important_val </span><span style="color:#ff79c6;">= </span><span style="color:#50fa7b;">get_value_from_world</span><span style="color:#f8f8f2;">(cc)
+    </span><span style="color:#50fa7b;">prin</span><span style="color:#f8f8f2;">(important_val, cc)
+    </span><span style="color:#50fa7b;">exit</span><span style="color:#f8f8f2;">(</span><span style="color:#f1fa8c;">&quot;nothing bad going on here&quot;</span><span style="color:#f8f8f2;">)
 </span></code></pre>
 <p>Here, we are able to exit out of our computation if we find ourselves in a tricky situation.
 Normally, we may accomplish this through an exception-based system. You would have a convoluted

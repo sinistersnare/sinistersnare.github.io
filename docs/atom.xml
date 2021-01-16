@@ -4,8 +4,21 @@
 	<link href="https://drs.is/atom.xml" rel="self" type="application/atom+xml"/>
   <link href="https://drs.is"/>
 	<generator uri="https://www.getzola.org/">Zola</generator>
-	<updated>2021-01-14T12:15:00-05:00</updated>
+	<updated>2021-01-15T12:15:00-05:00</updated>
 	<id>https://drs.is/atom.xml</id>
+	<entry xml:lang="en">
+		<title>I Hate Parsing</title>
+		<published>2021-01-15T12:15:00-05:00</published>
+		<updated>2021-01-15T12:15:00-05:00</updated>
+		<link href="https://drs.is/post/i-hate-parsing/" type="text/html"/>
+		<id>https://drs.is/post/i-hate-parsing/</id>
+		<content type="html">&lt;p&gt;People talk about parsing too much! Its boring! Its tedious to get right, and it doesnt even produce anything special.&lt;&#x2F;p&gt;
+&lt;p&gt;The best part of compilation is &lt;em&gt;after&lt;&#x2F;em&gt; you have your AST. Turning the AST into an IR, or further into machine code. And performing optimizations! And after that, working on runtime stuff, like garbage collection, JIT, or runtime libraries. Thats the kind of fun stuff&lt;&#x2F;p&gt;
+&lt;p&gt;I suggest that every compilers class just use a Lisp! Only the most basic of parsing needed, and you can focus on the cool&#x2F;interesting parts of PL: transformations, and semantics.&lt;&#x2F;p&gt;
+&lt;p&gt;After you hook people into how cool the field is, then you show them the boring side of parsing. Parsing just gets really annoying when you realize how much error recovery you have to do to make it somewhat usable.&lt;&#x2F;p&gt;
+&lt;p&gt;Anyways, thats my rant for the day, maybe I should just use Twitter.&lt;&#x2F;p&gt;
+</content>
+	</entry>
 	<entry xml:lang="en">
 		<title>Crafting Semantics 2: Basic Features</title>
 		<published>2021-01-14T12:15:00-05:00</published>
@@ -444,26 +457,26 @@ I eventually want to get to the downsides of these undelimited continuations, an
 delimited continuations. If none of that made sense, awesome! Enjoy!&lt;&#x2F;p&gt;
 &lt;h1 id=&quot;first-class&quot;&gt;First Class&lt;&#x2F;h1&gt;
 &lt;p&gt;You may be familiar with the concept of first class functions. Where you can use functions as regular-old values, and treat them like anything else in a language.&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;foo&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;a&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;):
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;...
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;bar&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;b&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;):
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;...
+&lt;pre style=&quot;background-color:#282a36;&quot;&gt;
+&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span style=&quot;font-style:italic;color:#ff79c6;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#50fa7b;&quot;&gt;foo&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#ffb86c;&quot;&gt;a&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;):
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bd93f9;&quot;&gt;...
+&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#ff79c6;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#50fa7b;&quot;&gt;bar&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#ffb86c;&quot;&gt;b&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;):
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bd93f9;&quot;&gt;...
 ...
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;x &amp;lt; y:
-    which = foo
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;else&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:
-    which = bar
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;x &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;&amp;lt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;y:
+    which &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;foo
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;else&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;:
+    which &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;bar
 
-value = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;which&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(x)
+value &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#50fa7b;&quot;&gt;which&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(x)
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;Here we decide which function to use based on some condition. We can also have functions take functions as arguments.&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;add1&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;x&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;):
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;x + &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;1
+&lt;pre style=&quot;background-color:#282a36;&quot;&gt;
+&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span style=&quot;font-style:italic;color:#ff79c6;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#50fa7b;&quot;&gt;add1&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#ffb86c;&quot;&gt;x&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;):
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;return &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;x &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;+ &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bd93f9;&quot;&gt;1
 
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;better = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;map&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(add1, [&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;,&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;2&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;,&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;3&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;,&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;4&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;])
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;# better == [2,3,4,5]
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;better &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8be9fd;&quot;&gt;map&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(add1, [&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bd93f9;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;,&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bd93f9;&quot;&gt;2&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;,&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bd93f9;&quot;&gt;3&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;,&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bd93f9;&quot;&gt;4&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;])
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6272a4;&quot;&gt;# better == [2,3,4,5]
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;Functions are just like any other value in many modern languages. They are at the same status as integers, or strings.
 This is really nice, and programmers have decided that this is overall a nice-to-have feature.&lt;&#x2F;p&gt;
@@ -473,15 +486,15 @@ This is really nice, and programmers have decided that this is overall a nice-to
 By having a first class return, we turn the idea of returning into a value that can be passed around, same as an integer, or a function.&lt;&#x2F;p&gt;
 &lt;p&gt;Lets pretend our language no longer has a return statement, and we can only return by using first-class return values. Lets have &lt;code&gt;return&lt;&#x2F;code&gt; be the
 final argument to any function.&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;# We call the return argument `exit`
+&lt;pre style=&quot;background-color:#282a36;&quot;&gt;
+&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span style=&quot;color:#6272a4;&quot;&gt;# We call the return argument `exit`
 # in the main function.
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;exit&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;):
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;compute&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;12&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;, exit)
+&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#ff79c6;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#50fa7b;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#ffb86c;&quot;&gt;exit&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;):
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#50fa7b;&quot;&gt;compute&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bd93f9;&quot;&gt;12&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;, exit)
 
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;compute&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;x&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;background-color:#bf616a;color:#2b303b;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;):
-    y = x &#x2F; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;3
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(y)
+&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#ff79c6;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#50fa7b;&quot;&gt;compute&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#ffb86c;&quot;&gt;x&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;background-color:#ff79c6;color:#f8f8f0;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;):
+    y &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;x &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;&#x2F; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bd93f9;&quot;&gt;3
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(y)
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;In the &lt;code&gt;main&lt;&#x2F;code&gt; function, we are given a value that we named &lt;code&gt;exit&lt;&#x2F;code&gt; instead of &lt;code&gt;return&lt;&#x2F;code&gt;. Of course, these are variables so we can call them whatever
 we want. This &lt;code&gt;exit&lt;&#x2F;code&gt; argument, when called, will take you to the exited state of the program, when given a return value. Much like how
@@ -495,22 +508,22 @@ we alter the &#x27;control&#x27; of the program to somewhere else.&lt;&#x2F;p&gt
 &lt;p&gt;However, right now, the only actual continuation value we have seen is the &lt;code&gt;exit&lt;&#x2F;code&gt; continuation, that is provided as a way to quit the program. We have been passing it around, but, how do we get any continuation?
 If I want to call &lt;code&gt;var = foo(42, ???)&lt;&#x2F;code&gt; How do I get a continuation that will return and then fill in &lt;code&gt;var&lt;&#x2F;code&gt;?
 Lets use an operator called &lt;code&gt;cc&lt;&#x2F;code&gt;, the &#x27;current continuation&#x27;:&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;compute&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;x&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;background-color:#bf616a;color:#2b303b;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;):
-    y = x &#x2F; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;3
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(y)
+&lt;pre style=&quot;background-color:#282a36;&quot;&gt;
+&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span style=&quot;font-style:italic;color:#ff79c6;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#50fa7b;&quot;&gt;compute&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#ffb86c;&quot;&gt;x&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;background-color:#ff79c6;color:#f8f8f0;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;):
+    y &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;x &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;&#x2F; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bd93f9;&quot;&gt;3
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(y)
 
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;exit&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;):
-    y = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;compute&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;12&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;, cc)
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;print&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Got: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;{y}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot;, cc)
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;exit&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;9001&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;)
+&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#ff79c6;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#50fa7b;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#ffb86c;&quot;&gt;exit&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;):
+    y &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#50fa7b;&quot;&gt;compute&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bd93f9;&quot;&gt;12&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;, cc)
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8be9fd;&quot;&gt;print&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f1fa8c;&quot;&gt;&amp;quot;Got: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bd93f9;&quot;&gt;{y}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f1fa8c;&quot;&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;, cc)
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#50fa7b;&quot;&gt;exit&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bd93f9;&quot;&gt;9001&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;)
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;This &lt;code&gt;cc&lt;&#x2F;code&gt; operator reckons what the current computation is, and creates a continuation for that. In our line &lt;code&gt;y = compute(12, cc)&lt;&#x2F;code&gt;, &lt;code&gt;cc&lt;&#x2F;code&gt; knows that after
 the function ends, it is going to place the returned value into the variable &lt;code&gt;y&lt;&#x2F;code&gt;. The &lt;code&gt;cc&lt;&#x2F;code&gt; in the call to &lt;code&gt;print&lt;&#x2F;code&gt; is used so that the program
 will simply continue running, as no variable is assigned anywhere. Then we use the &lt;code&gt;exit&lt;&#x2F;code&gt; continuation to end the program with a nice and big number.&lt;&#x2F;p&gt;
 &lt;p&gt;With the &lt;code&gt;cc&lt;&#x2F;code&gt; operator, we can now fulfill our goal of &#x27;early return&#x27; semantics.&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;# In the world where this program exists,
+&lt;pre style=&quot;background-color:#282a36;&quot;&gt;
+&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span style=&quot;color:#6272a4;&quot;&gt;# In the world where this program exists,
 # 73 is a _VERY BAD NUMBER_, dont trust it.
 # We must make sure all input does not contain 73.
 
@@ -518,21 +531,21 @@ will simply continue running, as no variable is assigned anywhere. Then we use t
 # out to `bad_return` with an error message
 # Otherwise, we return to `good_return`
 # with the value.
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;sanitize&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;x&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;bad_return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;good_return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;):
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;x - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;1 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;== &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;72&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:
-        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;bad_return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;NO EVIL ALLOWED HERE&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot;)
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;else&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;:
-        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;good_return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(x)
+&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#ff79c6;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#50fa7b;&quot;&gt;sanitize&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#ffb86c;&quot;&gt;x&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#ffb86c;&quot;&gt;bad_return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#ffb86c;&quot;&gt;good_return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;):
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;x &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;- &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bd93f9;&quot;&gt;1 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;== &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bd93f9;&quot;&gt;72&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;:
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#50fa7b;&quot;&gt;bad_return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f1fa8c;&quot;&gt;&amp;quot;NO EVIL ALLOWED HERE&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;)
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;else&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;:
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#50fa7b;&quot;&gt;good_return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(x)
 
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;get_value_from_world&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;background-color:#bf616a;color:#2b303b;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;):
-    value = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;get_maybe_dangerous_input&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cc)
-    good = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;sanitize&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(value, &lt;&#x2F;span&gt;&lt;span style=&quot;background-color:#bf616a;color:#2b303b;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;, cc&lt;&#x2F;span&gt;&lt;span style=&quot;background-color:#bf616a;color:#2b303b;&quot;&gt;)&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Got good value &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;{good}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;!&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot;)
+&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#ff79c6;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#50fa7b;&quot;&gt;get_value_from_world&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;background-color:#ff79c6;color:#f8f8f0;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;):
+    value &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#50fa7b;&quot;&gt;get_maybe_dangerous_input&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(cc)
+    good &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#50fa7b;&quot;&gt;sanitize&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(value, &lt;&#x2F;span&gt;&lt;span style=&quot;background-color:#ff79c6;color:#f8f8f0;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;, cc&lt;&#x2F;span&gt;&lt;span style=&quot;background-color:#ff79c6;color:#f8f8f0;&quot;&gt;)&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f1fa8c;&quot;&gt;&amp;quot;Got good value &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bd93f9;&quot;&gt;{good}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f1fa8c;&quot;&gt;!&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;)
 
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;exit&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;):
-    important_val = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;get_value_from_world&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cc)
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;prin&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(important_val, cc)
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;exit&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;nothing bad going on here&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;quot;)
+&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#ff79c6;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#50fa7b;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#ffb86c;&quot;&gt;exit&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;):
+    important_val &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#50fa7b;&quot;&gt;get_value_from_world&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(cc)
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#50fa7b;&quot;&gt;prin&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(important_val, cc)
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#50fa7b;&quot;&gt;exit&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f1fa8c;&quot;&gt;&amp;quot;nothing bad going on here&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;)
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;Here, we are able to exit out of our computation if we find ourselves in a tricky situation.
 Normally, we may accomplish this through an exception-based system. You would have a convoluted
@@ -707,15 +720,15 @@ that a continuation does is store the previous one, like a linked-list. Continua
 &lt;p&gt;For example, an program that looks like:&lt;&#x2F;p&gt;
 &lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;x := (y := (z := 3 \;\text{in}\; z) \;\text{in}\; (y + y)) \;\text{in}\; x&lt;&#x2F;script&gt;
 &lt;p&gt;Here is what the states will look like over the course of 3 applications of &lt;code&gt;assign-exp&lt;&#x2F;code&gt;:&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(x := (y := (z := 3 in z) in (y + y)) in x , {} , NONE)
+&lt;pre style=&quot;background-color:#282a36;&quot;&gt;
+&lt;code&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(x := (y := (z := 3 in z) in (y + y)) in x , {} , NONE)
 -&amp;gt; ((y := (z := 3 in z) in (y + y)) , {} , assign(x , x , NONE))
 -&amp;gt; ((z := 3 in z) , {} , assign(y , y + y , assign(x , x , NONE)))
 -&amp;gt; (3 , {} , assign(z , z , assign(y , y + y , assign(x , x , NONE))))
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;Then if we apply &lt;code&gt;assign-kont&lt;&#x2F;code&gt; a couple times, with omitted &lt;code&gt;addition&lt;&#x2F;code&gt; and &lt;code&gt;var-lookup&lt;&#x2F;code&gt; rules:&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;-&amp;gt; (z , {z : 3} , assign(y , y + y , assign(x , x , NONE)))
+&lt;pre style=&quot;background-color:#282a36;&quot;&gt;
+&lt;code&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;-&amp;gt; (z , {z : 3} , assign(y , y + y , assign(x , x , NONE)))
 -&amp;gt; (3 , {z : 3} , assign(y , y + y , assign(x , x , NONE)))
 -&amp;gt; (y + y , {z : 3 , y : 3} , assign(x , x , NONE))
 ...
@@ -763,8 +776,8 @@ big bar.&lt;&#x2F;p&gt;
      {(x := (\text{if} \; (1 + 1) \; \text{then} \;7\; \text{else} \;12) \; \text{in} \; x \;,\; \{\} \;,\; NONE)
         \rightarrow (7, \{\}, NONE)}
 }&lt;&#x2F;script&gt;
-&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(x := (if (1 + 1) then 7 else 12) , {} , NONE)
+&lt;pre style=&quot;background-color:#282a36;&quot;&gt;
+&lt;code&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(x := (if (1 + 1) then 7 else 12) , {} , NONE)
 -&amp;gt; (if (1 + 1) then 7 else 12 , {} , assign(x, x, NONE))
 -&amp;gt; ((1 + 1) , {} , ifk(7, 12, assign(x, x, NONE)))
 -&amp;gt; (2 , {} , ifk(7, 12, assign(x, x, NONE)))
@@ -818,19 +831,19 @@ before, I go to the imports to find where it is defined, and then look it up in&
 to be a little dangerous. They should encourage the user to keep learning after the tutorial
 is finished. When I find myself reading tutorials, many look like this
 (from the wonderful &lt;a href=&quot;https:&amp;#x2F;&amp;#x2F;tantivy-search.github.io&amp;#x2F;examples&amp;#x2F;basic_search.html&quot; target=&quot;_blank&quot;&gt;Tantivy Documentation↪&lt;&#x2F;a&gt;):&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;#[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;macro_use&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;]
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;extern crate&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; tantivy;
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;tantivy::collector::TopDocs;
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;tantivy::query::QueryParser;
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;tantivy::schema::*;
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;tantivy::Index;
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;tantivy::ReloadPolicy;
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;tempdir::TempDir;
+&lt;pre style=&quot;background-color:#282a36;&quot;&gt;
+&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;#[macro_use]
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;extern crate&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; tantivy;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span style=&quot;text-decoration:underline;color:#66d9ef;&quot;&gt;tantivy&lt;&#x2F;span&gt;&lt;span style=&quot;text-decoration:underline;color:#ff79c6;&quot;&gt;::&lt;&#x2F;span&gt;&lt;span style=&quot;text-decoration:underline;color:#66d9ef;&quot;&gt;collector&lt;&#x2F;span&gt;&lt;span style=&quot;text-decoration:underline;color:#ff79c6;&quot;&gt;::&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;TopDocs;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span style=&quot;text-decoration:underline;color:#66d9ef;&quot;&gt;tantivy&lt;&#x2F;span&gt;&lt;span style=&quot;text-decoration:underline;color:#ff79c6;&quot;&gt;::&lt;&#x2F;span&gt;&lt;span style=&quot;text-decoration:underline;color:#66d9ef;&quot;&gt;query&lt;&#x2F;span&gt;&lt;span style=&quot;text-decoration:underline;color:#ff79c6;&quot;&gt;::&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;QueryParser;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span style=&quot;text-decoration:underline;color:#66d9ef;&quot;&gt;tantivy&lt;&#x2F;span&gt;&lt;span style=&quot;text-decoration:underline;color:#ff79c6;&quot;&gt;::&lt;&#x2F;span&gt;&lt;span style=&quot;text-decoration:underline;color:#66d9ef;&quot;&gt;schema&lt;&#x2F;span&gt;&lt;span style=&quot;text-decoration:underline;color:#ff79c6;&quot;&gt;::&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span style=&quot;text-decoration:underline;color:#66d9ef;&quot;&gt;tantivy&lt;&#x2F;span&gt;&lt;span style=&quot;text-decoration:underline;color:#ff79c6;&quot;&gt;::&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;Index;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span style=&quot;text-decoration:underline;color:#66d9ef;&quot;&gt;tantivy&lt;&#x2F;span&gt;&lt;span style=&quot;text-decoration:underline;color:#ff79c6;&quot;&gt;::&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;ReloadPolicy;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span style=&quot;text-decoration:underline;color:#66d9ef;&quot;&gt;tempdir&lt;&#x2F;span&gt;&lt;span style=&quot;text-decoration:underline;color:#ff79c6;&quot;&gt;::&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;TempDir;
 
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;() -&amp;gt; tantivy::Result&amp;lt;()&amp;gt; {
-    ... &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; rest of tutorial
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;}
+&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#50fa7b;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;() &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;-&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;text-decoration:underline;color:#66d9ef;&quot;&gt;tantivy&lt;&#x2F;span&gt;&lt;span style=&quot;text-decoration:underline;color:#ff79c6;&quot;&gt;::&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#66d9ef;&quot;&gt;Result&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;&amp;lt;()&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;{
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;... &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6272a4;&quot;&gt;&#x2F;&#x2F; rest of tutorial
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;}
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;This is not a more egregious example, simply the one I most recently faced.&lt;&#x2F;p&gt;
 &lt;p&gt;The first thing I do when reading a tutorial is scan the imports. When I see the glob here,
@@ -901,27 +914,27 @@ File systems use &lt;a href=&quot;https:&amp;#x2F;&amp;#x2F;en.wikipedia.org&amp
 &lt;p&gt;Trees power the world, inside and outside of computers.
 We will be using a simple binary tree for this post.&lt;&#x2F;p&gt;
 &lt;p&gt;Here is a common binary tree definition. We will be using C for the whole of this post:&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* We will use this type definition later. *&#x2F;
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;typedef void &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(*VisitFunc)(Tree*);
+&lt;pre style=&quot;background-color:#282a36;&quot;&gt;
+&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;span style=&quot;color:#6272a4;&quot;&gt;&#x2F;* We will use this type definition later. *&#x2F;
+&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;typedef void &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;VisitFunc)(Tree&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;);
 
-typedef &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; Tree {
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;int&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; data;
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; Tree* left;
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; Tree* right;
-} Tree;
+typedef &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; Tree &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;{
+    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;int&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; data;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; Tree&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; left;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; Tree&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; right;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; Tree;
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;We can use the tree like so:&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;int &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;void&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;) {
-    Tree root, root_left;
-    root_left.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;data &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;;
-    root_left.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;left &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;;
-    root_left.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;right &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;;
-    root.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;data &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;;
-    root.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;left &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;= &amp;amp;root_left;
-    root.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;right &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;;
-}
+&lt;pre style=&quot;background-color:#282a36;&quot;&gt;
+&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;int &lt;&#x2F;span&gt;&lt;span style=&quot;color:#50fa7b;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;void&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;{
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;    Tree root, root_left;
+    root_left&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;data &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bd93f9;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;;
+    root_left&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;left &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bd93f9;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;;
+    root_left&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;right &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bd93f9;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;;
+    root&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;data &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bd93f9;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;;
+    root&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;left &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;= &amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;root_left;
+    root&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;right &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bd93f9;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;}
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;We will  specifically be using&lt;&#x2F;p&gt;
 &lt;a href=&quot;https:&amp;#x2F;&amp;#x2F;en.wikipedia.org&amp;#x2F;wiki&amp;#x2F;Binary_search_tree&quot; target=&quot;_blank&quot;&gt;Binary Search Trees↪&lt;&#x2F;a&gt;,
@@ -931,15 +944,15 @@ typedef &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;struct&lt
 This is obviously a critically important function of a tree,
 we should be able to access all elements if we need to.&lt;&#x2F;p&gt;
 &lt;p&gt;Luckily, traversing a tree is super easy!&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;void &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;traverse&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(Tree* &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;cur&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;) {
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur == &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;;
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;pre_visit&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur); &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* pre-order traversal *&#x2F;
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;traverse&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur-&amp;gt;left);
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;in_visit&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur); &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* in-order traversal *&#x2F;
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;traverse&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur-&amp;gt;right);
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;post_visit&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur); &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* post-order traversal *&#x2F;
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;}
+&lt;pre style=&quot;background-color:#282a36;&quot;&gt;
+&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;void &lt;&#x2F;span&gt;&lt;span style=&quot;color:#50fa7b;&quot;&gt;traverse&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(Tree&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;* &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#ffb86c;&quot;&gt;cur&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;{
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(cur &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;== &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bd93f9;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#50fa7b;&quot;&gt;pre_visit&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(cur); &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6272a4;&quot;&gt;&#x2F;* pre-order traversal *&#x2F;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#50fa7b;&quot;&gt;traverse&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(cur&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;-&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;left);
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#50fa7b;&quot;&gt;in_visit&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(cur); &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6272a4;&quot;&gt;&#x2F;* in-order traversal *&#x2F;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#50fa7b;&quot;&gt;traverse&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(cur&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;-&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;right);
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#50fa7b;&quot;&gt;post_visit&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(cur); &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6272a4;&quot;&gt;&#x2F;* post-order traversal *&#x2F;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;}
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;This algorithm is universally taught in beginning CS courses at universities.
 It gets the job done, but I think we can do better.&lt;&#x2F;p&gt;
@@ -1005,63 +1018,63 @@ when going up a tree.&lt;&#x2F;p&gt;
 &lt;p&gt;This method is stackless, like in the threaded tree, and solves Knuth&#x27;s question.
 It does not solve our dilemma though, we need O(1) worst-case space complexity!
 Lets talk about how and why it works, which will lead us to Robson.&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;typedef struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; Tree {
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;int&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; data;
-    Tree* left;
-    Tree* right;
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;bool&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; went_right;
-} Tree;
+&lt;pre style=&quot;background-color:#282a36;&quot;&gt;
+&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;typedef struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; Tree &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;{
+    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;int&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; data;
+    Tree&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; left;
+    Tree&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; right;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;bool&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; went_right;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;} &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;Tree;
 
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;void &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;link_inversion&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(Tree* &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;cur&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;, VisitFunc &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;pre_order&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;,
-                               VisitFunc &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;in_order&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;,
-                               VisitFunc &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;post_order&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;) {
-    Tree* prev = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;;
-    Tree* old_prev;
-    Tree* old_prev_left;
-    Tree* old_cur;
+&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;void &lt;&#x2F;span&gt;&lt;span style=&quot;color:#50fa7b;&quot;&gt;link_inversion&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(Tree&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;* &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#ffb86c;&quot;&gt;cur&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;, VisitFunc &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#ffb86c;&quot;&gt;pre_order&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;,
+                               VisitFunc &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#ffb86c;&quot;&gt;in_order&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;,
+                               VisitFunc &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#ffb86c;&quot;&gt;post_order&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;{
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;    Tree&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; prev &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bd93f9;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;;
+    Tree&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; old_prev;
+    Tree&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; old_prev_left;
+    Tree&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; old_cur;
 
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur == &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(cur &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;== &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bd93f9;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;;
 
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;do &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;{
-        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* 1) Descend leftward as much as possible. *&#x2F;
-        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;while &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur != &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;) {
-            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;pre_order&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur);
-            cur-&amp;gt;went_right = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;false&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;;
-            old_cur = cur;
-            cur = old_cur-&amp;gt;left;
-            old_cur-&amp;gt;left = prev;
-            prev = old_cur;
-        }
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;do &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;{
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6272a4;&quot;&gt;&#x2F;* 1) Descend leftward as much as possible. *&#x2F;
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;while &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(cur &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;!= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bd93f9;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;{
+            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#50fa7b;&quot;&gt;pre_order&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(cur);
+            cur&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;-&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;went_right &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bd93f9;&quot;&gt;false&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;;
+            old_cur &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; cur;
+            cur &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; old_cur&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;-&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;left;
+            old_cur&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;-&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;left &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; prev;
+            prev &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; old_cur;
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;}
 
-        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* 2) ascend from right as much as we can. *&#x2F;
-        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;while &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(prev != &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;NULL &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;amp;&amp;amp; prev-&amp;gt;went_right) {
-            old_prev = prev;
-            prev = prev-&amp;gt;right;
-            old_prev-&amp;gt;right = cur;
-            cur = old_prev;
-            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;post_order&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur);
-        }
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6272a4;&quot;&gt;&#x2F;* 2) ascend from right as much as we can. *&#x2F;
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;while &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(prev &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;!= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bd93f9;&quot;&gt;NULL &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;&amp;amp;&amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; prev&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;-&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;went_right) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;{
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;            old_prev &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; prev;
+            prev &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; prev&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;-&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;right;
+            old_prev&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;-&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;right &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; cur;
+            cur &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; old_prev;
+            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#50fa7b;&quot;&gt;post_order&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(cur);
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;}
 
-        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* 3)
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6272a4;&quot;&gt;&#x2F;* 3)
             If prev is null after coming back up from the right,
                 it means that we have finished traversal,
                 so head back to the while-condition and get outta here!
             Else, we will do an exchange here,
                 swap to right child of parent. *&#x2F;
-        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(prev != &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;) {
-            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* Switch from the left side of prev to the right
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(prev &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;!= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bd93f9;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;{
+            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6272a4;&quot;&gt;&#x2F;* Switch from the left side of prev to the right
                Also, mark prev as went_right so we know to traverse
                upwards using right pointer. *&#x2F;
-            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;in_order&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(prev);
-            old_prev_left = prev-&amp;gt;left;
-            prev-&amp;gt;went_right = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;true&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;;
-            prev-&amp;gt;left = cur;
-            cur = prev-&amp;gt;right;
-            prev-&amp;gt;right = old_prev_left;
-        }
-    } &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;while &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(prev != &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;);
-}
+            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#50fa7b;&quot;&gt;in_order&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(prev);
+            old_prev_left &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; prev&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;-&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;left;
+            prev&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;-&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;went_right &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bd93f9;&quot;&gt;true&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;;
+            prev&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;-&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;left &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; cur;
+            cur &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; prev&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;-&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;right;
+            prev&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;-&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;right &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; old_prev_left;
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;}
+    } &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;while &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(prev &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;!= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bd93f9;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;);
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;}
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;The core algorithm is in the name, we must invert the links. As we push down the tree,
 we invert the links so that way the child points to the parent, and we can walk up the tree
@@ -1152,43 +1165,43 @@ If the left pointer is a thread (&lt;code&gt;cur-&amp;gt;left_thread&lt;&#x2F;co
 predecessor. The same is true for &lt;code&gt;cur-&amp;gt;right_thread&lt;&#x2F;code&gt; pointing to the in-order successor.
 Following threads is a constant operation to the predecessor&#x2F;successor, which speeds up in-order
 traversals.&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;typedef struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; Tree {
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;int&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; data;
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; Tree* left;
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; Tree* right;
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;bool&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; left_thread;
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;bool&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; right_thread;
-} Tree;
+&lt;pre style=&quot;background-color:#282a36;&quot;&gt;
+&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;typedef struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; Tree &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;{
+    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;int&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; data;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; Tree&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; left;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; Tree&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; right;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;bool&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; left_thread;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;bool&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; right_thread;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;} &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;Tree;
 
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* Takes the root of the tree (we call it cur for readability in the function itself) *&#x2F;
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;void &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;threaded_traversal&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(Tree* &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;cur&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;) {
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* Go all the way down to the smallest number in the tree. *&#x2F;
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;while &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(!cur-&amp;gt;is_thread) {
-        cur = cur-&amp;gt;left;
-    }
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6272a4;&quot;&gt;&#x2F;* Takes the root of the tree (we call it cur for readability in the function itself) *&#x2F;
+&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;void &lt;&#x2F;span&gt;&lt;span style=&quot;color:#50fa7b;&quot;&gt;threaded_traversal&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(Tree&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;* &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#ffb86c;&quot;&gt;cur&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;{
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6272a4;&quot;&gt;&#x2F;* Go all the way down to the smallest number in the tree. *&#x2F;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;while &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;!&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;cur&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;-&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;is_thread) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;{
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;        cur &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; cur&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;-&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;left;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;}
 
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* Now all we have to do is go rightwards until the end! *&#x2F;
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;while &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur != &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;) {
-        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;inorder_visit&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur);
-        cur = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;tree_successor&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur);
-    }
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6272a4;&quot;&gt;&#x2F;* Now all we have to do is go rightwards until the end! *&#x2F;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;while &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(cur &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;!= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bd93f9;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;{
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#50fa7b;&quot;&gt;inorder_visit&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(cur);
+        cur &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#50fa7b;&quot;&gt;tree_successor&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(cur);
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;}
 }
 
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* Returns a successor to any given node, `node`.*&#x2F;
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;Tree* &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;tree_successor&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(Tree* &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;node&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;) {
-    Tree* cur;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6272a4;&quot;&gt;&#x2F;* Returns a successor to any given node, `node`.*&#x2F;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;Tree&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;* &lt;&#x2F;span&gt;&lt;span style=&quot;color:#50fa7b;&quot;&gt;tree_successor&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(Tree&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;* &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#ffb86c;&quot;&gt;node&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;{
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;    Tree&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; cur;
 
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* fast path! *&#x2F;
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(node-&amp;gt;right_thread) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; node-&amp;gt;right;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6272a4;&quot;&gt;&#x2F;* fast path! *&#x2F;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(node&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;-&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;right_thread) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; node&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;-&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;right;
 
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* else return leftmost child of right subtree! *&#x2F;
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;    cur = node-&amp;gt;right;
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;while &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(!cur-&amp;gt;left_thread) {
-        cur = cur-&amp;gt;left;
-    }
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; cur;
-}
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6272a4;&quot;&gt;&#x2F;* else return leftmost child of right subtree! *&#x2F;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;    cur &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; node&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;-&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;right;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;while &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;!&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;cur&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;-&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;left_thread) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;{
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;        cur &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; cur&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;-&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;left;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;}
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; cur;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;}
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;This &lt;code&gt;Tree&lt;&#x2F;code&gt; struct includes a boolean field to tell whether the current tree node has an in-order thread.
 When we search for the in-order successor to the current node, and find that it is a thread, we take the
@@ -1367,41 +1380,41 @@ to &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;google&#x2F;xi-editor&#x2F
 Trees power the world, inside and outside of computers.
 We will be using a simple binary tree for this post.&lt;&#x2F;p&gt;
 &lt;p&gt;Here is a common binary tree definition. We will be using C for the whole of this post:&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* We will use this type definition later. *&#x2F;
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;typedef void &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(*VisitFunc)(Tree*);
+&lt;pre style=&quot;background-color:#282a36;&quot;&gt;
+&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;span style=&quot;color:#6272a4;&quot;&gt;&#x2F;* We will use this type definition later. *&#x2F;
+&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;typedef void &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;VisitFunc)(Tree&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;);
 
-typedef &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; Tree {
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;int&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; data;
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; Tree* left;
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; Tree* right;
-} Tree;
+typedef &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; Tree &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;{
+    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;int&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; data;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; Tree&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; left;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; Tree&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; right;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; Tree;
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;We can create the tree like so:&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;int &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;void&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;) {
-    Tree root, root_left;
-    root_left.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;data &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;;
-    root_left.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;left &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;;
-    root_left.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;right &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;;
-    root.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;data &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;;
-    root.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;left &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;= &amp;amp;root_left;
-    root.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;right &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;;
-}
+&lt;pre style=&quot;background-color:#282a36;&quot;&gt;
+&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;int &lt;&#x2F;span&gt;&lt;span style=&quot;color:#50fa7b;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;void&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;{
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;    Tree root, root_left;
+    root_left&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;data &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bd93f9;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;;
+    root_left&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;left &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bd93f9;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;;
+    root_left&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;right &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bd93f9;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;;
+    root&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;data &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bd93f9;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;;
+    root&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;left &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;= &amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;root_left;
+    root&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;right &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bd93f9;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;}
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;&lt;h2 id=&quot;how-do-we-traverse-a-tree&quot;&gt;How Do We Traverse a tree?&lt;&#x2F;h2&gt;
 &lt;p&gt;Traversing a tree is accessing each node&#x27;s data in the whole tree.
 This is obviously a critically important function of a tree,
 we should be able to access all elements if we need to.&lt;&#x2F;p&gt;
 &lt;p&gt;Luckily, traversing a tree is super easy!&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;void &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;traverse&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(Tree* &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;cur&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;) {
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur == &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;;
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;pre_visit&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur); &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* pre-order traversal *&#x2F;
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;traverse&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur-&amp;gt;left);
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;in_visit&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur); &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* in-order traversal *&#x2F;
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;traverse&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur-&amp;gt;right);
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;post_visit&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur); &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* post-order traversal *&#x2F;
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;}
+&lt;pre style=&quot;background-color:#282a36;&quot;&gt;
+&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;void &lt;&#x2F;span&gt;&lt;span style=&quot;color:#50fa7b;&quot;&gt;traverse&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(Tree&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;* &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#ffb86c;&quot;&gt;cur&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;{
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(cur &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;== &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bd93f9;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#50fa7b;&quot;&gt;pre_visit&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(cur); &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6272a4;&quot;&gt;&#x2F;* pre-order traversal *&#x2F;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#50fa7b;&quot;&gt;traverse&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(cur&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;-&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;left);
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#50fa7b;&quot;&gt;in_visit&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(cur); &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6272a4;&quot;&gt;&#x2F;* in-order traversal *&#x2F;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#50fa7b;&quot;&gt;traverse&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(cur&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;-&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;right);
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#50fa7b;&quot;&gt;post_visit&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(cur); &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6272a4;&quot;&gt;&#x2F;* post-order traversal *&#x2F;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;}
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;Pre-order traversal always visits a parent before its child. This is very useful when you want to copy a tree, maintaining its order. In-order is mostly used for sorted trees, as it will visit nodes in order! A node will be visited in post-order only after its children have been visited. This means that post-order is best used for tasks such as deleting the tree, freeing its memory without dangling pointers left over. If we made &lt;code&gt;free&lt;&#x2F;code&gt; our pre-visit function, then we would never be able to traverse right children!&lt;&#x2F;p&gt;
 &lt;p&gt;This algorithm is universally taught in beginning CS courses at universities.
@@ -1415,42 +1428,42 @@ It gets the job done, and yet here we are, trying to complicate things!&lt;&#x2F
 &lt;h2 id=&quot;the-threaded-tree&quot;&gt;The Threaded Tree&lt;&#x2F;h2&gt;
 &lt;p&gt;J.H. Morris presented the threaded tree in 1979. It utilizes the wasteful NULL nodes at the end of trees, for great profit. Using this algorithm will allow us to perform the &lt;code&gt;successor&lt;&#x2F;code&gt; operation of an in-order traversal in &lt;em&gt;amortized constant&lt;&#x2F;em&gt; time.&lt;&#x2F;p&gt;
 &lt;p&gt;A Threaded tree has two extra bits of information. One bit informs whether the left pointer is actually a &lt;em&gt;thread&lt;&#x2F;em&gt;, and the other for the right pointer. A thread is &lt;em&gt;not&lt;&#x2F;em&gt; an OS thread, think of it more like a pointer to a seemingly random part of the tree, and not a child. If we follow a thread, what we find is the in-order successor to a node. Here is the code for our Threaded Tree. I will describe the algorithm under the code-block.&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;typedef struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; Tree {
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;int&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; data;
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; Tree* left;
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; Tree* right;
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;bool&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; right_thread;
-} Tree;
+&lt;pre style=&quot;background-color:#282a36;&quot;&gt;
+&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;typedef struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; Tree &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;{
+    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;int&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; data;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; Tree&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; left;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; Tree&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; right;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;bool&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; right_thread;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;} &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;Tree;
 
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* Takes the root of the tree (we call it cur for readability in the function itself) *&#x2F;
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;void &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;threaded_traversal&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(Tree* &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;cur&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;) {
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* Go all the way down to the smallest number in the tree. *&#x2F;
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;while &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(!cur-&amp;gt;is_thread) {
-        cur = cur-&amp;gt;left;
-    }
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6272a4;&quot;&gt;&#x2F;* Takes the root of the tree (we call it cur for readability in the function itself) *&#x2F;
+&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;void &lt;&#x2F;span&gt;&lt;span style=&quot;color:#50fa7b;&quot;&gt;threaded_traversal&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(Tree&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;* &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#ffb86c;&quot;&gt;cur&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;{
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6272a4;&quot;&gt;&#x2F;* Go all the way down to the smallest number in the tree. *&#x2F;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;while &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;!&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;cur&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;-&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;is_thread) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;{
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;        cur &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; cur&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;-&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;left;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;}
 
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* Now all we have to do is go rightwards until the end! *&#x2F;
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;while &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur != &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;) {
-        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;inorder_visit&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur);
-        cur = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;tree_successor&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur);
-    }
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6272a4;&quot;&gt;&#x2F;* Now all we have to do is go rightwards until the end! *&#x2F;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;while &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(cur &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;!= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bd93f9;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;{
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#50fa7b;&quot;&gt;inorder_visit&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(cur);
+        cur &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#50fa7b;&quot;&gt;tree_successor&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(cur);
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;}
 }
 
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* Returns a successor to any given node, `node`.*&#x2F;
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;Tree* &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;tree_successor&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(Tree* &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;node&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;) {
-    Tree* cur;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6272a4;&quot;&gt;&#x2F;* Returns a successor to any given node, `node`.*&#x2F;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;Tree&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;* &lt;&#x2F;span&gt;&lt;span style=&quot;color:#50fa7b;&quot;&gt;tree_successor&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(Tree&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;* &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#ffb86c;&quot;&gt;node&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;{
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;    Tree&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; cur;
 
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* fast path! *&#x2F;
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(node-&amp;gt;right_thread) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; node-&amp;gt;right;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6272a4;&quot;&gt;&#x2F;* fast path! *&#x2F;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(node&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;-&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;right_thread) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; node&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;-&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;right;
 
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* else return leftmost child of right subtree! *&#x2F;
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;    cur = node-&amp;gt;right;
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;while &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(!cur-&amp;gt;left) {
-        cur = cur-&amp;gt;left;
-    }
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; cur;
-}
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6272a4;&quot;&gt;&#x2F;* else return leftmost child of right subtree! *&#x2F;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;    cur &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; node&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;-&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;right;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;while &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;!&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;cur&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;-&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;left) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;{
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;        cur &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; cur&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;-&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;left;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;}
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; cur;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;}
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;This &lt;code&gt;Tree&lt;&#x2F;code&gt; struct includes a boolean field to tell whether the current tree node has an in-order thread. When we search for the in-order successor to the current node, and find that it is a thread, we take the right node to get the immediate successor! This is always a single operation. If we traverse an entire tree this way, we find that the &lt;code&gt;tree_successor&lt;&#x2F;code&gt; function is running in &lt;em&gt;amortized &lt;code&gt;O(1)&lt;&#x2F;code&gt;&lt;&#x2F;em&gt; speed.&lt;&#x2F;p&gt;
 &lt;p&gt;However, to support this method, we must add a boolean field for each and every node in this tree. This means that the spatial cost for this algorithm is linear.&lt;&#x2F;p&gt;
@@ -1475,63 +1488,63 @@ It gets the job done, and yet here we are, trying to complicate things!&lt;&#x2F
 &lt;h2 id=&quot;the-link-inversion-model&quot;&gt;The Link-Inversion Model&lt;&#x2F;h2&gt;
 &lt;p&gt;Link Inversion is a key ingredient to our final algorithm. Link-Inversion is a process where we use a marker-bit on each node to tell if we should continue to traverse up, or traverse rightward when going up a tree.&lt;&#x2F;p&gt;
 &lt;p&gt;This method is stackless, like the threaded tree traversal. The trick is that we jumble the pointers, to thwart hacking attempts. Just kidding! We only seemingly jumble pointers! Also, it is not to thwart hackers, its to show us the way back up the tree!&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;typedef struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; Tree {
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;int&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; data;
-    Tree* left;
-    Tree* right;
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;bool&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt; went_right;
-} Tree;
+&lt;pre style=&quot;background-color:#282a36;&quot;&gt;
+&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;typedef struct&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; Tree &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;{
+    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;int&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; data;
+    Tree&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; left;
+    Tree&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; right;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;bool&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; went_right;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;} &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;Tree;
 
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;void &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;link_inversion&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(Tree* &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;cur&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;, VisitFunc &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;pre_order&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;,
-                               VisitFunc &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;in_order&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;,
-                               VisitFunc &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;post_order&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;) {
-    Tree* prev = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;;
-    Tree* old_prev;
-    Tree* old_prev_left;
-    Tree* old_cur;
+&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;void &lt;&#x2F;span&gt;&lt;span style=&quot;color:#50fa7b;&quot;&gt;link_inversion&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(Tree&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;* &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#ffb86c;&quot;&gt;cur&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;, VisitFunc &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#ffb86c;&quot;&gt;pre_order&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;,
+                               VisitFunc &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#ffb86c;&quot;&gt;in_order&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;,
+                               VisitFunc &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#ffb86c;&quot;&gt;post_order&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;{
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;    Tree&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; prev &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bd93f9;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;;
+    Tree&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; old_prev;
+    Tree&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; old_prev_left;
+    Tree&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; old_cur;
 
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur == &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(cur &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;== &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bd93f9;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;;
 
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;do &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;{
-        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* 1) Descend leftward as much as possible. *&#x2F;
-        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;while &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur != &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;) {
-            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;pre_order&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur);
-            cur-&amp;gt;went_right = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;false&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;;
-            old_cur = cur;
-            cur = old_cur-&amp;gt;left;
-            old_cur-&amp;gt;left = prev;
-            prev = old_cur;
-        }
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;do &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;{
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6272a4;&quot;&gt;&#x2F;* 1) Descend leftward as much as possible. *&#x2F;
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;while &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(cur &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;!= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bd93f9;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;{
+            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#50fa7b;&quot;&gt;pre_order&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(cur);
+            cur&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;-&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;went_right &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bd93f9;&quot;&gt;false&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;;
+            old_cur &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; cur;
+            cur &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; old_cur&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;-&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;left;
+            old_cur&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;-&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;left &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; prev;
+            prev &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; old_cur;
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;}
 
-        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* 2) ascend from right as much as we can. *&#x2F;
-        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;while &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(prev != &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;NULL &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;&amp;amp;&amp;amp; prev-&amp;gt;went_right) {
-            old_prev = prev;
-            prev = prev-&amp;gt;right;
-            old_prev-&amp;gt;right = cur;
-            cur = old_prev;
-            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;post_order&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(cur);
-        }
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6272a4;&quot;&gt;&#x2F;* 2) ascend from right as much as we can. *&#x2F;
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;while &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(prev &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;!= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bd93f9;&quot;&gt;NULL &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;&amp;amp;&amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; prev&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;-&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;went_right) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;{
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;            old_prev &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; prev;
+            prev &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; prev&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;-&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;right;
+            old_prev&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;-&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;right &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; cur;
+            cur &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; old_prev;
+            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#50fa7b;&quot;&gt;post_order&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(cur);
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;}
 
-        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* 3)
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6272a4;&quot;&gt;&#x2F;* 3)
             If prev is null after coming back up from the right,
                 it means that we have finished traversal,
                 so head back to the while-condition and get outta here!
             Else, we will do an exchange here,
                 swap to right child of parent. *&#x2F;
-        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(prev != &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;) {
-            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;* Switch from the left side of prev to the right
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(prev &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;!= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bd93f9;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;{
+            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6272a4;&quot;&gt;&#x2F;* Switch from the left side of prev to the right
                Also, mark prev as went_right so we know to traverse
                upwards using right pointer. *&#x2F;
-            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;in_order&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(prev);
-            old_prev_left = prev-&amp;gt;left;
-            prev-&amp;gt;went_right = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;true&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;;
-            prev-&amp;gt;left = cur;
-            cur = prev-&amp;gt;right;
-            prev-&amp;gt;right = old_prev_left;
-        }
-    } &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;while &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;(prev != &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c0c5ce;&quot;&gt;);
-}
+            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#50fa7b;&quot;&gt;in_order&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(prev);
+            old_prev_left &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; prev&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;-&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;left;
+            prev&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;-&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;went_right &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bd93f9;&quot;&gt;true&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;;
+            prev&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;-&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;left &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; cur;
+            cur &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; prev&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;-&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;right;
+            prev&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;-&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;right &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; old_prev_left;
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;}
+    } &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;while &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(prev &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;!= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bd93f9;&quot;&gt;NULL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;);
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;}
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;The core algorithm is in the name, we must invert the links. As we push down the tree,
 we invert the links so that way the child points to the parent, and we can walk up the tree

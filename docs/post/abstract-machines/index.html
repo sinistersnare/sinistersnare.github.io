@@ -339,15 +339,15 @@ that a continuation does is store the previous one, like a linked-list. Continua
 <p>For example, an program that looks like:</p>
 <script type="math/tex;mode=display">x := (y := (z := 3 \;\text{in}\; z) \;\text{in}\; (y + y)) \;\text{in}\; x</script>
 <p>Here is what the states will look like over the course of 3 applications of <code>assign-exp</code>:</p>
-<pre style="background-color:#2b303b;">
-<code><span style="color:#c0c5ce;">(x := (y := (z := 3 in z) in (y + y)) in x , {} , NONE)
+<pre style="background-color:#282a36;">
+<code><span style="color:#f8f8f2;">(x := (y := (z := 3 in z) in (y + y)) in x , {} , NONE)
 -&gt; ((y := (z := 3 in z) in (y + y)) , {} , assign(x , x , NONE))
 -&gt; ((z := 3 in z) , {} , assign(y , y + y , assign(x , x , NONE)))
 -&gt; (3 , {} , assign(z , z , assign(y , y + y , assign(x , x , NONE))))
 </span></code></pre>
 <p>Then if we apply <code>assign-kont</code> a couple times, with omitted <code>addition</code> and <code>var-lookup</code> rules:</p>
-<pre style="background-color:#2b303b;">
-<code><span style="color:#c0c5ce;">-&gt; (z , {z : 3} , assign(y , y + y , assign(x , x , NONE)))
+<pre style="background-color:#282a36;">
+<code><span style="color:#f8f8f2;">-&gt; (z , {z : 3} , assign(y , y + y , assign(x , x , NONE)))
 -&gt; (3 , {z : 3} , assign(y , y + y , assign(x , x , NONE)))
 -&gt; (y + y , {z : 3 , y : 3} , assign(x , x , NONE))
 ...
@@ -395,8 +395,8 @@ big bar.</p>
      {(x := (\text{if} \; (1 + 1) \; \text{then} \;7\; \text{else} \;12) \; \text{in} \; x \;,\; \{\} \;,\; NONE)
         \rightarrow (7, \{\}, NONE)}
 }</script>
-<pre style="background-color:#2b303b;">
-<code><span style="color:#c0c5ce;">(x := (if (1 + 1) then 7 else 12) , {} , NONE)
+<pre style="background-color:#282a36;">
+<code><span style="color:#f8f8f2;">(x := (if (1 + 1) then 7 else 12) , {} , NONE)
 -&gt; (if (1 + 1) then 7 else 12 , {} , assign(x, x, NONE))
 -&gt; ((1 + 1) , {} , ifk(7, 12, assign(x, x, NONE)))
 -&gt; (2 , {} , ifk(7, 12, assign(x, x, NONE)))
