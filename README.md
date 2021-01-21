@@ -2,7 +2,7 @@
 
 Find the real site [HERE!](https://drs.is)
 
-Hey, this is my Blog's repository.
+Hey, this is my Blog's source repository.
 The generated HTML is in the `docs/` directory,
 everything else is the 'source' for the site.
 
@@ -16,7 +16,7 @@ Run the command:
 $ zola serve
 ```
 
-This will create a test-server to write new posts and content in. --drafts will show drafts.
+This will create a test-server to write new posts and content in. `--drafts` will show drafts.
 
 Now write, and changes will be reflected.
 
