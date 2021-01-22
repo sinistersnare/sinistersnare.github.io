@@ -4,8 +4,355 @@
 	<link href="https://drs.is/atom.xml" rel="self" type="application/atom+xml"/>
   <link href="https://drs.is"/>
 	<generator uri="https://www.getzola.org/">Zola</generator>
-	<updated>2021-01-15T12:15:00-05:00</updated>
+	<updated>2021-01-21T12:15:00-05:00</updated>
 	<id>https://drs.is/atom.xml</id>
+	<entry xml:lang="en">
+		<title>Crafting Semantics 3: More Fundamentals</title>
+		<published>2021-01-21T12:15:00-05:00</published>
+		<updated>2021-01-21T12:15:00-05:00</updated>
+		<link href="https://drs.is/post/crafting-semantics-3/" type="text/html"/>
+		<id>https://drs.is/post/crafting-semantics-3/</id>
+		<content type="html">&lt;p&gt;This series of posts revolves around creating operational semantics of the Scheme programming language from the ground up, starting with the lambda calculus.&lt;&#x2F;p&gt;
+&lt;p&gt;If you have not read the introductory post, you can find it &lt;a href=&quot;https:&#x2F;&#x2F;drs.is&#x2F;post&#x2F;crafting-semantics-0&#x2F;&quot;&gt;here&lt;&#x2F;a&gt;, and see the index of this series &lt;a href=&quot;&#x2F;tags&#x2F;crafting-semantics&#x2F;&quot;&gt;here&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;intro&quot;&gt;Intro&lt;&#x2F;h1&gt;
+&lt;p&gt;Trucking along, we are gonna add some more features that make our language much more usable. Lets list them out:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Let-expressions to bind variables.&lt;&#x2F;li&gt;
+&lt;li&gt;Multi-argument functions&lt;&#x2F;li&gt;
+&lt;li&gt;First-class continuations&lt;&#x2F;li&gt;
+&lt;li&gt;Variable mutation&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;These features are pretty integral to modern Scheme programming. After we implement these we will be one step closer to a bog-standard Scheme that anyone can implement in 1 line of Python with &lt;code&gt;import scheme_interpreter&lt;&#x2F;code&gt;&lt;a href=&quot;https:&#x2F;&#x2F;xkcd.com&#x2F;353&#x2F;&quot;&gt;.&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;recap&quot;&gt;Recap&lt;&#x2F;h2&gt;
+&lt;p&gt;Lets take a look at the machine transitions that we have so far, to give a quick refresher of where we are at.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;old-eval-rules&quot;&gt;Old Eval Rules&lt;&#x2F;h3&gt;
+&lt;p&gt;These rules evaluate syntax until a value is able to be produced by our atomic-evaluation function &lt;script type=&quot;math&#x2F;tex&quot;&gt;\mathcal{A}&lt;&#x2F;script&gt;.&lt;&#x2F;p&gt;
+&lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;E \langle \text{\ae} , \rho , \sigma , \kappa \rangle \\
+\leadsto
+A \langle v , \rho , \sigma , \kappa \rangle \\ \\
+\begin{aligned}
+\text{where }
+v &amp;\triangleq \mathcal{A}(\varsigma)
+\end{aligned}&lt;&#x2F;script&gt;
+&lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;E \langle (\texttt{if} \; e_c \; e_t \; e_f) , \rho , \sigma , \kappa \rangle \\
+\leadsto
+E \langle e_c , \rho , \sigma , \kappa&#x27; \rangle \\ \\
+\begin{aligned}
+\text{where }
+\kappa&#x27; &amp;\triangleq \textbf{cond}(e_t , e_f , \rho , \kappa)
+\end{aligned}&lt;&#x2F;script&gt;
+&lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;E \langle (e_f \; e_0) , \rho , \sigma , \kappa \rangle \\
+\leadsto
+E \langle e_f , \rho , \sigma , \kappa&#x27; \rangle \\ \\
+\begin{aligned}
+\text{where }
+\kappa&#x27; &amp;\triangleq \textbf{arg}(e_0 , \rho , \kappa)
+\end{aligned}&lt;&#x2F;script&gt;
+&lt;h3 id=&quot;old-apply-rules&quot;&gt;Old Apply Rules&lt;&#x2F;h3&gt;
+&lt;p&gt;Once our control is a value, we have reached an apply state. From here, we look to our continuation for... continuation.&lt;&#x2F;p&gt;
+&lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;A \langle v , \rho , \sigma , \kappa \rangle \\
+\leadsto
+E \langle e_f , \rho_{\kappa} , \sigma , \kappa&#x27; \rangle \\ \\
+\begin{aligned}
+\text{where }
+\kappa &amp;= \textbf{cond}(e_f , e_f , \rho_{\kappa} , \kappa&#x27;) \\
+v &amp;= \texttt{\#f}
+\end{aligned} \\
+A \langle v , \rho , \sigma , \kappa \rangle \\
+\leadsto
+E \langle e_t , \rho_{\kappa} , \sigma , \kappa&#x27; \rangle \\ \\
+\begin{aligned}
+\text{where }
+\kappa &amp;= \textbf{cond}(e_t , e_f , \rho_{\kappa} , \kappa&#x27;) \\
+v &amp;\;≠ \texttt{\#f}
+\end{aligned}&lt;&#x2F;script&gt;
+&lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;A \langle v , \rho , \sigma , \kappa \rangle \\
+\leadsto
+E \langle e , \rho_{\kappa} , \sigma , \kappa&#x27;&#x27; \rangle \\ \\
+\begin{aligned}
+\text{where }
+\kappa &amp;= \textbf{arg}(e , \rho_{\kappa} , \kappa&#x27;) \\
+\kappa&#x27;&#x27; &amp;\triangleq \textbf{fn}(v , \kappa&#x27;)
+\end{aligned} \\
+%
+A \langle v , \rho , \sigma , \kappa \rangle \\
+\leadsto
+E \langle e_b , \rho_{\lambda}&#x27; , \sigma&#x27; , \kappa&#x27; \rangle \\ \\
+\begin{aligned}
+\text{where }
+\kappa &amp;= \textbf{fn}(((\lambda \; (x) \; e_b) , \rho_{\lambda}) , \kappa&#x27;) \\
+a &amp;\triangleq alloc(\sigma) \\
+\rho_{\lambda}&#x27; &amp;\triangleq \rho_{\lambda}[x \mapsto a] \\
+\sigma&#x27; &amp;\triangleq \sigma[a \mapsto v]
+\end{aligned}&lt;&#x2F;script&gt;
+&lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;A \langle \varsigma \rangle \leadsto A \langle \varsigma \rangle \\ \\
+\begin{aligned}
+\text{where }
+\kappa &amp;= \textbf{mt}
+\end{aligned}&lt;&#x2F;script&gt;
+&lt;h1 id=&quot;the-next-machine&quot;&gt;The Next Machine&lt;&#x2F;h1&gt;
+&lt;p&gt;Luckily, we don&#x27;t have any big roadblock here, we can simply implement these new features one by one! Lets start with our domains:&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;syntax-domains&quot;&gt;Syntax Domains&lt;&#x2F;h2&gt;
+&lt;p&gt;These will again be remarkably similar, we are only adding a few things to our language.&lt;&#x2F;p&gt;
+&lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;\begin{aligned}
+% expressions
+e \in \textsf{Exp} &amp;::= \text{\ae}  \\
+				   &amp;| \; (\texttt{if} \; e \; e \; e) \\
+				   &amp;| \; (\texttt{let} \; ([x \; e] \; ...) \; e) \\
+				   &amp;| \; (\texttt{call&#x2F;cc} \; e) \\
+				   &amp;| \; (\texttt{set!} \; x \; e) \\
+                   &amp;| \; (e \; e \; ...) \\
+\text{\ae} \in \textsf{AExp} &amp;::= x \;|\; lam \;|\; n \;|\; b \\
+% variables
+x \in \textsf{Var} &amp;\triangleq \text{The set of variables} \\
+% lambdas
+lam \in \textsf{Lam} &amp;::= (λ \; (x) \; e) \\
+n \in \mathbb{Z} &amp;\triangleq \text{The set of integers } \\
+b \in \textsf{Bool} &amp;::= \texttt{\#t} \;|\; \texttt{\#f}
+\end{aligned}&lt;&#x2F;script&gt;
+&lt;p&gt;We have added 3 expression types, the &lt;code&gt;let&lt;&#x2F;code&gt;, &lt;code&gt;call&#x2F;cc&lt;&#x2F;code&gt;, and &lt;code&gt;set!&lt;&#x2F;code&gt; expressions. We will discuss and implement them soon. Also of note here is that we changed our &#x27;untagged&#x27; function call syntax to allow any non-zero number of expressions.&lt;&#x2F;p&gt;
+&lt;p&gt;From our prior semantics, I will have to change the rules related to function calls to accomodate this change. However, the other rules can stay in our semantics unharmed.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;semantic-domains&quot;&gt;Semantic Domains&lt;&#x2F;h2&gt;
+&lt;p&gt;Our semantic domains are similarly similar, only a few additions and one slight change.&lt;&#x2F;p&gt;
+&lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;\begin{aligned}
+% Machine
+\varsigma \in \Sigma &amp;\triangleq
+			E\langle \textit{Eval} \rangle
+			+ A\langle \textit{Apply} \rangle \\
+\textit{Eval} &amp;\triangleq \textsf{Exp} \times \textit{Env} \times \textit{Store} \times \textit{Kont} \\
+\textit{Apply} &amp;\triangleq \textit{Val} \times \textit{Env} \times \textit{Store} \times \textit{Kont} \\
+% Env
+\rho \in \textit{Env} &amp;\triangleq \textsf{Var} \rightarrow \textsf{Addr} \\
+% Store
+\sigma \in \textit{Store} &amp;\triangleq \textsf{Addr} \rightarrow \textsf{Val} \\
+% Address
+a \in \textit{Addr} &amp;\triangleq \mathbb{N} \times \mathbb{N} \\
+% Value
+v \in \textit{Val} &amp;\triangleq \textit{Clo}
+					+ \mathbb{Z} + \textsf{Bool} + \textit{Kont} \\
+% Closures
+clo \in \textit{Clo} &amp;\triangleq \textsf{Lam} \times \textit{Env} \\
+% Continuation
+\kappa \in \textit{Kont} &amp;::= \textbf{mt} \\
+						&amp;| \; \textbf{cond}(e , e , \rho , \kappa) \\
+						&amp;| \; \textbf{callcc}(\kappa) \\
+						&amp;| \; \textbf{set}(a , \kappa) \\
+						&amp;| \; \textbf{call}(\overrightarrow{v} , \overrightarrow{e} , \rho , \kappa) \\
+\end{aligned}&lt;&#x2F;script&gt;
+&lt;p&gt;Changes I made here were to the &lt;code&gt;Val&lt;&#x2F;code&gt;, &lt;code&gt;Kont&lt;&#x2F;code&gt;, and &lt;code&gt;Addr&lt;&#x2F;code&gt; domains. Now, continuations can be a value held in a variable, to obtain one, you must go through the new &lt;code&gt;callcc&lt;&#x2F;code&gt; Kontinuation. We added 3 continuation types: for &lt;code&gt;call&#x2F;cc&lt;&#x2F;code&gt;, &lt;code&gt;set!&lt;&#x2F;code&gt;, and for the multi-arg &lt;code&gt;call&lt;&#x2F;code&gt;. I removed the old continuations pertaining to function calling. Finally, the second number added to the address domain is required to support multiple argument functions.&lt;&#x2F;p&gt;
+&lt;p&gt;The syntax of the variables inside the &lt;code&gt;call&lt;&#x2F;code&gt; continuation may be new. The overhead-arrow means the variable is a list. When we call a function, we need to keep track of the values that we have processed, and which expressions we have yet to process. Therefore, the first argument is a list of values, which correspond to the evaluated arguments of the call-list. The second argument is that list of unevaluated expressions. We will discuss how they work when we implement the call semantics.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;helper-functions&quot;&gt;Helper Functions&lt;&#x2F;h2&gt;
+&lt;p&gt;Last, let&#x27;s recapitulate our helper functions.&lt;&#x2F;p&gt;
+&lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;\mathcal{A} : \textit{Eval} \rightarrow \textit{Val} \\
+\begin{aligned}
+\mathcal{A}(\langle n , \_ , \_ , \_ \rangle) &amp;\triangleq n \\
+\mathcal{A}(\langle b , \_ , \_ , \_ \rangle) &amp;\triangleq b \\
+\mathcal{A}(\langle x , \rho , \sigma , \_ \rangle) &amp;\triangleq \sigma(\rho(x)) \\
+\mathcal{A}(\langle lam , \rho , \_ , \_ \rangle) &amp;\triangleq (lam, \rho) \\
+\end{aligned}&lt;&#x2F;script&gt;
+&lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;inj : \textsf{Exp} \rightarrow \Sigma \\
+inj(e) \triangleq E\langle e , \varnothing , \varnothing , \textbf{mt} \rangle \\ \\
+\; \\
+alloc : \textit{Store} \times \mathbb{N} \rightarrow \textit{Addr} \\
+alloc(\sigma, n) \triangleq (|\sigma|, n)&lt;&#x2F;script&gt;
+&lt;p&gt;Only a small change to the &lt;code&gt;alloc&lt;&#x2F;code&gt; function to allow the second argument. This second number is used as an &#x27;offset&#x27; to the address, and will be utilized when we call functions.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;transfer-rules&quot;&gt;Transfer Rules&lt;&#x2F;h1&gt;
+&lt;p&gt;Now that we have defined our domains, lets start writing transition rules!&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;let-expressions&quot;&gt;Let Expressions&lt;&#x2F;h2&gt;
+&lt;p&gt;If you are an astute computer scientist, you will know of the isomorphism between function calls and let expressions. We will utilize it to create a dead-easy let implementation here.&lt;&#x2F;p&gt;
+&lt;p&gt;What I mean to say is that a &lt;code&gt;let&lt;&#x2F;code&gt; expression in Scheme is equivalent to calling a function. Here is an example to illustrate my point:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#282a36;&quot;&gt;
+&lt;code class=&quot;language-scm&quot; data-lang=&quot;scm&quot;&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;let &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;([x &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bd93f9;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;] [y &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bd93f9;&quot;&gt;2&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;])
+  (&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;if&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; x y &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bd93f9;&quot;&gt;3&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;))
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This expression binds 2 variables, &lt;code&gt;x&lt;&#x2F;code&gt; and &lt;code&gt;y&lt;&#x2F;code&gt;, where they are usable in the &lt;code&gt;if&lt;&#x2F;code&gt; expression immediately after. In a standard scheme implementation, this expression is &lt;em&gt;semantically equivalent&lt;&#x2F;em&gt; to:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#282a36;&quot;&gt;
+&lt;code class=&quot;language-scm&quot; data-lang=&quot;scm&quot;&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;((λ (x y) (&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;if&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt; x y &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bd93f9;&quot;&gt;3&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;)) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bd93f9;&quot;&gt;1 2&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f8f8f2;&quot;&gt;)
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The difference is only in &lt;em&gt;style&lt;&#x2F;em&gt;. The first expression conveys the meaning of binding variables to values and then using them in an enclosed expression. The second is about calling functions to return some value. For the lazy semanticist, however, we can easily implement &lt;code&gt;let&lt;&#x2F;code&gt; in terms of this function call.&lt;&#x2F;p&gt;
+&lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;E \langle let , \rho , \sigma , \kappa \rangle \\
+\leadsto E \langle call , \rho , \sigma , \kappa \rangle \\ \\
+\begin{aligned}
+\text{where }
+let &amp;= (\texttt{let} \; ([x_s \; e_s] \; ...) \; e_b) \\
+call &amp;= ((\lambda \; (x_s \; ...) \; e_b) \; e_s \; ...) \\
+\end{aligned}&lt;&#x2F;script&gt;
+&lt;p&gt;This rule is a simple syntactic transformation. If we wanted, we could use a whole &lt;code&gt;let&lt;&#x2F;code&gt; continuation frame, and evaluate it so similarly to a regular function call that it would bore everyone. Trust me, I&#x27;ve done it, it is quite tiresome! But if you want to grow your semantic-construction chops, then please implement &lt;code&gt;let&lt;&#x2F;code&gt; explicitly! I would be happy to commend you on your effort, dear reader.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;call-with-current-continuation&quot;&gt;Call With Current Continuation&lt;&#x2F;h2&gt;
+&lt;p&gt;Call with current continuation, or &lt;code&gt;call&#x2F;cc&lt;&#x2F;code&gt; for short, is a way of obtaining the continuation of the current state, and using it like a regular value. I have &lt;a href=&quot;https:&#x2F;&#x2F;drs.is&#x2F;post&#x2F;continuations-as-return&#x2F;&quot;&gt;written about continuations before&lt;&#x2F;a&gt;, so I will be a bit more straightforward with my implementation notes here. In my experience though, I did not truly understand continuations until I implemented this feature in an abstract machine.&lt;&#x2F;p&gt;
+&lt;p&gt;Also, I am switching to implementing the whole feature at once, instead of writing out all eval rules and then all apply rules. I think this method is a bit easier for understanding how a feature works, as you can see how they work in concert, side by side.&lt;&#x2F;p&gt;
+&lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;E \langle (\texttt{call&#x2F;cc} \; e) , \rho , \sigma , \kappa \rangle
+\leadsto E \langle e , \rho , \sigma , \kappa&#x27; \rangle \\ \\
+\begin{aligned}
+\text{where }
+\kappa&#x27; &amp;\triangleq \textbf{callcc}(\kappa) \\
+\end{aligned}&lt;&#x2F;script&gt;
+&lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;A \langle v , \rho , \sigma , \kappa \rangle
+\leadsto E \langle e_b , \rho&#x27; , \sigma&#x27; , \kappa&#x27; \rangle \\
+\begin{aligned}
+\text{where }
+\kappa &amp;= \textbf{callcc}(\kappa&#x27;) \\
+v &amp;= ((\lambda \; (x) \; e_b) , \rho_\lambda) \\
+a &amp;\triangleq alloc(\sigma, 0) \\
+\rho&#x27; &amp;\triangleq \rho_\lambda[x \mapsto a] \\
+\sigma&#x27; &amp;\triangleq \sigma[a \mapsto \kappa&#x27;]
+\end{aligned}&lt;&#x2F;script&gt;
+&lt;p&gt;Here, we specify that call&#x2F;cc can only take a one-arg function, and fills its argument with the current continuation. The name makes a lot of sense now! Call the given function... with the current continuation!&lt;&#x2F;p&gt;
+&lt;p&gt;What can be done with the continuation value though? To find out, read on! We will cover that when we implement our &lt;code&gt;call&lt;&#x2F;code&gt; continuation!&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;mutation&quot;&gt;Mutation&lt;&#x2F;h2&gt;
+&lt;p&gt;Mutation is the altering of live variables. Up to this point, variables have been immutable. You could shadow a variable, but once the shadow goes out of scope, the original value will be returned. If we wanted to mutate a variable for real, we need language support. Enter the &lt;code&gt;set!&lt;&#x2F;code&gt; expression!&lt;&#x2F;p&gt;
+&lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;E \langle (\texttt{set!} \; x \; e) , \rho , \sigma , \kappa \rangle
+\leadsto E \langle e , \rho , \sigma , \kappa&#x27; \rangle \\
+\begin{aligned}
+\text{where }
+\kappa&#x27; &amp;\triangleq \textbf{set}(\rho(x) , \rho , \kappa) \\
+\end{aligned}&lt;&#x2F;script&gt;
+&lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;A \langle v , \rho , \sigma , \kappa \rangle
+\leadsto A \langle \sigma(a) , \rho , \sigma&#x27; , \kappa&#x27; \rangle \\
+\begin{aligned}
+\text{where }
+\kappa &amp;= \textbf{set}(a , \kappa&#x27;) \\
+\sigma&#x27; &amp;\triangleq \sigma[a \mapsto v]
+\end{aligned}&lt;&#x2F;script&gt;
+&lt;p&gt;So mutation modifies &lt;em&gt;only&lt;&#x2F;em&gt; the store, which is new for us, usually we alter both in tandem. So that&#x27;s fun.&lt;&#x2F;p&gt;
+&lt;p&gt;Anyway, the semantics of &lt;code&gt;set!&lt;&#x2F;code&gt; are very simple. In these semantics, I return the old value of the variable, but usually set! returns &lt;code&gt;Void&lt;&#x2F;code&gt;. You can do that: add a &lt;code&gt;Void&lt;&#x2F;code&gt; constant to your values domain, and return that. I just felt like keeping the semantics a little smaller.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;function-calls&quot;&gt;Function Calls&lt;&#x2F;h2&gt;
+&lt;p&gt;Lastly, we need to implement calls. This will include continuations, so stay tuned!&lt;&#x2F;p&gt;
+&lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;E \langle (e_f \; e_s \; ...) , \rho , \sigma , \kappa \rangle
+\leadsto E \langle e_f , \rho , \sigma , \kappa&#x27; \rangle \\
+\begin{aligned}
+\text{where }
+\kappa&#x27; &amp;\triangleq \textbf{call}(\epsilon , e_s , \rho , \kappa)
+\end{aligned}&lt;&#x2F;script&gt;
+&lt;p&gt;Here, when we create the &lt;code&gt;call&lt;&#x2F;code&gt; continuation, we initialize our list of finished values (our &#x27;done&#x27; list) with epsilon &lt;code&gt;ϵ&lt;&#x2F;code&gt;, which we use as the empty list. We also mark our arguments e&lt;sub&gt;s&lt;&#x2F;sub&gt; as the &#x27;todo&#x27; list of expressions. If no arguments are given (e.g. in the expression &lt;code&gt;((λ () 3))&lt;&#x2F;code&gt;), then it will of course by empty.&lt;&#x2F;p&gt;
+&lt;p&gt;We next need a rule for the in-between states of &#x27;finished evaluating an argument, but have more to do&#x27;&lt;&#x2F;p&gt;
+&lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;A \langle v , \rho , \sigma , \kappa \rangle
+\leadsto E \langle e , \rho_\kappa , \sigma , \kappa&#x27;&#x27; \rangle \\
+\begin{aligned}
+\text{where }
+\kappa &amp;= \textbf{call}(\overrightarrow{v} , e :: \overrightarrow{e}
+						, \rho_\kappa , \kappa&#x27;) \\
+\kappa&#x27;&#x27; &amp;\triangleq \textbf{call}(\overrightarrow{v} +\hspace{-12mu}+\, [v] , \overrightarrow{e} , \rho_\kappa , \kappa&#x27;) \\
+\end{aligned}&lt;&#x2F;script&gt;
+&lt;p&gt;In this case, we have finished evaluating an argument, but still have unevaluated arguments left. This is notated by the double-colon operator which denotes &lt;code&gt;e&lt;&#x2F;code&gt; as the head of the todo-list, and the &lt;code&gt;e&lt;&#x2F;code&gt; with an arrow as the tail of the list. The double-plus sign symbol is a list-concatenation operator.&lt;&#x2F;p&gt;
+&lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;A \langle v , \rho , \sigma , \kappa \rangle
+\leadsto E \langle e_b , \rho&#x27; , \sigma&#x27; , \kappa&#x27; \rangle \\
+\begin{aligned}
+\text{where }
+\kappa &amp;= \textbf{call}(\overrightarrow{v} , \epsilon , \rho_\kappa , \kappa&#x27;) \\
+\overrightarrow{v} +\hspace{-12mu}+\, v &amp;= v_h :: \overrightarrow{v} \\
+v_h &amp;= ((\lambda \; (\overrightarrow{x}) \; e_b) , \rho_\lambda) \\
+a_i &amp;\triangleq alloc(\sigma, i) \\
+\rho&#x27; &amp;\triangleq \rho_\lambda[\overrightarrow x_i \mapsto a_i] \\
+\sigma&#x27; &amp;\triangleq \sigma[a_i \mapsto \overrightarrow v_i] \\
+\end{aligned}&lt;&#x2F;script&gt;
+&lt;p&gt;Here, we have finally utilized our new &lt;code&gt;alloc&lt;&#x2F;code&gt; functions offset feature! It&#x27;s needed here because the amount of elements in the old store will remain constant for the entire transition, so we need a way to differentiate each variables address in the new store.&lt;&#x2F;p&gt;
+&lt;p&gt;There is an implicit iteration here, with the &lt;code&gt;i&lt;&#x2F;code&gt; variable used. This is a nicety of the pseudo-code nature of these semantics, that we do not have to write out what to do any more explicitly than this. &lt;code&gt;i&lt;&#x2F;code&gt; is a number up to the amount of formal parameters of the function, so if we are calling a 3 argument function, then there will be 3 iterations of each of the variables using the &lt;code&gt;i&lt;&#x2F;code&gt; subscript.&lt;&#x2F;p&gt;
+&lt;p&gt;Overall, this is almost completely the same as the old calling semantics, but with additions to allow for multiple parameters.&lt;&#x2F;p&gt;
+&lt;p&gt;Finally, the long awaited rule for using continuations! You really stuck it out just for this, I&#x27;m sure! The exciting conclusion of todays semantics!&lt;&#x2F;p&gt;
+&lt;p&gt;Without further ado&lt;&#x2F;p&gt;
+&lt;p&gt;The semantics&lt;&#x2F;p&gt;
+&lt;p&gt;For&lt;&#x2F;p&gt;
+&lt;p&gt;Continuation Calling&lt;&#x2F;p&gt;
+&lt;p&gt;I&#x27;m not sure why I&#x27;m stalling this ....&lt;&#x2F;p&gt;
+&lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;A \langle v , \rho , \sigma , \kappa \rangle
+\leadsto A \langle v , \rho , \sigma , \kappa&#x27;&#x27; \rangle \\
+\begin{aligned}
+\text{where }
+\kappa &amp;= \textbf{call}(\overrightarrow{v} , \epsilon , \rho_\kappa , \kappa&#x27;) \\
+\overrightarrow{v} &amp;= [\kappa&#x27;&#x27;] \\
+\end{aligned}&lt;&#x2F;script&gt;
+&lt;p&gt;Actually nice and simple! Continuations can be used like functions in Scheme. When they are called with an argument, the Kontinuation of the next state is set to the continuation being &#x27;called&#x27;. This type of continuation is called an &#x27;undelimited escaping continuation&#x27;, which basically means its goto... so don&#x27;t go crazy with it!&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;example&quot;&gt;Example&lt;&#x2F;h1&gt;
+&lt;p&gt;We have implemented some great features here today! Lets do a quick example to showcase them!&lt;&#x2F;p&gt;
+&lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;e_0 = (\texttt{call&#x2F;cc} \; (\texttt{lambda} \; (k) \; (\texttt{let}  \;
+							([\text{u} \;3] \; [\text{n} \; (k \;13)])\;  55))) \\
+\varsigma_0 = inj(e_0) = E\langle e_0 , \varnothing , \varnothing , \textbf{mt}\rangle \\ \\
+\varsigma_n = step(\varsigma_{n-1}) \\
+\;\\
+\varsigma_1 = E\langle
+				(\lambda \; (k) \; (\texttt{let} \; ([\text{u}\; 3] \;
+											  [\text{n} \; (k \; 13)]) \; 55)) ,
+				\varnothing , \varnothing , \textbf{callcc}(\textbf{mt})
+				\rangle \\
+\varsigma_2 = A\langle
+				((\lambda \; (k) \; (\texttt{let} \; ([\text{u}\; 3] \;
+											[\text{n} \;  (k \; 13)]) \; 55)) ,
+							\varnothing) ,
+				\varnothing , \varnothing , \textbf{callcc}(\textbf{mt})
+				\rangle \\
+\varsigma_3 = E\langle
+				(\texttt{let} \; ([\text{u}\; 3] \;
+									[\text{n} \; (k \; 13)]) \; 55) ,
+				\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \}, \textbf{mt}
+				\rangle \\
+\varsigma_4 = E\langle
+				((\lambda \; (\text{u} \; \text{n}) \; 55) \; 3 \; (k \; 13)) ,
+				\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \}, \textbf{mt}
+				\rangle \\
+\kappa_1 = \textbf{call}(\epsilon , [3 , (k \; 13)] , \{k : (0 , 0)\}
+						,\textbf{mt}) \\
+\varsigma_5 = E\langle
+				(\lambda \; (\text{u} \; \text{n}) \; 55) ,
+				\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \},
+				\kappa_1
+				\rangle \\
+\varsigma_6 = A\langle
+				((\lambda \; (\text{u} \; \text{n}) \; 55) , \{k : (0 , 0) \}) ,
+				\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \},
+				\kappa_1
+				\rangle \\
+clo = ((\lambda \; (\text{u} \; \text{n}) \; 55) , \{k : (0 , 0) \}) \\
+\kappa_2 = \textbf{call}([clo] , [(k \; 13)] , \{k : (0 , 0) \} , \textbf{mt}) \\
+\varsigma_7 = E\langle
+				3,
+				\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \},
+				\kappa_2
+				\rangle \\
+\varsigma_8 = A\langle
+				3,
+				\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \},
+				\kappa_2
+				\rangle \\
+\kappa_3 = \textbf{call}([clo , 3],\epsilon , \{k : (0 , 0) \} , \textbf{mt}) \\
+\varsigma_9 = E\langle
+				(k \; 13),
+				\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \},
+				\kappa_3
+				\rangle \\
+\kappa_4 = \textbf{call}(\epsilon , [13] , \{k : (0 , 0) \} , \kappa_3) \\
+\varsigma_{10} = E\langle
+				k,
+				\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \},
+				\kappa_4
+				\rangle \\
+\varsigma_{11} = A\langle
+				\textbf{mt},
+				\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \},
+				\kappa_4
+				\rangle \\
+\kappa_5 = \textbf{call}([\textbf{mt}] , \epsilon , \{k : (0 , 0) \} , \kappa_3) \\
+\varsigma_{12} = E\langle
+				13,
+				\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \},
+				\kappa_5
+				\rangle \\
+\varsigma_{13} = A\langle
+				13,
+				\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \},
+				\kappa_5
+				\rangle \\
+\varsigma_{14} = A\langle
+				13, \{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \}, \textbf{mt}
+				\rangle \\&lt;&#x2F;script&gt;
+&lt;p&gt;I separated out the longer continuations because they were getting LONG!&lt;&#x2F;p&gt;
+&lt;p&gt;Alas, for this example, in the end, most of that computation was perfectly useless. But it happened, because this is a NO OPTIMIZATION ZONE! No optimizations in 3 days so far, a new warehouse record. It&#x27;s hard to find comedy in Computer Science sometimes, sorry. I have been telling that &#x27;2 hard problems in CS&#x27; joke for near 10 years...&lt;&#x2F;p&gt;
+&lt;p&gt;As you see, the machine performs admirably up to these new inputs. I did not feature &lt;code&gt;set!&lt;&#x2F;code&gt;, because this example was crazy enough! Make a &lt;code&gt;set!&lt;&#x2F;code&gt; example yourself, and write out the states by hand, it really helps understand the machine better!&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h1&gt;
+&lt;p&gt;Another briskly paced post today! I hope you gained some intuition of these machines by this repeated style of implementation. If you think that it&#x27;s a bit boring, then good! That means you have it down, and this repetition is simply icing on the cake of your semantic knowledge. There will be probably one more post of this caliber before I start to crank it up with more esoteric stuff, so savor the boredom while it lasts!&lt;&#x2F;p&gt;
+&lt;p&gt;Next post, I will add other callable types, such as primitives and variadic functions. After that, the machine should be about as done as I want it to be, and our concrete interpreter will be finished. I have future plans though! I want to write about abstract interpretation, and static analysis. I will convert our &#x27;concrete semantics&#x27; into &#x27;abstract semantics&#x27;, so that we can statically analyze programs in our language.&lt;&#x2F;p&gt;
+</content>
+	</entry>
 	<entry xml:lang="en">
 		<title>I Hate Parsing</title>
 		<published>2021-01-15T12:15:00-05:00</published>
