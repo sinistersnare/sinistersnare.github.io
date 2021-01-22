@@ -3,7 +3,7 @@ slug = "crafting-semantics-3"
 title = "Crafting Semantics 3: More Fundamentals"
 description = "Variable binding, continuations, multiple arguments!"
 date = 2021-01-21T12:15:00-05:00
-draft = true
+draft = false
 [taxonomies]
 tags = ["PLT", "Computer Science", "Semantics", "Crafting Semantics"]
 [extra]
@@ -109,7 +109,7 @@ a &\triangleq alloc(\sigma) \\
 {% end %}
 
 {% katex(block=true) %}
-A \langle \varsigma \rangle \\ \leadsto A \langle \varsigma \rangle \\ \\
+A \langle \varsigma \rangle \leadsto A \langle \varsigma \rangle \\ \\
 \begin{aligned}
 \text{where }
 \kappa &= \textbf{mt}
@@ -155,8 +155,8 @@ Our semantic domains are similarly similar, only a few additions and one slight 
 \begin{aligned}
 % Machine
 \varsigma \in \Sigma &\triangleq
-			E\langle \textit{Eval} \rangle \\
-			+ A\langle \textit{Apply} \rangle \\ \\
+			E\langle \textit{Eval} \rangle
+			+ A\langle \textit{Apply} \rangle \\
 \textit{Eval} &\triangleq \textsf{Exp} \times \textit{Env} \times \textit{Store} \times \textit{Kont} \\
 \textit{Apply} &\triangleq \textit{Val} \times \textit{Env} \times \textit{Store} \times \textit{Kont} \\
 % Env
@@ -174,14 +174,14 @@ clo \in \textit{Clo} &\triangleq \textsf{Lam} \times \textit{Env} \\
 \kappa \in \textit{Kont} &::= \textbf{mt} \\
 						&| \; \textbf{cond}(e , e , \rho , \kappa) \\
 						&| \; \textbf{callcc}(\kappa) \\
-						&| \; \textbf{set}(a, \rho , \kappa) \\
+						&| \; \textbf{set}(a , \kappa) \\
 						&| \; \textbf{call}(\overrightarrow{v} , \overrightarrow{e} , \rho , \kappa) \\
 \end{aligned}
 {% end %}
 
-Changes I made here were to the `Val` and `Kont`, and `Addr` domains. Now, continuations can be a value held in a variable, to obtain one, you must go through the new `callcc` Kontinuation. We added 3 continuation types, for `call/cc`, `set!`, and for the multi-arg call. I removed the old continuations pertaining to function calling. Finally, the second number added to the address domain is required to support multiple argument functions.
+Changes I made here were to the `Val`, `Kont`, and `Addr` domains. Now, continuations can be a value held in a variable, to obtain one, you must go through the new `callcc` Kontinuation. We added 3 continuation types: for `call/cc`, `set!`, and for the multi-arg `call`. I removed the old continuations pertaining to function calling. Finally, the second number added to the address domain is required to support multiple argument functions.
 
-The syntax of the variables inside the `call` continuation may be a bit weird. When we call a function, we need to keep track of the values that we have processed, and which expressions we have yet to process. The first argument is a list of values, which correspond to the evaluated arguments of the call-list. The second argument is that list of unevaluated expressions. We will discuss how they work when we implement the call semantics.
+The syntax of the variables inside the `call` continuation may be new. The overhead-arrow means the variable is a list. When we call a function, we need to keep track of the values that we have processed, and which expressions we have yet to process. Therefore, the first argument is a list of values, which correspond to the evaluated arguments of the call-list. The second argument is that list of unevaluated expressions. We will discuss how they work when we implement the call semantics.
 
 ## Helper Functions
 
@@ -190,10 +190,10 @@ Last, let's recapitulate our helper functions.
 {% katex(block=true) %}
 \mathcal{A} : \textit{Eval} \rightarrow \textit{Val} \\
 \begin{aligned}
-\mathcal{A}(\langle n , \_ , \_ , \_ \rangle \\) &\triangleq n \\
-\mathcal{A}(\langle b , \_ , \_ , \_ \rangle \\) &\triangleq b \\
-\mathcal{A}(\langle x , \rho , \sigma , \_ \rangle \\) &\triangleq \sigma(\rho(x)) \\
-\mathcal{A}(\langle lam , \rho , \_ , \_ \rangle \\) &\triangleq (lam, \rho) \\
+\mathcal{A}(\langle n , \_ , \_ , \_ \rangle) &\triangleq n \\
+\mathcal{A}(\langle b , \_ , \_ , \_ \rangle) &\triangleq b \\
+\mathcal{A}(\langle x , \rho , \sigma , \_ \rangle) &\triangleq \sigma(\rho(x)) \\
+\mathcal{A}(\langle lam , \rho , \_ , \_ \rangle) &\triangleq (lam, \rho) \\
 \end{aligned}
 {% end %}
 
@@ -222,13 +222,13 @@ What I mean to say is that a `let` expression in Scheme is equivalent to calling
   (if x y 3))
 ```
 
-This expression binds 2 variables, `x` and `y`, where they are usable in the `if` expression immediately after. In a standard scheme implementation, this expression is _semantically equivalents_ to:
+This expression binds 2 variables, `x` and `y`, where they are usable in the `if` expression immediately after. In a standard scheme implementation, this expression is _semantically equivalent_ to:
 
 ```scm
 ((λ (x y) (if x y 3)) 1 2)
 ```
 
-The difference is only in _style_. The first expression conveys the meaning of binding variables to values, and using them in an enclosed expression. The second is about calling functions to return some value. For the lazy semanticist, however, we can easily implement `let` in terms of this function call.
+The difference is only in _style_. The first expression conveys the meaning of binding variables to values and then using them in an enclosed expression. The second is about calling functions to return some value. For the lazy semanticist, however, we can easily implement `let` in terms of this function call.
 
 {% katex(block=true) %}
 E \langle let , \rho , \sigma , \kappa \rangle \\
@@ -246,10 +246,10 @@ This rule is a simple syntactic transformation. If we wanted, we could use a who
 
 Call with current continuation, or `call/cc` for short, is a way of obtaining the continuation of the current state, and using it like a regular value. I have [written about continuations before](https://drs.is/post/continuations-as-return/), so I will be a bit more straightforward with my implementation notes here. In my experience though, I did not truly understand continuations until I implemented this feature in an abstract machine.
 
-Also, I am switching to implementing the whole feature at once, instead of writing out all eval rules and then all apply rules. I think this method is a bit easier for understanding how a feature works. Especially because you can see how they work in concert, side by side.
+Also, I am switching to implementing the whole feature at once, instead of writing out all eval rules and then all apply rules. I think this method is a bit easier for understanding how a feature works, as you can see how they work in concert, side by side.
 
 {% katex(block=true) %}
-E \langle (\texttt{call/cc} \; e) , \rho , \sigma , \kappa \rangle \\
+E \langle (\texttt{call/cc} \; e) , \rho , \sigma , \kappa \rangle
 \leadsto E \langle e , \rho , \sigma , \kappa' \rangle \\ \\
 \begin{aligned}
 \text{where }
@@ -258,8 +258,8 @@ E \langle (\texttt{call/cc} \; e) , \rho , \sigma , \kappa \rangle \\
 {% end %}
 
 {% katex(block=true) %}
-A \langle v , \rho , \sigma , \kappa \rangle \\
-\leadsto E \langle e_b , \rho' , \sigma' , \kappa' \rangle \\ \\
+A \langle v , \rho , \sigma , \kappa \rangle
+\leadsto E \langle e_b , \rho' , \sigma' , \kappa' \rangle \\
 \begin{aligned}
 \text{where }
 \kappa &= \textbf{callcc}(\kappa') \\
@@ -279,8 +279,8 @@ What can be done with the continuation value though? To find out, read on! We wi
 Mutation is the altering of live variables. Up to this point, variables have been immutable. You could shadow a variable, but once the shadow goes out of scope, the original value will be returned. If we wanted to mutate a variable for real, we need language support. Enter the `set!` expression!
 
 {% katex(block=true) %}
-E \langle (\texttt{set!} \; x \; e) , \rho , \sigma , \kappa \rangle \\
-\leadsto E \langle e , \rho , \sigma , \kappa' \rangle \\ \\
+E \langle (\texttt{set!} \; x \; e) , \rho , \sigma , \kappa \rangle
+\leadsto E \langle e , \rho , \sigma , \kappa' \rangle \\
 \begin{aligned}
 \text{where }
 \kappa' &\triangleq \textbf{set}(\rho(x) , \rho , \kappa) \\
@@ -288,29 +288,29 @@ E \langle (\texttt{set!} \; x \; e) , \rho , \sigma , \kappa \rangle \\
 {% end %}
 
 {% katex(block=true) %}
-A \langle v , \rho , \sigma , \kappa \rangle \\
-\leadsto A \langle \sigma(a) , \rho' , \sigma' , \kappa' \rangle \\ \\
+A \langle v , \rho , \sigma , \kappa \rangle
+\leadsto A \langle \sigma(a) , \rho , \sigma' , \kappa' \rangle \\
 \begin{aligned}
 \text{where }
-\kappa &= \textbf{set}(a , \rho' , \kappa') \\
+\kappa &= \textbf{set}(a , \kappa') \\
 \sigma' &\triangleq \sigma[a \mapsto v]
 \end{aligned}
 {% end %}
 
 So mutation modifies _only_ the store, which is new for us, usually we alter both in tandem. So that's fun.
 
-Anyway, the semantics of `set!` are very simple. In these semantics, I return the old value of the variable, but usually set! returns `Void`. You can do that, add a `Void` constant to your values domain, and return that. I just felt like keeping the semantics a little smaller.
+Anyway, the semantics of `set!` are very simple. In these semantics, I return the old value of the variable, but usually set! returns `Void`. You can do that: add a `Void` constant to your values domain, and return that. I just felt like keeping the semantics a little smaller.
 
 ## Function Calls ##
 
 Lastly, we need to implement calls. This will include continuations, so stay tuned!
 
 {% katex(block=true) %}
-E \langle (e_f \; e_s \; ...) , \rho , \sigma , \kappa \rangle \\
-\leadsto E \langle e_f , \rho , \sigma , \kappa' \rangle \\ \\
+E \langle (e_f \; e_s \; ...) , \rho , \sigma , \kappa \rangle
+\leadsto E \langle e_f , \rho , \sigma , \kappa' \rangle \\
 \begin{aligned}
 \text{where }
-\kappa' &\triangleq \textbf{call}(\epsilon , e_s , \rho , \kappa) \\
+\kappa' &\triangleq \textbf{call}(\epsilon , e_s , \rho , \kappa)
 \end{aligned}
 {% end %}
 
@@ -319,8 +319,8 @@ Here, when we create the `call` continuation, we initialize our list of finished
 We next need a rule for the in-between states of 'finished evaluating an argument, but have more to do'
 
 {% katex(block=true) %}
-A \langle v , \rho , \sigma , \kappa \rangle \\
-\leadsto E \langle e , \rho_\kappa , \sigma , \kappa'' \rangle \\ \\
+A \langle v , \rho , \sigma , \kappa \rangle
+\leadsto E \langle e , \rho_\kappa , \sigma , \kappa'' \rangle \\
 \begin{aligned}
 \text{where }
 \kappa &= \textbf{call}(\overrightarrow{v} , e :: \overrightarrow{e}
@@ -332,8 +332,8 @@ A \langle v , \rho , \sigma , \kappa \rangle \\
 In this case, we have finished evaluating an argument, but still have unevaluated arguments left. This is notated by the double-colon operator which denotes `e` as the head of the todo-list, and the `e` with an arrow as the tail of the list. The double-plus sign symbol is a list-concatenation operator.
 
 {% katex(block=true) %}
-A \langle v , \rho , \sigma , \kappa \rangle \\
-\leadsto E \langle e_b , \rho' , \sigma' , \kappa' \rangle \\ \\
+A \langle v , \rho , \sigma , \kappa \rangle
+\leadsto E \langle e_b , \rho' , \sigma' , \kappa' \rangle \\
 \begin{aligned}
 \text{where }
 \kappa &= \textbf{call}(\overrightarrow{v} , \epsilon , \rho_\kappa , \kappa') \\
@@ -345,9 +345,9 @@ a_i &\triangleq alloc(\sigma, i) \\
 \end{aligned}
 {% end %}
 
-Here, we have finally utilized our new `alloc` functions offset functionality. Its needed here because the amount of elements in the old store will remain constant for the entire transition, so we need a way to differentiate each variables address in the new store. We are nearing the end of usefulness of this allocation strategy, so perhaps we will change it in a future post.
+Here, we have finally utilized our new `alloc` functions offset feature! It's needed here because the amount of elements in the old store will remain constant for the entire transition, so we need a way to differentiate each variables address in the new store.
 
-There is an implicit iteration here, with the `i` variable used. This is a nicety of the pseudo-code nature of these semantics, that we do not have to write out what to do any more explicitly than this. `i` is indexed based on the amount of formal parameters of the function, so if we are calling a 3 argument function, then there will be 3 iterations of each of the variables using the `i` subscript.
+There is an implicit iteration here, with the `i` variable used. This is a nicety of the pseudo-code nature of these semantics, that we do not have to write out what to do any more explicitly than this. `i` is a number up to the amount of formal parameters of the function, so if we are calling a 3 argument function, then there will be 3 iterations of each of the variables using the `i` subscript.
 
 Overall, this is almost completely the same as the old calling semantics, but with additions to allow for multiple parameters.
 
@@ -364,8 +364,8 @@ Continuation Calling
 I'm not sure why I'm stalling this ....
 
 {% katex(block=true) %}
-A \langle v , \rho , \sigma , \kappa \rangle \\
-\leadsto A \langle v , \rho , \sigma , \kappa'' \rangle \\ \\
+A \langle v , \rho , \sigma , \kappa \rangle
+\leadsto A \langle v , \rho , \sigma , \kappa'' \rangle \\
 \begin{aligned}
 \text{where }
 \kappa &= \textbf{call}(\overrightarrow{v} , \epsilon , \rho_\kappa , \kappa') \\
@@ -436,8 +436,7 @@ clo = ((\lambda \; (\text{u} \; \text{n}) \; 55) , \{k : (0 , 0) \}) \\
 				\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \},
 				\kappa_3
 				\rangle \\
-\kappa_4 = \textbf{call}(\epsilon , [13] , \{k : (0 , 0) \} ,
-				\textbf{call}([clo , 3] , \epsilon), \{k: (0,0)\}, \textbf{mt}) \\
+\kappa_4 = \textbf{call}(\epsilon , [13] , \{k : (0 , 0) \} , \kappa_3) \\
 \varsigma_{10} = E\langle
 				k,
 				\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \},
@@ -448,8 +447,7 @@ clo = ((\lambda \; (\text{u} \; \text{n}) \; 55) , \{k : (0 , 0) \}) \\
 				\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \},
 				\kappa_4
 				\rangle \\
-\kappa_5 = \textbf{call}([\textbf{mt}] , \epsilon , \{k : (0 , 0) \} ,
-				\textbf{call}([clo , 3] , \epsilon), \{k: (0,0)\}, \textbf{mt}) \\
+\kappa_5 = \textbf{call}([\textbf{mt}] , \epsilon , \{k : (0 , 0) \} , \kappa_3) \\
 \varsigma_{12} = E\langle
 				13,
 				\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \},
