@@ -4,8 +4,57 @@
 	<link href="https://drs.is/atom.xml" rel="self" type="application/atom+xml"/>
   <link href="https://drs.is"/>
 	<generator uri="https://www.getzola.org/">Zola</generator>
-	<updated>2021-01-21T12:15:00-05:00</updated>
+	<updated>2021-07-05T12:15:00-05:00</updated>
 	<id>https://drs.is/atom.xml</id>
+	<entry xml:lang="en">
+		<title>Code Review: Contibutor&#x27;s Side</title>
+		<published>2021-07-05T12:15:00-05:00</published>
+		<updated>2021-07-05T12:15:00-05:00</updated>
+		<link href="https://drs.is/post/code-review-contributor/" type="text/html"/>
+		<id>https://drs.is/post/code-review-contributor/</id>
+		<content type="html">&lt;p&gt;Hi! This is a short and opinionated guide on how to be a model contributor to a codebase. Ideally, a project would adopt this methodology. These are not tips on how to get a reviewer to like you (that&#x27;s &lt;a href=&quot;https:&#x2F;&#x2F;mtlynch.io&#x2F;code-review-love&#x2F;&quot;&gt;here&lt;&#x2F;a&gt; and its a wonderful article!), but a system for how to be a contributor to a codebase that adopts this ethos.&lt;&#x2F;p&gt;
+&lt;p&gt;I will also have a second post, from the reviewers side, that should complement this entry. Both posts will form a system of rules for small to moderate size codebases for teams with a few up to around 10 contributors. I have used this system and I find it effective.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;the-problem&quot;&gt;The Problem&lt;&#x2F;h1&gt;
+&lt;p&gt;Many codebases start with only a single contributor or two hacking away quickly. This is fine and great, but when it comes time to scale up, getting developers into the groove and making sure that knowledge is spread throughout the team becomes more and more important. The &lt;a href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Bus_factor&quot;&gt;bus factor&lt;&#x2F;a&gt; of a team needs to stay high, and I think that my system is an easy way to keep that number up, at worst 2, but as time continues it increases.&lt;&#x2F;p&gt;
+&lt;p&gt;A simple review in this system is something like:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;Contributor creates the contribution&lt;&#x2F;li&gt;
+&lt;li&gt;Reviewer does a short line-by-line code review, scanning for any obvious deficiencies.&lt;&#x2F;li&gt;
+&lt;li&gt;Reviewer leaves line comments on smaller issues, or general comments for larger ideas&lt;&#x2F;li&gt;
+&lt;li&gt;Contributor addresses feedback&lt;&#x2F;li&gt;
+&lt;li&gt;Reviewer ensures that changes were addressed&lt;&#x2F;li&gt;
+&lt;li&gt;Reviewer tests the code locally, ensuring that everything actually works&lt;&#x2F;li&gt;
+&lt;li&gt;Return to step 3 if there are issues&lt;&#x2F;li&gt;
+&lt;li&gt;Merge&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;p&gt;This post will address all steps involving the contributor.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;creating-a-contribution&quot;&gt;Creating a Contribution&lt;&#x2F;h1&gt;
+&lt;p&gt;This is hopefully this most time consuming part of the process. Creating the contribution involves writing the code, testing, documenting, and ensuring that your code stays up to date with the primary branch of your repository. This step starts as soon as you accept your tasking, and ideate your solution.&lt;&#x2F;p&gt;
+&lt;p&gt;One thing I like to do as I write my code is to keep personal notes on what I&#x27;ve done. If I&#x27;m moving around a lot in the codebase, I write a little note saying what I have accomplished that is outward facing. Once I have finished writing the code, I consult my notes, and do a quick scan of the diff. I form a list of the high level changes made.&lt;&#x2F;p&gt;
+&lt;p&gt;It is time to test! Ensure that your task is actually finished before you send it up to be reviewed. Hopefully you have a good set of tests, but at least you should make sure your code compiles, and you can see the changes you made (in some way you can check). I would also write down the steps you took to test your code from a fresh pull of your branch. That way, your reviewer can easily know what has to be done to ensure that your changes work.&lt;&#x2F;p&gt;
+&lt;p&gt;Finally, I do a &lt;em&gt;self code review&lt;&#x2F;em&gt;. I go through my diff myself to ensure that my reviewer wont have to deal with any cruft. Any files that snuck into the git commit, any typos in comments, any curse words removed from TODOs, etc. In a perfect scenario, you would catch all of the issues &lt;em&gt;yourself&lt;&#x2F;em&gt;, and all your reviewer would have to do is test it themself, and hit &lt;code&gt;merge&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;That is the key, that you should make your reviewer&#x27;s life &lt;em&gt;really easy&lt;&#x2F;em&gt;. They should be a &lt;em&gt;sanity check&lt;&#x2F;em&gt;, not the code-police, or an adversary. You two (or more) will work together to make sure that the primary branch of your code stays building and clean. But you, as the primary author, should be putting in the most effort into this short lived relationship.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;choosing-a-reviewer&quot;&gt;Choosing a Reviewer&lt;&#x2F;h1&gt;
+&lt;p&gt;It is your responsibility to find a reviewer. In my experience we have had a few different ways of choosing. At one point, we had a wheel with everyone&#x27;s names on it, and we spun it! Whoever it landed on got a message on slack, asking if they were available for review. If not, the wheel gets spun again!&lt;&#x2F;p&gt;
+&lt;p&gt;Other times, you may have an idea for who &#x27;owns&#x27; the bit of code you are working on. Someone who recently wrote that module, or just had a similar contribution accepted for example. You could outright ask them if they are interested in a review, and that their experience may be helpful in the process.&lt;&#x2F;p&gt;
+&lt;p&gt;If you are lucky, someone will volunteer for you, making your life easier. If you think that your contribution is particularly large or wide reaching, feel free to ask for multiple reviews. One goal of the review is to make sure that multiple people are &#x27;in the loop&#x27; and understand any given part of the codebase. This way, the aforementioned bus-factor is higher. But you probably do not need multiple reviewers for the bog-standard sized contributions that you are likely to make -- you cant always rewrite the whole codebase in Rust!&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;addressing-feedback&quot;&gt;Addressing Feedback&lt;&#x2F;h1&gt;
+&lt;p&gt;So, nobody is a perfect developer. You will write code that you may think is fine, but others may have objections to. That is simply a part of our art form. Or perhaps you didn&#x27;t catch some typo, or didn&#x27;t apply some formatting somewhere. It is not your failure for missing things, it happens. You should not be &lt;em&gt;dependent&lt;&#x2F;em&gt; on a review, but it exists for a reason. It exists for many reasons even, but this time it&#x27;s to catch mistakes.&lt;&#x2F;p&gt;
+&lt;p&gt;After the reviewer has finished a round of comments, I like to address them one by one. Out of the comments, I form a short-lived checklist of what I should do, and start tackling them one by one. As I address them, I check them off my list. If there needs to be further clarification, I reply to the comment asking for clarification. Usually, reviewers are getting lots of emails, so I also ping them on Slack (or however you regularly communicate with your team) mentioning that I asked for some clarification on a comment.&lt;&#x2F;p&gt;
+&lt;p&gt;After everything is resolved, I push up my changes, and give a &#x27;done!&#x27; comment on every thing that I resolved. Then I ping my reviewer stating that I have finished addressing their comments. This is the signal that it is time for your teammate to switch back into review mode. If they forget about reviewing, you can ping them after an appropriate amount of time, given the timeline that the contribution needs to be merged.&lt;&#x2F;p&gt;
+&lt;p&gt;Many code review systems give comments the ability to be &lt;em&gt;resolved&lt;&#x2F;em&gt;. &lt;em&gt;&lt;strong&gt;DO NOT RESOLVE COMMENTS!&lt;&#x2F;strong&gt;&lt;&#x2F;em&gt; It is the person who wrote the comment&#x27;s job to resolve their own comments. Just because you think you addressed feedback enough does not mean your reviewer will agree. If they are lagging and their resolutions are blocking a merge, give them a nudge via your communication channel of choice. A nice &amp;quot;Hey, do you mind resolving your comments on my contribution if you think its adequate?&amp;quot; should be fine.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;merging&quot;&gt;Merging&lt;&#x2F;h1&gt;
+&lt;p&gt;Hopefully, if everything has been resolved, the reviewer will be content and merge your contribution! This is something you should give consent to, in my opinion. I don&#x27;t like it when people merge my code without my final &#x27;yes please hit the button&#x27;. But it is the reviewers job to merge it. It is their say that allows your code into the codebase.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;joy&quot;&gt;Joy&lt;&#x2F;h1&gt;
+&lt;p&gt;Now that you have completed a successful code review, make sure to give back and review your fellow team members&#x27; contributions! I love reviewing, but that is a topic for another post!&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;useful-reading&quot;&gt;Useful Reading&lt;&#x2F;h2&gt;
+&lt;p&gt;Here are some articles that I have liked on the topic of reviews:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;mtlynch.io&#x2F;code-review-love&#x2F;&quot;&gt;How to Make Your Code Reviewer Fall in Love with You&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;medium.com&#x2F;pinterest-engineering&#x2F;how-to-review-code-as-a-junior-developer-10ffb7846958&quot;&gt;How to Review Code as a Junior Developer&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+</content>
+	</entry>
 	<entry xml:lang="en">
 		<title>Crafting Semantics 3: More Fundamentals</title>
 		<published>2021-01-21T12:15:00-05:00</published>

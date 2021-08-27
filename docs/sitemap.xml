@@ -18,6 +18,10 @@
         <lastmod>2020-08-14</lastmod>
     </url>
     <url>
+        <loc>https://drs.is/post/code-review-contributor/</loc>
+        <lastmod>2021-07-05T12:15:00-05:00</lastmod>
+    </url>
+    <url>
         <loc>https://drs.is/post/continuations-as-return/</loc>
         <lastmod>2020-11-30T12:15:00-05:00</lastmod>
     </url>
@@ -56,9 +60,6 @@
     <url>
         <loc>https://drs.is/post/rust-wishlist-2019/</loc>
         <lastmod>2018-12-12T08:10:44-05:00</lastmod>
-    </url>
-    <url>
-        <loc>https://drs.is/projects/</loc>
     </url>
     <url>
         <loc>https://drs.is/tags/</loc>
@@ -103,6 +104,9 @@
         <loc>https://drs.is/tags/plt/</loc>
     </url>
     <url>
+        <loc>https://drs.is/tags/programming/</loc>
+    </url>
+    <url>
         <loc>https://drs.is/tags/python/</loc>
     </url>
     <url>
@@ -113,5 +117,8 @@
     </url>
     <url>
         <loc>https://drs.is/tags/trees/</loc>
+    </url>
+    <url>
+        <loc>https://drs.is/work/</loc>
     </url>
 </urlset>
