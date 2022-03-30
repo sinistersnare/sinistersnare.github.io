@@ -10,15 +10,15 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="referrer" content="no-referrer">
 
-        <link rel="stylesheet" href="https:&#x2F;&#x2F;drs.is&#x2F;fonts.css">
-        <link rel="stylesheet" href="https:&#x2F;&#x2F;drs.is&#x2F;style.css">
+        <link rel="stylesheet" href="https://drs.is/fonts.css">
+        <link rel="stylesheet" href="https://drs.is/style.css">
 
         <title>
     Crafting Semantics 3: More Fundamentals  · Sin&#x27;s Blog
 </title>
 
         
-            <link rel="alternate" type="application/rss+xml" title="RSS" href="https:&#x2F;&#x2F;drs.is&#x2F;atom.xml">
+            <link rel="alternate" type="application/rss+xml" title="RSS" href="https://drs.is/atom.xml">
         
 
         <!-- TODO: apparently CDNs arent good anymore. -->
@@ -60,25 +60,25 @@
             <ul>
                 
                 <li class="tag">
-                    <a href="https:&#x2F;&#x2F;drs.is&#x2F;tags&#x2F;plt&#x2F;">
+                    <a href="https://drs.is/tags/plt/">
                         PLT
                     </a>
                 </li>
                 
                 <li class="tag">
-                    <a href="https:&#x2F;&#x2F;drs.is&#x2F;tags&#x2F;computer-science&#x2F;">
+                    <a href="https://drs.is/tags/computer-science/">
                         Computer Science
                     </a>
                 </li>
                 
                 <li class="tag">
-                    <a href="https:&#x2F;&#x2F;drs.is&#x2F;tags&#x2F;semantics&#x2F;">
+                    <a href="https://drs.is/tags/semantics/">
                         Semantics
                     </a>
                 </li>
                 
                 <li class="tag">
-                    <a href="https:&#x2F;&#x2F;drs.is&#x2F;tags&#x2F;crafting-semantics&#x2F;">
+                    <a href="https://drs.is/tags/crafting-semantics/">
                         Crafting Semantics
                     </a>
                 </li>
@@ -103,7 +103,8 @@
 <h2 id="recap">Recap</h2>
 <p>Lets take a look at the machine transitions that we have so far, to give a quick refresher of where we are at.</p>
 <h3 id="old-eval-rules">Old Eval Rules</h3>
-<p>These rules evaluate syntax until a value is able to be produced by our atomic-evaluation function <script type="math/tex">\mathcal{A}</script>.</p>
+<p>These rules evaluate syntax until a value is able to be produced by our atomic-evaluation function <script type="math/tex">\mathcal{A}</script>
+.</p>
 <script type="math/tex;mode=display">E \langle \text{\ae} , \rho , \sigma , \kappa \rangle \\
 \leadsto
 A \langle v , \rho , \sigma , \kappa \rangle \\ \\
@@ -238,13 +239,11 @@ alloc(\sigma, n) \triangleq (|\sigma|, n)</script>
 <h2 id="let-expressions">Let Expressions</h2>
 <p>If you are an astute computer scientist, you will know of the isomorphism between function calls and let expressions. We will utilize it to create a dead-easy let implementation here.</p>
 <p>What I mean to say is that a <code>let</code> expression in Scheme is equivalent to calling a function. Here is an example to illustrate my point:</p>
-<pre style="background-color:#282a36;">
-<code class="language-scm" data-lang="scm"><span style="color:#f8f8f2;">(</span><span style="color:#ff79c6;">let </span><span style="color:#f8f8f2;">([x </span><span style="color:#bd93f9;">1</span><span style="color:#f8f8f2;">] [y </span><span style="color:#bd93f9;">2</span><span style="color:#f8f8f2;">])
-  (</span><span style="color:#ff79c6;">if</span><span style="color:#f8f8f2;"> x y </span><span style="color:#bd93f9;">3</span><span style="color:#f8f8f2;">))
+<pre data-lang="scm" style="background-color:#282a36;color:#f8f8f2;" class="language-scm "><code class="language-scm" data-lang="scm"><span>(</span><span style="color:#ff79c6;">let </span><span>([x </span><span style="color:#bd93f9;">1</span><span>] [y </span><span style="color:#bd93f9;">2</span><span>])
+</span><span>  (</span><span style="color:#ff79c6;">if</span><span> x y </span><span style="color:#bd93f9;">3</span><span>))
 </span></code></pre>
 <p>This expression binds 2 variables, <code>x</code> and <code>y</code>, where they are usable in the <code>if</code> expression immediately after. In a standard scheme implementation, this expression is <em>semantically equivalent</em> to:</p>
-<pre style="background-color:#282a36;">
-<code class="language-scm" data-lang="scm"><span style="color:#f8f8f2;">((λ (x y) (</span><span style="color:#ff79c6;">if</span><span style="color:#f8f8f2;"> x y </span><span style="color:#bd93f9;">3</span><span style="color:#f8f8f2;">)) </span><span style="color:#bd93f9;">1 2</span><span style="color:#f8f8f2;">)
+<pre data-lang="scm" style="background-color:#282a36;color:#f8f8f2;" class="language-scm "><code class="language-scm" data-lang="scm"><span>((λ (x y) (</span><span style="color:#ff79c6;">if</span><span> x y </span><span style="color:#bd93f9;">3</span><span>)) </span><span style="color:#bd93f9;">1 2</span><span>)
 </span></code></pre>
 <p>The difference is only in <em>style</em>. The first expression conveys the meaning of binding variables to values and then using them in an enclosed expression. The second is about calling functions to return some value. For the lazy semanticist, however, we can easily implement <code>let</code> in terms of this function call.</p>
 <script type="math/tex;mode=display">E \langle let , \rho , \sigma , \kappa \rangle \\
@@ -301,7 +300,8 @@ a &\triangleq alloc(\sigma, 0) \\
 \text{where }
 \kappa' &\triangleq \textbf{call}(\epsilon , e_s , \rho , \kappa)
 \end{aligned}</script>
-<p>Here, when we create the <code>call</code> continuation, we initialize our list of finished values (our 'done' list) with epsilon <code>ϵ</code>, which we use as the empty list. We also mark our arguments e<sub>s</sub> as the 'todo' list of expressions. If no arguments are given (e.g. in the expression <code>((λ () 3))</code>), then it will of course by empty.</p>
+<p>Here, when we create the <code>call</code> continuation, we initialize our list of finished values (our 'done' list) with epsilon <code>ϵ</code>, which we use as the empty list. We also mark our arguments e<sub>s</sub>
+ as the 'todo' list of expressions. If no arguments are given (e.g. in the expression <code>((λ () 3))</code>), then it will of course by empty.</p>
 <p>We next need a rule for the in-between states of 'finished evaluating an argument, but have more to do'</p>
 <script type="math/tex;mode=display">A \langle v , \rho , \sigma , \kappa \rangle
 \leadsto E \langle e , \rho_\kappa , \sigma , \kappa'' \rangle \\

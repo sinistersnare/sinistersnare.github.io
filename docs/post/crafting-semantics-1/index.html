@@ -10,15 +10,15 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="referrer" content="no-referrer">
 
-        <link rel="stylesheet" href="https:&#x2F;&#x2F;drs.is&#x2F;fonts.css">
-        <link rel="stylesheet" href="https:&#x2F;&#x2F;drs.is&#x2F;style.css">
+        <link rel="stylesheet" href="https://drs.is/fonts.css">
+        <link rel="stylesheet" href="https://drs.is/style.css">
 
         <title>
     Crafting Semantics 1: Lambda Calculus  · Sin&#x27;s Blog
 </title>
 
         
-            <link rel="alternate" type="application/rss+xml" title="RSS" href="https:&#x2F;&#x2F;drs.is&#x2F;atom.xml">
+            <link rel="alternate" type="application/rss+xml" title="RSS" href="https://drs.is/atom.xml">
         
 
         <!-- TODO: apparently CDNs arent good anymore. -->
@@ -60,25 +60,25 @@
             <ul>
                 
                 <li class="tag">
-                    <a href="https:&#x2F;&#x2F;drs.is&#x2F;tags&#x2F;plt&#x2F;">
+                    <a href="https://drs.is/tags/plt/">
                         PLT
                     </a>
                 </li>
                 
                 <li class="tag">
-                    <a href="https:&#x2F;&#x2F;drs.is&#x2F;tags&#x2F;computer-science&#x2F;">
+                    <a href="https://drs.is/tags/computer-science/">
                         Computer Science
                     </a>
                 </li>
                 
                 <li class="tag">
-                    <a href="https:&#x2F;&#x2F;drs.is&#x2F;tags&#x2F;semantics&#x2F;">
+                    <a href="https://drs.is/tags/semantics/">
                         Semantics
                     </a>
                 </li>
                 
                 <li class="tag">
-                    <a href="https:&#x2F;&#x2F;drs.is&#x2F;tags&#x2F;crafting-semantics&#x2F;">
+                    <a href="https://drs.is/tags/crafting-semantics/">
                         Crafting Semantics
                     </a>
                 </li>
@@ -99,10 +99,14 @@
 <p>The control of a machine is the current instruction that is being evaluated. For the λ-calculus, this will simply be the syntax. For a more complex machine, like the JVM, this could be the bytecodes and an index into the current instruction. For a CPU, it may be an instruction pointer and the binary program text. When you hear the word 'control flow' it is referring to this component.</p>
 <p>The environment is the set of variables that can be referenced. We will use a simple key-value mapping (dict, hash, etc.) to represent our environment. The keys of the mapping will be the variable names, and the value will be the address of where to find that variables value.</p>
 <p>The store is where values are actually held. If you have an address, you can access the store to get its corresponding value. We again use a key-value mapping, from address to value.</p>
-<p>The kontinuation is what happens 'next', after we finish evaluating an expression. We will use a special continuation frame object to track this. In many languages, this kind of thing is called a '<a href="https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Call_stack" target="_blank">call-stack↪</a>'. When a function is called, the 'stack' is added to with the current function. In the future, We will augment it to track more things, such as conditionals, let bindings, and variable mutation.</p>
+<p>The kontinuation is what happens 'next', after we finish evaluating an expression. We will use a special continuation frame object to track this. In many languages, this kind of thing is called a '
+<a href="https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Call_stack" target="_blank">call-stack↪</a>
+'. When a function is called, the 'stack' is added to with the current function. In the future, We will augment it to track more things, such as conditionals, let bindings, and variable mutation.</p>
 <p>It is used to represent a fine grained call-stack. But instead of only keeping track of function calls, it tracks many other things, such as conditionals and let bindings.</p>
 <h1 id="l">λ</h1>
-<p>The lambda calculus is a very simple language. Created before modern computers, its goal was to express logic formally. Now, we can use it as a basis for a small and simple programming language. Its <a href="https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Lambda_calculus" target="_blank">Wikipedia Page↪</a> is chock-full of great stuff, but I will give it a quick introduction.</p>
+<p>The lambda calculus is a very simple language. Created before modern computers, its goal was to express logic formally. Now, we can use it as a basis for a small and simple programming language. Its 
+<a href="https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Lambda_calculus" target="_blank">Wikipedia Page↪</a>
+ is chock-full of great stuff, but I will give it a quick introduction.</p>
 <p>The lambda calculus has 3 forms</p>
 <script type="math/tex;mode=display">\begin{aligned}
 % expressions
@@ -120,7 +124,9 @@ x &::= \; \text{some variable} \\
 <h1 id="the-machine">The Machine</h1>
 <p>First, we need to define our <em>domains</em>. These are the things that we actually use to implement our machines. A simple domain that you may be familiar with is the set of Integers. starting at 0, you can go forward by 1, or backwards by 1, to infinity (and negative infinity). Our domains include 'syntactic domains', which are domains seen in the progrm text, and 'semantic domains', for determining meaning.</p>
 <h2 id="syntax">Syntax</h2>
-<p>The syntactic domain is our grammar from above, but lets expand on it a bit for our sake. We will also be using a more mathy notation, in addition to the <a href="https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Backus–Naur_form" target="_blank">BNF↪</a> above.</p>
+<p>The syntactic domain is our grammar from above, but lets expand on it a bit for our sake. We will also be using a more mathy notation, in addition to the 
+<a href="https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Backus–Naur_form" target="_blank">BNF↪</a>
+ above.</p>
 <script type="math/tex;mode=display">\begin{aligned}
 % expressions
 e \in \textsf{Exp} &::= x  \\
@@ -135,7 +141,9 @@ lam \in \textsf{Lam} &::= (λ \; (x) \; e) \\
 <p>There are 3 domains here, expressions, variables, and lambdas. These are the same as above, but now we have the name of the sets used, instead of just the metavariable names. If we see any <code>e</code>, then it is in the <code>Exp</code> domain. The same goes for <code>x</code> and <code>Var</code>. We may see multiple <code>e</code> metavariables used, but in this context, they can be filled in with different values. Later, when we are writing the semantics, we will differentiate metavariables of the same domain with subscripts or tick-marks.</p>
 <p>I also factored the lambda 'production' in the grammar into its own domain. This will be helpful in the semantic domain definitions.</p>
 <p>The equal sign with the delta-triangle over it just means 'is defined as'. In Computer Science and Math, <code>=</code> may mean 'is the same as' or 'is defined as', so we use the Δ to differentiate the two.</p>
-<p>Sometimes <code>::=</code> is used, and sometimes our <code>=</code> with <code>Δ</code> is used, why? Because using notation in this way is helpful. There arent strict rules here, and I found it useful to use BNF style for some domains, and definitional-equality for others. If you dont like it, you could perhaps give each production in the BNF grammar its own domain, and use a '<a href="https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Tagged_union" target="_blank">sum type↪</a>' to define everything in terms of definitional equality.</p>
+<p>Sometimes <code>::=</code> is used, and sometimes our <code>=</code> with <code>Δ</code> is used, why? Because using notation in this way is helpful. There arent strict rules here, and I found it useful to use BNF style for some domains, and definitional-equality for others. If you dont like it, you could perhaps give each production in the BNF grammar its own domain, and use a '
+<a href="https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Tagged_union" target="_blank">sum type↪</a>
+' to define everything in terms of definitional equality.</p>
 <h2 id="semantics">Semantics</h2>
 <p>The semantic domains include the definitions for the machine parts themselves. Exciting!</p>
 <script type="math/tex;mode=display">\begin{aligned}
@@ -158,10 +166,14 @@ clo \in \textit{Clo} &\triangleq \textsf{Lam} \times \textit{Env} \\
 						& | \; \textbf{fn}(v, \rho, \kappa) \\
 \end{aligned}</script>
 <p>So there are a lot of pieces here! Lets go through them! Dont worry if they dont make perfect sense just yet, it will make more sense when they are used in context in the next section.</p>
-<p>First, the state definition itself. We have 4 components as previously defined. We use a '<a href="https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Product_type" target="_blank">product type↪</a>' to say 'One of each'. The domain is called Σ, or 'sigma' (uppercase). When we only have one state, (much as we would have one number in the domain of 'Integer'), we use ς, or 'varsigma' (i dont understand ancient greek enough to get why its called that). To form a state, you take one of each of the constituent parts. Our machine takes a state as input, and returns a state.</p>
+<p>First, the state definition itself. We have 4 components as previously defined. We use a '
+<a href="https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Product_type" target="_blank">product type↪</a>
+' to say 'One of each'. The domain is called Σ, or 'sigma' (uppercase). When we only have one state, (much as we would have one number in the domain of 'Integer'), we use ς, or 'varsigma' (i dont understand ancient greek enough to get why its called that). To form a state, you take one of each of the constituent parts. Our machine takes a state as input, and returns a state.</p>
 <p>Next, we need to define the environment and store. In computer science jargon, a map is simply a 'partial function' from the input to the output. For the environment, the function takes a <code>Var</code>, and returns its <code>Addr</code>. The same is true of the store, which takes the address, and returns the value that it points to. The store isn't particularly useful in this machine, but when we implement things like mutation, it will be good to have around.</p>
 <p>Third, the address and value sets. In this simple machine, addresses will be very simple, we will use numbers to define them (the set with the fancy <code>N</code> is integers starting at 0 and going up to infinity).</p>
-<p>Values in this machine are '<a href="https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Closure_(computer_programming)" target="_blank">closures↪</a>'. Closures are a key part of higher order languages, such as Scheme, and are defined as a syntactic function (in our case the abstraction form), and an environment. In more advanced machines, values will be able to take on many different types, including numbers, strings, even continuations!</p>
+<p>Values in this machine are '
+<a href="https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Closure_(computer_programming)" target="_blank">closures↪</a>
+'. Closures are a key part of higher order languages, such as Scheme, and are defined as a syntactic function (in our case the abstraction form), and an environment. In more advanced machines, values will be able to take on many different types, including numbers, strings, even continuations!</p>
 <p>Finally, our definition of continuations. If you look closely, its a kind of linked list, meaning that a continuation has another continuation attached to it, until you get to the <code>mt</code> continuation, the end. Other than <code>mt</code>, there are two important 'continuation frame' types. The <code>arg</code> continuation means that after we finish the current computation, we must evaluate the argument to the application. The <code>fn</code> frame tells us that after the current computation, we need to execute the function with the argument.</p>
 <h2 id="injection-and-allocation">Injection And Allocation</h2>
 <p>As I mentioned earlier, our machine takes a state and returns a state, so how do we know what the 'first' state is? To determine that, we create an 'injection function'. This takes the program text as input, and returns the initial machine state that will evaluate it. Ours is quite simple:</p>
@@ -198,7 +210,8 @@ alloc(\sigma) \triangleq |\sigma| \\</script>
 <script type="math/tex;mode=display">(lam , \rho , \sigma , \textbf{arg}(e_a , \rho' , \kappa))
 \leadsto (e_a , \rho' , \sigma , \textbf{fn}(lam , \rho , \kappa)) \\</script>
 <p>This input state is more complex than the prior. If we have a value for the control (in our case, the control is a lambda), and if the current continuation is an <code>arg</code> frame, then we transition as shown. Wht this transition 'means', is that we are finished evaluating the left side of the application, and are now going to evaluate the right side.</p>
-<p>Also pay attention to the environments, and what goes where. For the resulting state, we use the env found in the continuation, but in the resulting continuation, we use the environment given in the state. This is because the closure we are creating by pairing the lambda (control) requires the env it was found in.  But when we evaluate the right side of the application (e<sub>a</sub>), we need to use the same environment that we originally used when evaluating the left side.</p>
+<p>Also pay attention to the environments, and what goes where. For the resulting state, we use the env found in the continuation, but in the resulting continuation, we use the environment given in the state. This is because the closure we are creating by pairing the lambda (control) requires the env it was found in.  But when we evaluate the right side of the application (e<sub>a</sub>
+), we need to use the same environment that we originally used when evaluating the left side.</p>
 <p>Take a little bit to think on that. The fact that we need to use the same environment for both elements of the application, and why the env that gets paired with the lambda is the one that it is.</p>
 <p>After you understand that, lets finish this out with the final transition function for today.</p>
 <script type="math/tex;mode=display">(lam , \rho , \sigma , \textbf{fn}(lam' , \rho' , \kappa))
@@ -210,7 +223,9 @@ alloc(\sigma) \triangleq |\sigma| \\</script>
 			  \sigma' &\triangleq \sigma[a \mapsto (lam , \rho)]
 \end{aligned}</script>
 <p>At this point, we have a lambda as the control, and a <code>fn</code> continuation frame. It is officially time to apply the application! The first part of the continuation frame is the function, and the current control is the argument. So we place the functions body as the new control, and add its argument (paired with the environment it was found in to form a closure) to the env/store.</p>
-<p>This is the most complex function in this machine. Make sure to internalize that in this machine, the only value is the closure. So, when we see a lambda, we have reached a value (when combined with an env). There <a href="https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Church_encoding" target="_blank">are ways↪</a> to ues closures to represent common datatypes such as numbers, or lists. These ways are how lambda calculus continues to be used as the basis for minimalistic languages such as scheme. But it makes programs hard to read, so we add integers anyways!</p>
+<p>This is the most complex function in this machine. Make sure to internalize that in this machine, the only value is the closure. So, when we see a lambda, we have reached a value (when combined with an env). There 
+<a href="https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Church_encoding" target="_blank">are ways↪</a>
+ to ues closures to represent common datatypes such as numbers, or lists. These ways are how lambda calculus continues to be used as the basis for minimalistic languages such as scheme. But it makes programs hard to read, so we add integers anyways!</p>
 <h1 id="the-completed-machine">The Completed Machine</h1>
 <p>And just like that, we have the 4 transition functions that define a standard 'call-by-value' lambda calculus. Lets put them together for posterity:</p>
 <script type="math/tex;mode=display">(x , \rho , \sigma , \kappa) \leadsto (v , \rho_\lambda , \sigma , \kappa) \\
@@ -231,7 +246,9 @@ alloc(\sigma) \triangleq |\sigma| \\</script>
 			  \rho'' &\triangleq \rho'[x \mapsto a] \\
 			  \sigma' &\triangleq \sigma[a \mapsto (lam , \rho)]
 \end{aligned}</script>
-<p>The machine works by combining each of these into one big function, much like the <a href="https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Piecewise" target="_blank">piece-wise function↪</a> you learned in math class. Lets give this function the name <code>step</code>.</p>
+<p>The machine works by combining each of these into one big function, much like the 
+<a href="https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Piecewise" target="_blank">piece-wise function↪</a>
+ you learned in math class. Lets give this function the name <code>step</code>.</p>
 <h1 id="an-example-run">An Example Run</h1>
 <p>To evaluate a function, we continuously execute our transition functions until we reach a stuck-state. That final state is the return value of our program.</p>
 <p>Lets take our example from before, and run it by hand.</p>
@@ -245,8 +262,10 @@ alloc(\sigma) \triangleq |\sigma| \\</script>
 \varsigma_2 = ((\lambda \; (\text{blerp}) \; \text{WORD}) , \emptyset , \emptyset , \textbf{fn}((\lambda \; (q) \; (\lambda \; (b) \; q)) , \emptyset , \textbf{mt})) \\
 %
 \varsigma_3 = ((\lambda \; (b) \; q) , \{q : 0\} , \{0 : (\lambda \; (\text{blerp}) \; \text{WORD})\} , \textbf{mt}) \\</script>
-<p>ς<sub>3</sub> is the final state, if we run <code>step</code> again, no applicable input is found. Try to write the steps out more explicitly on some paper, and see for yourself that this is the final state.</p>
-<p>The key insight to understand that  ς<sub>3</sub> is the final state is that we are at an 'atomic' value with an empty continuation. Atomic in this case means we can't break it down further, like we could a variable or and application form.</p>
+<p>ς<sub>3</sub>
+ is the final state, if we run <code>step</code> again, no applicable input is found. Try to write the steps out more explicitly on some paper, and see for yourself that this is the final state.</p>
+<p>The key insight to understand that  ς<sub>3</sub>
+ is the final state is that we are at an 'atomic' value with an empty continuation. Atomic in this case means we can't break it down further, like we could a variable or and application form.</p>
 <h1 id="whats-next">Whats next</h1>
 <p>Well, we have a turing complete language, what's the point in doing anything else? Language features to make this machine usable?? Fine! Stay tuned and next time we will implement 'useful' things, like numbers, and <code>if</code>. I promise that it will be shorter than this post.</p>
 <p>See you next time!</p>

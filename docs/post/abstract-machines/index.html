@@ -10,15 +10,15 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="referrer" content="no-referrer">
 
-        <link rel="stylesheet" href="https:&#x2F;&#x2F;drs.is&#x2F;fonts.css">
-        <link rel="stylesheet" href="https:&#x2F;&#x2F;drs.is&#x2F;style.css">
+        <link rel="stylesheet" href="https://drs.is/fonts.css">
+        <link rel="stylesheet" href="https://drs.is/style.css">
 
         <title>
     Abstract Machines: Interpreters for Computer Scientists  · Sin&#x27;s Blog
 </title>
 
         
-            <link rel="alternate" type="application/rss+xml" title="RSS" href="https:&#x2F;&#x2F;drs.is&#x2F;atom.xml">
+            <link rel="alternate" type="application/rss+xml" title="RSS" href="https://drs.is/atom.xml">
         
 
         <!-- TODO: apparently CDNs arent good anymore. -->
@@ -60,31 +60,31 @@
             <ul>
                 
                 <li class="tag">
-                    <a href="https:&#x2F;&#x2F;drs.is&#x2F;tags&#x2F;plt&#x2F;">
+                    <a href="https://drs.is/tags/plt/">
                         PLT
                     </a>
                 </li>
                 
                 <li class="tag">
-                    <a href="https:&#x2F;&#x2F;drs.is&#x2F;tags&#x2F;computer-science&#x2F;">
+                    <a href="https://drs.is/tags/computer-science/">
                         Computer Science
                     </a>
                 </li>
                 
                 <li class="tag">
-                    <a href="https:&#x2F;&#x2F;drs.is&#x2F;tags&#x2F;interpreters&#x2F;">
+                    <a href="https://drs.is/tags/interpreters/">
                         Interpreters
                     </a>
                 </li>
                 
                 <li class="tag">
-                    <a href="https:&#x2F;&#x2F;drs.is&#x2F;tags&#x2F;abstract-machines&#x2F;">
+                    <a href="https://drs.is/tags/abstract-machines/">
                         Abstract Machines
                     </a>
                 </li>
                 
                 <li class="tag">
-                    <a href="https:&#x2F;&#x2F;drs.is&#x2F;tags&#x2F;continuations&#x2F;">
+                    <a href="https://drs.is/tags/continuations/">
                         Continuations
                     </a>
                 </li>
@@ -258,47 +258,75 @@ operators'. Control is the currently running 'thing' in your program. The <code>
 the C machine because you only need control to represent the state of the entire program.</p>
 <p>C machines are not capable of much, only simple rewriting of expresions, because they dont have any information other than the program's control itself to go off of.
 One kind of language we can formalize with a C machine is that of mathematical expressions.</p>
-<p>Here is a big-step semantics of type <script type="math/tex">MathExp \Downarrow Number</script> (takes a math expression and returns a number). This means that the control we choose to use is a math expression. The result of evaluating a math expression is a number, of course, so thats the value.</p>
-<script type="math/tex">Addition:</script>
+<p>Here is a big-step semantics of type <script type="math/tex">MathExp \Downarrow Number</script>
+ (takes a math expression and returns a number). This means that the control we choose to use is a math expression. The result of evaluating a math expression is a number, of course, so thats the value.</p>
+<p><script type="math/tex">Addition:</script>
+
 <script type="math/tex;mode=display">\frac{e_1 \Downarrow n_1 \;,\; e_2 \Downarrow n_2 \;,\; n_1+n_2 = n }
      {e_1+e_2 \Downarrow n}</script>
-<p>This rule shows how to add expressions to end up with a number. You can understand it by reading the half under the bar as 'this is what we start and end with' and the half above the bar as 'these must be true to use these semantics'. You read <script type="math/tex">\Downarrow</script> as 'evalutes to'.</p>
+</p>
+<p>This rule shows how to add expressions to end up with a number. You can understand it by reading the half under the bar as 'this is what we start and end with' and the half above the bar as 'these must be true to use these semantics'. You read <script type="math/tex">\Downarrow</script>
+ as 'evalutes to'.</p>
 <p>You can read this rule like so:</p>
 <ol>
-<li>If we have some control that looks like <script type="math/tex">e_1 + e_2</script> (this is from the bottom left, before the arrow)</li>
-<li>if <script type="math/tex">e_1</script> evaluates to some number <script type="math/tex">n_1</script> (the first expression above the bar),</li>
-<li>if <script type="math/tex">e_2</script> evaluates to some number <script type="math/tex">n_2</script> (the second expression above the bar),</li>
-<li>if <script type="math/tex">n_1</script> added to <script type="math/tex">n_2</script> is equal to some number <script type="math/tex">n</script> (the third expression above the bar).</li>
-<li>THEN we know that the expression in step 1 evaluates to <script type="math/tex">n</script>.</li>
+<li>If we have some control that looks like <script type="math/tex">e_1 + e_2</script>
+ (this is from the bottom left, before the arrow)</li>
+<li>if <script type="math/tex">e_1</script>
+ evaluates to some number <script type="math/tex">n_1</script>
+ (the first expression above the bar),</li>
+<li>if <script type="math/tex">e_2</script>
+ evaluates to some number <script type="math/tex">n_2</script>
+ (the second expression above the bar),</li>
+<li>if <script type="math/tex">n_1</script>
+ added to <script type="math/tex">n_2</script>
+ is equal to some number <script type="math/tex">n</script>
+ (the third expression above the bar).</li>
+<li>THEN we know that the expression in step 1 evaluates to <script type="math/tex">n</script>
+.</li>
 </ol>
 <p>This may seem a bit backwards, we implement adding by adding? Well, the key is that expressions are complex, they can be composed of other expressions or just values. These rules show how to do math on expressions by first evaluating them to values. Then once they are values, it is quite easy to do math operations on them.</p>
-<p>Note the distinction between the arrow <script type="math/tex">\Downarrow</script> and <script type="math/tex">=</script> here. <script type="math/tex">\Downarrow</script> is saying &quot;left evaluates to right by virtue of applying this machine's rules.&quot; and <script type="math/tex">=</script> is saying &quot;you can substitute left for right&quot;.</p>
-<p>Authors of semantics like these love to use different looking arrow symbols, they all mean the same thing. Usually in big step they use a cool down-facing arrow like <script type="math/tex">\Downarrow</script>. In small step they will use a more boring arrow like <script type="math/tex">\rightarrow</script>.</p>
+<p>Note the distinction between the arrow <script type="math/tex">\Downarrow</script>
+ and <script type="math/tex">=</script>
+ here. <script type="math/tex">\Downarrow</script>
+ is saying &quot;left evaluates to right by virtue of applying this machine's rules.&quot; and <script type="math/tex">=</script>
+ is saying &quot;you can substitute left for right&quot;.</p>
+<p>Authors of semantics like these love to use different looking arrow symbols, they all mean the same thing. Usually in big step they use a cool down-facing arrow like <script type="math/tex">\Downarrow</script>
+. In small step they will use a more boring arrow like <script type="math/tex">\rightarrow</script>
+.</p>
 <h3 id="example">Example</h3>
 <p>Lets evaluate a simple math expression to show how you can use these rules to prove that expressions are evaluated correctly using a machines rules.</p>
 <script type="math/tex;mode=display">\frac{\frac{7 \Downarrow 7 \; 3 \Downarrow 3 \; 7 + 3 = 10}{7 + 3 \Downarrow 10}  \scriptsize{\mathbf{Addition}} \;\;\; \frac{}{4 \Downarrow 4} \;\;\; 10 + 4 = 14}
      {7+3+4 \Downarrow 14} \scriptsize{\mathbf{Addition}}</script>
-<p>Here, at the first, bottom most level, <script type="math/tex">e_1 = 7 + 3</script> and <script type="math/tex">e_2 = 4</script>. Then we need to prove that <code>7 + 3 = 10</code>, and we do that with another application of the addition rule! We could have chosen <code>3 + 4</code> to be be <script type="math/tex">e_2</script>, but it doesnt matter for addition, and we leave issues like that to a parser. I noted each level with the rule that was used to evaluate it. It is generally showed like this, but I usually dont show them. I only have so much horizontal space on this webpage!</p>
+<p>Here, at the first, bottom most level, <script type="math/tex">e_1 = 7 + 3</script>
+ and <script type="math/tex">e_2 = 4</script>
+. Then we need to prove that <code>7 + 3 = 10</code>, and we do that with another application of the addition rule! We could have chosen <code>3 + 4</code> to be be <script type="math/tex">e_2</script>
+, but it doesnt matter for addition, and we leave issues like that to a parser. I noted each level with the rule that was used to evaluate it. It is generally showed like this, but I usually dont show them. I only have so much horizontal space on this webpage!</p>
 <p>To evaluate simple mathematical expressions, we only need a control for the state. C machines are only capable of evaluating simple programs. What if we want to add a simple programming construct like variables? For that, we need a place to store them. And so, the CE machine is born!</p>
 <h1 id="environments-with-the-ce-machine">Environments with the CE machine.</h1>
 <p>To evaluate variables, we need to be able to keep track of what value they hold at a given program point. in a C machine, if we are given <code>a + 2</code>, we have no way of know what <code>a</code> is, because its not a number, and we can only deal with syntax as we see it. But if we gave a machine both <code>a + 2</code>, the control, and a mapping <code>{a : 4}</code>, an environment, we can evaluate the expression to 6!</p>
-<p>So, a big-step CE machine doesnt just have <code>MathExp</code> (C) for state anymore, we need an <code>Env</code> (E) to accompany it! The function is now of type <script type="math/tex">(MathExp \times Env) \Downarrow Number</script>. This means that our machine will take 2 arguments, a math expression and an environment, and it will return a computed number.</p>
-<script type="math/tex">Var-Lookup:</script>
+<p>So, a big-step CE machine doesnt just have <code>MathExp</code> (C) for state anymore, we need an <code>Env</code> (E) to accompany it! The function is now of type <script type="math/tex">(MathExp \times Env) \Downarrow Number</script>
+. This means that our machine will take 2 arguments, a math expression and an environment, and it will return a computed number.</p>
+<p><script type="math/tex">Var-Lookup:</script>
+
 <script type="math/tex;mode=display">\frac{\rho[var] = n}
      {(var, \rho) \Downarrow n}</script>
+</p>
 <p>This simply states that if the expression is a variable, not an artithmetic expression,
 the value it returns is what the environment says it is. We use the greek
 letter rho ('ρ') (not the letter 'p') to represent the environment. This is what is used
-in the literature, and its always best to follow along with norms to avoid confusion! For the history on why they used <script type="math/tex">\rho</script> for this task, you will have to ask someone smarter than me.</p>
+in the literature, and its always best to follow along with norms to avoid confusion! For the history on why they used <script type="math/tex">\rho</script>
+ for this task, you will have to ask someone smarter than me.</p>
 <p>We dont have variable binding yet, but you can imagine an expression like:
 <code>m*c*c</code> with an environment <code>{m : 12 c : 299792458}</code>, which will return some number for us.
 We have made a calculator with predefined constants! We can put pi in there,
 or tau if you are a lunatic...</p>
 <h1 id="real-looking-programs">Real Looking Programs</h1>
 <p>Wow, it seems like we can do a lot with just a control and an environment. We could further extend this to things like variable assignment (again, these are big-step semantics):</p>
-<script type="math/tex">\mathbf{Assignment:}</script>
+<p><script type="math/tex">\mathbf{Assignment:}</script>
+
 <script type="math/tex;mode=display">\frac{e_1 \Downarrow n_2 \;,\; \rho_2 = (\rho + \{var : n_2\}) \;,\; (e_2, \rho_2) \Downarrow n}
      {(var := e_1 \;\text{in}\; e_2 \;,\; \rho) \Downarrow n}</script>
+</p>
 <p>This tells us that when we assign a variable, it will be available in the next expression.</p>
 <p>It seems that these two components of a state are enough to be wildly dangerous with. Soon enough, your semantics will be modeling a real language, with conditions, and inequalities, oh my! But, there are two big problems that you may face.</p>
 <p>First, your big step semantics may limit you. Their stringent requirements that their sub-expressions be terminating can cause issues in a turing-complete environment. And a small-step semantics can provide more granularity of control. For that reason, we will be using small-step semantics from now on.</p>
@@ -308,21 +336,28 @@ or tau if you are a lunatic...</p>
 A continuation is a way of showing 'future work' to be done. For example, when we implement
 our assignment operation, we can delegate the work of executing the second expression to the
 continuation:</p>
-<script type="math/tex">\footnotesize{\mathbf{Assign-Exp}}:</script>
+<p><script type="math/tex">\footnotesize{\mathbf{Assign-Exp}}:</script>
+
 <script type="math/tex;mode=display">\footnotesize{
 \frac{}
      {(v := e_1 \;\text{in}\; e_2 , \rho , \kappa)
      \rightarrow (e_1 , \rho , \text{assign}(v, e_2, \kappa))}
 }</script>
-<script type="math/tex">\footnotesize{\mathbf{Assign-Kont}}:</script>
+</p>
+<p><script type="math/tex">\footnotesize{\mathbf{Assign-Kont}}:</script>
+
 <script type="math/tex;mode=display">\frac{e \text{ is atomic} , \rho_2 = (\rho + \{v : \text{e} \})}
      {(e , \rho , \text{assign}(v, e_2 , k_{next} ))
         \rightarrow (e_2 , \rho_2 , k_{next})}</script>
+</p>
 <p>There is quite a bit more to unpack here!</p>
 <p>First, we switched to a small step semantics. Instead of returning a fully evaluated value as before, we now return states. Big step semantics are nice for simple programs, but when things get more complex, we want finer-grained control, so we switch to small-step.</p>
-<p>Next, our state has a third argument. Our type signature is now <script type="math/tex">(C, E, K) \rightarrow (C, E, K)</script>. The third argument is a continuation, it is
+<p>Next, our state has a third argument. Our type signature is now <script type="math/tex">(C, E, K) \rightarrow (C, E, K)</script>
+. The third argument is a continuation, it is
 useful in small step semantics, so we can focus on evaluating expressions. When we are done, we know what to do next.</p>
-<p>Finaly, The above semantics show that when we see an assignment expression, we simply return the <script type="math/tex">e_1</script> expression as the control for the next state. The key is that we save a new 'continuation frame' along with that control. This signifies that after that expression is fully evaluated, we continue by assigning it to a variable, and then execute the expression <script type="math/tex">e_2</script>.</p>
+<p>Finaly, The above semantics show that when we see an assignment expression, we simply return the <script type="math/tex">e_1</script>
+ expression as the control for the next state. The key is that we save a new 'continuation frame' along with that control. This signifies that after that expression is fully evaluated, we continue by assigning it to a variable, and then execute the expression <script type="math/tex">e_2</script>
+.</p>
 <p>Another notable thing is that, inside of that 'assign' continuation frame, we store the old continuation. This recursive format is necessary when nesting complex expressions. Let's use an example with nested assignment expressions, with the recursive nature of the continuations being our life-jacket.</p>
 <h2 id="example-1">Example</h2>
 <p>If we had some expression:</p>
@@ -341,22 +376,21 @@ that a continuation does is store the previous one, like a linked-list. Continua
 <p>For example, an program that looks like:</p>
 <script type="math/tex;mode=display">x := (y := (z := 3 \;\text{in}\; z) \;\text{in}\; (y + y)) \;\text{in}\; x</script>
 <p>Here is what the states will look like over the course of 3 applications of <code>assign-exp</code>:</p>
-<pre style="background-color:#282a36;">
-<code><span style="color:#f8f8f2;">(x := (y := (z := 3 in z) in (y + y)) in x , {} , NONE)
--&gt; ((y := (z := 3 in z) in (y + y)) , {} , assign(x , x , NONE))
--&gt; ((z := 3 in z) , {} , assign(y , y + y , assign(x , x , NONE)))
--&gt; (3 , {} , assign(z , z , assign(y , y + y , assign(x , x , NONE))))
+<pre style="background-color:#282a36;color:#f8f8f2;"><code><span>(x := (y := (z := 3 in z) in (y + y)) in x , {} , NONE)
+</span><span>-&gt; ((y := (z := 3 in z) in (y + y)) , {} , assign(x , x , NONE))
+</span><span>-&gt; ((z := 3 in z) , {} , assign(y , y + y , assign(x , x , NONE)))
+</span><span>-&gt; (3 , {} , assign(z , z , assign(y , y + y , assign(x , x , NONE))))
 </span></code></pre>
 <p>Then if we apply <code>assign-kont</code> a couple times, with omitted <code>addition</code> and <code>var-lookup</code> rules:</p>
-<pre style="background-color:#282a36;">
-<code><span style="color:#f8f8f2;">-&gt; (z , {z : 3} , assign(y , y + y , assign(x , x , NONE)))
--&gt; (3 , {z : 3} , assign(y , y + y , assign(x , x , NONE)))
--&gt; (y + y , {z : 3 , y : 3} , assign(x , x , NONE))
-...
--&gt; (6 , {z : 3 , y : 3} , assign(x , x , NONE))
--&gt; (x , {z : 3 , y : 3 , x : 6} , NONE)
--&gt; (6 , {z : 3 , y : 3 , x : 6} , NONE)
-</span></code></pre><h3 id="interlude-injection">Interlude: Injection</h3>
+<pre style="background-color:#282a36;color:#f8f8f2;"><code><span>-&gt; (z , {z : 3} , assign(y , y + y , assign(x , x , NONE)))
+</span><span>-&gt; (3 , {z : 3} , assign(y , y + y , assign(x , x , NONE)))
+</span><span>-&gt; (y + y , {z : 3 , y : 3} , assign(x , x , NONE))
+</span><span>...
+</span><span>-&gt; (6 , {z : 3 , y : 3} , assign(x , x , NONE))
+</span><span>-&gt; (x , {z : 3 , y : 3 , x : 6} , NONE)
+</span><span>-&gt; (6 , {z : 3 , y : 3 , x : 6} , NONE)
+</span></code></pre>
+<h3 id="interlude-injection">Interlude: Injection</h3>
 <p>Note above that there is an 'initial' state that we use when we start evaluating an expression. We wrap the expression with an empty environment ('{}'), and an 'empty' contination ('NONE'). This is usually done with whats called an <em>injection function</em>:</p>
 <script type="math/tex;mode=display">inject(e) = (e \;,\; \{\} \;,\; \text{NONE})</script>
 <p>This gives us the initial state from an expression. The initial state can of course be changed to your needs. adding initial environment values or constants, for example.</p>
@@ -371,18 +405,24 @@ What if we want to add a conditional to our language? It is very easy with our l
 <p>Lets compute this text:</p>
 <script type="math/tex;mode=display">\text{if}\; c \;\text{then}\; t \;\text{else}\; f</script>
 <p>This will evaluate <code>c</code>, and once a value is computed, it checks its value. If the value is <code>0</code>, it will take the <code>else</code> branch, otherwise it will take the <code>then</code> branch. If we had a more complex language with booleans, we could use those. Or really, we could do almost anything! Make your own language, make it weird!</p>
-<script type="math/tex">\text{if-exp}:</script>
+<p><script type="math/tex">\text{if-exp}:</script>
+
 <script type="math/tex;mode=display">\frac{}
      {((\text{if}\; c \;\text{then}\; t \;\text{else}\; f) \;,\; \rho , \kappa)
      \rightarrow (c , \rho , \text{ifk}(t , f , \kappa))}</script>
-<script type="math/tex">\text{if-kont-t}:</script>
+</p>
+<p><script type="math/tex">\text{if-kont-t}:</script>
+
 <script type="math/tex;mode=display">\frac{v \text{ is atomic} , v \;\text{!=}\; 0}
      {(v , \rho , \text{ifk}(t , f , \kappa_{next}))
      \rightarrow (t , \rho , \kappa_{next})}</script>
-<script type="math/tex">\text{if-kont-f}:</script>
+</p>
+<p><script type="math/tex">\text{if-kont-f}:</script>
+
 <script type="math/tex;mode=display">\frac{v \text{ is atomic} , v = 0}
      {(v , \rho , \text{ifk}(t , f , \kappa_{next}))
      \rightarrow (f , \rho , \kappa_{next})}</script>
+</p>
 <p>Here, when it is time to check the continuation for guidance, we will next evaluate
 one of the branches from the <code>ifk</code> continuation 'frame' based on the controls value.</p>
 <p>The idea of small step + continuation can be very similar to big-step. this CEK machine
@@ -391,21 +431,22 @@ that but in a slightly more compact way, involving more inference rules on the t
 big bar.</p>
 <h2 id="another-example">Another Example</h2>
 <p>Lets do another simple example of continuations, just to hammer them in!</p>
-<p>We will show that:</p>
+<p>We will show that:
 <script type="math/tex;mode=display">\scriptsize{
 \frac{}
      {(x := (\text{if} \; (1 + 1) \; \text{then} \;7\; \text{else} \;12) \; \text{in} \; x \;,\; \{\} \;,\; NONE)
         \rightarrow (7, \{\}, NONE)}
 }</script>
-<pre style="background-color:#282a36;">
-<code><span style="color:#f8f8f2;">(x := (if (1 + 1) then 7 else 12) , {} , NONE)
--&gt; (if (1 + 1) then 7 else 12 , {} , assign(x, x, NONE))
--&gt; ((1 + 1) , {} , ifk(7, 12, assign(x, x, NONE)))
--&gt; (2 , {} , ifk(7, 12, assign(x, x, NONE)))
--&gt; (7 , {} , assign(x, x, NONE))
--&gt; (x , {x : 7} , NONE)
--&gt; (7 , {} , NONE)
-</span></code></pre><h3 id="fun-insight">Fun Insight!</h3>
+</p>
+<pre style="background-color:#282a36;color:#f8f8f2;"><code><span>(x := (if (1 + 1) then 7 else 12) , {} , NONE)
+</span><span>-&gt; (if (1 + 1) then 7 else 12 , {} , assign(x, x, NONE))
+</span><span>-&gt; ((1 + 1) , {} , ifk(7, 12, assign(x, x, NONE)))
+</span><span>-&gt; (2 , {} , ifk(7, 12, assign(x, x, NONE)))
+</span><span>-&gt; (7 , {} , assign(x, x, NONE))
+</span><span>-&gt; (x , {x : 7} , NONE)
+</span><span>-&gt; (7 , {} , NONE)
+</span></code></pre>
+<h3 id="fun-insight">Fun Insight!</h3>
 <p>If you have been paying close attention to the continuations, they kind of act like a fine-grained <em>stack</em>. Traditional stacks are at the level of funtions. You call a function, and a stack-frame is pushed. After a <code>return</code> is issued (in our case, reaching an atomic value), that frame is popped. The idea with continuations here is very similar, but at the level of instructions (like conditionals, assignments, etc.), not just functions.</p>
 <p>I didnt want to get into the weeds of <em>real progrmaming</em> in this post, but if that helps you understand more, great! If not, dont fret! But think on the recursive nature of continuations, it can really give shed new light on how to model computation!</p>
 <p>In practice, recursive continnuations can be made efficient by using tail-call eliminations, but thats a subject for a whole 'nother post!</p>
@@ -426,12 +467,17 @@ operational semantics can help you to formalize how your language evalautes, and
 <p>Abstract Machines are a way to formally define computation for terms. When mapped to 'the real world' that means an interpreter for your programming language. They are a wonderful way of explicitly showing how programs are executed, and computation is performed.</p>
 <h1 id="appendix">Appendix</h1>
 <script type="math/tex"></script>
-<script type="math/tex">\rho:</script> 'rho', is an environment, used to map variables to values.
-<script type="math/tex">\kappa:</script> 'kappa', is a continuation, which represents the rest of the program. We consult this after the current control is fully evaluated.
-<script type="math/tex">\Sigma:</script> 'Sigma' (uppercase). Although not used in this post, this character often is used to represent the `State` type of the machine.
-<script type="math/tex">\varsigma:</script> 'sigma' (lowercase in 'final word position'). This is known as 'varsigma'. You may find this used as an instance of a state. A small step machine goes from some state to a next state, so we can codify that as
+<p><script type="math/tex">\rho:</script>
+ 'rho', is an environment, used to map variables to values.</p>
+<p><script type="math/tex">\kappa:</script>
+ 'kappa', is a continuation, which represents the rest of the program. We consult this after the current control is fully evaluated.</p>
+<p><script type="math/tex">\Sigma:</script>
+ 'Sigma' (uppercase). Although not used in this post, this character often is used to represent the <code>State</code> type of the machine.</p>
+<p><script type="math/tex">\varsigma:</script>
+ 'sigma' (lowercase in 'final word position'). This is known as 'varsigma'. You may find this used as an instance of a state. A small step machine goes from some state to a next state, so we can codify that as</p>
 <script type="math/tex;mode=display">\varsigma_i \rightarrow \varsigma_{i+1}</script>
-<script type="math/tex">\sigma:</script> 'sigma' (lowercase). Although not used in this post, this character is used to represent the `store` component of a machine. If we would have made a CESK machine,  then the S would be this.
+<p><script type="math/tex">\sigma:</script>
+ 'sigma' (lowercase). Although not used in this post, this character is used to represent the <code>store</code> component of a machine. If we would have made a CESK machine,  then the S would be this.</p>
 
 
         </div>

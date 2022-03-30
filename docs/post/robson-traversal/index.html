@@ -10,15 +10,15 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="referrer" content="no-referrer">
 
-        <link rel="stylesheet" href="https:&#x2F;&#x2F;drs.is&#x2F;fonts.css">
-        <link rel="stylesheet" href="https:&#x2F;&#x2F;drs.is&#x2F;style.css">
+        <link rel="stylesheet" href="https://drs.is/fonts.css">
+        <link rel="stylesheet" href="https://drs.is/style.css">
 
         <title>
     The Robson Tree Traversal (DRAFT)  · Sin&#x27;s Blog
 </title>
 
         
-            <link rel="alternate" type="application/rss+xml" title="RSS" href="https:&#x2F;&#x2F;drs.is&#x2F;atom.xml">
+            <link rel="alternate" type="application/rss+xml" title="RSS" href="https://drs.is/atom.xml">
         
 
         <!-- TODO: apparently CDNs arent good anymore. -->
@@ -60,25 +60,25 @@
             <ul>
                 
                 <li class="tag">
-                    <a href="https:&#x2F;&#x2F;drs.is&#x2F;tags&#x2F;data-structures&#x2F;">
+                    <a href="https://drs.is/tags/data-structures/">
                         Data-Structures
                     </a>
                 </li>
                 
                 <li class="tag">
-                    <a href="https:&#x2F;&#x2F;drs.is&#x2F;tags&#x2F;algorithms&#x2F;">
+                    <a href="https://drs.is/tags/algorithms/">
                         Algorithms
                     </a>
                 </li>
                 
                 <li class="tag">
-                    <a href="https:&#x2F;&#x2F;drs.is&#x2F;tags&#x2F;trees&#x2F;">
+                    <a href="https://drs.is/tags/trees/">
                         Trees
                     </a>
                 </li>
                 
                 <li class="tag">
-                    <a href="https:&#x2F;&#x2F;drs.is&#x2F;tags&#x2F;c&#x2F;">
+                    <a href="https://drs.is/tags/c/">
                         C
                     </a>
                 </li>
@@ -112,7 +112,9 @@
 <p>In this post, we will discuss a novel tree traversal algorithm.
 The standard traversal method operates with a <em>linear</em> spatial cost.
 The Robson traversal counters with a cool <em><strong>constant</strong></em> space!</p>
-<p>The final code is on <a href="https:&#x2F;&#x2F;github.com&#x2F;sinistersnare&#x2F;robson" target="_blank">github↪</a>,
+<p>The final code is on 
+<a href="https:&#x2F;&#x2F;github.com&#x2F;sinistersnare&#x2F;robson" target="_blank">github↪</a>
+,
 but I encourage you to read this post!
 The table of contents may help for people that may want to skip a bit :)</p>
 <h1 id="table-of-contents">Table of Contents</h1>
@@ -121,51 +123,58 @@ The table of contents may help for people that may want to skip a bit :)</p>
 <p>The tree is an incredibly important data structure.
 A great learning tool for beginning computer scientists, starting to understand the science.
 Trees are also used throughout the real-world.
-File systems use <a href="https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;B-tree" target="_blank">B-trees↪</a> to</p>
-<a href="https:&#x2F;&#x2F;github.com&#x2F;postgres&#x2F;postgres&#x2F;tree&#x2F;master&#x2F;src&#x2F;backend&#x2F;access&#x2F;nbtree" target="_blank">store their data↪</a>. Text editors use
-<a href="https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Rope_(data_structure)" target="_blank">ropes↪</a> to
-<a href="https:&#x2F;&#x2F;github.com&#x2F;google&#x2F;xi-editor&#x2F;tree&#x2F;master&#x2F;rust&#x2F;rope" target="_blank">organize their text↪</a>.
-<p>Trees power the world, inside and outside of computers.
+File systems use 
+<a href="https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;B-tree" target="_blank">B-trees↪</a>
+ to
+
+<a href="https:&#x2F;&#x2F;github.com&#x2F;postgres&#x2F;postgres&#x2F;tree&#x2F;master&#x2F;src&#x2F;backend&#x2F;access&#x2F;nbtree" target="_blank">store their data↪</a>
+. Text editors use
+
+<a href="https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Rope_(data_structure)" target="_blank">ropes↪</a>
+ to
+
+<a href="https:&#x2F;&#x2F;github.com&#x2F;google&#x2F;xi-editor&#x2F;tree&#x2F;master&#x2F;rust&#x2F;rope" target="_blank">organize their text↪</a>
+.
+Trees power the world, inside and outside of computers.
 We will be using a simple binary tree for this post.</p>
 <p>Here is a common binary tree definition. We will be using C for the whole of this post:</p>
-<pre style="background-color:#282a36;">
-<code class="language-c" data-lang="c"><span style="color:#6272a4;">/* We will use this type definition later. */
-</span><span style="font-style:italic;color:#8be9fd;">typedef void </span><span style="color:#f8f8f2;">(</span><span style="color:#ff79c6;">*</span><span style="color:#f8f8f2;">VisitFunc)(Tree</span><span style="color:#ff79c6;">*</span><span style="color:#f8f8f2;">);
-
-typedef </span><span style="font-style:italic;color:#8be9fd;">struct</span><span style="color:#f8f8f2;"> Tree </span><span style="color:#ffffff;">{
-    </span><span style="font-style:italic;color:#8be9fd;">int</span><span style="color:#f8f8f2;"> data;
-    </span><span style="font-style:italic;color:#8be9fd;">struct</span><span style="color:#f8f8f2;"> Tree</span><span style="color:#ff79c6;">*</span><span style="color:#f8f8f2;"> left;
-    </span><span style="font-style:italic;color:#8be9fd;">struct</span><span style="color:#f8f8f2;"> Tree</span><span style="color:#ff79c6;">*</span><span style="color:#f8f8f2;"> right;
-</span><span style="color:#ffffff;">}</span><span style="color:#f8f8f2;"> Tree;
+<pre data-lang="c" style="background-color:#282a36;color:#f8f8f2;" class="language-c "><code class="language-c" data-lang="c"><span style="color:#6272a4;">/* We will use this type definition later. */
+</span><span style="font-style:italic;color:#8be9fd;">typedef void </span><span>(</span><span style="color:#ff79c6;">*</span><span>VisitFunc)(Tree</span><span style="color:#ff79c6;">*</span><span>);
+</span><span>
+</span><span style="font-style:italic;color:#8be9fd;">typedef struct</span><span> Tree </span><span style="color:#ffffff;">{
+</span><span>    </span><span style="font-style:italic;color:#8be9fd;">int</span><span> data;
+</span><span>    </span><span style="font-style:italic;color:#8be9fd;">struct</span><span> Tree</span><span style="color:#ff79c6;">*</span><span> left;
+</span><span>    </span><span style="font-style:italic;color:#8be9fd;">struct</span><span> Tree</span><span style="color:#ff79c6;">*</span><span> right;
+</span><span style="color:#ffffff;">} </span><span>Tree;
 </span></code></pre>
 <p>We can use the tree like so:</p>
-<pre style="background-color:#282a36;">
-<code class="language-c" data-lang="c"><span style="font-style:italic;color:#8be9fd;">int </span><span style="color:#50fa7b;">main</span><span style="color:#f8f8f2;">(</span><span style="font-style:italic;color:#8be9fd;">void</span><span style="color:#f8f8f2;">) </span><span style="color:#ffffff;">{
-</span><span style="color:#f8f8f2;">    Tree root, root_left;
-    root_left</span><span style="color:#ff79c6;">.</span><span style="color:#ffffff;">data </span><span style="color:#ff79c6;">= </span><span style="color:#bd93f9;">0</span><span style="color:#f8f8f2;">;
-    root_left</span><span style="color:#ff79c6;">.</span><span style="color:#ffffff;">left </span><span style="color:#ff79c6;">= </span><span style="color:#bd93f9;">NULL</span><span style="color:#f8f8f2;">;
-    root_left</span><span style="color:#ff79c6;">.</span><span style="color:#ffffff;">right </span><span style="color:#ff79c6;">= </span><span style="color:#bd93f9;">NULL</span><span style="color:#f8f8f2;">;
-    root</span><span style="color:#ff79c6;">.</span><span style="color:#ffffff;">data </span><span style="color:#ff79c6;">= </span><span style="color:#bd93f9;">1</span><span style="color:#f8f8f2;">;
-    root</span><span style="color:#ff79c6;">.</span><span style="color:#ffffff;">left </span><span style="color:#ff79c6;">= &amp;</span><span style="color:#f8f8f2;">root_left;
-    root</span><span style="color:#ff79c6;">.</span><span style="color:#ffffff;">right </span><span style="color:#ff79c6;">= </span><span style="color:#bd93f9;">NULL</span><span style="color:#f8f8f2;">;
+<pre data-lang="c" style="background-color:#282a36;color:#f8f8f2;" class="language-c "><code class="language-c" data-lang="c"><span style="font-style:italic;color:#8be9fd;">int </span><span style="color:#50fa7b;">main</span><span>(</span><span style="font-style:italic;color:#8be9fd;">void</span><span>) </span><span style="color:#ffffff;">{
+</span><span>    Tree root, root_left;
+</span><span>    root_left</span><span style="color:#ff79c6;">.</span><span style="color:#ffffff;">data </span><span style="color:#ff79c6;">= </span><span style="color:#bd93f9;">0</span><span>;
+</span><span>    root_left</span><span style="color:#ff79c6;">.</span><span style="color:#ffffff;">left </span><span style="color:#ff79c6;">= </span><span style="color:#bd93f9;">NULL</span><span>;
+</span><span>    root_left</span><span style="color:#ff79c6;">.</span><span style="color:#ffffff;">right </span><span style="color:#ff79c6;">= </span><span style="color:#bd93f9;">NULL</span><span>;
+</span><span>    root</span><span style="color:#ff79c6;">.</span><span style="color:#ffffff;">data </span><span style="color:#ff79c6;">= </span><span style="color:#bd93f9;">1</span><span>;
+</span><span>    root</span><span style="color:#ff79c6;">.</span><span style="color:#ffffff;">left </span><span style="color:#ff79c6;">= &amp;</span><span>root_left;
+</span><span>    root</span><span style="color:#ff79c6;">.</span><span style="color:#ffffff;">right </span><span style="color:#ff79c6;">= </span><span style="color:#bd93f9;">NULL</span><span>;
 </span><span style="color:#ffffff;">}
 </span></code></pre>
-<p>We will  specifically be using</p>
-<a href="https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Binary_search_tree" target="_blank">Binary Search Trees↪</a>,
-<p>so that way in-order traversal works.</p>
+<p>We will  specifically be using
+
+<a href="https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Binary_search_tree" target="_blank">Binary Search Trees↪</a>
+,
+so that way in-order traversal works.</p>
 <h2 id="how-do-we-traverse-a-tree">How Do We Traverse a tree?</h2>
 <p>Traversing a tree means accessing each node's data in the whole tree.
 This is obviously a critically important function of a tree,
 we should be able to access all elements if we need to.</p>
 <p>Luckily, traversing a tree is super easy!</p>
-<pre style="background-color:#282a36;">
-<code class="language-c" data-lang="c"><span style="font-style:italic;color:#8be9fd;">void </span><span style="color:#50fa7b;">traverse</span><span style="color:#f8f8f2;">(Tree</span><span style="color:#ff79c6;">* </span><span style="font-style:italic;color:#ffb86c;">cur</span><span style="color:#f8f8f2;">) </span><span style="color:#ffffff;">{
-    </span><span style="color:#ff79c6;">if </span><span style="color:#f8f8f2;">(cur </span><span style="color:#ff79c6;">== </span><span style="color:#bd93f9;">NULL</span><span style="color:#f8f8f2;">) </span><span style="color:#ff79c6;">return</span><span style="color:#f8f8f2;">;
-    </span><span style="color:#50fa7b;">pre_visit</span><span style="color:#f8f8f2;">(cur); </span><span style="color:#6272a4;">/* pre-order traversal */
-    </span><span style="color:#50fa7b;">traverse</span><span style="color:#f8f8f2;">(cur</span><span style="color:#ff79c6;">-&gt;</span><span style="color:#f8f8f2;">left);
-    </span><span style="color:#50fa7b;">in_visit</span><span style="color:#f8f8f2;">(cur); </span><span style="color:#6272a4;">/* in-order traversal */
-    </span><span style="color:#50fa7b;">traverse</span><span style="color:#f8f8f2;">(cur</span><span style="color:#ff79c6;">-&gt;</span><span style="color:#f8f8f2;">right);
-    </span><span style="color:#50fa7b;">post_visit</span><span style="color:#f8f8f2;">(cur); </span><span style="color:#6272a4;">/* post-order traversal */
+<pre data-lang="c" style="background-color:#282a36;color:#f8f8f2;" class="language-c "><code class="language-c" data-lang="c"><span style="font-style:italic;color:#8be9fd;">void </span><span style="color:#50fa7b;">traverse</span><span>(Tree</span><span style="color:#ff79c6;">* </span><span style="font-style:italic;color:#ffb86c;">cur</span><span>) </span><span style="color:#ffffff;">{
+</span><span>    </span><span style="color:#ff79c6;">if </span><span>(cur </span><span style="color:#ff79c6;">== </span><span style="color:#bd93f9;">NULL</span><span>) </span><span style="color:#ff79c6;">return</span><span>;
+</span><span>    </span><span style="color:#50fa7b;">pre_visit</span><span>(cur); </span><span style="color:#6272a4;">/* pre-order traversal */
+</span><span>    </span><span style="color:#50fa7b;">traverse</span><span>(cur</span><span style="color:#ff79c6;">-&gt;</span><span>left);
+</span><span>    </span><span style="color:#50fa7b;">in_visit</span><span>(cur); </span><span style="color:#6272a4;">/* in-order traversal */
+</span><span>    </span><span style="color:#50fa7b;">traverse</span><span>(cur</span><span style="color:#ff79c6;">-&gt;</span><span>right);
+</span><span>    </span><span style="color:#50fa7b;">post_visit</span><span>(cur); </span><span style="color:#6272a4;">/* post-order traversal */
 </span><span style="color:#ffffff;">}
 </span></code></pre>
 <p>This algorithm is universally taught in beginning CS courses at universities.
@@ -187,9 +196,11 @@ Take an algorithms course I guess? I'll give a quick paragraph.</p>
 If we are talking about speed, an <code>O(n)</code> function will perform linearly with regards to input.
 An <code>O(1)</code> function will always perform the same no matter how big the input gets. You should try
 to avoid <code>O(n!)</code> functions, too... These functions are used for 'time' and 'space'. If you
-are interested in this stuff, please check out</p>
+are interested in this stuff, please check out
+
 <a href="https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Introduction_to_Algorithms" target="_blank">CLRS↪</a>
-<p>chapter 3 for more information, or ask me to write a post on it!</p>
+
+chapter 3 for more information, or ask me to write a post on it!</p>
 <p>The 'standard' traversal method is as efficient as possible, time-wise.
 We need to traverse all <code>n</code>-nodes of a tree, and the algorithm has <code>O(n)</code>
 run-time complexity. You cant get any better than that!</p>
@@ -232,62 +243,61 @@ when going up a tree.</p>
 <p>This method is stackless, like in the threaded tree, and solves Knuth's question.
 It does not solve our dilemma though, we need O(1) worst-case space complexity!
 Lets talk about how and why it works, which will lead us to Robson.</p>
-<pre style="background-color:#282a36;">
-<code class="language-c" data-lang="c"><span style="font-style:italic;color:#8be9fd;">typedef struct</span><span style="color:#f8f8f2;"> Tree </span><span style="color:#ffffff;">{
-    </span><span style="font-style:italic;color:#8be9fd;">int</span><span style="color:#f8f8f2;"> data;
-    Tree</span><span style="color:#ff79c6;">*</span><span style="color:#f8f8f2;"> left;
-    Tree</span><span style="color:#ff79c6;">*</span><span style="color:#f8f8f2;"> right;
-    </span><span style="font-style:italic;color:#8be9fd;">bool</span><span style="color:#f8f8f2;"> went_right;
-</span><span style="color:#ffffff;">} </span><span style="color:#f8f8f2;">Tree;
-
-</span><span style="font-style:italic;color:#8be9fd;">void </span><span style="color:#50fa7b;">link_inversion</span><span style="color:#f8f8f2;">(Tree</span><span style="color:#ff79c6;">* </span><span style="font-style:italic;color:#ffb86c;">cur</span><span style="color:#f8f8f2;">, VisitFunc </span><span style="font-style:italic;color:#ffb86c;">pre_order</span><span style="color:#f8f8f2;">,
-                               VisitFunc </span><span style="font-style:italic;color:#ffb86c;">in_order</span><span style="color:#f8f8f2;">,
-                               VisitFunc </span><span style="font-style:italic;color:#ffb86c;">post_order</span><span style="color:#f8f8f2;">) </span><span style="color:#ffffff;">{
-</span><span style="color:#f8f8f2;">    Tree</span><span style="color:#ff79c6;">*</span><span style="color:#f8f8f2;"> prev </span><span style="color:#ff79c6;">= </span><span style="color:#bd93f9;">NULL</span><span style="color:#f8f8f2;">;
-    Tree</span><span style="color:#ff79c6;">*</span><span style="color:#f8f8f2;"> old_prev;
-    Tree</span><span style="color:#ff79c6;">*</span><span style="color:#f8f8f2;"> old_prev_left;
-    Tree</span><span style="color:#ff79c6;">*</span><span style="color:#f8f8f2;"> old_cur;
-
-    </span><span style="color:#ff79c6;">if </span><span style="color:#f8f8f2;">(cur </span><span style="color:#ff79c6;">== </span><span style="color:#bd93f9;">NULL</span><span style="color:#f8f8f2;">) </span><span style="color:#ff79c6;">return</span><span style="color:#f8f8f2;">;
-
-    </span><span style="color:#ff79c6;">do </span><span style="color:#ffffff;">{
-        </span><span style="color:#6272a4;">/* 1) Descend leftward as much as possible. */
-        </span><span style="color:#ff79c6;">while </span><span style="color:#f8f8f2;">(cur </span><span style="color:#ff79c6;">!= </span><span style="color:#bd93f9;">NULL</span><span style="color:#f8f8f2;">) </span><span style="color:#ffffff;">{
-            </span><span style="color:#50fa7b;">pre_order</span><span style="color:#f8f8f2;">(cur);
-            cur</span><span style="color:#ff79c6;">-&gt;</span><span style="color:#f8f8f2;">went_right </span><span style="color:#ff79c6;">= </span><span style="color:#bd93f9;">false</span><span style="color:#f8f8f2;">;
-            old_cur </span><span style="color:#ff79c6;">=</span><span style="color:#f8f8f2;"> cur;
-            cur </span><span style="color:#ff79c6;">=</span><span style="color:#f8f8f2;"> old_cur</span><span style="color:#ff79c6;">-&gt;</span><span style="color:#f8f8f2;">left;
-            old_cur</span><span style="color:#ff79c6;">-&gt;</span><span style="color:#f8f8f2;">left </span><span style="color:#ff79c6;">=</span><span style="color:#f8f8f2;"> prev;
-            prev </span><span style="color:#ff79c6;">=</span><span style="color:#f8f8f2;"> old_cur;
-        </span><span style="color:#ffffff;">}
-
-        </span><span style="color:#6272a4;">/* 2) ascend from right as much as we can. */
-        </span><span style="color:#ff79c6;">while </span><span style="color:#f8f8f2;">(prev </span><span style="color:#ff79c6;">!= </span><span style="color:#bd93f9;">NULL </span><span style="color:#ff79c6;">&amp;&amp;</span><span style="color:#f8f8f2;"> prev</span><span style="color:#ff79c6;">-&gt;</span><span style="color:#f8f8f2;">went_right) </span><span style="color:#ffffff;">{
-</span><span style="color:#f8f8f2;">            old_prev </span><span style="color:#ff79c6;">=</span><span style="color:#f8f8f2;"> prev;
-            prev </span><span style="color:#ff79c6;">=</span><span style="color:#f8f8f2;"> prev</span><span style="color:#ff79c6;">-&gt;</span><span style="color:#f8f8f2;">right;
-            old_prev</span><span style="color:#ff79c6;">-&gt;</span><span style="color:#f8f8f2;">right </span><span style="color:#ff79c6;">=</span><span style="color:#f8f8f2;"> cur;
-            cur </span><span style="color:#ff79c6;">=</span><span style="color:#f8f8f2;"> old_prev;
-            </span><span style="color:#50fa7b;">post_order</span><span style="color:#f8f8f2;">(cur);
-        </span><span style="color:#ffffff;">}
-
-        </span><span style="color:#6272a4;">/* 3)
-            If prev is null after coming back up from the right,
-                it means that we have finished traversal,
-                so head back to the while-condition and get outta here!
-            Else, we will do an exchange here,
-                swap to right child of parent. */
-        </span><span style="color:#ff79c6;">if </span><span style="color:#f8f8f2;">(prev </span><span style="color:#ff79c6;">!= </span><span style="color:#bd93f9;">NULL</span><span style="color:#f8f8f2;">) </span><span style="color:#ffffff;">{
-            </span><span style="color:#6272a4;">/* Switch from the left side of prev to the right
-               Also, mark prev as went_right so we know to traverse
-               upwards using right pointer. */
-            </span><span style="color:#50fa7b;">in_order</span><span style="color:#f8f8f2;">(prev);
-            old_prev_left </span><span style="color:#ff79c6;">=</span><span style="color:#f8f8f2;"> prev</span><span style="color:#ff79c6;">-&gt;</span><span style="color:#f8f8f2;">left;
-            prev</span><span style="color:#ff79c6;">-&gt;</span><span style="color:#f8f8f2;">went_right </span><span style="color:#ff79c6;">= </span><span style="color:#bd93f9;">true</span><span style="color:#f8f8f2;">;
-            prev</span><span style="color:#ff79c6;">-&gt;</span><span style="color:#f8f8f2;">left </span><span style="color:#ff79c6;">=</span><span style="color:#f8f8f2;"> cur;
-            cur </span><span style="color:#ff79c6;">=</span><span style="color:#f8f8f2;"> prev</span><span style="color:#ff79c6;">-&gt;</span><span style="color:#f8f8f2;">right;
-            prev</span><span style="color:#ff79c6;">-&gt;</span><span style="color:#f8f8f2;">right </span><span style="color:#ff79c6;">=</span><span style="color:#f8f8f2;"> old_prev_left;
-        </span><span style="color:#ffffff;">}
-    } </span><span style="color:#ff79c6;">while </span><span style="color:#f8f8f2;">(prev </span><span style="color:#ff79c6;">!= </span><span style="color:#bd93f9;">NULL</span><span style="color:#f8f8f2;">);
+<pre data-lang="c" style="background-color:#282a36;color:#f8f8f2;" class="language-c "><code class="language-c" data-lang="c"><span style="font-style:italic;color:#8be9fd;">typedef struct</span><span> Tree </span><span style="color:#ffffff;">{
+</span><span>    </span><span style="font-style:italic;color:#8be9fd;">int</span><span> data;
+</span><span>    Tree</span><span style="color:#ff79c6;">*</span><span> left;
+</span><span>    Tree</span><span style="color:#ff79c6;">*</span><span> right;
+</span><span>    </span><span style="font-style:italic;color:#8be9fd;">bool</span><span> went_right;
+</span><span style="color:#ffffff;">} </span><span>Tree;
+</span><span>
+</span><span style="font-style:italic;color:#8be9fd;">void </span><span style="color:#50fa7b;">link_inversion</span><span>(Tree</span><span style="color:#ff79c6;">* </span><span style="font-style:italic;color:#ffb86c;">cur</span><span>, VisitFunc </span><span style="font-style:italic;color:#ffb86c;">pre_order</span><span>,
+</span><span>                               VisitFunc </span><span style="font-style:italic;color:#ffb86c;">in_order</span><span>,
+</span><span>                               VisitFunc </span><span style="font-style:italic;color:#ffb86c;">post_order</span><span>) </span><span style="color:#ffffff;">{
+</span><span>    Tree</span><span style="color:#ff79c6;">*</span><span> prev </span><span style="color:#ff79c6;">= </span><span style="color:#bd93f9;">NULL</span><span>;
+</span><span>    Tree</span><span style="color:#ff79c6;">*</span><span> old_prev;
+</span><span>    Tree</span><span style="color:#ff79c6;">*</span><span> old_prev_left;
+</span><span>    Tree</span><span style="color:#ff79c6;">*</span><span> old_cur;
+</span><span>
+</span><span>    </span><span style="color:#ff79c6;">if </span><span>(cur </span><span style="color:#ff79c6;">== </span><span style="color:#bd93f9;">NULL</span><span>) </span><span style="color:#ff79c6;">return</span><span>;
+</span><span>
+</span><span>    </span><span style="color:#ff79c6;">do </span><span style="color:#ffffff;">{
+</span><span>        </span><span style="color:#6272a4;">/* 1) Descend leftward as much as possible. */
+</span><span>        </span><span style="color:#ff79c6;">while </span><span>(cur </span><span style="color:#ff79c6;">!= </span><span style="color:#bd93f9;">NULL</span><span>) </span><span style="color:#ffffff;">{
+</span><span>            </span><span style="color:#50fa7b;">pre_order</span><span>(cur);
+</span><span>            cur</span><span style="color:#ff79c6;">-&gt;</span><span>went_right </span><span style="color:#ff79c6;">= </span><span style="color:#bd93f9;">false</span><span>;
+</span><span>            old_cur </span><span style="color:#ff79c6;">=</span><span> cur;
+</span><span>            cur </span><span style="color:#ff79c6;">=</span><span> old_cur</span><span style="color:#ff79c6;">-&gt;</span><span>left;
+</span><span>            old_cur</span><span style="color:#ff79c6;">-&gt;</span><span>left </span><span style="color:#ff79c6;">=</span><span> prev;
+</span><span>            prev </span><span style="color:#ff79c6;">=</span><span> old_cur;
+</span><span>        </span><span style="color:#ffffff;">}
+</span><span>
+</span><span>        </span><span style="color:#6272a4;">/* 2) ascend from right as much as we can. */
+</span><span>        </span><span style="color:#ff79c6;">while </span><span>(prev </span><span style="color:#ff79c6;">!= </span><span style="color:#bd93f9;">NULL </span><span style="color:#ff79c6;">&amp;&amp;</span><span> prev</span><span style="color:#ff79c6;">-&gt;</span><span>went_right) </span><span style="color:#ffffff;">{
+</span><span>            old_prev </span><span style="color:#ff79c6;">=</span><span> prev;
+</span><span>            prev </span><span style="color:#ff79c6;">=</span><span> prev</span><span style="color:#ff79c6;">-&gt;</span><span>right;
+</span><span>            old_prev</span><span style="color:#ff79c6;">-&gt;</span><span>right </span><span style="color:#ff79c6;">=</span><span> cur;
+</span><span>            cur </span><span style="color:#ff79c6;">=</span><span> old_prev;
+</span><span>            </span><span style="color:#50fa7b;">post_order</span><span>(cur);
+</span><span>        </span><span style="color:#ffffff;">}
+</span><span>
+</span><span>        </span><span style="color:#6272a4;">/* 3)
+</span><span style="color:#6272a4;">            If prev is null after coming back up from the right,
+</span><span style="color:#6272a4;">                it means that we have finished traversal,
+</span><span style="color:#6272a4;">                so head back to the while-condition and get outta here!
+</span><span style="color:#6272a4;">            Else, we will do an exchange here,
+</span><span style="color:#6272a4;">                swap to right child of parent. */
+</span><span>        </span><span style="color:#ff79c6;">if </span><span>(prev </span><span style="color:#ff79c6;">!= </span><span style="color:#bd93f9;">NULL</span><span>) </span><span style="color:#ffffff;">{
+</span><span>            </span><span style="color:#6272a4;">/* Switch from the left side of prev to the right
+</span><span style="color:#6272a4;">               Also, mark prev as went_right so we know to traverse
+</span><span style="color:#6272a4;">               upwards using right pointer. */
+</span><span>            </span><span style="color:#50fa7b;">in_order</span><span>(prev);
+</span><span>            old_prev_left </span><span style="color:#ff79c6;">=</span><span> prev</span><span style="color:#ff79c6;">-&gt;</span><span>left;
+</span><span>            prev</span><span style="color:#ff79c6;">-&gt;</span><span>went_right </span><span style="color:#ff79c6;">= </span><span style="color:#bd93f9;">true</span><span>;
+</span><span>            prev</span><span style="color:#ff79c6;">-&gt;</span><span>left </span><span style="color:#ff79c6;">=</span><span> cur;
+</span><span>            cur </span><span style="color:#ff79c6;">=</span><span> prev</span><span style="color:#ff79c6;">-&gt;</span><span>right;
+</span><span>            prev</span><span style="color:#ff79c6;">-&gt;</span><span>right </span><span style="color:#ff79c6;">=</span><span> old_prev_left;
+</span><span>        </span><span style="color:#ffffff;">}
+</span><span>    </span><span style="color:#ffffff;">} </span><span style="color:#ff79c6;">while </span><span>(prev </span><span style="color:#ff79c6;">!= </span><span style="color:#bd93f9;">NULL</span><span>);
 </span><span style="color:#ffffff;">}
 </span></code></pre>
 <p>The core algorithm is in the name, we must invert the links. As we push down the tree,
@@ -379,42 +389,41 @@ If the left pointer is a thread (<code>cur-&gt;left_thread</code>), then <code>c
 predecessor. The same is true for <code>cur-&gt;right_thread</code> pointing to the in-order successor.
 Following threads is a constant operation to the predecessor/successor, which speeds up in-order
 traversals.</p>
-<pre style="background-color:#282a36;">
-<code class="language-c" data-lang="c"><span style="font-style:italic;color:#8be9fd;">typedef struct</span><span style="color:#f8f8f2;"> Tree </span><span style="color:#ffffff;">{
-    </span><span style="font-style:italic;color:#8be9fd;">int</span><span style="color:#f8f8f2;"> data;
-    </span><span style="font-style:italic;color:#8be9fd;">struct</span><span style="color:#f8f8f2;"> Tree</span><span style="color:#ff79c6;">*</span><span style="color:#f8f8f2;"> left;
-    </span><span style="font-style:italic;color:#8be9fd;">struct</span><span style="color:#f8f8f2;"> Tree</span><span style="color:#ff79c6;">*</span><span style="color:#f8f8f2;"> right;
-    </span><span style="font-style:italic;color:#8be9fd;">bool</span><span style="color:#f8f8f2;"> left_thread;
-    </span><span style="font-style:italic;color:#8be9fd;">bool</span><span style="color:#f8f8f2;"> right_thread;
-</span><span style="color:#ffffff;">} </span><span style="color:#f8f8f2;">Tree;
-
+<pre data-lang="c" style="background-color:#282a36;color:#f8f8f2;" class="language-c "><code class="language-c" data-lang="c"><span style="font-style:italic;color:#8be9fd;">typedef struct</span><span> Tree </span><span style="color:#ffffff;">{
+</span><span>    </span><span style="font-style:italic;color:#8be9fd;">int</span><span> data;
+</span><span>    </span><span style="font-style:italic;color:#8be9fd;">struct</span><span> Tree</span><span style="color:#ff79c6;">*</span><span> left;
+</span><span>    </span><span style="font-style:italic;color:#8be9fd;">struct</span><span> Tree</span><span style="color:#ff79c6;">*</span><span> right;
+</span><span>    </span><span style="font-style:italic;color:#8be9fd;">bool</span><span> left_thread;
+</span><span>    </span><span style="font-style:italic;color:#8be9fd;">bool</span><span> right_thread;
+</span><span style="color:#ffffff;">} </span><span>Tree;
+</span><span>
 </span><span style="color:#6272a4;">/* Takes the root of the tree (we call it cur for readability in the function itself) */
-</span><span style="font-style:italic;color:#8be9fd;">void </span><span style="color:#50fa7b;">threaded_traversal</span><span style="color:#f8f8f2;">(Tree</span><span style="color:#ff79c6;">* </span><span style="font-style:italic;color:#ffb86c;">cur</span><span style="color:#f8f8f2;">) </span><span style="color:#ffffff;">{
-    </span><span style="color:#6272a4;">/* Go all the way down to the smallest number in the tree. */
-    </span><span style="color:#ff79c6;">while </span><span style="color:#f8f8f2;">(</span><span style="color:#ff79c6;">!</span><span style="color:#f8f8f2;">cur</span><span style="color:#ff79c6;">-&gt;</span><span style="color:#f8f8f2;">is_thread) </span><span style="color:#ffffff;">{
-</span><span style="color:#f8f8f2;">        cur </span><span style="color:#ff79c6;">=</span><span style="color:#f8f8f2;"> cur</span><span style="color:#ff79c6;">-&gt;</span><span style="color:#f8f8f2;">left;
-    </span><span style="color:#ffffff;">}
-
-    </span><span style="color:#6272a4;">/* Now all we have to do is go rightwards until the end! */
-    </span><span style="color:#ff79c6;">while </span><span style="color:#f8f8f2;">(cur </span><span style="color:#ff79c6;">!= </span><span style="color:#bd93f9;">NULL</span><span style="color:#f8f8f2;">) </span><span style="color:#ffffff;">{
-        </span><span style="color:#50fa7b;">inorder_visit</span><span style="color:#f8f8f2;">(cur);
-        cur </span><span style="color:#ff79c6;">= </span><span style="color:#50fa7b;">tree_successor</span><span style="color:#f8f8f2;">(cur);
-    </span><span style="color:#ffffff;">}
-}
-
+</span><span style="font-style:italic;color:#8be9fd;">void </span><span style="color:#50fa7b;">threaded_traversal</span><span>(Tree</span><span style="color:#ff79c6;">* </span><span style="font-style:italic;color:#ffb86c;">cur</span><span>) </span><span style="color:#ffffff;">{
+</span><span>    </span><span style="color:#6272a4;">/* Go all the way down to the smallest number in the tree. */
+</span><span>    </span><span style="color:#ff79c6;">while </span><span>(</span><span style="color:#ff79c6;">!</span><span>cur</span><span style="color:#ff79c6;">-&gt;</span><span>is_thread) </span><span style="color:#ffffff;">{
+</span><span>        cur </span><span style="color:#ff79c6;">=</span><span> cur</span><span style="color:#ff79c6;">-&gt;</span><span>left;
+</span><span>    </span><span style="color:#ffffff;">}
+</span><span>
+</span><span>    </span><span style="color:#6272a4;">/* Now all we have to do is go rightwards until the end! */
+</span><span>    </span><span style="color:#ff79c6;">while </span><span>(cur </span><span style="color:#ff79c6;">!= </span><span style="color:#bd93f9;">NULL</span><span>) </span><span style="color:#ffffff;">{
+</span><span>        </span><span style="color:#50fa7b;">inorder_visit</span><span>(cur);
+</span><span>        cur </span><span style="color:#ff79c6;">= </span><span style="color:#50fa7b;">tree_successor</span><span>(cur);
+</span><span>    </span><span style="color:#ffffff;">}
+</span><span style="color:#ffffff;">}
+</span><span>
 </span><span style="color:#6272a4;">/* Returns a successor to any given node, `node`.*/
-</span><span style="color:#f8f8f2;">Tree</span><span style="color:#ff79c6;">* </span><span style="color:#50fa7b;">tree_successor</span><span style="color:#f8f8f2;">(Tree</span><span style="color:#ff79c6;">* </span><span style="font-style:italic;color:#ffb86c;">node</span><span style="color:#f8f8f2;">) </span><span style="color:#ffffff;">{
-</span><span style="color:#f8f8f2;">    Tree</span><span style="color:#ff79c6;">*</span><span style="color:#f8f8f2;"> cur;
-
-    </span><span style="color:#6272a4;">/* fast path! */
-    </span><span style="color:#ff79c6;">if </span><span style="color:#f8f8f2;">(node</span><span style="color:#ff79c6;">-&gt;</span><span style="color:#f8f8f2;">right_thread) </span><span style="color:#ff79c6;">return</span><span style="color:#f8f8f2;"> node</span><span style="color:#ff79c6;">-&gt;</span><span style="color:#f8f8f2;">right;
-
-    </span><span style="color:#6272a4;">/* else return leftmost child of right subtree! */
-</span><span style="color:#f8f8f2;">    cur </span><span style="color:#ff79c6;">=</span><span style="color:#f8f8f2;"> node</span><span style="color:#ff79c6;">-&gt;</span><span style="color:#f8f8f2;">right;
-    </span><span style="color:#ff79c6;">while </span><span style="color:#f8f8f2;">(</span><span style="color:#ff79c6;">!</span><span style="color:#f8f8f2;">cur</span><span style="color:#ff79c6;">-&gt;</span><span style="color:#f8f8f2;">left_thread) </span><span style="color:#ffffff;">{
-</span><span style="color:#f8f8f2;">        cur </span><span style="color:#ff79c6;">=</span><span style="color:#f8f8f2;"> cur</span><span style="color:#ff79c6;">-&gt;</span><span style="color:#f8f8f2;">left;
-    </span><span style="color:#ffffff;">}
-    </span><span style="color:#ff79c6;">return</span><span style="color:#f8f8f2;"> cur;
+</span><span>Tree</span><span style="color:#ff79c6;">* </span><span style="color:#50fa7b;">tree_successor</span><span>(Tree</span><span style="color:#ff79c6;">* </span><span style="font-style:italic;color:#ffb86c;">node</span><span>) </span><span style="color:#ffffff;">{
+</span><span>    Tree</span><span style="color:#ff79c6;">*</span><span> cur;
+</span><span>
+</span><span>    </span><span style="color:#6272a4;">/* fast path! */
+</span><span>    </span><span style="color:#ff79c6;">if </span><span>(node</span><span style="color:#ff79c6;">-&gt;</span><span>right_thread) </span><span style="color:#ff79c6;">return</span><span> node</span><span style="color:#ff79c6;">-&gt;</span><span>right;
+</span><span>
+</span><span>    </span><span style="color:#6272a4;">/* else return leftmost child of right subtree! */
+</span><span>    cur </span><span style="color:#ff79c6;">=</span><span> node</span><span style="color:#ff79c6;">-&gt;</span><span>right;
+</span><span>    </span><span style="color:#ff79c6;">while </span><span>(</span><span style="color:#ff79c6;">!</span><span>cur</span><span style="color:#ff79c6;">-&gt;</span><span>left_thread) </span><span style="color:#ffffff;">{
+</span><span>        cur </span><span style="color:#ff79c6;">=</span><span> cur</span><span style="color:#ff79c6;">-&gt;</span><span>left;
+</span><span>    </span><span style="color:#ffffff;">}
+</span><span>    </span><span style="color:#ff79c6;">return</span><span> cur;
 </span><span style="color:#ffffff;">}
 </span></code></pre>
 <p>This <code>Tree</code> struct includes a boolean field to tell whether the current tree node has an in-order thread.
@@ -422,8 +431,10 @@ When we search for the in-order successor to the current node, and find that it 
 right node to get the immediate successor! This is always a single operation, AKA O(1) time!</p>
 <p>You note, of course, that to support this method, we need to add a boolean field for each and every node in the tree!
 This means we are stuck with a linear space cost for this traversal.</p>
-<p>Threaded trees are super cool, and I would love for people to know them. Luckily, there is a great</p>
-<a href="https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Threaded_binary_tree" target="_blank">Wikipedia page↪</a> on the subject. If there was not, I would definitely write more.
+<p>Threaded trees are super cool, and I would love for people to know them. Luckily, there is a great
+
+<a href="https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Threaded_binary_tree" target="_blank">Wikipedia page↪</a>
+ on the subject. If there was not, I would definitely write more.</p>
 <p>I won't do a full walkthrough of the threaded traversal, but here is an image of a threaded tree:</p>
 <div class="img-tpl">
     <img src="threaded01.png" alt="TODO-SORRY!">
@@ -564,6 +575,7 @@ if anyone uses this algorithm, please let me know, I'd be super interested to se
 anything there, as long as you swap it for 0 when you need to actually use the pointer. So maybe
 as another way to do this stuff, you can just use one of the pointers' low bits as the follow pointer
 in link inversion. However, that would be really ugly to code, and then I would have had less to write about :(</p>
+
 <a href="https:&#x2F;&#x2F;stackoverflow.com&#x2F;questions&#x2F;19991506&#x2F;how-portable-is-using-the-low-bit-of-a-pointer-as-a-flag" target="_blank">relevant discussion↪</a>
 <h3 id="when-not-to-use-robson">When not to use robson</h3>
 <p>Robson only works on binary trees i think(!)</p>

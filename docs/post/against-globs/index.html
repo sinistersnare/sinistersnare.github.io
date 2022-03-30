@@ -10,15 +10,15 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="referrer" content="no-referrer">
 
-        <link rel="stylesheet" href="https:&#x2F;&#x2F;drs.is&#x2F;fonts.css">
-        <link rel="stylesheet" href="https:&#x2F;&#x2F;drs.is&#x2F;style.css">
+        <link rel="stylesheet" href="https://drs.is/fonts.css">
+        <link rel="stylesheet" href="https://drs.is/style.css">
 
         <title>
     Against Glob Imports  · Sin&#x27;s Blog
 </title>
 
         
-            <link rel="alternate" type="application/rss+xml" title="RSS" href="https:&#x2F;&#x2F;drs.is&#x2F;atom.xml">
+            <link rel="alternate" type="application/rss+xml" title="RSS" href="https://drs.is/atom.xml">
         
 
         <!-- TODO: apparently CDNs arent good anymore. -->
@@ -60,31 +60,31 @@
             <ul>
                 
                 <li class="tag">
-                    <a href="https:&#x2F;&#x2F;drs.is&#x2F;tags&#x2F;rust&#x2F;">
+                    <a href="https://drs.is/tags/rust/">
                         Rust
                     </a>
                 </li>
                 
                 <li class="tag">
-                    <a href="https:&#x2F;&#x2F;drs.is&#x2F;tags&#x2F;python&#x2F;">
+                    <a href="https://drs.is/tags/python/">
                         Python
                     </a>
                 </li>
                 
                 <li class="tag">
-                    <a href="https:&#x2F;&#x2F;drs.is&#x2F;tags&#x2F;java&#x2F;">
+                    <a href="https://drs.is/tags/java/">
                         Java
                     </a>
                 </li>
                 
                 <li class="tag">
-                    <a href="https:&#x2F;&#x2F;drs.is&#x2F;tags&#x2F;engineering&#x2F;">
+                    <a href="https://drs.is/tags/engineering/">
                         Engineering
                     </a>
                 </li>
                 
                 <li class="tag">
-                    <a href="https:&#x2F;&#x2F;drs.is&#x2F;tags&#x2F;pet-peeves&#x2F;">
+                    <a href="https://drs.is/tags/pet-peeves/">
                         Pet-Peeves
                     </a>
                 </li>
@@ -99,26 +99,29 @@
 I know they may seem useful, but I think that, overall, they are an anti-pattern.</p>
 <h1 id="reading-code">Reading Code</h1>
 <p>Using globs is a detriment to reading code. If I see some code using a type I have not seen
-before, I go to the imports to find where it is defined, and then look it up in</p>
-<a href="https:&#x2F;&#x2F;docs.rs" target="_blank">docs.rs↪</a> or the std-docs.
-<p>If I cant find the item thanks to a glob, then it makes it an annoying game of 'find the type'.</p>
+before, I go to the imports to find where it is defined, and then look it up in
+
+<a href="https:&#x2F;&#x2F;docs.rs" target="_blank">docs.rs↪</a>
+ or the std-docs.
+If I cant find the item thanks to a glob, then it makes it an annoying game of 'find the type'.</p>
 <h1 id="example">Example</h1>
 <p>Tutorials are supposed to be jumping off points! They should give the user enough information
 to be a little dangerous. They should encourage the user to keep learning after the tutorial
 is finished. When I find myself reading tutorials, many look like this
-(from the wonderful <a href="https:&#x2F;&#x2F;tantivy-search.github.io&#x2F;examples&#x2F;basic_search.html" target="_blank">Tantivy Documentation↪</a>):</p>
-<pre style="background-color:#282a36;">
-<code class="language-rust" data-lang="rust"><span style="color:#f8f8f2;">#[macro_use]
-</span><span style="color:#ff79c6;">extern crate</span><span style="color:#f8f8f2;"> tantivy;
-</span><span style="color:#ff79c6;">use </span><span style="text-decoration:underline;color:#66d9ef;">tantivy</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span style="text-decoration:underline;color:#66d9ef;">collector</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span style="color:#f8f8f2;">TopDocs;
-</span><span style="color:#ff79c6;">use </span><span style="text-decoration:underline;color:#66d9ef;">tantivy</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span style="text-decoration:underline;color:#66d9ef;">query</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span style="color:#f8f8f2;">QueryParser;
-</span><span style="color:#ff79c6;">use </span><span style="text-decoration:underline;color:#66d9ef;">tantivy</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span style="text-decoration:underline;color:#66d9ef;">schema</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span style="color:#ff79c6;">*</span><span style="color:#f8f8f2;">;
-</span><span style="color:#ff79c6;">use </span><span style="text-decoration:underline;color:#66d9ef;">tantivy</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span style="color:#f8f8f2;">Index;
-</span><span style="color:#ff79c6;">use </span><span style="text-decoration:underline;color:#66d9ef;">tantivy</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span style="color:#f8f8f2;">ReloadPolicy;
-</span><span style="color:#ff79c6;">use </span><span style="text-decoration:underline;color:#66d9ef;">tempdir</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span style="color:#f8f8f2;">TempDir;
-
-</span><span style="font-style:italic;color:#8be9fd;">fn </span><span style="color:#50fa7b;">main</span><span style="color:#f8f8f2;">() </span><span style="color:#ff79c6;">-&gt; </span><span style="text-decoration:underline;color:#66d9ef;">tantivy</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span style="font-style:italic;color:#66d9ef;">Result</span><span style="color:#ff79c6;">&lt;()&gt; </span><span style="color:#ffffff;">{
-    </span><span style="color:#ff79c6;">... </span><span style="color:#6272a4;">// rest of tutorial
+(from the wonderful 
+<a href="https:&#x2F;&#x2F;tantivy-search.github.io&#x2F;examples&#x2F;basic_search.html" target="_blank">Tantivy Documentation↪</a>
+):</p>
+<pre data-lang="rust" style="background-color:#282a36;color:#f8f8f2;" class="language-rust "><code class="language-rust" data-lang="rust"><span>#[macro_use]
+</span><span style="color:#ff79c6;">extern crate</span><span> tantivy;
+</span><span style="color:#ff79c6;">use </span><span style="text-decoration:underline;color:#66d9ef;">tantivy</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span style="text-decoration:underline;color:#66d9ef;">collector</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>TopDocs;
+</span><span style="color:#ff79c6;">use </span><span style="text-decoration:underline;color:#66d9ef;">tantivy</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span style="text-decoration:underline;color:#66d9ef;">query</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>QueryParser;
+</span><span style="color:#ff79c6;">use </span><span style="text-decoration:underline;color:#66d9ef;">tantivy</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span style="text-decoration:underline;color:#66d9ef;">schema</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span style="color:#ff79c6;">*</span><span>;
+</span><span style="color:#ff79c6;">use </span><span style="text-decoration:underline;color:#66d9ef;">tantivy</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>Index;
+</span><span style="color:#ff79c6;">use </span><span style="text-decoration:underline;color:#66d9ef;">tantivy</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>ReloadPolicy;
+</span><span style="color:#ff79c6;">use </span><span style="text-decoration:underline;color:#66d9ef;">tempdir</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>TempDir;
+</span><span>
+</span><span style="font-style:italic;color:#8be9fd;">fn </span><span style="color:#50fa7b;">main</span><span>() </span><span style="color:#ff79c6;">-&gt; </span><span style="text-decoration:underline;color:#66d9ef;">tantivy</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span style="font-style:italic;color:#66d9ef;">Result</span><span style="color:#ff79c6;">&lt;()&gt; </span><span style="color:#ffffff;">{
+</span><span>    </span><span style="color:#ff79c6;">... </span><span style="color:#6272a4;">// rest of tutorial
 </span><span style="color:#ffffff;">}
 </span></code></pre>
 <p>This is not a more egregious example, simply the one I most recently faced.</p>
