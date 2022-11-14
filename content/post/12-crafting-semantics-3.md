@@ -244,7 +244,7 @@ This rule is a simple syntactic transformation. If we wanted, we could use a who
 
 ## Call With Current Continuation ##
 
-Call with current continuation, or `call/cc` for short, is a way of obtaining the continuation of the current state, and using it like a regular value. I have [written about continuations before](https://drs.is/post/continuations-as-return/), so I will be a bit more straightforward with my implementation notes here. In my experience though, I did not truly understand continuations until I implemented this feature in an abstract machine.
+Call with current continuation, or `call/cc` for short, is a way of obtaining the continuation of the current state, and using it like a regular value. I have [written about continuations before](https://davis.tools/post/continuations-as-return/), so I will be a bit more straightforward with my implementation notes here. In my experience though, I did not truly understand continuations until I implemented this feature in an abstract machine.
 
 Also, I am switching to implementing the whole feature at once, instead of writing out all eval rules and then all apply rules. I think this method is a bit easier for understanding how a feature works, as you can see how they work in concert, side by side.
 

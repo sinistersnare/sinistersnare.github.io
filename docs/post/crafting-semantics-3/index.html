@@ -10,15 +10,15 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="referrer" content="no-referrer">
 
-        <link rel="stylesheet" href="https://drs.is/fonts.css">
-        <link rel="stylesheet" href="https://drs.is/style.css">
+        <link rel="stylesheet" href="https://davis.tools/fonts.css">
+        <link rel="stylesheet" href="https://davis.tools/style.css">
 
         <title>
     Crafting Semantics 3: More Fundamentals  · Sin&#x27;s Blog
 </title>
 
         
-            <link rel="alternate" type="application/rss+xml" title="RSS" href="https://drs.is/atom.xml">
+            <link rel="alternate" type="application/rss+xml" title="RSS" href="https://davis.tools/atom.xml">
         
 
         <!-- TODO: apparently CDNs arent good anymore. -->
@@ -60,25 +60,25 @@
             <ul>
                 
                 <li class="tag">
-                    <a href="https://drs.is/tags/plt/">
+                    <a href="https://davis.tools/tags/plt/">
                         PLT
                     </a>
                 </li>
                 
                 <li class="tag">
-                    <a href="https://drs.is/tags/computer-science/">
+                    <a href="https://davis.tools/tags/computer-science/">
                         Computer Science
                     </a>
                 </li>
                 
                 <li class="tag">
-                    <a href="https://drs.is/tags/semantics/">
+                    <a href="https://davis.tools/tags/semantics/">
                         Semantics
                     </a>
                 </li>
                 
                 <li class="tag">
-                    <a href="https://drs.is/tags/crafting-semantics/">
+                    <a href="https://davis.tools/tags/crafting-semantics/">
                         Crafting Semantics
                     </a>
                 </li>
@@ -90,7 +90,7 @@
     
     
     <p>This series of posts revolves around creating operational semantics of the Scheme programming language from the ground up, starting with the lambda calculus.</p>
-<p>If you have not read the introductory post, you can find it <a href="https://drs.is/post/crafting-semantics-0/">here</a>, and see the index of this series <a href="/tags/crafting-semantics/">here</a>.</p>
+<p>If you have not read the introductory post, you can find it <a href="https://davis.tools/post/crafting-semantics-0/">here</a>, and see the index of this series <a href="/tags/crafting-semantics/">here</a>.</p>
 <h1 id="intro">Intro</h1>
 <p>Trucking along, we are gonna add some more features that make our language much more usable. Lets list them out:</p>
 <ul>
@@ -255,7 +255,7 @@ call &= ((\lambda \; (x_s \; ...) \; e_b) \; e_s \; ...) \\
 \end{aligned}</script>
 <p>This rule is a simple syntactic transformation. If we wanted, we could use a whole <code>let</code> continuation frame, and evaluate it so similarly to a regular function call that it would bore everyone. Trust me, I've done it, it is quite tiresome! But if you want to grow your semantic-construction chops, then please implement <code>let</code> explicitly! I would be happy to commend you on your effort, dear reader.</p>
 <h2 id="call-with-current-continuation">Call With Current Continuation</h2>
-<p>Call with current continuation, or <code>call/cc</code> for short, is a way of obtaining the continuation of the current state, and using it like a regular value. I have <a href="https://drs.is/post/continuations-as-return/">written about continuations before</a>, so I will be a bit more straightforward with my implementation notes here. In my experience though, I did not truly understand continuations until I implemented this feature in an abstract machine.</p>
+<p>Call with current continuation, or <code>call/cc</code> for short, is a way of obtaining the continuation of the current state, and using it like a regular value. I have <a href="https://davis.tools/post/continuations-as-return/">written about continuations before</a>, so I will be a bit more straightforward with my implementation notes here. In my experience though, I did not truly understand continuations until I implemented this feature in an abstract machine.</p>
 <p>Also, I am switching to implementing the whole feature at once, instead of writing out all eval rules and then all apply rules. I think this method is a bit easier for understanding how a feature works, as you can see how they work in concert, side by side.</p>
 <script type="math/tex;mode=display">E \langle (\texttt{call/cc} \; e) , \rho , \sigma , \kappa \rangle
 \leadsto E \langle e , \rho , \sigma , \kappa' \rangle \\ \\
@@ -438,7 +438,7 @@ clo = ((\lambda \; (\text{u} \; \text{n}) \; 55) , \{k : (0 , 0) \}) \\
         <nav class="bottom-menu-nav">
             <ul class="bottom-nav-list">
                 <li class="bottom-nav-item">
-                    <a class="bottom-nav-link" href="https:&#x2F;&#x2F;drs.is">
+                    <a class="bottom-nav-link" href="https:&#x2F;&#x2F;davis.tools">
                         Home
                     </a>
                 </li>

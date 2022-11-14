@@ -1,124 +1,124 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-        <loc>https://drs.is/</loc>
+        <loc>https://davis.tools/</loc>
     </url>
     <url>
-        <loc>https://drs.is/about/</loc>
+        <loc>https://davis.tools/about/</loc>
     </url>
     <url>
-        <loc>https://drs.is/post/</loc>
+        <loc>https://davis.tools/post/</loc>
     </url>
     <url>
-        <loc>https://drs.is/post/abstract-machines/</loc>
+        <loc>https://davis.tools/post/abstract-machines/</loc>
         <lastmod>2020-11-09T12:15:00-05:00</lastmod>
     </url>
     <url>
-        <loc>https://drs.is/post/against-globs/</loc>
+        <loc>https://davis.tools/post/against-globs/</loc>
         <lastmod>2020-08-14</lastmod>
     </url>
     <url>
-        <loc>https://drs.is/post/code-review-contributor/</loc>
+        <loc>https://davis.tools/post/code-review-contributor/</loc>
         <lastmod>2021-07-05T12:15:00-05:00</lastmod>
     </url>
     <url>
-        <loc>https://drs.is/post/continuations-as-return/</loc>
+        <loc>https://davis.tools/post/continuations-as-return/</loc>
         <lastmod>2020-11-30T12:15:00-05:00</lastmod>
     </url>
     <url>
-        <loc>https://drs.is/post/crafting-semantics-0/</loc>
+        <loc>https://davis.tools/post/crafting-semantics-0/</loc>
         <lastmod>2021-01-05T12:15:00-05:00</lastmod>
     </url>
     <url>
-        <loc>https://drs.is/post/crafting-semantics-1/</loc>
+        <loc>https://davis.tools/post/crafting-semantics-1/</loc>
         <lastmod>2021-01-06T12:15:00-05:00</lastmod>
     </url>
     <url>
-        <loc>https://drs.is/post/crafting-semantics-2/</loc>
+        <loc>https://davis.tools/post/crafting-semantics-2/</loc>
         <lastmod>2021-01-14T12:15:00-05:00</lastmod>
     </url>
     <url>
-        <loc>https://drs.is/post/crafting-semantics-3/</loc>
+        <loc>https://davis.tools/post/crafting-semantics-3/</loc>
         <lastmod>2021-01-21T12:15:00-05:00</lastmod>
     </url>
     <url>
-        <loc>https://drs.is/post/fancy-tree-traversals/</loc>
+        <loc>https://davis.tools/post/fancy-tree-traversals/</loc>
         <lastmod>2019-01-02T10:10:44-05:00</lastmod>
     </url>
     <url>
-        <loc>https://drs.is/post/hello-world/</loc>
+        <loc>https://davis.tools/post/hello-world/</loc>
         <lastmod>2017-12-24T05:50:44-05:00</lastmod>
     </url>
     <url>
-        <loc>https://drs.is/post/i-hate-parsing/</loc>
+        <loc>https://davis.tools/post/i-hate-parsing/</loc>
         <lastmod>2021-01-15T12:15:00-05:00</lastmod>
     </url>
     <url>
-        <loc>https://drs.is/post/robson-traversal/</loc>
+        <loc>https://davis.tools/post/robson-traversal/</loc>
         <lastmod>2019-12-05T08:10:44-05:00</lastmod>
     </url>
     <url>
-        <loc>https://drs.is/post/rust-wishlist-2019/</loc>
+        <loc>https://davis.tools/post/rust-wishlist-2019/</loc>
         <lastmod>2018-12-12T08:10:44-05:00</lastmod>
     </url>
     <url>
-        <loc>https://drs.is/tags/</loc>
+        <loc>https://davis.tools/tags/</loc>
     </url>
     <url>
-        <loc>https://drs.is/tags/abstract-machines/</loc>
+        <loc>https://davis.tools/tags/abstract-machines/</loc>
     </url>
     <url>
-        <loc>https://drs.is/tags/algorithms/</loc>
+        <loc>https://davis.tools/tags/algorithms/</loc>
     </url>
     <url>
-        <loc>https://drs.is/tags/c/</loc>
+        <loc>https://davis.tools/tags/c/</loc>
     </url>
     <url>
-        <loc>https://drs.is/tags/computer-science/</loc>
+        <loc>https://davis.tools/tags/computer-science/</loc>
     </url>
     <url>
-        <loc>https://drs.is/tags/continuations/</loc>
+        <loc>https://davis.tools/tags/continuations/</loc>
     </url>
     <url>
-        <loc>https://drs.is/tags/crafting-semantics/</loc>
+        <loc>https://davis.tools/tags/crafting-semantics/</loc>
     </url>
     <url>
-        <loc>https://drs.is/tags/data-structures/</loc>
+        <loc>https://davis.tools/tags/data-structures/</loc>
     </url>
     <url>
-        <loc>https://drs.is/tags/engineering/</loc>
+        <loc>https://davis.tools/tags/engineering/</loc>
     </url>
     <url>
-        <loc>https://drs.is/tags/interpreters/</loc>
+        <loc>https://davis.tools/tags/interpreters/</loc>
     </url>
     <url>
-        <loc>https://drs.is/tags/java/</loc>
+        <loc>https://davis.tools/tags/java/</loc>
     </url>
     <url>
-        <loc>https://drs.is/tags/meta/</loc>
+        <loc>https://davis.tools/tags/meta/</loc>
     </url>
     <url>
-        <loc>https://drs.is/tags/pet-peeves/</loc>
+        <loc>https://davis.tools/tags/pet-peeves/</loc>
     </url>
     <url>
-        <loc>https://drs.is/tags/plt/</loc>
+        <loc>https://davis.tools/tags/plt/</loc>
     </url>
     <url>
-        <loc>https://drs.is/tags/programming/</loc>
+        <loc>https://davis.tools/tags/programming/</loc>
     </url>
     <url>
-        <loc>https://drs.is/tags/python/</loc>
+        <loc>https://davis.tools/tags/python/</loc>
     </url>
     <url>
-        <loc>https://drs.is/tags/rust/</loc>
+        <loc>https://davis.tools/tags/rust/</loc>
     </url>
     <url>
-        <loc>https://drs.is/tags/semantics/</loc>
+        <loc>https://davis.tools/tags/semantics/</loc>
     </url>
     <url>
-        <loc>https://drs.is/tags/trees/</loc>
+        <loc>https://davis.tools/tags/trees/</loc>
     </url>
     <url>
-        <loc>https://drs.is/work/</loc>
+        <loc>https://davis.tools/work/</loc>
     </url>
 </urlset>

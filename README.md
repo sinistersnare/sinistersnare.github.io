@@ -1,6 +1,6 @@
 # Blog of the Sinistersnare #
 
-Find the real site [HERE!](https://drs.is)
+Find the real site [HERE!](https://davis.tools)
 
 Hey, this is my Blog's source repository.
 The generated HTML is in the `docs/` directory,

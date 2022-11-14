@@ -10,15 +10,15 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="referrer" content="no-referrer">
 
-        <link rel="stylesheet" href="https://drs.is/fonts.css">
-        <link rel="stylesheet" href="https://drs.is/style.css">
+        <link rel="stylesheet" href="https://davis.tools/fonts.css">
+        <link rel="stylesheet" href="https://davis.tools/style.css">
 
         <title>
     Crafting Semantics 2: Basic Features  · Sin&#x27;s Blog
 </title>
 
         
-            <link rel="alternate" type="application/rss+xml" title="RSS" href="https://drs.is/atom.xml">
+            <link rel="alternate" type="application/rss+xml" title="RSS" href="https://davis.tools/atom.xml">
         
 
         <!-- TODO: apparently CDNs arent good anymore. -->
@@ -60,25 +60,25 @@
             <ul>
                 
                 <li class="tag">
-                    <a href="https://drs.is/tags/plt/">
+                    <a href="https://davis.tools/tags/plt/">
                         PLT
                     </a>
                 </li>
                 
                 <li class="tag">
-                    <a href="https://drs.is/tags/computer-science/">
+                    <a href="https://davis.tools/tags/computer-science/">
                         Computer Science
                     </a>
                 </li>
                 
                 <li class="tag">
-                    <a href="https://drs.is/tags/semantics/">
+                    <a href="https://davis.tools/tags/semantics/">
                         Semantics
                     </a>
                 </li>
                 
                 <li class="tag">
-                    <a href="https://drs.is/tags/crafting-semantics/">
+                    <a href="https://davis.tools/tags/crafting-semantics/">
                         Crafting Semantics
                     </a>
                 </li>
@@ -90,9 +90,9 @@
     
     
     <p>This series of posts revolves around creating operational semantics of the Scheme programming language from the ground up, starting with the lambda calculus.</p>
-<p>If you have not read the introductory post, you can find it <a href="https://drs.is/post/crafting-semantics-0/">here</a>, and see the index of this series <a href="/tags/crafting-semantics/">here</a>.</p>
+<p>If you have not read the introductory post, you can find it <a href="https://davis.tools/post/crafting-semantics-0/">here</a>, and see the index of this series <a href="/tags/crafting-semantics/">here</a>.</p>
 <h1 id="intro">Intro</h1>
-<p>Hi! Welcome! Today, we will be extending the CESK machine from the <a href="https://drs.is/post/crafting-semantics-1/">previous post</a>, adding some simple features that will make our language more usable. In particular, we will implement numbers and conditionals. To accomplish that, we will be partitioning the machine into 2 different types of states. This will make future extensions to our language much simpler.</p>
+<p>Hi! Welcome! Today, we will be extending the CESK machine from the <a href="https://davis.tools/post/crafting-semantics-1/">previous post</a>, adding some simple features that will make our language more usable. In particular, we will implement numbers and conditionals. To accomplish that, we will be partitioning the machine into 2 different types of states. This will make future extensions to our language much simpler.</p>
 <h2 id="recap">Recap</h2>
 <p>Let's look at the machine that we have so far. These transition functions serve as the basis for the famous call-by-value lambda-calculus. If you don't remember the domains, I will reproduce them soon, when we create our new machine.</p>
 <script type="math/tex;mode=display">(x , \rho , \sigma , \kappa) \leadsto (v , \rho_\lambda , \sigma , \kappa) \\
@@ -115,7 +115,7 @@
 \end{aligned}</script>
 <h2 id="roadblock">Roadblock</h2>
 <p>The main issue with this machine is that it is very 'lambda-centric'. For example, if you pay close attention in the last post, closure creation is actually deeply embedded into the semantics. When a variable is evaluated it finds the closure and sets it to the current environment. We want a machine that is more ... 'value independent'</p>
-<p>If we wanted to have values that are less syntactically visible, like <a href="https://drs.is/post/continuations-as-return/">first-class continuations</a>, adding them to the current machine would overcomplicate our transitions. Instead, we will partition the machine into 'eval' and 'apply' states. Eval states are for <em>evaluating</em> syntax to get a value. Apply states are for <em>applying</em> the value into the current Kontinuation.</p>
+<p>If we wanted to have values that are less syntactically visible, like <a href="https://davis.tools/post/continuations-as-return/">first-class continuations</a>, adding them to the current machine would overcomplicate our transitions. Instead, we will partition the machine into 'eval' and 'apply' states. Eval states are for <em>evaluating</em> syntax to get a value. Apply states are for <em>applying</em> the value into the current Kontinuation.</p>
 <h1 id="the-next-machine">The Next Machine</h1>
 <p>Our machine is very similar to the previous machine, with a few additions to the syntactic and semantic domains. I will point out the differences, so don't worry about cross-referencing the last post!</p>
 <h2 id="syntax-domains">Syntax Domains</h2>
@@ -322,7 +322,7 @@ a &\triangleq alloc(\sigma) \\
         <nav class="bottom-menu-nav">
             <ul class="bottom-nav-list">
                 <li class="bottom-nav-item">
-                    <a class="bottom-nav-link" href="https:&#x2F;&#x2F;drs.is">
+                    <a class="bottom-nav-link" href="https:&#x2F;&#x2F;davis.tools">
                         Home
                     </a>
                 </li>

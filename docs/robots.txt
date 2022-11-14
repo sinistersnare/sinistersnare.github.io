@@ -1,3 +1,4 @@
 User-agent: *
+Disallow:
 Allow: /
-Sitemap: https://drs.is/sitemap.xml
+Sitemap: https://davis.tools/sitemap.xml
