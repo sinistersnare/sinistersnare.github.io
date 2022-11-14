@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
-	<title>Sin&#x27;s Blog</title>
+	<title>The Site of Davis</title>
 	<link href="https://davis.tools/atom.xml" rel="self" type="application/atom+xml"/>
   <link href="https://davis.tools"/>
 	<generator uri="https://www.getzola.org/">Zola</generator>

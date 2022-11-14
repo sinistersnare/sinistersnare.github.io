@@ -13,7 +13,7 @@ generate_feed = true
 taxonomies = [
     { name = "tags" , rss = true },
 ]
-title = "Sin's Blog"
+title = "The Site of Davis"
 
 theme = "sam"
 
