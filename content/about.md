@@ -2,6 +2,7 @@
 title = "The About Page"
 draft = false
 slug = "about"
+aliases = ["/contact"]
 [extra]
 no_header = true
 +++
