@@ -43,7 +43,7 @@
 {% macro footer() %}
     {% if config.extra.sam_footer %}
         <div class="section footer">
-            {{ config.extra.sam_footer.text | safe }}
+            ©{{ config.extra.sam_footer.years | safe }} {{ config.extra.sam_footer.name | safe }}
             <div class="copyright">
                 <a rel="license" target="_blank" href="http://creativecommons.org/licenses/by/4.0/">
                     <img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/80x15.png" />

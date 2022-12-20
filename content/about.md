@@ -7,7 +7,8 @@ aliases = ["/contact"]
 no_header = true
 +++
 
-Hi! I am <strong>DAVIS</strong>.
+Hi! I am <strong>DAVIS</strong>. I am a software engineer at
+[The Prospective Co.](https://www.prospective.co/).
 
 ## Contact ##
 
