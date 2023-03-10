@@ -10,15 +10,15 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="referrer" content="no-referrer">
 
-        <link rel="stylesheet" href="https://davis.tools/fonts.css">
-        <link rel="stylesheet" href="https://davis.tools/style.css">
+        <link rel="stylesheet" href="https://thedav.is/fonts.css">
+        <link rel="stylesheet" href="https://thedav.is/style.css">
 
         <title>
     Crafting Semantics 1: Lambda Calculus  · The Site of Davis
 </title>
 
         
-            <link rel="alternate" type="application/rss+xml" title="RSS" href="https://davis.tools/atom.xml">
+            <link rel="alternate" type="application/rss+xml" title="RSS" href="https://thedav.is/atom.xml">
         
 
         <!-- TODO: apparently CDNs arent good anymore. -->
@@ -60,25 +60,25 @@
             <ul>
                 
                 <li class="tag">
-                    <a href="https://davis.tools/tags/plt/">
+                    <a href="https://thedav.is/tags/plt/">
                         PLT
                     </a>
                 </li>
                 
                 <li class="tag">
-                    <a href="https://davis.tools/tags/computer-science/">
+                    <a href="https://thedav.is/tags/computer-science/">
                         Computer Science
                     </a>
                 </li>
                 
                 <li class="tag">
-                    <a href="https://davis.tools/tags/semantics/">
+                    <a href="https://thedav.is/tags/semantics/">
                         Semantics
                     </a>
                 </li>
                 
                 <li class="tag">
-                    <a href="https://davis.tools/tags/crafting-semantics/">
+                    <a href="https://thedav.is/tags/crafting-semantics/">
                         Crafting Semantics
                     </a>
                 </li>
@@ -90,10 +90,10 @@
     
     
     <p>This series of posts revolves around creating operational semantics of the Scheme programming language from the ground up, starting with the lambda calculus.</p>
-<p>If you have not read the introductory post, you can find it <a href="https://davis.tools/post/crafting-semantics-0/">here</a>, and see the index of this series <a href="/tags/crafting-semantics/">here</a>.</p>
+<p>If you have not read the introductory post, you can find it <a href="https://thedav.is/post/crafting-semantics-0/">here</a>, and see the index of this series <a href="/tags/crafting-semantics/">here</a>.</p>
 <h1 id="intro">Intro</h1>
 <p>Hi, in this post we will be implementing a CESK Abstract Machine for the lambda calculus (or simply 'λ'). First, we need to define all of what an 'abstract machine' is, what semantics are, and the syntax we will be using. So this post may be a bit long. Future posts are likely to be shorter!</p>
-<p>If you know all of the intro stuff already, but dont know how to define semantics for the lambda calculus, feel free to skip to <a href="https://davis.tools/post/crafting-semantics-1/#the-machine">here</a></p>
+<p>If you know all of the intro stuff already, but dont know how to define semantics for the lambda calculus, feel free to skip to <a href="https://thedav.is/post/crafting-semantics-1/#the-machine">here</a></p>
 <h1 id="cesk">CESK</h1>
 <p>The type of abstract machine we will be creating is called 'CESK'. It stands for <strong>C</strong>ontrol, <strong>Environment</strong>, <strong>Store</strong>, and <strong>Kontinuation</strong> (C was already taken). For a language as simple as the λ-calculus, we dont need all of this machinery, but as we build features for this machine into a real scheme, it will be nice to have the extra features provided by the Store and Kontinuation pieces.</p>
 <p>The control of a machine is the current instruction that is being evaluated. For the λ-calculus, this will simply be the syntax. For a more complex machine, like the JVM, this could be the bytecodes and an index into the current instruction. For a CPU, it may be an instruction pointer and the binary program text. When you hear the word 'control flow' it is referring to this component.</p>
@@ -279,7 +279,7 @@ alloc(\sigma) \triangleq |\sigma| \\</script>
         <nav class="bottom-menu-nav">
             <ul class="bottom-nav-list">
                 <li class="bottom-nav-item">
-                    <a class="bottom-nav-link" href="https:&#x2F;&#x2F;davis.tools">
+                    <a class="bottom-nav-link" href="https:&#x2F;&#x2F;thedav.is">
                         Home
                     </a>
                 </li>

@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
 	<title>The Site of Davis</title>
-	<link href="https://davis.tools/atom.xml" rel="self" type="application/atom+xml"/>
-  <link href="https://davis.tools"/>
+	<link href="https://thedav.is/atom.xml" rel="self" type="application/atom+xml"/>
+  <link href="https://thedav.is"/>
 	<generator uri="https://www.getzola.org/">Zola</generator>
 	<updated>2021-07-05T12:15:00-05:00</updated>
-	<id>https://davis.tools/atom.xml</id>
+	<id>https://thedav.is/atom.xml</id>
 	<entry xml:lang="en">
 		<title>Code Review: Contibutor&#x27;s Side</title>
 		<published>2021-07-05T12:15:00-05:00</published>
 		<updated>2021-07-05T12:15:00-05:00</updated>
-		<link rel="alternate" href="https://davis.tools/post/code-review-contributor/" type="text/html"/>
-		<id>https://davis.tools/post/code-review-contributor/</id>
+		<link rel="alternate" href="https://thedav.is/post/code-review-contributor/" type="text/html"/>
+		<id>https://thedav.is/post/code-review-contributor/</id>
 		<content type="html">&lt;p&gt;Hi! This is a short and opinionated guide on how to be a model contributor to a codebase. Ideally, a project would adopt this methodology. These are not tips on how to get a reviewer to like you (that&#x27;s &lt;a href=&quot;https:&#x2F;&#x2F;mtlynch.io&#x2F;code-review-love&#x2F;&quot;&gt;here&lt;&#x2F;a&gt; and its a wonderful article!), but a system for how to be a contributor to a codebase that adopts this ethos.&lt;&#x2F;p&gt;
 &lt;p&gt;I will also have a second post, from the reviewers side, that should complement this entry. Both posts will form a system of rules for small to moderate size codebases for teams with a few up to around 10 contributors. I have used this system and I find it effective.&lt;&#x2F;p&gt;
 &lt;h1 id=&quot;the-problem&quot;&gt;The Problem&lt;&#x2F;h1&gt;
@@ -59,10 +59,10 @@
 		<title>Crafting Semantics 3: More Fundamentals</title>
 		<published>2021-01-21T12:15:00-05:00</published>
 		<updated>2021-01-21T12:15:00-05:00</updated>
-		<link rel="alternate" href="https://davis.tools/post/crafting-semantics-3/" type="text/html"/>
-		<id>https://davis.tools/post/crafting-semantics-3/</id>
+		<link rel="alternate" href="https://thedav.is/post/crafting-semantics-3/" type="text/html"/>
+		<id>https://thedav.is/post/crafting-semantics-3/</id>
 		<content type="html">&lt;p&gt;This series of posts revolves around creating operational semantics of the Scheme programming language from the ground up, starting with the lambda calculus.&lt;&#x2F;p&gt;
-&lt;p&gt;If you have not read the introductory post, you can find it &lt;a href=&quot;https:&#x2F;&#x2F;davis.tools&#x2F;post&#x2F;crafting-semantics-0&#x2F;&quot;&gt;here&lt;&#x2F;a&gt;, and see the index of this series &lt;a href=&quot;&#x2F;tags&#x2F;crafting-semantics&#x2F;&quot;&gt;here&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;If you have not read the introductory post, you can find it &lt;a href=&quot;https:&#x2F;&#x2F;thedav.is&#x2F;post&#x2F;crafting-semantics-0&#x2F;&quot;&gt;here&lt;&#x2F;a&gt;, and see the index of this series &lt;a href=&quot;&#x2F;tags&#x2F;crafting-semantics&#x2F;&quot;&gt;here&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
 &lt;h1 id=&quot;intro&quot;&gt;Intro&lt;&#x2F;h1&gt;
 &lt;p&gt;Trucking along, we are gonna add some more features that make our language much more usable. Lets list them out:&lt;&#x2F;p&gt;
 &lt;ul&gt;
@@ -102,37 +102,37 @@ E \langle e_f , \rho , \sigma , \kappa&#x27; \rangle \\ \\
 &lt;p&gt;Once our control is a value, we have reached an apply state. From here, we look to our continuation for... continuation.&lt;&#x2F;p&gt;
 &lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;A \langle v , \rho , \sigma , \kappa \rangle \\
 \leadsto
-E \langle e_f , \rho_{\kappa} , \sigma , \kappa&#x27; \rangle \\ \\
+E \langle e*f , \rho*{\kappa} , \sigma , \kappa&#x27; \rangle \\ \\
 \begin{aligned}
 \text{where }
-\kappa &amp;= \textbf{cond}(e_f , e_f , \rho_{\kappa} , \kappa&#x27;) \\
+\kappa &amp;= \textbf{cond}(e*f , e_f , \rho*{\kappa} , \kappa&#x27;) \\
 v &amp;= \texttt{\#f}
 \end{aligned} \\
 A \langle v , \rho , \sigma , \kappa \rangle \\
 \leadsto
-E \langle e_t , \rho_{\kappa} , \sigma , \kappa&#x27; \rangle \\ \\
+E \langle e*t , \rho*{\kappa} , \sigma , \kappa&#x27; \rangle \\ \\
 \begin{aligned}
 \text{where }
-\kappa &amp;= \textbf{cond}(e_t , e_f , \rho_{\kappa} , \kappa&#x27;) \\
+\kappa &amp;= \textbf{cond}(e*t , e_f , \rho*{\kappa} , \kappa&#x27;) \\
 v &amp;\;≠ \texttt{\#f}
 \end{aligned}&lt;&#x2F;script&gt;
 &lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;A \langle v , \rho , \sigma , \kappa \rangle \\
 \leadsto
-E \langle e , \rho_{\kappa} , \sigma , \kappa&#x27;&#x27; \rangle \\ \\
+E \langle e , \rho*{\kappa} , \sigma , \kappa&#x27;&#x27; \rangle \\ \\
 \begin{aligned}
 \text{where }
-\kappa &amp;= \textbf{arg}(e , \rho_{\kappa} , \kappa&#x27;) \\
+\kappa &amp;= \textbf{arg}(e , \rho*{\kappa} , \kappa&#x27;) \\
 \kappa&#x27;&#x27; &amp;\triangleq \textbf{fn}(v , \kappa&#x27;)
 \end{aligned} \\
 %
 A \langle v , \rho , \sigma , \kappa \rangle \\
 \leadsto
-E \langle e_b , \rho_{\lambda}&#x27; , \sigma&#x27; , \kappa&#x27; \rangle \\ \\
+E \langle e*b , \rho*{\lambda}&#x27; , \sigma&#x27; , \kappa&#x27; \rangle \\ \\
 \begin{aligned}
 \text{where }
-\kappa &amp;= \textbf{fn}(((\lambda \; (x) \; e_b) , \rho_{\lambda}) , \kappa&#x27;) \\
+\kappa &amp;= \textbf{fn}(((\lambda \; (x) \; e*b) , \rho*{\lambda}) , \kappa&#x27;) \\
 a &amp;\triangleq alloc(\sigma) \\
-\rho_{\lambda}&#x27; &amp;\triangleq \rho_{\lambda}[x \mapsto a] \\
+\rho*{\lambda}&#x27; &amp;\triangleq \rho*{\lambda}[x \mapsto a] \\
 \sigma&#x27; &amp;\triangleq \sigma[a \mapsto v]
 \end{aligned}&lt;&#x2F;script&gt;
 &lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;A \langle \varsigma \rangle \leadsto A \langle \varsigma \rangle \\ \\
@@ -146,12 +146,12 @@ a &amp;\triangleq alloc(\sigma) \\
 &lt;p&gt;These will again be remarkably similar, we are only adding a few things to our language.&lt;&#x2F;p&gt;
 &lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;\begin{aligned}
 % expressions
-e \in \textsf{Exp} &amp;::= \text{\ae}  \\
-				   &amp;| \; (\texttt{if} \; e \; e \; e) \\
-				   &amp;| \; (\texttt{let} \; ([x \; e] \; ...) \; e) \\
-				   &amp;| \; (\texttt{call&#x2F;cc} \; e) \\
-				   &amp;| \; (\texttt{set!} \; x \; e) \\
-                   &amp;| \; (e \; e \; ...) \\
+e \in \textsf{Exp} &amp;::= \text{\ae} \\
+&amp;| \; (\texttt{if} \; e \; e \; e) \\
+&amp;| \; (\texttt{let} \; ([x \; e] \; ...) \; e) \\
+&amp;| \; (\texttt{call&#x2F;cc} \; e) \\
+&amp;| \; (\texttt{set!} \; x \; e) \\
+&amp;| \; (e \; e \; ...) \\
 \text{\ae} \in \textsf{AExp} &amp;::= x \;|\; lam \;|\; n \;|\; b \\
 % variables
 x \in \textsf{Var} &amp;\triangleq \text{The set of variables} \\
@@ -167,8 +167,7 @@ b \in \textsf{Bool} &amp;::= \texttt{\#t} \;|\; \texttt{\#f}
 &lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;\begin{aligned}
 % Machine
 \varsigma \in \Sigma &amp;\triangleq
-			E\langle \textit{Eval} \rangle
-			+ A\langle \textit{Apply} \rangle \\
+E\langle \textit{Eval} \rangle + A\langle \textit{Apply} \rangle \\
 \textit{Eval} &amp;\triangleq \textsf{Exp} \times \textit{Env} \times \textit{Store} \times \textit{Kont} \\
 \textit{Apply} &amp;\triangleq \textit{Val} \times \textit{Env} \times \textit{Store} \times \textit{Kont} \\
 % Env
@@ -178,16 +177,15 @@ b \in \textsf{Bool} &amp;::= \texttt{\#t} \;|\; \texttt{\#f}
 % Address
 a \in \textit{Addr} &amp;\triangleq \mathbb{N} \times \mathbb{N} \\
 % Value
-v \in \textit{Val} &amp;\triangleq \textit{Clo}
-					+ \mathbb{Z} + \textsf{Bool} + \textit{Kont} \\
+v \in \textit{Val} &amp;\triangleq \textit{Clo} + \mathbb{Z} + \textsf{Bool} + \textit{Kont} \\
 % Closures
 clo \in \textit{Clo} &amp;\triangleq \textsf{Lam} \times \textit{Env} \\
 % Continuation
 \kappa \in \textit{Kont} &amp;::= \textbf{mt} \\
-						&amp;| \; \textbf{cond}(e , e , \rho , \kappa) \\
-						&amp;| \; \textbf{callcc}(\kappa) \\
-						&amp;| \; \textbf{set}(a , \kappa) \\
-						&amp;| \; \textbf{call}(\overrightarrow{v} , \overrightarrow{e} , \rho , \kappa) \\
+&amp;| \; \textbf{cond}(e , e , \rho , \kappa) \\
+&amp;| \; \textbf{callcc}(\kappa) \\
+&amp;| \; \textbf{set}(a , \kappa) \\
+&amp;| \; \textbf{call}(\overrightarrow{v} , \overrightarrow{e} , \rho , \kappa) \\
 \end{aligned}&lt;&#x2F;script&gt;
 &lt;p&gt;Changes I made here were to the &lt;code&gt;Val&lt;&#x2F;code&gt;, &lt;code&gt;Kont&lt;&#x2F;code&gt;, and &lt;code&gt;Addr&lt;&#x2F;code&gt; domains. Now, continuations can be a value held in a variable, to obtain one, you must go through the new &lt;code&gt;callcc&lt;&#x2F;code&gt; Kontinuation. We added 3 continuation types: for &lt;code&gt;call&#x2F;cc&lt;&#x2F;code&gt;, &lt;code&gt;set!&lt;&#x2F;code&gt;, and for the multi-arg &lt;code&gt;call&lt;&#x2F;code&gt;. I removed the old continuations pertaining to function calling. Finally, the second number added to the address domain is required to support multiple argument functions.&lt;&#x2F;p&gt;
 &lt;p&gt;The syntax of the variables inside the &lt;code&gt;call&lt;&#x2F;code&gt; continuation may be new. The overhead-arrow means the variable is a list. When we call a function, we need to keep track of the values that we have processed, and which expressions we have yet to process. Therefore, the first argument is a list of values, which correspond to the evaluated arguments of the call-list. The second argument is that list of unevaluated expressions. We will discuss how they work when we implement the call semantics.&lt;&#x2F;p&gt;
@@ -227,7 +225,7 @@ call &amp;= ((\lambda \; (x_s \; ...) \; e_b) \; e_s \; ...) \\
 \end{aligned}&lt;&#x2F;script&gt;
 &lt;p&gt;This rule is a simple syntactic transformation. If we wanted, we could use a whole &lt;code&gt;let&lt;&#x2F;code&gt; continuation frame, and evaluate it so similarly to a regular function call that it would bore everyone. Trust me, I&#x27;ve done it, it is quite tiresome! But if you want to grow your semantic-construction chops, then please implement &lt;code&gt;let&lt;&#x2F;code&gt; explicitly! I would be happy to commend you on your effort, dear reader.&lt;&#x2F;p&gt;
 &lt;h2 id=&quot;call-with-current-continuation&quot;&gt;Call With Current Continuation&lt;&#x2F;h2&gt;
-&lt;p&gt;Call with current continuation, or &lt;code&gt;call&#x2F;cc&lt;&#x2F;code&gt; for short, is a way of obtaining the continuation of the current state, and using it like a regular value. I have &lt;a href=&quot;https:&#x2F;&#x2F;davis.tools&#x2F;post&#x2F;continuations-as-return&#x2F;&quot;&gt;written about continuations before&lt;&#x2F;a&gt;, so I will be a bit more straightforward with my implementation notes here. In my experience though, I did not truly understand continuations until I implemented this feature in an abstract machine.&lt;&#x2F;p&gt;
+&lt;p&gt;Call with current continuation, or &lt;code&gt;call&#x2F;cc&lt;&#x2F;code&gt; for short, is a way of obtaining the continuation of the current state, and using it like a regular value. I have &lt;a href=&quot;https:&#x2F;&#x2F;thedav.is&#x2F;post&#x2F;continuations-as-return&#x2F;&quot;&gt;written about continuations before&lt;&#x2F;a&gt;, so I will be a bit more straightforward with my implementation notes here. In my experience though, I did not truly understand continuations until I implemented this feature in an abstract machine.&lt;&#x2F;p&gt;
 &lt;p&gt;Also, I am switching to implementing the whole feature at once, instead of writing out all eval rules and then all apply rules. I think this method is a bit easier for understanding how a feature works, as you can see how they work in concert, side by side.&lt;&#x2F;p&gt;
 &lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;E \langle (\texttt{call&#x2F;cc} \; e) , \rho , \sigma , \kappa \rangle
 \leadsto E \langle e , \rho , \sigma , \kappa&#x27; \rangle \\ \\
@@ -236,13 +234,13 @@ call &amp;= ((\lambda \; (x_s \; ...) \; e_b) \; e_s \; ...) \\
 \kappa&#x27; &amp;\triangleq \textbf{callcc}(\kappa) \\
 \end{aligned}&lt;&#x2F;script&gt;
 &lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;A \langle v , \rho , \sigma , \kappa \rangle
-\leadsto E \langle e_b , \rho&#x27; , \sigma&#x27; , \kappa&#x27; \rangle \\
+\leadsto E \langle e*b , \rho&#x27; , \sigma&#x27; , \kappa&#x27; \rangle \\
 \begin{aligned}
 \text{where }
 \kappa &amp;= \textbf{callcc}(\kappa&#x27;) \\
-v &amp;= ((\lambda \; (x) \; e_b) , \rho_\lambda) \\
+v &amp;= ((\lambda \; (x) \; e_b) , \rho*\lambda) \\
 a &amp;\triangleq alloc(\sigma, 0) \\
-\rho&#x27; &amp;\triangleq \rho_\lambda[x \mapsto a] \\
+\rho&#x27; &amp;\triangleq \rho\_\lambda[x \mapsto a] \\
 \sigma&#x27; &amp;\triangleq \sigma[a \mapsto \kappa&#x27;]
 \end{aligned}&lt;&#x2F;script&gt;
 &lt;p&gt;Here, we specify that call&#x2F;cc can only take a one-arg function, and fills its argument with the current continuation. The name makes a lot of sense now! Call the given function... with the current continuation!&lt;&#x2F;p&gt;
@@ -276,23 +274,23 @@ a &amp;\triangleq alloc(\sigma, 0) \\
  as the &#x27;todo&#x27; list of expressions. If no arguments are given (e.g. in the expression &lt;code&gt;((λ () 3))&lt;&#x2F;code&gt;), then it will of course by empty.&lt;&#x2F;p&gt;
 &lt;p&gt;We next need a rule for the in-between states of &#x27;finished evaluating an argument, but have more to do&#x27;&lt;&#x2F;p&gt;
 &lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;A \langle v , \rho , \sigma , \kappa \rangle
-\leadsto E \langle e , \rho_\kappa , \sigma , \kappa&#x27;&#x27; \rangle \\
+\leadsto E \langle e , \rho*\kappa , \sigma , \kappa&#x27;&#x27; \rangle \\
 \begin{aligned}
 \text{where }
 \kappa &amp;= \textbf{call}(\overrightarrow{v} , e :: \overrightarrow{e}
-						, \rho_\kappa , \kappa&#x27;) \\
-\kappa&#x27;&#x27; &amp;\triangleq \textbf{call}(\overrightarrow{v} +\hspace{-12mu}+\, [v] , \overrightarrow{e} , \rho_\kappa , \kappa&#x27;) \\
+, \rho*\kappa , \kappa&#x27;) \\
+\kappa&#x27;&#x27; &amp;\triangleq \textbf{call}(\overrightarrow{v} +\hspace{-12mu}+\, [v] , \overrightarrow{e} , \rho\_\kappa , \kappa&#x27;) \\
 \end{aligned}&lt;&#x2F;script&gt;
 &lt;p&gt;In this case, we have finished evaluating an argument, but still have unevaluated arguments left. This is notated by the double-colon operator which denotes &lt;code&gt;e&lt;&#x2F;code&gt; as the head of the todo-list, and the &lt;code&gt;e&lt;&#x2F;code&gt; with an arrow as the tail of the list. The double-plus sign symbol is a list-concatenation operator.&lt;&#x2F;p&gt;
 &lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;A \langle v , \rho , \sigma , \kappa \rangle
-\leadsto E \langle e_b , \rho&#x27; , \sigma&#x27; , \kappa&#x27; \rangle \\
+\leadsto E \langle e*b , \rho&#x27; , \sigma&#x27; , \kappa&#x27; \rangle \\
 \begin{aligned}
 \text{where }
-\kappa &amp;= \textbf{call}(\overrightarrow{v} , \epsilon , \rho_\kappa , \kappa&#x27;) \\
-\overrightarrow{v} +\hspace{-12mu}+\, v &amp;= v_h :: \overrightarrow{v} \\
-v_h &amp;= ((\lambda \; (\overrightarrow{x}) \; e_b) , \rho_\lambda) \\
-a_i &amp;\triangleq alloc(\sigma, i) \\
-\rho&#x27; &amp;\triangleq \rho_\lambda[\overrightarrow x_i \mapsto a_i] \\
+\kappa &amp;= \textbf{call}(\overrightarrow{v} , \epsilon , \rho*\kappa , \kappa&#x27;) \\
+\overrightarrow{v} +\hspace{-12mu}+\, v &amp;= v*h :: \overrightarrow{v} \\
+v_h &amp;= ((\lambda \; (\overrightarrow{x}) \; e_b) , \rho*\lambda) \\
+a*i &amp;\triangleq alloc(\sigma, i) \\
+\rho&#x27; &amp;\triangleq \rho*\lambda[\overrightarrow x_i \mapsto a_i] \\
 \sigma&#x27; &amp;\triangleq \sigma[a_i \mapsto \overrightarrow v_i] \\
 \end{aligned}&lt;&#x2F;script&gt;
 &lt;p&gt;Here, we have finally utilized our new &lt;code&gt;alloc&lt;&#x2F;code&gt; functions offset feature! It&#x27;s needed here because the amount of elements in the old store will remain constant for the entire transition, so we need a way to differentiate each variables address in the new store.&lt;&#x2F;p&gt;
@@ -308,92 +306,92 @@ a_i &amp;\triangleq alloc(\sigma, i) \\
 \leadsto A \langle v , \rho , \sigma , \kappa&#x27;&#x27; \rangle \\
 \begin{aligned}
 \text{where }
-\kappa &amp;= \textbf{call}(\overrightarrow{v} , \epsilon , \rho_\kappa , \kappa&#x27;) \\
+\kappa &amp;= \textbf{call}(\overrightarrow{v} , \epsilon , \rho\_\kappa , \kappa&#x27;) \\
 \overrightarrow{v} &amp;= [\kappa&#x27;&#x27;] \\
 \end{aligned}&lt;&#x2F;script&gt;
 &lt;p&gt;Actually nice and simple! Continuations can be used like functions in Scheme. When they are called with an argument, the Kontinuation of the next state is set to the continuation being &#x27;called&#x27;. This type of continuation is called an &#x27;undelimited escaping continuation&#x27;, which basically means its goto... so don&#x27;t go crazy with it!&lt;&#x2F;p&gt;
 &lt;h1 id=&quot;example&quot;&gt;Example&lt;&#x2F;h1&gt;
 &lt;p&gt;We have implemented some great features here today! Lets do a quick example to showcase them!&lt;&#x2F;p&gt;
-&lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;e_0 = (\texttt{call&#x2F;cc} \; (\texttt{lambda} \; (k) \; (\texttt{let}  \;
-							([\text{u} \;3] \; [\text{n} \; (k \;13)])\;  55))) \\
+&lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;e*0 = (\texttt{call&#x2F;cc} \; (\texttt{lambda} \; (k) \; (\texttt{let} \;
+([\text{u} \;3] \; [\text{n} \; (k \;13)])\; 55))) \\
 \varsigma_0 = inj(e_0) = E\langle e_0 , \varnothing , \varnothing , \textbf{mt}\rangle \\ \\
-\varsigma_n = step(\varsigma_{n-1}) \\
+\varsigma_n = step(\varsigma*{n-1}) \\
 \;\\
-\varsigma_1 = E\langle
-				(\lambda \; (k) \; (\texttt{let} \; ([\text{u}\; 3] \;
-											  [\text{n} \; (k \; 13)]) \; 55)) ,
-				\varnothing , \varnothing , \textbf{callcc}(\textbf{mt})
-				\rangle \\
+\varsigma*1 = E\langle
+(\lambda \; (k) \; (\texttt{let} \; ([\text{u}\; 3] \;
+[\text{n} \; (k \; 13)]) \; 55)) ,
+\varnothing , \varnothing , \textbf{callcc}(\textbf{mt})
+\rangle \\
 \varsigma_2 = A\langle
-				((\lambda \; (k) \; (\texttt{let} \; ([\text{u}\; 3] \;
-											[\text{n} \;  (k \; 13)]) \; 55)) ,
-							\varnothing) ,
-				\varnothing , \varnothing , \textbf{callcc}(\textbf{mt})
-				\rangle \\
+((\lambda \; (k) \; (\texttt{let} \; ([\text{u}\; 3] \;
+[\text{n} \; (k \; 13)]) \; 55)) ,
+\varnothing) ,
+\varnothing , \varnothing , \textbf{callcc}(\textbf{mt})
+\rangle \\
 \varsigma_3 = E\langle
-				(\texttt{let} \; ([\text{u}\; 3] \;
-									[\text{n} \; (k \; 13)]) \; 55) ,
-				\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \}, \textbf{mt}
-				\rangle \\
+(\texttt{let} \; ([\text{u}\; 3] \;
+[\text{n} \; (k \; 13)]) \; 55) ,
+\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \}, \textbf{mt}
+\rangle \\
 \varsigma_4 = E\langle
-				((\lambda \; (\text{u} \; \text{n}) \; 55) \; 3 \; (k \; 13)) ,
-				\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \}, \textbf{mt}
-				\rangle \\
+((\lambda \; (\text{u} \; \text{n}) \; 55) \; 3 \; (k \; 13)) ,
+\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \}, \textbf{mt}
+\rangle \\
 \kappa_1 = \textbf{call}(\epsilon , [3 , (k \; 13)] , \{k : (0 , 0)\}
-						,\textbf{mt}) \\
+,\textbf{mt}) \\
 \varsigma_5 = E\langle
-				(\lambda \; (\text{u} \; \text{n}) \; 55) ,
-				\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \},
-				\kappa_1
-				\rangle \\
+(\lambda \; (\text{u} \; \text{n}) \; 55) ,
+\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \},
+\kappa_1
+\rangle \\
 \varsigma_6 = A\langle
-				((\lambda \; (\text{u} \; \text{n}) \; 55) , \{k : (0 , 0) \}) ,
-				\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \},
-				\kappa_1
-				\rangle \\
+((\lambda \; (\text{u} \; \text{n}) \; 55) , \{k : (0 , 0) \}) ,
+\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \},
+\kappa_1
+\rangle \\
 clo = ((\lambda \; (\text{u} \; \text{n}) \; 55) , \{k : (0 , 0) \}) \\
 \kappa_2 = \textbf{call}([clo] , [(k \; 13)] , \{k : (0 , 0) \} , \textbf{mt}) \\
 \varsigma_7 = E\langle
-				3,
-				\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \},
-				\kappa_2
-				\rangle \\
+3,
+\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \},
+\kappa_2
+\rangle \\
 \varsigma_8 = A\langle
-				3,
-				\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \},
-				\kappa_2
-				\rangle \\
+3,
+\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \},
+\kappa_2
+\rangle \\
 \kappa_3 = \textbf{call}([clo , 3],\epsilon , \{k : (0 , 0) \} , \textbf{mt}) \\
 \varsigma_9 = E\langle
-				(k \; 13),
-				\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \},
-				\kappa_3
-				\rangle \\
+(k \; 13),
+\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \},
+\kappa_3
+\rangle \\
 \kappa_4 = \textbf{call}(\epsilon , [13] , \{k : (0 , 0) \} , \kappa_3) \\
-\varsigma_{10} = E\langle
-				k,
-				\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \},
-				\kappa_4
-				\rangle \\
-\varsigma_{11} = A\langle
-				\textbf{mt},
-				\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \},
-				\kappa_4
-				\rangle \\
+\varsigma*{10} = E\langle
+k,
+\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \},
+\kappa*4
+\rangle \\
+\varsigma*{11} = A\langle
+\textbf{mt},
+\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \},
+\kappa*4
+\rangle \\
 \kappa_5 = \textbf{call}([\textbf{mt}] , \epsilon , \{k : (0 , 0) \} , \kappa_3) \\
-\varsigma_{12} = E\langle
-				13,
-				\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \},
-				\kappa_5
-				\rangle \\
-\varsigma_{13} = A\langle
-				13,
-				\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \},
-				\kappa_5
-				\rangle \\
-\varsigma_{14} = A\langle
-				13, \{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \}, \textbf{mt}
-				\rangle \\&lt;&#x2F;script&gt;
+\varsigma*{12} = E\langle
+13,
+\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \},
+\kappa*5
+\rangle \\
+\varsigma*{13} = A\langle
+13,
+\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \},
+\kappa*5
+\rangle \\
+\varsigma*{14} = A\langle
+13, \{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \}, \textbf{mt}
+\rangle \\&lt;&#x2F;script&gt;
 &lt;p&gt;I separated out the longer continuations because they were getting LONG!&lt;&#x2F;p&gt;
 &lt;p&gt;Alas, for this example, in the end, most of that computation was perfectly useless. But it happened, because this is a NO OPTIMIZATION ZONE! No optimizations in 3 days so far, a new warehouse record. It&#x27;s hard to find comedy in Computer Science sometimes, sorry. I have been telling that &#x27;2 hard problems in CS&#x27; joke for near 10 years...&lt;&#x2F;p&gt;
 &lt;p&gt;As you see, the machine performs admirably up to these new inputs. I did not feature &lt;code&gt;set!&lt;&#x2F;code&gt;, because this example was crazy enough! Make a &lt;code&gt;set!&lt;&#x2F;code&gt; example yourself, and write out the states by hand, it really helps understand the machine better!&lt;&#x2F;p&gt;
@@ -406,8 +404,8 @@ clo = ((\lambda \; (\text{u} \; \text{n}) \; 55) , \{k : (0 , 0) \}) \\
 		<title>I Hate Parsing</title>
 		<published>2021-01-15T12:15:00-05:00</published>
 		<updated>2021-01-15T12:15:00-05:00</updated>
-		<link rel="alternate" href="https://davis.tools/post/i-hate-parsing/" type="text/html"/>
-		<id>https://davis.tools/post/i-hate-parsing/</id>
+		<link rel="alternate" href="https://thedav.is/post/i-hate-parsing/" type="text/html"/>
+		<id>https://thedav.is/post/i-hate-parsing/</id>
 		<content type="html">&lt;p&gt;People talk about parsing too much! Its boring! Its tedious to get right, and it doesnt even produce anything special.&lt;&#x2F;p&gt;
 &lt;p&gt;The best part of compilation is &lt;em&gt;after&lt;&#x2F;em&gt; you have your AST. Turning the AST into an IR, or further into machine code. And performing optimizations! And after that, working on runtime stuff, like garbage collection, JIT, or runtime libraries. Thats the kind of fun stuff&lt;&#x2F;p&gt;
 &lt;p&gt;I suggest that every compilers class just use a Lisp! Only the most basic of parsing needed, and you can focus on the cool&#x2F;interesting parts of PL: transformations, and semantics.&lt;&#x2F;p&gt;
@@ -419,12 +417,12 @@ clo = ((\lambda \; (\text{u} \; \text{n}) \; 55) , \{k : (0 , 0) \}) \\
 		<title>Crafting Semantics 2: Basic Features</title>
 		<published>2021-01-14T12:15:00-05:00</published>
 		<updated>2021-01-14T12:15:00-05:00</updated>
-		<link rel="alternate" href="https://davis.tools/post/crafting-semantics-2/" type="text/html"/>
-		<id>https://davis.tools/post/crafting-semantics-2/</id>
+		<link rel="alternate" href="https://thedav.is/post/crafting-semantics-2/" type="text/html"/>
+		<id>https://thedav.is/post/crafting-semantics-2/</id>
 		<content type="html">&lt;p&gt;This series of posts revolves around creating operational semantics of the Scheme programming language from the ground up, starting with the lambda calculus.&lt;&#x2F;p&gt;
-&lt;p&gt;If you have not read the introductory post, you can find it &lt;a href=&quot;https:&#x2F;&#x2F;davis.tools&#x2F;post&#x2F;crafting-semantics-0&#x2F;&quot;&gt;here&lt;&#x2F;a&gt;, and see the index of this series &lt;a href=&quot;&#x2F;tags&#x2F;crafting-semantics&#x2F;&quot;&gt;here&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;If you have not read the introductory post, you can find it &lt;a href=&quot;https:&#x2F;&#x2F;thedav.is&#x2F;post&#x2F;crafting-semantics-0&#x2F;&quot;&gt;here&lt;&#x2F;a&gt;, and see the index of this series &lt;a href=&quot;&#x2F;tags&#x2F;crafting-semantics&#x2F;&quot;&gt;here&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
 &lt;h1 id=&quot;intro&quot;&gt;Intro&lt;&#x2F;h1&gt;
-&lt;p&gt;Hi! Welcome! Today, we will be extending the CESK machine from the &lt;a href=&quot;https:&#x2F;&#x2F;davis.tools&#x2F;post&#x2F;crafting-semantics-1&#x2F;&quot;&gt;previous post&lt;&#x2F;a&gt;, adding some simple features that will make our language more usable. In particular, we will implement numbers and conditionals. To accomplish that, we will be partitioning the machine into 2 different types of states. This will make future extensions to our language much simpler.&lt;&#x2F;p&gt;
+&lt;p&gt;Hi! Welcome! Today, we will be extending the CESK machine from the &lt;a href=&quot;https:&#x2F;&#x2F;thedav.is&#x2F;post&#x2F;crafting-semantics-1&#x2F;&quot;&gt;previous post&lt;&#x2F;a&gt;, adding some simple features that will make our language more usable. In particular, we will implement numbers and conditionals. To accomplish that, we will be partitioning the machine into 2 different types of states. This will make future extensions to our language much simpler.&lt;&#x2F;p&gt;
 &lt;h2 id=&quot;recap&quot;&gt;Recap&lt;&#x2F;h2&gt;
 &lt;p&gt;Let&#x27;s look at the machine that we have so far. These transition functions serve as the basis for the famous call-by-value lambda-calculus. If you don&#x27;t remember the domains, I will reproduce them soon, when we create our new machine.&lt;&#x2F;p&gt;
 &lt;script type=&quot;math&#x2F;tex;mode=display&quot;&gt;(x , \rho , \sigma , \kappa) \leadsto (v , \rho_\lambda , \sigma , \kappa) \\
@@ -447,7 +445,7 @@ clo = ((\lambda \; (\text{u} \; \text{n}) \; 55) , \{k : (0 , 0) \}) \\
 \end{aligned}&lt;&#x2F;script&gt;
 &lt;h2 id=&quot;roadblock&quot;&gt;Roadblock&lt;&#x2F;h2&gt;
 &lt;p&gt;The main issue with this machine is that it is very &#x27;lambda-centric&#x27;. For example, if you pay close attention in the last post, closure creation is actually deeply embedded into the semantics. When a variable is evaluated it finds the closure and sets it to the current environment. We want a machine that is more ... &#x27;value independent&#x27;&lt;&#x2F;p&gt;
-&lt;p&gt;If we wanted to have values that are less syntactically visible, like &lt;a href=&quot;https:&#x2F;&#x2F;davis.tools&#x2F;post&#x2F;continuations-as-return&#x2F;&quot;&gt;first-class continuations&lt;&#x2F;a&gt;, adding them to the current machine would overcomplicate our transitions. Instead, we will partition the machine into &#x27;eval&#x27; and &#x27;apply&#x27; states. Eval states are for &lt;em&gt;evaluating&lt;&#x2F;em&gt; syntax to get a value. Apply states are for &lt;em&gt;applying&lt;&#x2F;em&gt; the value into the current Kontinuation.&lt;&#x2F;p&gt;
+&lt;p&gt;If we wanted to have values that are less syntactically visible, like &lt;a href=&quot;https:&#x2F;&#x2F;thedav.is&#x2F;post&#x2F;continuations-as-return&#x2F;&quot;&gt;first-class continuations&lt;&#x2F;a&gt;, adding them to the current machine would overcomplicate our transitions. Instead, we will partition the machine into &#x27;eval&#x27; and &#x27;apply&#x27; states. Eval states are for &lt;em&gt;evaluating&lt;&#x2F;em&gt; syntax to get a value. Apply states are for &lt;em&gt;applying&lt;&#x2F;em&gt; the value into the current Kontinuation.&lt;&#x2F;p&gt;
 &lt;h1 id=&quot;the-next-machine&quot;&gt;The Next Machine&lt;&#x2F;h1&gt;
 &lt;p&gt;Our machine is very similar to the previous machine, with a few additions to the syntactic and semantic domains. I will point out the differences, so don&#x27;t worry about cross-referencing the last post!&lt;&#x2F;p&gt;
 &lt;h2 id=&quot;syntax-domains&quot;&gt;Syntax Domains&lt;&#x2F;h2&gt;
@@ -650,13 +648,13 @@ a &amp;\triangleq alloc(\sigma) \\
 		<title>Crafting Semantics 1: Lambda Calculus</title>
 		<published>2021-01-06T12:15:00-05:00</published>
 		<updated>2021-01-06T12:15:00-05:00</updated>
-		<link rel="alternate" href="https://davis.tools/post/crafting-semantics-1/" type="text/html"/>
-		<id>https://davis.tools/post/crafting-semantics-1/</id>
+		<link rel="alternate" href="https://thedav.is/post/crafting-semantics-1/" type="text/html"/>
+		<id>https://thedav.is/post/crafting-semantics-1/</id>
 		<content type="html">&lt;p&gt;This series of posts revolves around creating operational semantics of the Scheme programming language from the ground up, starting with the lambda calculus.&lt;&#x2F;p&gt;
-&lt;p&gt;If you have not read the introductory post, you can find it &lt;a href=&quot;https:&#x2F;&#x2F;davis.tools&#x2F;post&#x2F;crafting-semantics-0&#x2F;&quot;&gt;here&lt;&#x2F;a&gt;, and see the index of this series &lt;a href=&quot;&#x2F;tags&#x2F;crafting-semantics&#x2F;&quot;&gt;here&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;If you have not read the introductory post, you can find it &lt;a href=&quot;https:&#x2F;&#x2F;thedav.is&#x2F;post&#x2F;crafting-semantics-0&#x2F;&quot;&gt;here&lt;&#x2F;a&gt;, and see the index of this series &lt;a href=&quot;&#x2F;tags&#x2F;crafting-semantics&#x2F;&quot;&gt;here&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
 &lt;h1 id=&quot;intro&quot;&gt;Intro&lt;&#x2F;h1&gt;
 &lt;p&gt;Hi, in this post we will be implementing a CESK Abstract Machine for the lambda calculus (or simply &#x27;λ&#x27;). First, we need to define all of what an &#x27;abstract machine&#x27; is, what semantics are, and the syntax we will be using. So this post may be a bit long. Future posts are likely to be shorter!&lt;&#x2F;p&gt;
-&lt;p&gt;If you know all of the intro stuff already, but dont know how to define semantics for the lambda calculus, feel free to skip to &lt;a href=&quot;https:&#x2F;&#x2F;davis.tools&#x2F;post&#x2F;crafting-semantics-1&#x2F;#the-machine&quot;&gt;here&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;If you know all of the intro stuff already, but dont know how to define semantics for the lambda calculus, feel free to skip to &lt;a href=&quot;https:&#x2F;&#x2F;thedav.is&#x2F;post&#x2F;crafting-semantics-1&#x2F;#the-machine&quot;&gt;here&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
 &lt;h1 id=&quot;cesk&quot;&gt;CESK&lt;&#x2F;h1&gt;
 &lt;p&gt;The type of abstract machine we will be creating is called &#x27;CESK&#x27;. It stands for &lt;strong&gt;C&lt;&#x2F;strong&gt;ontrol, &lt;strong&gt;Environment&lt;&#x2F;strong&gt;, &lt;strong&gt;Store&lt;&#x2F;strong&gt;, and &lt;strong&gt;Kontinuation&lt;&#x2F;strong&gt; (C was already taken). For a language as simple as the λ-calculus, we dont need all of this machinery, but as we build features for this machine into a real scheme, it will be nice to have the extra features provided by the Store and Kontinuation pieces.&lt;&#x2F;p&gt;
 &lt;p&gt;The control of a machine is the current instruction that is being evaluated. For the λ-calculus, this will simply be the syntax. For a more complex machine, like the JVM, this could be the bytecodes and an index into the current instruction. For a CPU, it may be an instruction pointer and the binary program text. When you hear the word &#x27;control flow&#x27; it is referring to this component.&lt;&#x2F;p&gt;
@@ -838,8 +836,8 @@ alloc(\sigma) \triangleq |\sigma| \\&lt;&#x2F;script&gt;
 		<title>Crafting Semantics 0: Introduction</title>
 		<published>2021-01-05T12:15:00-05:00</published>
 		<updated>2021-01-05T12:15:00-05:00</updated>
-		<link rel="alternate" href="https://davis.tools/post/crafting-semantics-0/" type="text/html"/>
-		<id>https://davis.tools/post/crafting-semantics-0/</id>
+		<link rel="alternate" href="https://thedav.is/post/crafting-semantics-0/" type="text/html"/>
+		<id>https://thedav.is/post/crafting-semantics-0/</id>
 		<content type="html">&lt;h1 id=&quot;introduction&quot;&gt;Introduction&lt;&#x2F;h1&gt;
 &lt;p&gt;Hi, this is the first post on a series about creating semantics for a programming language. We will be using Scheme as a reference point, and slowly building more and more features for it.&lt;&#x2F;p&gt;
 &lt;p&gt;We will be using &#x27;&lt;em&gt;computer science notation&lt;&#x2F;em&gt;&#x27; (specifically an operational semantics) for every post. We won&#x27;t be implementing these semantics in a &#x27;real&#x27; programming language, but you could quite easily if you wanted to.&lt;&#x2F;p&gt;
@@ -848,20 +846,20 @@ alloc(\sigma) \triangleq |\sigma| \\&lt;&#x2F;script&gt;
 &lt;p&gt;We will be building a programming language! But instead of writing a parser, interpreter, compiler, etc. for it, we will simply define it mathematically. When you have a rigorously defined semantics, it should be quite easy to make a &#x27;real&#x27; interpreter out of it.&lt;&#x2F;p&gt;
 &lt;p&gt;For a mostly &#x27;finished&#x27; product, I have semantics for many forms of Scheme &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;sinistersnare&#x2F;aams&#x2F;blob&#x2F;master&#x2F;latex&#x2F;formalism.pdf&quot;&gt;here in a Git repository&lt;&#x2F;a&gt;. Also included in that repo are implementations in Racket and Rust. We may or may not deviate from it as I see fit, but that will be what the semantics will look like. If this series goes far enough, I may delve into the abstract semantics section of that document, and talk about static analysis!&lt;&#x2F;p&gt;
 &lt;h1 id=&quot;semantics&quot;&gt;Semantics&lt;&#x2F;h1&gt;
-&lt;p&gt;The semantics of a language are how its syntax is interpreted by a reader (either human or machine). Like many things in Programming Language Theory, we have stolen this term from the field of linguistics (thanks!). Computer scientists use semantics to study programming languages. You can learn more about them in my &lt;a href=&quot;https:&#x2F;&#x2F;davis.tools&#x2F;post&#x2F;abstract-machines&#x2F;&quot;&gt;&#x27;Abstract Machines&#x27; post&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;The semantics of a language are how its syntax is interpreted by a reader (either human or machine). Like many things in Programming Language Theory, we have stolen this term from the field of linguistics (thanks!). Computer scientists use semantics to study programming languages. You can learn more about them in my &lt;a href=&quot;https:&#x2F;&#x2F;thedav.is&#x2F;post&#x2F;abstract-machines&#x2F;&quot;&gt;&#x27;Abstract Machines&#x27; post&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
 &lt;h1 id=&quot;prerequisites&quot;&gt;Prerequisites&lt;&#x2F;h1&gt;
 &lt;p&gt;There will be no &#x27;programming&#x27; in this series, only notation. I will try to explain all notation as it is first used.&lt;&#x2F;p&gt;
 &lt;p&gt;All I ask is that you are interested in the topic at hand!&lt;&#x2F;p&gt;
 &lt;h1 id=&quot;let-s-begin&quot;&gt;Let&#x27;s begin!&lt;&#x2F;h1&gt;
-&lt;p&gt;We will start after that post, with a CESK machine based on the lambda calculus. See &lt;a href=&quot;https:&#x2F;&#x2F;davis.tools&#x2F;post&#x2F;crafting-semantics-1&#x2F;&quot;&gt;The next post&lt;&#x2F;a&gt; for the exciting start to this series!&lt;&#x2F;p&gt;
+&lt;p&gt;We will start after that post, with a CESK machine based on the lambda calculus. See &lt;a href=&quot;https:&#x2F;&#x2F;thedav.is&#x2F;post&#x2F;crafting-semantics-1&#x2F;&quot;&gt;The next post&lt;&#x2F;a&gt; for the exciting start to this series!&lt;&#x2F;p&gt;
 </content>
 	</entry>
 	<entry xml:lang="en">
 		<title>Continuations as First Class Return</title>
 		<published>2020-11-30T12:15:00-05:00</published>
 		<updated>2020-11-30T12:15:00-05:00</updated>
-		<link rel="alternate" href="https://davis.tools/post/continuations-as-return/" type="text/html"/>
-		<id>https://davis.tools/post/continuations-as-return/</id>
+		<link rel="alternate" href="https://thedav.is/post/continuations-as-return/" type="text/html"/>
+		<id>https://thedav.is/post/continuations-as-return/</id>
 		<content type="html">&lt;p&gt;This post can serve as an extra-light introduction to continuations.
 If you have not heard of, or are confused by continuations,
 this post may be for you!&lt;&#x2F;p&gt;
@@ -976,8 +974,8 @@ return points as arguments, and then decide where you want to go next,&lt;&#x2F;
 		<title>Abstract Machines: Interpreters for Computer Scientists</title>
 		<published>2020-11-09T12:15:00-05:00</published>
 		<updated>2020-11-09T12:15:00-05:00</updated>
-		<link rel="alternate" href="https://davis.tools/post/abstract-machines/" type="text/html"/>
-		<id>https://davis.tools/post/abstract-machines/</id>
+		<link rel="alternate" href="https://thedav.is/post/abstract-machines/" type="text/html"/>
+		<id>https://thedav.is/post/abstract-machines/</id>
 		<content type="html">&lt;h1 id=&quot;introduction&quot;&gt;Introduction&lt;&#x2F;h1&gt;
 &lt;p&gt;So im a PhD student now, so I need to write about cool computer science things!
 As part of my learnings, I have been writing a bunch of &#x27;Abstract Machines&#x27;.
@@ -1273,8 +1271,8 @@ operational semantics can help you to formalize how your language evalautes, and
 		<title>Against Glob Imports</title>
 		<published>2020-08-14T00:00:00+00:00</published>
 		<updated>2020-08-14T00:00:00+00:00</updated>
-		<link rel="alternate" href="https://davis.tools/post/against-globs/" type="text/html"/>
-		<id>https://davis.tools/post/against-globs/</id>
+		<link rel="alternate" href="https://thedav.is/post/against-globs/" type="text/html"/>
+		<id>https://thedav.is/post/against-globs/</id>
 		<content type="html">&lt;p&gt;Hi, I hate glob imports. When I see them it actively hurts my understanding of code.
 I know they may seem useful, but I think that, overall, they are an anti-pattern.&lt;&#x2F;p&gt;
 &lt;h1 id=&quot;reading-code&quot;&gt;Reading Code&lt;&#x2F;h1&gt;
@@ -1332,8 +1330,8 @@ The only exception I find is for preludes, and preludes should be used &lt;em&gt
 		<title>The Robson Tree Traversal (DRAFT)</title>
 		<published>2019-12-05T08:10:44-05:00</published>
 		<updated>2019-12-05T08:10:44-05:00</updated>
-		<link rel="alternate" href="https://davis.tools/post/robson-traversal/" type="text/html"/>
-		<id>https://davis.tools/post/robson-traversal/</id>
+		<link rel="alternate" href="https://thedav.is/post/robson-traversal/" type="text/html"/>
+		<id>https://thedav.is/post/robson-traversal/</id>
 		<content type="html">&lt;h1 id=&quot;this-is-a-draft&quot;&gt;THIS IS A DRAFT&lt;&#x2F;h1&gt;
 &lt;p&gt;Hiya, this is a draft! Please read and give me feedback! Thanks!&lt;&#x2F;p&gt;
 &lt;h2 id=&quot;todo&quot;&gt;TODO&lt;&#x2F;h2&gt;
@@ -1832,8 +1830,8 @@ you need to run the algorithm completely before doing anything else with the tre
 		<title>Fancy Tree Traversals</title>
 		<published>2019-01-02T10:10:44-05:00</published>
 		<updated>2019-01-02T10:10:44-05:00</updated>
-		<link rel="alternate" href="https://davis.tools/post/fancy-tree-traversals/" type="text/html"/>
-		<id>https://davis.tools/post/fancy-tree-traversals/</id>
+		<link rel="alternate" href="https://thedav.is/post/fancy-tree-traversals/" type="text/html"/>
+		<id>https://thedav.is/post/fancy-tree-traversals/</id>
 		<content type="html">&lt;h1 id=&quot;introduction&quot;&gt;Introduction&lt;&#x2F;h1&gt;
 &lt;p&gt;In this post, we will discuss a couple of novel methods for traversing trees.
 The threaded tree offers amortized constant access to the successor of a tree-node.
@@ -2106,8 +2104,8 @@ Let&#x27;s get to the real thing now, the Robson traversal.&lt;&#x2F;p&gt;
 		<title>Sinistersnare&#x27;s Rust 2019 Wishlist</title>
 		<published>2018-12-12T08:10:44-05:00</published>
 		<updated>2018-12-12T08:10:44-05:00</updated>
-		<link rel="alternate" href="https://davis.tools/post/rust-wishlist-2019/" type="text/html"/>
-		<id>https://davis.tools/post/rust-wishlist-2019/</id>
+		<link rel="alternate" href="https://thedav.is/post/rust-wishlist-2019/" type="text/html"/>
+		<id>https://thedav.is/post/rust-wishlist-2019/</id>
 		<content type="html">&lt;p&gt;This is my response to the
 
 &lt;a href=&quot;https:&amp;#x2F;&amp;#x2F;blog.rust-lang.org&amp;#x2F;2018&amp;#x2F;12&amp;#x2F;06&amp;#x2F;call-for-rust-2019-roadmap-blogposts.html&quot; target=&quot;_blank&quot;&gt;Call for Rust 2019 Roadmap↪&lt;&#x2F;a&gt;
@@ -2138,8 +2136,8 @@ Thanks for reading!&lt;&#x2F;p&gt;
 		<title>Hello, World!</title>
 		<published>2017-12-24T05:50:44-05:00</published>
 		<updated>2017-12-24T05:50:44-05:00</updated>
-		<link rel="alternate" href="https://davis.tools/post/hello-world/" type="text/html"/>
-		<id>https://davis.tools/post/hello-world/</id>
+		<link rel="alternate" href="https://thedav.is/post/hello-world/" type="text/html"/>
+		<id>https://thedav.is/post/hello-world/</id>
 		<content type="html">&lt;p&gt;Hey! Intro Post!&lt;&#x2F;p&gt;
 &lt;p&gt;I have got some great ideas for blog posts&#x2F;series. Here is a couple:&lt;&#x2F;p&gt;
 &lt;ol&gt;

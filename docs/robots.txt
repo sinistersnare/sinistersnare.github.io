@@ -1,4 +1,4 @@
 User-agent: *
 Disallow:
 Allow: /
-Sitemap: https://davis.tools/sitemap.xml
+Sitemap: https://thedav.is/sitemap.xml

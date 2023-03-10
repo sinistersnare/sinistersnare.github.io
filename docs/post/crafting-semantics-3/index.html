@@ -10,15 +10,15 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="referrer" content="no-referrer">
 
-        <link rel="stylesheet" href="https://davis.tools/fonts.css">
-        <link rel="stylesheet" href="https://davis.tools/style.css">
+        <link rel="stylesheet" href="https://thedav.is/fonts.css">
+        <link rel="stylesheet" href="https://thedav.is/style.css">
 
         <title>
     Crafting Semantics 3: More Fundamentals  · The Site of Davis
 </title>
 
         
-            <link rel="alternate" type="application/rss+xml" title="RSS" href="https://davis.tools/atom.xml">
+            <link rel="alternate" type="application/rss+xml" title="RSS" href="https://thedav.is/atom.xml">
         
 
         <!-- TODO: apparently CDNs arent good anymore. -->
@@ -60,25 +60,25 @@
             <ul>
                 
                 <li class="tag">
-                    <a href="https://davis.tools/tags/plt/">
+                    <a href="https://thedav.is/tags/plt/">
                         PLT
                     </a>
                 </li>
                 
                 <li class="tag">
-                    <a href="https://davis.tools/tags/computer-science/">
+                    <a href="https://thedav.is/tags/computer-science/">
                         Computer Science
                     </a>
                 </li>
                 
                 <li class="tag">
-                    <a href="https://davis.tools/tags/semantics/">
+                    <a href="https://thedav.is/tags/semantics/">
                         Semantics
                     </a>
                 </li>
                 
                 <li class="tag">
-                    <a href="https://davis.tools/tags/crafting-semantics/">
+                    <a href="https://thedav.is/tags/crafting-semantics/">
                         Crafting Semantics
                     </a>
                 </li>
@@ -90,7 +90,7 @@
     
     
     <p>This series of posts revolves around creating operational semantics of the Scheme programming language from the ground up, starting with the lambda calculus.</p>
-<p>If you have not read the introductory post, you can find it <a href="https://davis.tools/post/crafting-semantics-0/">here</a>, and see the index of this series <a href="/tags/crafting-semantics/">here</a>.</p>
+<p>If you have not read the introductory post, you can find it <a href="https://thedav.is/post/crafting-semantics-0/">here</a>, and see the index of this series <a href="/tags/crafting-semantics/">here</a>.</p>
 <h1 id="intro">Intro</h1>
 <p>Trucking along, we are gonna add some more features that make our language much more usable. Lets list them out:</p>
 <ul>
@@ -130,37 +130,37 @@ E \langle e_f , \rho , \sigma , \kappa' \rangle \\ \\
 <p>Once our control is a value, we have reached an apply state. From here, we look to our continuation for... continuation.</p>
 <script type="math/tex;mode=display">A \langle v , \rho , \sigma , \kappa \rangle \\
 \leadsto
-E \langle e_f , \rho_{\kappa} , \sigma , \kappa' \rangle \\ \\
+E \langle e*f , \rho*{\kappa} , \sigma , \kappa' \rangle \\ \\
 \begin{aligned}
 \text{where }
-\kappa &= \textbf{cond}(e_f , e_f , \rho_{\kappa} , \kappa') \\
+\kappa &= \textbf{cond}(e*f , e_f , \rho*{\kappa} , \kappa') \\
 v &= \texttt{\#f}
 \end{aligned} \\
 A \langle v , \rho , \sigma , \kappa \rangle \\
 \leadsto
-E \langle e_t , \rho_{\kappa} , \sigma , \kappa' \rangle \\ \\
+E \langle e*t , \rho*{\kappa} , \sigma , \kappa' \rangle \\ \\
 \begin{aligned}
 \text{where }
-\kappa &= \textbf{cond}(e_t , e_f , \rho_{\kappa} , \kappa') \\
+\kappa &= \textbf{cond}(e*t , e_f , \rho*{\kappa} , \kappa') \\
 v &\;≠ \texttt{\#f}
 \end{aligned}</script>
 <script type="math/tex;mode=display">A \langle v , \rho , \sigma , \kappa \rangle \\
 \leadsto
-E \langle e , \rho_{\kappa} , \sigma , \kappa'' \rangle \\ \\
+E \langle e , \rho*{\kappa} , \sigma , \kappa'' \rangle \\ \\
 \begin{aligned}
 \text{where }
-\kappa &= \textbf{arg}(e , \rho_{\kappa} , \kappa') \\
+\kappa &= \textbf{arg}(e , \rho*{\kappa} , \kappa') \\
 \kappa'' &\triangleq \textbf{fn}(v , \kappa')
 \end{aligned} \\
 %
 A \langle v , \rho , \sigma , \kappa \rangle \\
 \leadsto
-E \langle e_b , \rho_{\lambda}' , \sigma' , \kappa' \rangle \\ \\
+E \langle e*b , \rho*{\lambda}' , \sigma' , \kappa' \rangle \\ \\
 \begin{aligned}
 \text{where }
-\kappa &= \textbf{fn}(((\lambda \; (x) \; e_b) , \rho_{\lambda}) , \kappa') \\
+\kappa &= \textbf{fn}(((\lambda \; (x) \; e*b) , \rho*{\lambda}) , \kappa') \\
 a &\triangleq alloc(\sigma) \\
-\rho_{\lambda}' &\triangleq \rho_{\lambda}[x \mapsto a] \\
+\rho*{\lambda}' &\triangleq \rho*{\lambda}[x \mapsto a] \\
 \sigma' &\triangleq \sigma[a \mapsto v]
 \end{aligned}</script>
 <script type="math/tex;mode=display">A \langle \varsigma \rangle \leadsto A \langle \varsigma \rangle \\ \\
@@ -174,12 +174,12 @@ a &\triangleq alloc(\sigma) \\
 <p>These will again be remarkably similar, we are only adding a few things to our language.</p>
 <script type="math/tex;mode=display">\begin{aligned}
 % expressions
-e \in \textsf{Exp} &::= \text{\ae}  \\
-				   &| \; (\texttt{if} \; e \; e \; e) \\
-				   &| \; (\texttt{let} \; ([x \; e] \; ...) \; e) \\
-				   &| \; (\texttt{call/cc} \; e) \\
-				   &| \; (\texttt{set!} \; x \; e) \\
-                   &| \; (e \; e \; ...) \\
+e \in \textsf{Exp} &::= \text{\ae} \\
+&| \; (\texttt{if} \; e \; e \; e) \\
+&| \; (\texttt{let} \; ([x \; e] \; ...) \; e) \\
+&| \; (\texttt{call/cc} \; e) \\
+&| \; (\texttt{set!} \; x \; e) \\
+&| \; (e \; e \; ...) \\
 \text{\ae} \in \textsf{AExp} &::= x \;|\; lam \;|\; n \;|\; b \\
 % variables
 x \in \textsf{Var} &\triangleq \text{The set of variables} \\
@@ -195,8 +195,7 @@ b \in \textsf{Bool} &::= \texttt{\#t} \;|\; \texttt{\#f}
 <script type="math/tex;mode=display">\begin{aligned}
 % Machine
 \varsigma \in \Sigma &\triangleq
-			E\langle \textit{Eval} \rangle
-			+ A\langle \textit{Apply} \rangle \\
+E\langle \textit{Eval} \rangle + A\langle \textit{Apply} \rangle \\
 \textit{Eval} &\triangleq \textsf{Exp} \times \textit{Env} \times \textit{Store} \times \textit{Kont} \\
 \textit{Apply} &\triangleq \textit{Val} \times \textit{Env} \times \textit{Store} \times \textit{Kont} \\
 % Env
@@ -206,16 +205,15 @@ b \in \textsf{Bool} &::= \texttt{\#t} \;|\; \texttt{\#f}
 % Address
 a \in \textit{Addr} &\triangleq \mathbb{N} \times \mathbb{N} \\
 % Value
-v \in \textit{Val} &\triangleq \textit{Clo}
-					+ \mathbb{Z} + \textsf{Bool} + \textit{Kont} \\
+v \in \textit{Val} &\triangleq \textit{Clo} + \mathbb{Z} + \textsf{Bool} + \textit{Kont} \\
 % Closures
 clo \in \textit{Clo} &\triangleq \textsf{Lam} \times \textit{Env} \\
 % Continuation
 \kappa \in \textit{Kont} &::= \textbf{mt} \\
-						&| \; \textbf{cond}(e , e , \rho , \kappa) \\
-						&| \; \textbf{callcc}(\kappa) \\
-						&| \; \textbf{set}(a , \kappa) \\
-						&| \; \textbf{call}(\overrightarrow{v} , \overrightarrow{e} , \rho , \kappa) \\
+&| \; \textbf{cond}(e , e , \rho , \kappa) \\
+&| \; \textbf{callcc}(\kappa) \\
+&| \; \textbf{set}(a , \kappa) \\
+&| \; \textbf{call}(\overrightarrow{v} , \overrightarrow{e} , \rho , \kappa) \\
 \end{aligned}</script>
 <p>Changes I made here were to the <code>Val</code>, <code>Kont</code>, and <code>Addr</code> domains. Now, continuations can be a value held in a variable, to obtain one, you must go through the new <code>callcc</code> Kontinuation. We added 3 continuation types: for <code>call/cc</code>, <code>set!</code>, and for the multi-arg <code>call</code>. I removed the old continuations pertaining to function calling. Finally, the second number added to the address domain is required to support multiple argument functions.</p>
 <p>The syntax of the variables inside the <code>call</code> continuation may be new. The overhead-arrow means the variable is a list. When we call a function, we need to keep track of the values that we have processed, and which expressions we have yet to process. Therefore, the first argument is a list of values, which correspond to the evaluated arguments of the call-list. The second argument is that list of unevaluated expressions. We will discuss how they work when we implement the call semantics.</p>
@@ -255,7 +253,7 @@ call &= ((\lambda \; (x_s \; ...) \; e_b) \; e_s \; ...) \\
 \end{aligned}</script>
 <p>This rule is a simple syntactic transformation. If we wanted, we could use a whole <code>let</code> continuation frame, and evaluate it so similarly to a regular function call that it would bore everyone. Trust me, I've done it, it is quite tiresome! But if you want to grow your semantic-construction chops, then please implement <code>let</code> explicitly! I would be happy to commend you on your effort, dear reader.</p>
 <h2 id="call-with-current-continuation">Call With Current Continuation</h2>
-<p>Call with current continuation, or <code>call/cc</code> for short, is a way of obtaining the continuation of the current state, and using it like a regular value. I have <a href="https://davis.tools/post/continuations-as-return/">written about continuations before</a>, so I will be a bit more straightforward with my implementation notes here. In my experience though, I did not truly understand continuations until I implemented this feature in an abstract machine.</p>
+<p>Call with current continuation, or <code>call/cc</code> for short, is a way of obtaining the continuation of the current state, and using it like a regular value. I have <a href="https://thedav.is/post/continuations-as-return/">written about continuations before</a>, so I will be a bit more straightforward with my implementation notes here. In my experience though, I did not truly understand continuations until I implemented this feature in an abstract machine.</p>
 <p>Also, I am switching to implementing the whole feature at once, instead of writing out all eval rules and then all apply rules. I think this method is a bit easier for understanding how a feature works, as you can see how they work in concert, side by side.</p>
 <script type="math/tex;mode=display">E \langle (\texttt{call/cc} \; e) , \rho , \sigma , \kappa \rangle
 \leadsto E \langle e , \rho , \sigma , \kappa' \rangle \\ \\
@@ -264,13 +262,13 @@ call &= ((\lambda \; (x_s \; ...) \; e_b) \; e_s \; ...) \\
 \kappa' &\triangleq \textbf{callcc}(\kappa) \\
 \end{aligned}</script>
 <script type="math/tex;mode=display">A \langle v , \rho , \sigma , \kappa \rangle
-\leadsto E \langle e_b , \rho' , \sigma' , \kappa' \rangle \\
+\leadsto E \langle e*b , \rho' , \sigma' , \kappa' \rangle \\
 \begin{aligned}
 \text{where }
 \kappa &= \textbf{callcc}(\kappa') \\
-v &= ((\lambda \; (x) \; e_b) , \rho_\lambda) \\
+v &= ((\lambda \; (x) \; e_b) , \rho*\lambda) \\
 a &\triangleq alloc(\sigma, 0) \\
-\rho' &\triangleq \rho_\lambda[x \mapsto a] \\
+\rho' &\triangleq \rho\_\lambda[x \mapsto a] \\
 \sigma' &\triangleq \sigma[a \mapsto \kappa']
 \end{aligned}</script>
 <p>Here, we specify that call/cc can only take a one-arg function, and fills its argument with the current continuation. The name makes a lot of sense now! Call the given function... with the current continuation!</p>
@@ -304,23 +302,23 @@ a &\triangleq alloc(\sigma, 0) \\
  as the 'todo' list of expressions. If no arguments are given (e.g. in the expression <code>((λ () 3))</code>), then it will of course by empty.</p>
 <p>We next need a rule for the in-between states of 'finished evaluating an argument, but have more to do'</p>
 <script type="math/tex;mode=display">A \langle v , \rho , \sigma , \kappa \rangle
-\leadsto E \langle e , \rho_\kappa , \sigma , \kappa'' \rangle \\
+\leadsto E \langle e , \rho*\kappa , \sigma , \kappa'' \rangle \\
 \begin{aligned}
 \text{where }
 \kappa &= \textbf{call}(\overrightarrow{v} , e :: \overrightarrow{e}
-						, \rho_\kappa , \kappa') \\
-\kappa'' &\triangleq \textbf{call}(\overrightarrow{v} +\hspace{-12mu}+\, [v] , \overrightarrow{e} , \rho_\kappa , \kappa') \\
+, \rho*\kappa , \kappa') \\
+\kappa'' &\triangleq \textbf{call}(\overrightarrow{v} +\hspace{-12mu}+\, [v] , \overrightarrow{e} , \rho\_\kappa , \kappa') \\
 \end{aligned}</script>
 <p>In this case, we have finished evaluating an argument, but still have unevaluated arguments left. This is notated by the double-colon operator which denotes <code>e</code> as the head of the todo-list, and the <code>e</code> with an arrow as the tail of the list. The double-plus sign symbol is a list-concatenation operator.</p>
 <script type="math/tex;mode=display">A \langle v , \rho , \sigma , \kappa \rangle
-\leadsto E \langle e_b , \rho' , \sigma' , \kappa' \rangle \\
+\leadsto E \langle e*b , \rho' , \sigma' , \kappa' \rangle \\
 \begin{aligned}
 \text{where }
-\kappa &= \textbf{call}(\overrightarrow{v} , \epsilon , \rho_\kappa , \kappa') \\
-\overrightarrow{v} +\hspace{-12mu}+\, v &= v_h :: \overrightarrow{v} \\
-v_h &= ((\lambda \; (\overrightarrow{x}) \; e_b) , \rho_\lambda) \\
-a_i &\triangleq alloc(\sigma, i) \\
-\rho' &\triangleq \rho_\lambda[\overrightarrow x_i \mapsto a_i] \\
+\kappa &= \textbf{call}(\overrightarrow{v} , \epsilon , \rho*\kappa , \kappa') \\
+\overrightarrow{v} +\hspace{-12mu}+\, v &= v*h :: \overrightarrow{v} \\
+v_h &= ((\lambda \; (\overrightarrow{x}) \; e_b) , \rho*\lambda) \\
+a*i &\triangleq alloc(\sigma, i) \\
+\rho' &\triangleq \rho*\lambda[\overrightarrow x_i \mapsto a_i] \\
 \sigma' &\triangleq \sigma[a_i \mapsto \overrightarrow v_i] \\
 \end{aligned}</script>
 <p>Here, we have finally utilized our new <code>alloc</code> functions offset feature! It's needed here because the amount of elements in the old store will remain constant for the entire transition, so we need a way to differentiate each variables address in the new store.</p>
@@ -336,92 +334,92 @@ a_i &\triangleq alloc(\sigma, i) \\
 \leadsto A \langle v , \rho , \sigma , \kappa'' \rangle \\
 \begin{aligned}
 \text{where }
-\kappa &= \textbf{call}(\overrightarrow{v} , \epsilon , \rho_\kappa , \kappa') \\
+\kappa &= \textbf{call}(\overrightarrow{v} , \epsilon , \rho\_\kappa , \kappa') \\
 \overrightarrow{v} &= [\kappa''] \\
 \end{aligned}</script>
 <p>Actually nice and simple! Continuations can be used like functions in Scheme. When they are called with an argument, the Kontinuation of the next state is set to the continuation being 'called'. This type of continuation is called an 'undelimited escaping continuation', which basically means its goto... so don't go crazy with it!</p>
 <h1 id="example">Example</h1>
 <p>We have implemented some great features here today! Lets do a quick example to showcase them!</p>
-<script type="math/tex;mode=display">e_0 = (\texttt{call/cc} \; (\texttt{lambda} \; (k) \; (\texttt{let}  \;
-							([\text{u} \;3] \; [\text{n} \; (k \;13)])\;  55))) \\
+<script type="math/tex;mode=display">e*0 = (\texttt{call/cc} \; (\texttt{lambda} \; (k) \; (\texttt{let} \;
+([\text{u} \;3] \; [\text{n} \; (k \;13)])\; 55))) \\
 \varsigma_0 = inj(e_0) = E\langle e_0 , \varnothing , \varnothing , \textbf{mt}\rangle \\ \\
-\varsigma_n = step(\varsigma_{n-1}) \\
+\varsigma_n = step(\varsigma*{n-1}) \\
 \;\\
-\varsigma_1 = E\langle
-				(\lambda \; (k) \; (\texttt{let} \; ([\text{u}\; 3] \;
-											  [\text{n} \; (k \; 13)]) \; 55)) ,
-				\varnothing , \varnothing , \textbf{callcc}(\textbf{mt})
-				\rangle \\
+\varsigma*1 = E\langle
+(\lambda \; (k) \; (\texttt{let} \; ([\text{u}\; 3] \;
+[\text{n} \; (k \; 13)]) \; 55)) ,
+\varnothing , \varnothing , \textbf{callcc}(\textbf{mt})
+\rangle \\
 \varsigma_2 = A\langle
-				((\lambda \; (k) \; (\texttt{let} \; ([\text{u}\; 3] \;
-											[\text{n} \;  (k \; 13)]) \; 55)) ,
-							\varnothing) ,
-				\varnothing , \varnothing , \textbf{callcc}(\textbf{mt})
-				\rangle \\
+((\lambda \; (k) \; (\texttt{let} \; ([\text{u}\; 3] \;
+[\text{n} \; (k \; 13)]) \; 55)) ,
+\varnothing) ,
+\varnothing , \varnothing , \textbf{callcc}(\textbf{mt})
+\rangle \\
 \varsigma_3 = E\langle
-				(\texttt{let} \; ([\text{u}\; 3] \;
-									[\text{n} \; (k \; 13)]) \; 55) ,
-				\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \}, \textbf{mt}
-				\rangle \\
+(\texttt{let} \; ([\text{u}\; 3] \;
+[\text{n} \; (k \; 13)]) \; 55) ,
+\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \}, \textbf{mt}
+\rangle \\
 \varsigma_4 = E\langle
-				((\lambda \; (\text{u} \; \text{n}) \; 55) \; 3 \; (k \; 13)) ,
-				\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \}, \textbf{mt}
-				\rangle \\
+((\lambda \; (\text{u} \; \text{n}) \; 55) \; 3 \; (k \; 13)) ,
+\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \}, \textbf{mt}
+\rangle \\
 \kappa_1 = \textbf{call}(\epsilon , [3 , (k \; 13)] , \{k : (0 , 0)\}
-						,\textbf{mt}) \\
+,\textbf{mt}) \\
 \varsigma_5 = E\langle
-				(\lambda \; (\text{u} \; \text{n}) \; 55) ,
-				\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \},
-				\kappa_1
-				\rangle \\
+(\lambda \; (\text{u} \; \text{n}) \; 55) ,
+\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \},
+\kappa_1
+\rangle \\
 \varsigma_6 = A\langle
-				((\lambda \; (\text{u} \; \text{n}) \; 55) , \{k : (0 , 0) \}) ,
-				\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \},
-				\kappa_1
-				\rangle \\
+((\lambda \; (\text{u} \; \text{n}) \; 55) , \{k : (0 , 0) \}) ,
+\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \},
+\kappa_1
+\rangle \\
 clo = ((\lambda \; (\text{u} \; \text{n}) \; 55) , \{k : (0 , 0) \}) \\
 \kappa_2 = \textbf{call}([clo] , [(k \; 13)] , \{k : (0 , 0) \} , \textbf{mt}) \\
 \varsigma_7 = E\langle
-				3,
-				\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \},
-				\kappa_2
-				\rangle \\
+3,
+\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \},
+\kappa_2
+\rangle \\
 \varsigma_8 = A\langle
-				3,
-				\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \},
-				\kappa_2
-				\rangle \\
+3,
+\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \},
+\kappa_2
+\rangle \\
 \kappa_3 = \textbf{call}([clo , 3],\epsilon , \{k : (0 , 0) \} , \textbf{mt}) \\
 \varsigma_9 = E\langle
-				(k \; 13),
-				\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \},
-				\kappa_3
-				\rangle \\
+(k \; 13),
+\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \},
+\kappa_3
+\rangle \\
 \kappa_4 = \textbf{call}(\epsilon , [13] , \{k : (0 , 0) \} , \kappa_3) \\
-\varsigma_{10} = E\langle
-				k,
-				\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \},
-				\kappa_4
-				\rangle \\
-\varsigma_{11} = A\langle
-				\textbf{mt},
-				\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \},
-				\kappa_4
-				\rangle \\
+\varsigma*{10} = E\langle
+k,
+\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \},
+\kappa*4
+\rangle \\
+\varsigma*{11} = A\langle
+\textbf{mt},
+\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \},
+\kappa*4
+\rangle \\
 \kappa_5 = \textbf{call}([\textbf{mt}] , \epsilon , \{k : (0 , 0) \} , \kappa_3) \\
-\varsigma_{12} = E\langle
-				13,
-				\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \},
-				\kappa_5
-				\rangle \\
-\varsigma_{13} = A\langle
-				13,
-				\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \},
-				\kappa_5
-				\rangle \\
-\varsigma_{14} = A\langle
-				13, \{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \}, \textbf{mt}
-				\rangle \\</script>
+\varsigma*{12} = E\langle
+13,
+\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \},
+\kappa*5
+\rangle \\
+\varsigma*{13} = A\langle
+13,
+\{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \},
+\kappa*5
+\rangle \\
+\varsigma*{14} = A\langle
+13, \{k : (0 , 0) \}, \{(0, 0) : \textbf{mt} \}, \textbf{mt}
+\rangle \\</script>
 <p>I separated out the longer continuations because they were getting LONG!</p>
 <p>Alas, for this example, in the end, most of that computation was perfectly useless. But it happened, because this is a NO OPTIMIZATION ZONE! No optimizations in 3 days so far, a new warehouse record. It's hard to find comedy in Computer Science sometimes, sorry. I have been telling that '2 hard problems in CS' joke for near 10 years...</p>
 <p>As you see, the machine performs admirably up to these new inputs. I did not feature <code>set!</code>, because this example was crazy enough! Make a <code>set!</code> example yourself, and write out the states by hand, it really helps understand the machine better!</p>
@@ -438,7 +436,7 @@ clo = ((\lambda \; (\text{u} \; \text{n}) \; 55) , \{k : (0 , 0) \}) \\
         <nav class="bottom-menu-nav">
             <ul class="bottom-nav-list">
                 <li class="bottom-nav-item">
-                    <a class="bottom-nav-link" href="https:&#x2F;&#x2F;davis.tools">
+                    <a class="bottom-nav-link" href="https:&#x2F;&#x2F;thedav.is">
                         Home
                     </a>
                 </li>

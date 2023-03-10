@@ -1,124 +1,124 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-        <loc>https://davis.tools/</loc>
+        <loc>https://thedav.is/</loc>
     </url>
     <url>
-        <loc>https://davis.tools/about/</loc>
+        <loc>https://thedav.is/about/</loc>
     </url>
     <url>
-        <loc>https://davis.tools/post/</loc>
+        <loc>https://thedav.is/post/</loc>
     </url>
     <url>
-        <loc>https://davis.tools/post/abstract-machines/</loc>
+        <loc>https://thedav.is/post/abstract-machines/</loc>
         <lastmod>2020-11-09T12:15:00-05:00</lastmod>
     </url>
     <url>
-        <loc>https://davis.tools/post/against-globs/</loc>
+        <loc>https://thedav.is/post/against-globs/</loc>
         <lastmod>2020-08-14</lastmod>
     </url>
     <url>
-        <loc>https://davis.tools/post/code-review-contributor/</loc>
+        <loc>https://thedav.is/post/code-review-contributor/</loc>
         <lastmod>2021-07-05T12:15:00-05:00</lastmod>
     </url>
     <url>
-        <loc>https://davis.tools/post/continuations-as-return/</loc>
+        <loc>https://thedav.is/post/continuations-as-return/</loc>
         <lastmod>2020-11-30T12:15:00-05:00</lastmod>
     </url>
     <url>
-        <loc>https://davis.tools/post/crafting-semantics-0/</loc>
+        <loc>https://thedav.is/post/crafting-semantics-0/</loc>
         <lastmod>2021-01-05T12:15:00-05:00</lastmod>
     </url>
     <url>
-        <loc>https://davis.tools/post/crafting-semantics-1/</loc>
+        <loc>https://thedav.is/post/crafting-semantics-1/</loc>
         <lastmod>2021-01-06T12:15:00-05:00</lastmod>
     </url>
     <url>
-        <loc>https://davis.tools/post/crafting-semantics-2/</loc>
+        <loc>https://thedav.is/post/crafting-semantics-2/</loc>
         <lastmod>2021-01-14T12:15:00-05:00</lastmod>
     </url>
     <url>
-        <loc>https://davis.tools/post/crafting-semantics-3/</loc>
+        <loc>https://thedav.is/post/crafting-semantics-3/</loc>
         <lastmod>2021-01-21T12:15:00-05:00</lastmod>
     </url>
     <url>
-        <loc>https://davis.tools/post/fancy-tree-traversals/</loc>
+        <loc>https://thedav.is/post/fancy-tree-traversals/</loc>
         <lastmod>2019-01-02T10:10:44-05:00</lastmod>
     </url>
     <url>
-        <loc>https://davis.tools/post/hello-world/</loc>
+        <loc>https://thedav.is/post/hello-world/</loc>
         <lastmod>2017-12-24T05:50:44-05:00</lastmod>
     </url>
     <url>
-        <loc>https://davis.tools/post/i-hate-parsing/</loc>
+        <loc>https://thedav.is/post/i-hate-parsing/</loc>
         <lastmod>2021-01-15T12:15:00-05:00</lastmod>
     </url>
     <url>
-        <loc>https://davis.tools/post/robson-traversal/</loc>
+        <loc>https://thedav.is/post/robson-traversal/</loc>
         <lastmod>2019-12-05T08:10:44-05:00</lastmod>
     </url>
     <url>
-        <loc>https://davis.tools/post/rust-wishlist-2019/</loc>
+        <loc>https://thedav.is/post/rust-wishlist-2019/</loc>
         <lastmod>2018-12-12T08:10:44-05:00</lastmod>
     </url>
     <url>
-        <loc>https://davis.tools/tags/</loc>
+        <loc>https://thedav.is/tags/</loc>
     </url>
     <url>
-        <loc>https://davis.tools/tags/abstract-machines/</loc>
+        <loc>https://thedav.is/tags/abstract-machines/</loc>
     </url>
     <url>
-        <loc>https://davis.tools/tags/algorithms/</loc>
+        <loc>https://thedav.is/tags/algorithms/</loc>
     </url>
     <url>
-        <loc>https://davis.tools/tags/c/</loc>
+        <loc>https://thedav.is/tags/c/</loc>
     </url>
     <url>
-        <loc>https://davis.tools/tags/computer-science/</loc>
+        <loc>https://thedav.is/tags/computer-science/</loc>
     </url>
     <url>
-        <loc>https://davis.tools/tags/continuations/</loc>
+        <loc>https://thedav.is/tags/continuations/</loc>
     </url>
     <url>
-        <loc>https://davis.tools/tags/crafting-semantics/</loc>
+        <loc>https://thedav.is/tags/crafting-semantics/</loc>
     </url>
     <url>
-        <loc>https://davis.tools/tags/data-structures/</loc>
+        <loc>https://thedav.is/tags/data-structures/</loc>
     </url>
     <url>
-        <loc>https://davis.tools/tags/engineering/</loc>
+        <loc>https://thedav.is/tags/engineering/</loc>
     </url>
     <url>
-        <loc>https://davis.tools/tags/interpreters/</loc>
+        <loc>https://thedav.is/tags/interpreters/</loc>
     </url>
     <url>
-        <loc>https://davis.tools/tags/java/</loc>
+        <loc>https://thedav.is/tags/java/</loc>
     </url>
     <url>
-        <loc>https://davis.tools/tags/meta/</loc>
+        <loc>https://thedav.is/tags/meta/</loc>
     </url>
     <url>
-        <loc>https://davis.tools/tags/pet-peeves/</loc>
+        <loc>https://thedav.is/tags/pet-peeves/</loc>
     </url>
     <url>
-        <loc>https://davis.tools/tags/plt/</loc>
+        <loc>https://thedav.is/tags/plt/</loc>
     </url>
     <url>
-        <loc>https://davis.tools/tags/programming/</loc>
+        <loc>https://thedav.is/tags/programming/</loc>
     </url>
     <url>
-        <loc>https://davis.tools/tags/python/</loc>
+        <loc>https://thedav.is/tags/python/</loc>
     </url>
     <url>
-        <loc>https://davis.tools/tags/rust/</loc>
+        <loc>https://thedav.is/tags/rust/</loc>
     </url>
     <url>
-        <loc>https://davis.tools/tags/semantics/</loc>
+        <loc>https://thedav.is/tags/semantics/</loc>
     </url>
     <url>
-        <loc>https://davis.tools/tags/trees/</loc>
+        <loc>https://thedav.is/tags/trees/</loc>
     </url>
     <url>
-        <loc>https://davis.tools/work/</loc>
+        <loc>https://thedav.is/work/</loc>
     </url>
 </urlset>
