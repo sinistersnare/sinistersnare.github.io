@@ -29,7 +29,6 @@ Now write, and changes will be reflected.
 ## TODO:
 
 - Edit theme to use [ToC support](https://www.getzola.org/documentation/content/table-of-contents/) for posts.
-- Automate build/deploy with GH actions or something? https://www.getzola.org/documentation/deployment/github-pages/
 - Delimit tags in posts with a comma or something.
 - Make blockquote look less SHIT
 - I fucked up default list styles making ToC looking good. Unfuckup while keeping ToCs pretty.

@@ -11,7 +11,7 @@ build_search_index = false
 generate_feed = true
 
 taxonomies = [{ name = "tags", rss = true }]
-title = "The Site of Davis"
+title = "The (Site of) Davis"
 
 theme = "sam"
 
