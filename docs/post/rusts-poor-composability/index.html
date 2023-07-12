@@ -52,7 +52,7 @@
         
             
             
-                &#183; 3 min
+                &#183; 4 min
             
         
         
@@ -149,8 +149,43 @@ but I think it should be the focus at least.</p>
 <p>Niko has <a href="http://smallcultfollowing.com/babysteps/blog/2023/01/20/rust-in-2023-growing-up/">some ideas</a> but they
 still seem so lofty compared to basic ergonomic capabilities.</p>
 <p>There is some work on keyword generics that looks horrendous, but maybe would solve this problem. I hope they can work on it.</p>
-<p>TODO: reference <code>registers of Rust</code> -- https://without.boats/blog/the-registers-of-rust/
-TODO: Find the keyword generics work, link to it.</p>
+<h1 id="more-things-i-have-found-that-annoy-me">More things I have found that annoy me.</h1>
+<p>I have a nice easy to make struct.</p>
+<pre data-lang="rs" style="background-color:#282a36;color:#f8f8f2;" class="language-rs "><code class="language-rs" data-lang="rs"><span style="font-style:italic;color:#8be9fd;">struct </span><span>Easy </span><span style="color:#ffffff;">{
+</span><span>    </span><span style="color:#ffffff;">thing</span><span>: </span><span style="font-style:italic;color:#8be9fd;">u32</span><span>,
+</span><span style="color:#ffffff;">}
+</span><span>
+</span><span style="font-style:italic;color:#8be9fd;">impl </span><span>Easy </span><span style="color:#ffffff;">{
+</span><span>    </span><span style="font-style:italic;color:#8be9fd;">fn </span><span style="color:#50fa7b;">new</span><span>() </span><span style="color:#ff79c6;">-&gt; </span><span style="font-style:italic;color:#8be9fd;">Self </span><span style="color:#ffffff;">{
+</span><span>        </span><span style="font-style:italic;color:#8be9fd;">Self </span><span style="color:#ffffff;">{
+</span><span>            thing: </span><span style="color:#bd93f9;">12</span><span>,
+</span><span>        </span><span style="color:#ffffff;">}
+</span><span>    </span><span style="color:#ffffff;">}
+</span><span style="color:#ffffff;">}
+</span></code></pre>
+<p>Cool! But, its just about to get slightly more complicated. <code>Easy</code> needs a reference.</p>
+<pre data-lang="rs" style="background-color:#282a36;color:#f8f8f2;" class="language-rs "><code class="language-rs" data-lang="rs"><span style="font-style:italic;color:#8be9fd;">struct </span><span>Easy&lt;</span><span style="color:#ff79c6;">&#39;a</span><span>&gt; </span><span style="color:#ffffff;">{
+</span><span>    </span><span style="color:#ffffff;">thing</span><span>: </span><span style="font-style:italic;color:#8be9fd;">u32</span><span>,
+</span><span>    </span><span style="color:#ffffff;">handle</span><span>: </span><span style="color:#ff79c6;">&amp;&#39;a</span><span> [</span><span style="font-style:italic;color:#8be9fd;">u8</span><span>],
+</span><span style="color:#ffffff;">}
+</span><span>
+</span><span style="font-style:italic;color:#8be9fd;">impl</span><span>&lt;</span><span style="color:#ff79c6;">&#39;a</span><span>&gt; Easy&lt;</span><span style="color:#ff79c6;">&#39;a</span><span>&gt; </span><span style="color:#ffffff;">{
+</span><span>    </span><span style="font-style:italic;color:#8be9fd;">fn </span><span style="color:#50fa7b;">new</span><span>() </span><span style="color:#ff79c6;">-&gt; Self&lt;&#39;a&gt; </span><span style="color:#ffffff;">{
+</span><span>        </span><span style="font-style:italic;color:#8be9fd;">Self </span><span style="color:#ffffff;">{
+</span><span>            thing: </span><span style="color:#bd93f9;">12</span><span>,
+</span><span>            handle: todo!() </span><span style="color:#6272a4;">// this is done better in real code I promise.
+</span><span>        </span><span style="color:#ffffff;">}
+</span><span>    </span><span style="color:#ffffff;">}
+</span><span style="color:#ffffff;">}
+</span></code></pre>
+<p>But, alas! <code>Self&lt;'a&gt;</code> is not valid! We need to switch it to <code>Easy&lt;'a&gt;</code>. Of course this is a small nit,
+but what the heck! This is exactly what I'm talking about. There are nice little sugars that we are allowed
+to use just until it becomes code that <em>actually needs to do anything</em>. Then you can't use the sugar.</p>
+<p>Whats the point of having the sugar in the first place then?!</p>
+<ul>
+<li>TODO: reference <code>registers of Rust</code> -- https://without.boats/blog/the-registers-of-rust/</li>
+<li>TODO: Find the keyword generics work, link to it.</li>
+</ul>
 
 
         </div>

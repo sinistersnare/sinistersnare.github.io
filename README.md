@@ -28,6 +28,11 @@ Now write, and changes will be reflected.
 
 ## TODO:
 
+- Footnote with backrefs. Zola supports footnotes but not backrefs.
+  - https://css-tricks.com/footnotes-that-work-in-rss-readers/
+  - Proably have 2 macros that do the ref, and another for the actual footnote contents.
+  - `{% footnote 1 %}`
+  - `{% footnotes {1: content here} {2: other content} %}`
 - Edit theme to use [ToC support](https://www.getzola.org/documentation/content/table-of-contents/) for posts.
 - Delimit tags in posts with a comma or something.
 - Make blockquote look less SHIT

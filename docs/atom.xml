@@ -72,8 +72,43 @@ but I think it should be the focus at least.&lt;&#x2F;p&gt;
 &lt;p&gt;Niko has &lt;a href=&quot;http:&#x2F;&#x2F;smallcultfollowing.com&#x2F;babysteps&#x2F;blog&#x2F;2023&#x2F;01&#x2F;20&#x2F;rust-in-2023-growing-up&#x2F;&quot;&gt;some ideas&lt;&#x2F;a&gt; but they
 still seem so lofty compared to basic ergonomic capabilities.&lt;&#x2F;p&gt;
 &lt;p&gt;There is some work on keyword generics that looks horrendous, but maybe would solve this problem. I hope they can work on it.&lt;&#x2F;p&gt;
-&lt;p&gt;TODO: reference &lt;code&gt;registers of Rust&lt;&#x2F;code&gt; -- https:&#x2F;&#x2F;without.boats&#x2F;blog&#x2F;the-registers-of-rust&#x2F;
-TODO: Find the keyword generics work, link to it.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;more-things-i-have-found-that-annoy-me&quot;&gt;More things I have found that annoy me.&lt;&#x2F;h1&gt;
+&lt;p&gt;I have a nice easy to make struct.&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rs&quot; style=&quot;background-color:#282a36;color:#f8f8f2;&quot; class=&quot;language-rs &quot;&gt;&lt;code class=&quot;language-rs&quot; data-lang=&quot;rs&quot;&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;struct &lt;&#x2F;span&gt;&lt;span&gt;Easy &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;thing&lt;&#x2F;span&gt;&lt;span&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;u32&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;impl &lt;&#x2F;span&gt;&lt;span&gt;Easy &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#50fa7b;&quot;&gt;new&lt;&#x2F;span&gt;&lt;span&gt;() &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;-&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;Self &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;Self &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;            thing: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bd93f9;&quot;&gt;12&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;}
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Cool! But, its just about to get slightly more complicated. &lt;code&gt;Easy&lt;&#x2F;code&gt; needs a reference.&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rs&quot; style=&quot;background-color:#282a36;color:#f8f8f2;&quot; class=&quot;language-rs &quot;&gt;&lt;code class=&quot;language-rs&quot; data-lang=&quot;rs&quot;&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;struct &lt;&#x2F;span&gt;&lt;span&gt;Easy&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;&amp;#39;a&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;thing&lt;&#x2F;span&gt;&lt;span&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;u32&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;handle&lt;&#x2F;span&gt;&lt;span&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;&amp;amp;&amp;#39;a&lt;&#x2F;span&gt;&lt;span&gt; [&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;u8&lt;&#x2F;span&gt;&lt;span&gt;],
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;impl&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;&amp;#39;a&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt; Easy&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;&amp;#39;a&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#50fa7b;&quot;&gt;new&lt;&#x2F;span&gt;&lt;span&gt;() &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;-&amp;gt; Self&amp;lt;&amp;#39;a&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;Self &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;            thing: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bd93f9;&quot;&gt;12&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;            handle: todo!() &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6272a4;&quot;&gt;&#x2F;&#x2F; this is done better in real code I promise.
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;}
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;But, alas! &lt;code&gt;Self&amp;lt;&#x27;a&amp;gt;&lt;&#x2F;code&gt; is not valid! We need to switch it to &lt;code&gt;Easy&amp;lt;&#x27;a&amp;gt;&lt;&#x2F;code&gt;. Of course this is a small nit,
+but what the heck! This is exactly what I&#x27;m talking about. There are nice little sugars that we are allowed
+to use just until it becomes code that &lt;em&gt;actually needs to do anything&lt;&#x2F;em&gt;. Then you can&#x27;t use the sugar.&lt;&#x2F;p&gt;
+&lt;p&gt;Whats the point of having the sugar in the first place then?!&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;TODO: reference &lt;code&gt;registers of Rust&lt;&#x2F;code&gt; -- https:&#x2F;&#x2F;without.boats&#x2F;blog&#x2F;the-registers-of-rust&#x2F;&lt;&#x2F;li&gt;
+&lt;li&gt;TODO: Find the keyword generics work, link to it.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
 </content>
 	</entry>
 	<entry xml:lang="en">

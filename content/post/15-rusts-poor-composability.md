@@ -104,5 +104,47 @@ still seem so lofty compared to basic ergonomic capabilities.
 
 There is some work on keyword generics that looks horrendous, but maybe would solve this problem. I hope they can work on it.
 
-TODO: reference `registers of Rust` -- https://without.boats/blog/the-registers-of-rust/
-TODO: Find the keyword generics work, link to it.
+# More things I have found that annoy me.
+
+I have a nice easy to make struct.
+
+```rs
+struct Easy {
+    thing: u32,
+}
+
+impl Easy {
+    fn new() -> Self {
+        Self {
+            thing: 12,
+        }
+    }
+}
+```
+
+Cool! But, its just about to get slightly more complicated. `Easy` needs a reference.
+
+```rs
+struct Easy<'a> {
+    thing: u32,
+    handle: &'a [u8],
+}
+
+impl<'a> Easy<'a> {
+    fn new() -> Self<'a> {
+        Self {
+            thing: 12,
+            handle: todo!() // this is done better in real code I promise.
+        }
+    }
+}
+```
+
+But, alas! `Self<'a>` is not valid! We need to switch it to `Easy<'a>`. Of course this is a small nit,
+but what the heck! This is exactly what I'm talking about. There are nice little sugars that we are allowed
+to use just until it becomes code that _actually needs to do anything_. Then you can't use the sugar.
+
+Whats the point of having the sugar in the first place then?!
+
+- TODO: reference `registers of Rust` -- https://without.boats/blog/the-registers-of-rust/
+- TODO: Find the keyword generics work, link to it.
