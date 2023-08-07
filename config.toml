@@ -34,7 +34,7 @@ sam_menu = [
     { text = "Posts", link = "/post" },
     { text = "About", link = "/about" },
     { text = "Works", link = "/work" },
-    { text = "Mastodon↪", link = "https://hachyderm.io/@davis" },
+    { text = "Mastodon↪", link = "https://hachyderm.io/@davis", masto = true },
     { text = "GitHub↪", link = "https://github.com/sinistersnare" },
 ]
 sam_bottom_menu = true
