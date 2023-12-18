@@ -7,16 +7,14 @@ aliases = ["/contact"]
 no_header = true
 +++
 
-Hi! I am <strong>DAVIS</strong>. I am a software engineer at
-[The Prospective Co.](https://www.prospective.co/).
+Hi! I am <strong>DAVIS</strong>.
+I write code and want to change the world with software.
 
-## Contact ##
-
-I am 'Sinistersnare' on {{ elink(text="GitHub", to="https://github.com/sinistersnare") }}.
+## Contact
 
 My email is my name @ this domain.
 
-## About This Site ##
+## About This Site
 
 This site is powered by {{ elink(text="Zola", to="https://www.getzola.org") }} and the {{ elink(text="Sam Theme", to="https://www.getzola.org/themes/sam/") }}.
 

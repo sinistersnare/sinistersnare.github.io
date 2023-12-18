@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
-	<title>The (Site of) Davis</title>
-	<link href="https://thedav.is/atom.xml" rel="self" type="application/atom+xml"/>
-  <link href="https://thedav.is"/>
-	<generator uri="https://www.getzola.org/">Zola</generator>
-	<updated>2023-08-21T12:15:00-05:00</updated>
-	<id>https://thedav.is/atom.xml</id>
-	<entry xml:lang="en">
-		<title>Homo Deus (2016) Review: Bad Ragebait</title>
-		<published>2023-08-21T12:15:00-05:00</published>
-		<updated>2023-08-21T12:15:00-05:00</updated>
-		<link rel="alternate" href="https://thedav.is/post/homo-deus-review/" type="text/html"/>
-		<id>https://thedav.is/post/homo-deus-review/</id>
-		<content type="html">&lt;p&gt;Hello, I just finished &lt;em&gt;Homo Deus&lt;&#x2F;em&gt; by Yuval Noah Harari, author of the acclaimed &#x27;Sapiens&#x27;.
+    <title>The (Site of) Davis</title>
+    <link href="https://thedav.is/atom.xml" rel="self" type="application/atom+xml"/>
+    <link href="https://thedav.is"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2023-08-21T12:15:00-05:00</updated>
+    <id>https://thedav.is/atom.xml</id>
+    <entry xml:lang="en">
+        <title>Homo Deus (2016) Review: Bad Ragebait</title>
+        <published>2023-08-21T12:15:00-05:00</published>
+        <updated>2023-08-21T12:15:00-05:00</updated>
+        <author>
+          <name>Unknown</name>
+        </author>
+        <link rel="alternate" href="https://thedav.is/post/homo-deus-review/" type="text/html"/>
+        <id>https://thedav.is/post/homo-deus-review/</id>
+        
+        <content type="html">&lt;p&gt;Hello, I just finished &lt;em&gt;Homo Deus&lt;&#x2F;em&gt; by Yuval Noah Harari, author of the acclaimed &#x27;Sapiens&#x27;.
 This is my review from the perspective of a Utopian, and fairly stream-of-consciousness style.&lt;&#x2F;p&gt;
 &lt;p&gt;First, I think the book is first and foremost capitalist apologia. Every sentence should be critically analyzed and discounted. It has some good historical takes on the fall of state socialism. It also has interesting views on how humans evolve socially. It too easily assumes that because we are living in liberal capitalism now, liberal capitalism must be the only possible way to live. It also presupposes that economic and political value are literally the only reasons for humans to live, which is fairly dystopian.&lt;&#x2F;p&gt;
 &lt;p&gt;Again, it does not have a good vision of the future. This is really important. He does not portray a good enough future. Think about it as you read, if you choose to read it. His future sounds cruelly neutral at best, and that scares me.&lt;&#x2F;p&gt;
@@ -45,14 +49,19 @@ This is my review from the perspective of a Utopian, and fairly stream-of-consci
 &lt;p&gt;If you have made it this far, hear my plea. Change the world. We have done enough protesting. We know the problems. Make a change, a real change. Build a Utopia.&lt;&#x2F;p&gt;
 &lt;p&gt;Thanks! Let me know if you liked the review!&lt;&#x2F;p&gt;
 </content>
-	</entry>
-	<entry xml:lang="en">
-		<title>Rust&#x27;s Poor Composability</title>
-		<published>2023-04-05T12:15:00-05:00</published>
-		<updated>2023-04-05T12:15:00-05:00</updated>
-		<link rel="alternate" href="https://thedav.is/post/rusts-poor-composability/" type="text/html"/>
-		<id>https://thedav.is/post/rusts-poor-composability/</id>
-		<content type="html">&lt;p&gt;I love Rust. I wish they would spend more time making it actually work for non hello-world use-cases.&lt;&#x2F;p&gt;
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Rust&#x27;s Poor Composability</title>
+        <published>2023-04-05T12:15:00-05:00</published>
+        <updated>2023-04-05T12:15:00-05:00</updated>
+        <author>
+          <name>Unknown</name>
+        </author>
+        <link rel="alternate" href="https://thedav.is/post/rusts-poor-composability/" type="text/html"/>
+        <id>https://thedav.is/post/rusts-poor-composability/</id>
+        
+        <content type="html">&lt;p&gt;I love Rust. I wish they would spend more time making it actually work for non hello-world use-cases.&lt;&#x2F;p&gt;
 &lt;h2 id=&quot;iteration&quot;&gt;Iteration&lt;&#x2F;h2&gt;
 &lt;p&gt;Rust has a nice pretty syntax for iterating:&lt;&#x2F;p&gt;
 &lt;pre data-lang=&quot;rs&quot; style=&quot;background-color:#282a36;color:#f8f8f2;&quot; class=&quot;language-rs &quot;&gt;&lt;code class=&quot;language-rs&quot; data-lang=&quot;rs&quot;&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;for&lt;&#x2F;span&gt;&lt;span&gt; x &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;in &amp;amp;mut&lt;&#x2F;span&gt;&lt;span&gt; something &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;{
@@ -150,14 +159,19 @@ to use just until it becomes code that &lt;em&gt;actually needs to do anything&l
 &lt;li&gt;TODO: Find the keyword generics work, link to it.&lt;&#x2F;li&gt;
 &lt;&#x2F;ul&gt;
 </content>
-	</entry>
-	<entry xml:lang="en">
-		<title>Code Review: Contibutor&#x27;s Side</title>
-		<published>2021-07-05T12:15:00-05:00</published>
-		<updated>2021-07-05T12:15:00-05:00</updated>
-		<link rel="alternate" href="https://thedav.is/post/code-review-contributor/" type="text/html"/>
-		<id>https://thedav.is/post/code-review-contributor/</id>
-		<content type="html">&lt;p&gt;Hi! This is a short and opinionated guide on how to be a model contributor to a codebase. Ideally, a project would adopt this methodology. These are not tips on how to get a reviewer to like you (that&#x27;s &lt;a href=&quot;https:&#x2F;&#x2F;mtlynch.io&#x2F;code-review-love&#x2F;&quot;&gt;here&lt;&#x2F;a&gt; and its a wonderful article!), but a system for how to be a contributor to a codebase that adopts this ethos.&lt;&#x2F;p&gt;
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Code Review: Contibutor&#x27;s Side</title>
+        <published>2021-07-05T12:15:00-05:00</published>
+        <updated>2021-07-05T12:15:00-05:00</updated>
+        <author>
+          <name>Unknown</name>
+        </author>
+        <link rel="alternate" href="https://thedav.is/post/code-review-contributor/" type="text/html"/>
+        <id>https://thedav.is/post/code-review-contributor/</id>
+        
+        <content type="html">&lt;p&gt;Hi! This is a short and opinionated guide on how to be a model contributor to a codebase. Ideally, a project would adopt this methodology. These are not tips on how to get a reviewer to like you (that&#x27;s &lt;a href=&quot;https:&#x2F;&#x2F;mtlynch.io&#x2F;code-review-love&#x2F;&quot;&gt;here&lt;&#x2F;a&gt; and its a wonderful article!), but a system for how to be a contributor to a codebase that adopts this ethos.&lt;&#x2F;p&gt;
 &lt;p&gt;I will also have a second post, from the reviewers side, that should complement this entry. Both posts will form a system of rules for small to moderate size codebases for teams with a few up to around 10 contributors. I have used this system and I find it effective.&lt;&#x2F;p&gt;
 &lt;h1 id=&quot;the-problem&quot;&gt;The Problem&lt;&#x2F;h1&gt;
 &lt;p&gt;Many codebases start with only a single contributor or two hacking away quickly. This is fine and great, but when it comes time to scale up, getting developers into the groove and making sure that knowledge is spread throughout the team becomes more and more important. The &lt;a href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Bus_factor&quot;&gt;bus factor&lt;&#x2F;a&gt; of a team needs to stay high, and I think that my system is an easy way to keep that number up, at worst 2, but as time continues it increases.&lt;&#x2F;p&gt;
@@ -199,14 +213,19 @@ to use just until it becomes code that &lt;em&gt;actually needs to do anything&l
 &lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;medium.com&#x2F;pinterest-engineering&#x2F;how-to-review-code-as-a-junior-developer-10ffb7846958&quot;&gt;How to Review Code as a Junior Developer&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
 &lt;&#x2F;ul&gt;
 </content>
-	</entry>
-	<entry xml:lang="en">
-		<title>Crafting Semantics 3: More Fundamentals</title>
-		<published>2021-01-21T12:15:00-05:00</published>
-		<updated>2021-01-21T12:15:00-05:00</updated>
-		<link rel="alternate" href="https://thedav.is/post/crafting-semantics-3/" type="text/html"/>
-		<id>https://thedav.is/post/crafting-semantics-3/</id>
-		<content type="html">&lt;p&gt;This series of posts revolves around creating operational semantics of the Scheme programming language from the ground up, starting with the lambda calculus.&lt;&#x2F;p&gt;
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Crafting Semantics 3: More Fundamentals</title>
+        <published>2021-01-21T12:15:00-05:00</published>
+        <updated>2021-01-21T12:15:00-05:00</updated>
+        <author>
+          <name>Unknown</name>
+        </author>
+        <link rel="alternate" href="https://thedav.is/post/crafting-semantics-3/" type="text/html"/>
+        <id>https://thedav.is/post/crafting-semantics-3/</id>
+        
+        <content type="html">&lt;p&gt;This series of posts revolves around creating operational semantics of the Scheme programming language from the ground up, starting with the lambda calculus.&lt;&#x2F;p&gt;
 &lt;p&gt;If you have not read the introductory post, you can find it &lt;a href=&quot;https:&#x2F;&#x2F;thedav.is&#x2F;post&#x2F;crafting-semantics-0&#x2F;&quot;&gt;here&lt;&#x2F;a&gt;, and see the index of this series &lt;a href=&quot;&#x2F;tags&#x2F;crafting-semantics&#x2F;&quot;&gt;here&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
 &lt;h1 id=&quot;intro&quot;&gt;Intro&lt;&#x2F;h1&gt;
 &lt;p&gt;Trucking along, we are gonna add some more features that make our language much more usable. Lets list them out:&lt;&#x2F;p&gt;
@@ -544,27 +563,37 @@ k,
 &lt;p&gt;Another briskly paced post today! I hope you gained some intuition of these machines by this repeated style of implementation. If you think that it&#x27;s a bit boring, then good! That means you have it down, and this repetition is simply icing on the cake of your semantic knowledge. There will be probably one more post of this caliber before I start to crank it up with more esoteric stuff, so savor the boredom while it lasts!&lt;&#x2F;p&gt;
 &lt;p&gt;Next post, I will add other callable types, such as primitives and variadic functions. After that, the machine should be about as done as I want it to be, and our concrete interpreter will be finished. I have future plans though! I want to write about abstract interpretation, and static analysis. I will convert our &#x27;concrete semantics&#x27; into &#x27;abstract semantics&#x27;, so that we can statically analyze programs in our language.&lt;&#x2F;p&gt;
 </content>
-	</entry>
-	<entry xml:lang="en">
-		<title>I Hate Parsing</title>
-		<published>2021-01-15T12:15:00-05:00</published>
-		<updated>2021-01-15T12:15:00-05:00</updated>
-		<link rel="alternate" href="https://thedav.is/post/i-hate-parsing/" type="text/html"/>
-		<id>https://thedav.is/post/i-hate-parsing/</id>
-		<content type="html">&lt;p&gt;People talk about parsing too much! Its boring! Its tedious to get right, and it doesnt even produce anything special.&lt;&#x2F;p&gt;
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>I Hate Parsing</title>
+        <published>2021-01-15T12:15:00-05:00</published>
+        <updated>2021-01-15T12:15:00-05:00</updated>
+        <author>
+          <name>Unknown</name>
+        </author>
+        <link rel="alternate" href="https://thedav.is/post/i-hate-parsing/" type="text/html"/>
+        <id>https://thedav.is/post/i-hate-parsing/</id>
+        
+        <content type="html">&lt;p&gt;People talk about parsing too much! Its boring! Its tedious to get right, and it doesnt even produce anything special.&lt;&#x2F;p&gt;
 &lt;p&gt;The best part of compilation is &lt;em&gt;after&lt;&#x2F;em&gt; you have your AST. Turning the AST into an IR, or further into machine code. And performing optimizations! And after that, working on runtime stuff, like garbage collection, JIT, or runtime libraries. Thats the kind of fun stuff&lt;&#x2F;p&gt;
 &lt;p&gt;I suggest that every compilers class just use a Lisp! Only the most basic of parsing needed, and you can focus on the cool&#x2F;interesting parts of PL: transformations, and semantics.&lt;&#x2F;p&gt;
 &lt;p&gt;After you hook people into how cool the field is, then you show them the boring side of parsing. Parsing just gets really annoying when you realize how much error recovery you have to do to make it somewhat usable.&lt;&#x2F;p&gt;
 &lt;p&gt;Anyways, thats my rant for the day, maybe I should just use Twitter.&lt;&#x2F;p&gt;
 </content>
-	</entry>
-	<entry xml:lang="en">
-		<title>Crafting Semantics 2: Basic Features</title>
-		<published>2021-01-14T12:15:00-05:00</published>
-		<updated>2021-01-14T12:15:00-05:00</updated>
-		<link rel="alternate" href="https://thedav.is/post/crafting-semantics-2/" type="text/html"/>
-		<id>https://thedav.is/post/crafting-semantics-2/</id>
-		<content type="html">&lt;p&gt;This series of posts revolves around creating operational semantics of the Scheme programming language from the ground up, starting with the lambda calculus.&lt;&#x2F;p&gt;
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Crafting Semantics 2: Basic Features</title>
+        <published>2021-01-14T12:15:00-05:00</published>
+        <updated>2021-01-14T12:15:00-05:00</updated>
+        <author>
+          <name>Unknown</name>
+        </author>
+        <link rel="alternate" href="https://thedav.is/post/crafting-semantics-2/" type="text/html"/>
+        <id>https://thedav.is/post/crafting-semantics-2/</id>
+        
+        <content type="html">&lt;p&gt;This series of posts revolves around creating operational semantics of the Scheme programming language from the ground up, starting with the lambda calculus.&lt;&#x2F;p&gt;
 &lt;p&gt;If you have not read the introductory post, you can find it &lt;a href=&quot;https:&#x2F;&#x2F;thedav.is&#x2F;post&#x2F;crafting-semantics-0&#x2F;&quot;&gt;here&lt;&#x2F;a&gt;, and see the index of this series &lt;a href=&quot;&#x2F;tags&#x2F;crafting-semantics&#x2F;&quot;&gt;here&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
 &lt;h1 id=&quot;intro&quot;&gt;Intro&lt;&#x2F;h1&gt;
 &lt;p&gt;Hi! Welcome! Today, we will be extending the CESK machine from the &lt;a href=&quot;https:&#x2F;&#x2F;thedav.is&#x2F;post&#x2F;crafting-semantics-1&#x2F;&quot;&gt;previous post&lt;&#x2F;a&gt;, adding some simple features that will make our language more usable. In particular, we will implement numbers and conditionals. To accomplish that, we will be partitioning the machine into 2 different types of states. This will make future extensions to our language much simpler.&lt;&#x2F;p&gt;
@@ -788,14 +817,19 @@ a &amp;\triangleq alloc(\sigma) \\
 &lt;p&gt;By utilizing this method, adding new features is simple. Also by utilizing this method, I can churn out blog posts until the sun dies! Just kidding, I have better things to do than eternally add features until we accidentally formalize Perl.&lt;&#x2F;p&gt;
 &lt;p&gt;In the next post, I will be adding multi-arg functions, and a couple of other useful features. I hope to see you there!&lt;&#x2F;p&gt;
 </content>
-	</entry>
-	<entry xml:lang="en">
-		<title>Crafting Semantics 1: Lambda Calculus</title>
-		<published>2021-01-06T12:15:00-05:00</published>
-		<updated>2021-01-06T12:15:00-05:00</updated>
-		<link rel="alternate" href="https://thedav.is/post/crafting-semantics-1/" type="text/html"/>
-		<id>https://thedav.is/post/crafting-semantics-1/</id>
-		<content type="html">&lt;p&gt;This series of posts revolves around creating operational semantics of the Scheme programming language from the ground up, starting with the lambda calculus.&lt;&#x2F;p&gt;
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Crafting Semantics 1: Lambda Calculus</title>
+        <published>2021-01-06T12:15:00-05:00</published>
+        <updated>2021-01-06T12:15:00-05:00</updated>
+        <author>
+          <name>Unknown</name>
+        </author>
+        <link rel="alternate" href="https://thedav.is/post/crafting-semantics-1/" type="text/html"/>
+        <id>https://thedav.is/post/crafting-semantics-1/</id>
+        
+        <content type="html">&lt;p&gt;This series of posts revolves around creating operational semantics of the Scheme programming language from the ground up, starting with the lambda calculus.&lt;&#x2F;p&gt;
 &lt;p&gt;If you have not read the introductory post, you can find it &lt;a href=&quot;https:&#x2F;&#x2F;thedav.is&#x2F;post&#x2F;crafting-semantics-0&#x2F;&quot;&gt;here&lt;&#x2F;a&gt;, and see the index of this series &lt;a href=&quot;&#x2F;tags&#x2F;crafting-semantics&#x2F;&quot;&gt;here&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
 &lt;h1 id=&quot;intro&quot;&gt;Intro&lt;&#x2F;h1&gt;
 &lt;p&gt;Hi, in this post we will be implementing a CESK Abstract Machine for the lambda calculus (or simply &#x27;λ&#x27;). First, we need to define all of what an &#x27;abstract machine&#x27; is, what semantics are, and the syntax we will be using. So this post may be a bit long. Future posts are likely to be shorter!&lt;&#x2F;p&gt;
@@ -976,14 +1010,19 @@ alloc(\sigma) \triangleq |\sigma| \\&lt;&#x2F;script&gt;
 &lt;p&gt;Well, we have a turing complete language, what&#x27;s the point in doing anything else? Language features to make this machine usable?? Fine! Stay tuned and next time we will implement &#x27;useful&#x27; things, like numbers, and &lt;code&gt;if&lt;&#x2F;code&gt;. I promise that it will be shorter than this post.&lt;&#x2F;p&gt;
 &lt;p&gt;See you next time!&lt;&#x2F;p&gt;
 </content>
-	</entry>
-	<entry xml:lang="en">
-		<title>Crafting Semantics 0: Introduction</title>
-		<published>2021-01-05T12:15:00-05:00</published>
-		<updated>2021-01-05T12:15:00-05:00</updated>
-		<link rel="alternate" href="https://thedav.is/post/crafting-semantics-0/" type="text/html"/>
-		<id>https://thedav.is/post/crafting-semantics-0/</id>
-		<content type="html">&lt;h1 id=&quot;introduction&quot;&gt;Introduction&lt;&#x2F;h1&gt;
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Crafting Semantics 0: Introduction</title>
+        <published>2021-01-05T12:15:00-05:00</published>
+        <updated>2021-01-05T12:15:00-05:00</updated>
+        <author>
+          <name>Unknown</name>
+        </author>
+        <link rel="alternate" href="https://thedav.is/post/crafting-semantics-0/" type="text/html"/>
+        <id>https://thedav.is/post/crafting-semantics-0/</id>
+        
+        <content type="html">&lt;h1 id=&quot;introduction&quot;&gt;Introduction&lt;&#x2F;h1&gt;
 &lt;p&gt;Hi, this is the first post on a series about creating semantics for a programming language. We will be using Scheme as a reference point, and slowly building more and more features for it.&lt;&#x2F;p&gt;
 &lt;p&gt;We will be using &#x27;&lt;em&gt;computer science notation&lt;&#x2F;em&gt;&#x27; (specifically an operational semantics) for every post. We won&#x27;t be implementing these semantics in a &#x27;real&#x27; programming language, but you could quite easily if you wanted to.&lt;&#x2F;p&gt;
 &lt;p&gt;If you want to get started in Programming Language Theory, and want to understand how to define a programming language formally, this is the series for you! If you want to understand abstract machines better, this is the series for you!&lt;&#x2F;p&gt;
@@ -998,14 +1037,19 @@ alloc(\sigma) \triangleq |\sigma| \\&lt;&#x2F;script&gt;
 &lt;h1 id=&quot;let-s-begin&quot;&gt;Let&#x27;s begin!&lt;&#x2F;h1&gt;
 &lt;p&gt;We will start after that post, with a CESK machine based on the lambda calculus. See &lt;a href=&quot;https:&#x2F;&#x2F;thedav.is&#x2F;post&#x2F;crafting-semantics-1&#x2F;&quot;&gt;The next post&lt;&#x2F;a&gt; for the exciting start to this series!&lt;&#x2F;p&gt;
 </content>
-	</entry>
-	<entry xml:lang="en">
-		<title>Continuations as First Class Return</title>
-		<published>2020-11-30T12:15:00-05:00</published>
-		<updated>2020-11-30T12:15:00-05:00</updated>
-		<link rel="alternate" href="https://thedav.is/post/continuations-as-return/" type="text/html"/>
-		<id>https://thedav.is/post/continuations-as-return/</id>
-		<content type="html">&lt;p&gt;This post can serve as an extra-light introduction to continuations.
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Continuations as First Class Return</title>
+        <published>2020-11-30T12:15:00-05:00</published>
+        <updated>2020-11-30T12:15:00-05:00</updated>
+        <author>
+          <name>Unknown</name>
+        </author>
+        <link rel="alternate" href="https://thedav.is/post/continuations-as-return/" type="text/html"/>
+        <id>https://thedav.is/post/continuations-as-return/</id>
+        
+        <content type="html">&lt;p&gt;This post can serve as an extra-light introduction to continuations.
 If you have not heard of, or are confused by continuations,
 this post may be for you!&lt;&#x2F;p&gt;
 &lt;p&gt;This will be the first post of a series on continuations.
@@ -1114,14 +1158,19 @@ for an implicit argument given to functions. That way, you can take multiple
 return points as arguments, and then decide where you want to go next,&lt;&#x2F;p&gt;
 &lt;p&gt;If this blog post interested you, but didnt have enough info, stay tuned!&lt;&#x2F;p&gt;
 </content>
-	</entry>
-	<entry xml:lang="en">
-		<title>Abstract Machines: Interpreters for Computer Scientists</title>
-		<published>2020-11-09T12:15:00-05:00</published>
-		<updated>2020-11-09T12:15:00-05:00</updated>
-		<link rel="alternate" href="https://thedav.is/post/abstract-machines/" type="text/html"/>
-		<id>https://thedav.is/post/abstract-machines/</id>
-		<content type="html">&lt;h1 id=&quot;introduction&quot;&gt;Introduction&lt;&#x2F;h1&gt;
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Abstract Machines: Interpreters for Computer Scientists</title>
+        <published>2020-11-09T12:15:00-05:00</published>
+        <updated>2020-11-09T12:15:00-05:00</updated>
+        <author>
+          <name>Unknown</name>
+        </author>
+        <link rel="alternate" href="https://thedav.is/post/abstract-machines/" type="text/html"/>
+        <id>https://thedav.is/post/abstract-machines/</id>
+        
+        <content type="html">&lt;h1 id=&quot;introduction&quot;&gt;Introduction&lt;&#x2F;h1&gt;
 &lt;p&gt;So im a PhD student now, so I need to write about cool computer science things!
 As part of my learnings, I have been writing a bunch of &#x27;Abstract Machines&#x27;.
 I think of them as how computer scientists do programming languages research without computers.
@@ -1411,14 +1460,19 @@ operational semantics can help you to formalize how your language evalautes, and
 &lt;p&gt;&lt;script type=&quot;math&#x2F;tex&quot;&gt;\sigma:&lt;&#x2F;script&gt;
  &#x27;sigma&#x27; (lowercase). Although not used in this post, this character is used to represent the &lt;code&gt;store&lt;&#x2F;code&gt; component of a machine. If we would have made a CESK machine,  then the S would be this.&lt;&#x2F;p&gt;
 </content>
-	</entry>
-	<entry xml:lang="en">
-		<title>Against Glob Imports</title>
-		<published>2020-08-14T00:00:00+00:00</published>
-		<updated>2020-08-14T00:00:00+00:00</updated>
-		<link rel="alternate" href="https://thedav.is/post/against-globs/" type="text/html"/>
-		<id>https://thedav.is/post/against-globs/</id>
-		<content type="html">&lt;p&gt;Hi, I hate glob imports. When I see them it actively hurts my understanding of code.
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Against Glob Imports</title>
+        <published>2020-08-14T00:00:00+00:00</published>
+        <updated>2020-08-14T00:00:00+00:00</updated>
+        <author>
+          <name>Unknown</name>
+        </author>
+        <link rel="alternate" href="https://thedav.is/post/against-globs/" type="text/html"/>
+        <id>https://thedav.is/post/against-globs/</id>
+        
+        <content type="html">&lt;p&gt;Hi, I hate glob imports. When I see them it actively hurts my understanding of code.
 I know they may seem useful, but I think that, overall, they are an anti-pattern.&lt;&#x2F;p&gt;
 &lt;h1 id=&quot;reading-code&quot;&gt;Reading Code&lt;&#x2F;h1&gt;
 &lt;p&gt;Using globs is a detriment to reading code. If I see some code using a type I have not seen
@@ -1470,14 +1524,19 @@ to write out the imports, make future you, and future readers&#x27; lives easier
 &lt;p&gt;Tutorials should not use globs. Production code should not use globs.
 The only exception I find is for preludes, and preludes should be used &lt;em&gt;extremely&lt;&#x2F;em&gt; sparingly.&lt;&#x2F;p&gt;
 </content>
-	</entry>
-	<entry xml:lang="en">
-		<title>The Robson Tree Traversal (DRAFT)</title>
-		<published>2019-12-05T08:10:44-05:00</published>
-		<updated>2019-12-05T08:10:44-05:00</updated>
-		<link rel="alternate" href="https://thedav.is/post/robson-traversal/" type="text/html"/>
-		<id>https://thedav.is/post/robson-traversal/</id>
-		<content type="html">&lt;h1 id=&quot;this-is-a-draft&quot;&gt;THIS IS A DRAFT&lt;&#x2F;h1&gt;
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>The Robson Tree Traversal (DRAFT)</title>
+        <published>2019-12-05T08:10:44-05:00</published>
+        <updated>2019-12-05T08:10:44-05:00</updated>
+        <author>
+          <name>Unknown</name>
+        </author>
+        <link rel="alternate" href="https://thedav.is/post/robson-traversal/" type="text/html"/>
+        <id>https://thedav.is/post/robson-traversal/</id>
+        
+        <content type="html">&lt;h1 id=&quot;this-is-a-draft&quot;&gt;THIS IS A DRAFT&lt;&#x2F;h1&gt;
 &lt;p&gt;Hiya, this is a draft! Please read and give me feedback! Thanks!&lt;&#x2F;p&gt;
 &lt;h2 id=&quot;todo&quot;&gt;TODO&lt;&#x2F;h2&gt;
 &lt;ul&gt;
@@ -1970,14 +2029,19 @@ in link inversion. However, that would be really ugly to code, and then I would 
 &lt;p&gt;if you need to stop the algorithm at any time the tree will be in a terrible state,
 you need to run the algorithm completely before doing anything else with the tree.&lt;&#x2F;p&gt;
 </content>
-	</entry>
-	<entry xml:lang="en">
-		<title>Fancy Tree Traversals</title>
-		<published>2019-01-02T10:10:44-05:00</published>
-		<updated>2019-01-02T10:10:44-05:00</updated>
-		<link rel="alternate" href="https://thedav.is/post/fancy-tree-traversals/" type="text/html"/>
-		<id>https://thedav.is/post/fancy-tree-traversals/</id>
-		<content type="html">&lt;h1 id=&quot;introduction&quot;&gt;Introduction&lt;&#x2F;h1&gt;
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Fancy Tree Traversals</title>
+        <published>2019-01-02T10:10:44-05:00</published>
+        <updated>2019-01-02T10:10:44-05:00</updated>
+        <author>
+          <name>Unknown</name>
+        </author>
+        <link rel="alternate" href="https://thedav.is/post/fancy-tree-traversals/" type="text/html"/>
+        <id>https://thedav.is/post/fancy-tree-traversals/</id>
+        
+        <content type="html">&lt;h1 id=&quot;introduction&quot;&gt;Introduction&lt;&#x2F;h1&gt;
 &lt;p&gt;In this post, we will discuss a couple of novel methods for traversing trees.
 The threaded tree offers amortized constant access to the successor of a tree-node.
 The link-inversion traversal offers a stackless traversal of binary trees.&lt;&#x2F;p&gt;
@@ -2244,14 +2308,19 @@ Let&#x27;s get to the real thing now, the Robson traversal.&lt;&#x2F;p&gt;
 &lt;p&gt;I have another blog post in the works, detailing an even cooler tree traversal. This Robson traversal is little known, but traverses trees in &lt;em&gt;&lt;strong&gt;constant space&lt;&#x2F;strong&gt;&lt;&#x2F;em&gt;. Please keep an eye out for this forthcoming blog post.&lt;&#x2F;p&gt;
 &lt;p&gt;If you liked this post, and want to see the new one even sooner, shoot me an email or a tweet for encouragement! I hope you learned something great today!&lt;&#x2F;p&gt;
 </content>
-	</entry>
-	<entry xml:lang="en">
-		<title>Sinistersnare&#x27;s Rust 2019 Wishlist</title>
-		<published>2018-12-12T08:10:44-05:00</published>
-		<updated>2018-12-12T08:10:44-05:00</updated>
-		<link rel="alternate" href="https://thedav.is/post/rust-wishlist-2019/" type="text/html"/>
-		<id>https://thedav.is/post/rust-wishlist-2019/</id>
-		<content type="html">&lt;p&gt;This is my response to the
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Sinistersnare&#x27;s Rust 2019 Wishlist</title>
+        <published>2018-12-12T08:10:44-05:00</published>
+        <updated>2018-12-12T08:10:44-05:00</updated>
+        <author>
+          <name>Unknown</name>
+        </author>
+        <link rel="alternate" href="https://thedav.is/post/rust-wishlist-2019/" type="text/html"/>
+        <id>https://thedav.is/post/rust-wishlist-2019/</id>
+        
+        <content type="html">&lt;p&gt;This is my response to the
 
 &lt;a href=&quot;https:&amp;#x2F;&amp;#x2F;blog.rust-lang.org&amp;#x2F;2018&amp;#x2F;12&amp;#x2F;06&amp;#x2F;call-for-rust-2019-roadmap-blogposts.html&quot; target=&quot;_blank&quot;&gt;Call for Rust 2019 Roadmap↪&lt;&#x2F;a&gt;
 .
@@ -2276,14 +2345,19 @@ Thanks for reading!&lt;&#x2F;p&gt;
 &lt;h1 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h1&gt;
 &lt;p&gt;Thank you so much for reading this! Rust is an amazing language, and has been since I started using it in 2013. The 2019 year will create the springboard we need to have an amazing Rust 2021 edition.&lt;&#x2F;p&gt;
 </content>
-	</entry>
-	<entry xml:lang="en">
-		<title>Hello, World!</title>
-		<published>2017-12-24T05:50:44-05:00</published>
-		<updated>2017-12-24T05:50:44-05:00</updated>
-		<link rel="alternate" href="https://thedav.is/post/hello-world/" type="text/html"/>
-		<id>https://thedav.is/post/hello-world/</id>
-		<content type="html">&lt;p&gt;Hey! Intro Post!&lt;&#x2F;p&gt;
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Hello, World!</title>
+        <published>2017-12-24T05:50:44-05:00</published>
+        <updated>2017-12-24T05:50:44-05:00</updated>
+        <author>
+          <name>Unknown</name>
+        </author>
+        <link rel="alternate" href="https://thedav.is/post/hello-world/" type="text/html"/>
+        <id>https://thedav.is/post/hello-world/</id>
+        
+        <content type="html">&lt;p&gt;Hey! Intro Post!&lt;&#x2F;p&gt;
 &lt;p&gt;I have got some great ideas for blog posts&#x2F;series. Here is a couple:&lt;&#x2F;p&gt;
 &lt;ol&gt;
 &lt;li&gt;The Robson Tree Traversal Algorithm.&lt;&#x2F;li&gt;
@@ -2294,5 +2368,6 @@ Thanks for reading!&lt;&#x2F;p&gt;
 but I would love to make a post explaining the CS behind it.&lt;&#x2F;p&gt;
 &lt;p&gt;Tesselation just seems really cool and I would love to talk about that.&lt;&#x2F;p&gt;
 </content>
-	</entry>
+        
+    </entry>
 </feed>
