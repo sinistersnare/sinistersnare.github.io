@@ -85,6 +85,33 @@ Gross. The Rust designers really should have ran [`import this`](https://peps.py
 Again, the absolute lack of composability is astounding. Whats the point of even having iterator methods if you can't
 use them for _real world usecases_, where code is regularly fallable, so you need to return a `Result`.
 
+## Another Example
+
+Just now at $JOB, I was about to write code like:
+
+```rs
+// `cfg.client` and `client.file` are both `Option<T>`.
+let data = cfg.client.map(|client| client.file.map(|file| std::fs::read(file)?));
+```
+
+But instead, due to that pesky little `?` deep in there, I had to full expand this, using imperative style code:
+
+```rs
+let data = {
+    if let Some(client) = cfg.client {
+        if let Some(file) = client.file {
+            Some(std::fs::read(file)?)
+        } else {
+            None
+        }
+    } else {
+        None
+    }
+};
+```
+
+What a terrible composition of functional components with the `?` operator!
+
 # Async
 
 This is basically the same problem as before, but with `.await` instead of `?`.

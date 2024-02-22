@@ -136,6 +136,25 @@ and everything you were promised was a lie.</p>
 </blockquote>
 <p>Again, the absolute lack of composability is astounding. Whats the point of even having iterator methods if you can't
 use them for <em>real world usecases</em>, where code is regularly fallable, so you need to return a <code>Result</code>.</p>
+<h2 id="another-example">Another Example</h2>
+<p>Just now at $JOB, I was about to write code like:</p>
+<pre data-lang="rs" style="background-color:#282a36;color:#f8f8f2;" class="language-rs "><code class="language-rs" data-lang="rs"><span style="color:#6272a4;">// `cfg.client` and `client.file` are both `Option&lt;T&gt;`.
+</span><span style="font-style:italic;color:#8be9fd;">let</span><span> data </span><span style="color:#ff79c6;">=</span><span> cfg</span><span style="color:#ff79c6;">.</span><span>client</span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">map</span><span>(|</span><span style="font-style:italic;color:#ffb86c;">client</span><span>| client</span><span style="color:#ff79c6;">.</span><span>file</span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">map</span><span>(|</span><span style="font-style:italic;color:#ffb86c;">file</span><span>| </span><span style="text-decoration:underline;color:#66d9ef;">std</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span style="text-decoration:underline;color:#66d9ef;">fs</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>read(file)</span><span style="color:#ff79c6;">?</span><span>));
+</span></code></pre>
+<p>But instead, due to that pesky little <code>?</code> deep in there, I had to full expand this, using imperative style code:</p>
+<pre data-lang="rs" style="background-color:#282a36;color:#f8f8f2;" class="language-rs "><code class="language-rs" data-lang="rs"><span style="font-style:italic;color:#8be9fd;">let</span><span> data </span><span style="color:#ff79c6;">= </span><span style="color:#ffffff;">{
+</span><span>    </span><span style="color:#ff79c6;">if </span><span style="font-style:italic;color:#8be9fd;">let </span><span style="font-style:italic;color:#66d9ef;">Some</span><span>(client) </span><span style="color:#ff79c6;">=</span><span> cfg</span><span style="color:#ff79c6;">.</span><span>client </span><span style="color:#ffffff;">{
+</span><span>        </span><span style="color:#ff79c6;">if </span><span style="font-style:italic;color:#8be9fd;">let </span><span style="font-style:italic;color:#66d9ef;">Some</span><span>(file) </span><span style="color:#ff79c6;">=</span><span> client</span><span style="color:#ff79c6;">.</span><span>file </span><span style="color:#ffffff;">{
+</span><span>            </span><span style="font-style:italic;color:#66d9ef;">Some</span><span>(</span><span style="text-decoration:underline;color:#66d9ef;">std</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span style="text-decoration:underline;color:#66d9ef;">fs</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>read(file)</span><span style="color:#ff79c6;">?</span><span>)
+</span><span>        </span><span style="color:#ffffff;">} </span><span style="color:#ff79c6;">else </span><span style="color:#ffffff;">{
+</span><span>            </span><span style="font-style:italic;color:#66d9ef;">None
+</span><span>        </span><span style="color:#ffffff;">}
+</span><span>    </span><span style="color:#ffffff;">} </span><span style="color:#ff79c6;">else </span><span style="color:#ffffff;">{
+</span><span>        </span><span style="font-style:italic;color:#66d9ef;">None
+</span><span>    </span><span style="color:#ffffff;">}
+</span><span style="color:#ffffff;">}</span><span>;
+</span></code></pre>
+<p>What a terrible composition of functional components with the <code>?</code> operator!</p>
 <h1 id="async">Async</h1>
 <p>This is basically the same problem as before, but with <code>.await</code> instead of <code>?</code>.
 You <em>must</em> use the <code>for</code> loop syntax if you want to use <code>.await</code>, because iterators are not powerful enough
