@@ -3,7 +3,7 @@ slug = "homo-deus-review"
 title = "Homo Deus (2016) Review: Bad Ragebait"
 description = "a bad look at a sad future."
 date = 2023-08-21T12:15:00-05:00
-draft = false
+draft = true
 [taxonomies]
 tags = ["Book Review", "Utopia"]
 [extra]

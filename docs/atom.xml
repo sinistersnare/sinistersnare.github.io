@@ -1,67 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
     <title>The (Site of) Davis</title>
-    <link href="https://thedav.is/atom.xml" rel="self" type="application/atom+xml"/>
-    <link href="https://thedav.is"/>
+    <link rel="self" type="application/atom+xml" href="https://thedav.is/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://thedav.is"/>
     <generator uri="https://www.getzola.org/">Zola</generator>
-    <updated>2023-08-21T12:15:00-05:00</updated>
+    <updated>2023-04-05T12:15:00-05:00</updated>
     <id>https://thedav.is/atom.xml</id>
-    <entry xml:lang="en">
-        <title>Homo Deus (2016) Review: Bad Ragebait</title>
-        <published>2023-08-21T12:15:00-05:00</published>
-        <updated>2023-08-21T12:15:00-05:00</updated>
-        <author>
-          <name>Unknown</name>
-        </author>
-        <link rel="alternate" href="https://thedav.is/post/homo-deus-review/" type="text/html"/>
-        <id>https://thedav.is/post/homo-deus-review/</id>
-        
-        <content type="html">&lt;p&gt;Hello, I just finished &lt;em&gt;Homo Deus&lt;&#x2F;em&gt; by Yuval Noah Harari, author of the acclaimed &#x27;Sapiens&#x27;.
-This is my review from the perspective of a Utopian, and fairly stream-of-consciousness style.&lt;&#x2F;p&gt;
-&lt;p&gt;First, I think the book is first and foremost capitalist apologia. Every sentence should be critically analyzed and discounted. It has some good historical takes on the fall of state socialism. It also has interesting views on how humans evolve socially. It too easily assumes that because we are living in liberal capitalism now, liberal capitalism must be the only possible way to live. It also presupposes that economic and political value are literally the only reasons for humans to live, which is fairly dystopian.&lt;&#x2F;p&gt;
-&lt;p&gt;Again, it does not have a good vision of the future. This is really important. He does not portray a good enough future. Think about it as you read, if you choose to read it. His future sounds cruelly neutral at best, and that scares me.&lt;&#x2F;p&gt;
-&lt;p&gt;His central thesis relies on the understanding that each human provides value. And then therefore humans providing more value deserve more. That&#x27;s fucking bullshit. I don&#x27;t care how much other humans are worth I just want us all to be happy.&lt;&#x2F;p&gt;
-&lt;h2 id=&quot;stories&quot;&gt;Stories&lt;&#x2F;h2&gt;
-&lt;p&gt;His history is good and entertaining. I say that, but maybe I am just amazed by things I barely know. I found his computing history weak, personally. That makes me question his knowledge of fields that I know less of. There is some name for this phenomenon I think, but I do not remember it. Like, how much of this is actually bullshit, but I buy it because I&#x27;m not an expert.&lt;&#x2F;p&gt;
-&lt;p&gt;I also think he discounts the advances of Computing Science as a field of metaphysics. All of his metaphors are based on computing terminology, from computability to completeness. In fact, he asks at the end of the book if there are things that can not be computed, and that has been known for a hundred years by computing scientists. His lack of understanding on this makes me question how accurate his takes on history are, no matter how entertaining.&lt;&#x2F;p&gt;
-&lt;p&gt;His scientific takes are dystopian, unhelpful, and just kinda dumb. When he steps into the realm of science, I find his rhetoric extremely weak. Maybe this is too cynical, but he mentions a lot of contemporary tech startups. It just feels like he has a belief that Theranos was basically perfect, and it wasn&#x27;t all just some lie to get private equity more money.&lt;&#x2F;p&gt;
-&lt;h2 id=&quot;economics&quot;&gt;Economics&lt;&#x2F;h2&gt;
-&lt;p&gt;His take on the future is based on &amp;quot;evolutionary humanism&amp;quot;. He does not seriously discuss other possible futures. Only this one, and in detail.&lt;&#x2F;p&gt;
-&lt;p&gt;He says that once human economic value is gone the literal only other thing to pursue is information. Not just fucking happiness. That couldn&#x27;t possibly be worth discussing. Where&#x27;s the economic and political value in happiness? His response maybe that happiness can be simply reduced to hormones and data. But my response is: So? Who cares? Well actually, he does deem happiness a humanist pursuit (and therefore passé). So I guess that makes it dealt with in his mind. But that seems pretty dumb. I mean to say, I don&#x27;t think he gives credence at all to pleasure hedonism for example. He treats it as a humanist dogma and does not entertain it as something all of life should strive to.&lt;&#x2F;p&gt;
-&lt;p&gt;It&#x27;s like he read &amp;quot;Gödel Escher Bach&amp;quot; poorly, and then said: &amp;quot;oh if art and math are the same, art is just as valueless as sitting in a room thinking of math and not PRODUCING.&amp;quot; What a weird take for so many reasons. A quote: &amp;quot;Musicologists, economists and sell biologists can finally understand each other.&amp;quot; WHAT?? They&#x27;ve understood each other for thousands of years my dude. We are humans.&lt;&#x2F;p&gt;
-&lt;p&gt;I mean, it is interesting reading these dystopian luke-warm takes, because it is just interesting how sad this guy is. If this is his take on the future, he really needs to touch some grass. It&#x27;s like he needs to justify his existential nihilism by saying &amp;quot;hey it doesn&#x27;t matter I&#x27;m sad, at least it&#x27;s a useful data point,&amp;quot; and then he carries on his day being sad without processing it.&lt;&#x2F;p&gt;
-&lt;h2 id=&quot;politics&quot;&gt;Politics&lt;&#x2F;h2&gt;
-&lt;p&gt;His understanding of &#x27;communism&#x27; ends at state socialism. He pays no mind to what the marxists&#x2F;etc. truly want, which is common goods, not nationalized goods. He claims it relies on centralized processing versus capitalism and distributed strategy. Completely misunderstanding that Marxism is about perfect distribution, and truly utilizing economies of scale.&lt;&#x2F;p&gt;
-&lt;p&gt;I could take endless quotes to show his shallow hits on communism, as completely unfair characterizations. He describes state socialism so unfairly, but just as well uses contemporary business ethics as goal posts. The main problem, being that these businesses suffer from the same problems as Eastern European state socialism did. So his take just does not make sense to me. I&#x27;m not sure how to process it.&lt;&#x2F;p&gt;
-&lt;p&gt;On the other hand he has complete faith in free market capitalism. He offers no critiques to the current system in any way at all. In fact, he offers arguments in favor of lowering taxes and further lowering regulations, without any discussion on the extremely unethical practices of his would-hope-to-be business-daddies Google and Facebook.&lt;&#x2F;p&gt;
-&lt;p&gt;He also seems to have an unflappable belief that the current liberal capitalist system values everyone equally, at least insofar as they can be canon fodder in some pointless war for &amp;quot;economic value&amp;quot; or some bullshit. However this discounts the insane amount of oppression that our system requires, and he agrees is taken for granted in the system, as inegalitarian. We also treat our homeless population worse than ever before, we give them no dignity. I don&#x27;t understand how he believe the system works the way he says.&lt;&#x2F;p&gt;
-&lt;h2 id=&quot;the-conclusion&quot;&gt;The Conclusion&lt;&#x2F;h2&gt;
-&lt;p&gt;We as humans are unable to grasp the scale of today&#x27;s world. The numbers are simply too big. People don&#x27;t understand that we do live in a post-scarcity world. It&#x27;s time to start thinking as big as we have data for, and I can agree with Harari on that. But the differences in what our futures look like are almost total. We must use these algorithms to help &lt;em&gt;us&lt;&#x2F;em&gt; understand the world, it does not matter if the algorithms understand us.&lt;&#x2F;p&gt;
-&lt;p&gt;He also brings up something that needs to be discussed, and it is how we should deal with direct democracy in Utopia. He brings up that individually atomized humans are not actually a good unit of voting. However he does not offer any interesting alternatives, other than handwavy oh computers will just do it. No discussion of &amp;quot;election algorithms&amp;quot; to use his terminology, even though he never actually uses his terminology interestingly.&lt;&#x2F;p&gt;
-&lt;p&gt;In the final chapter, Harari makes an argument for a new religion &amp;quot;dataism&amp;quot;. He then makes an impassioned argument culminating mostly in the statement that Beethoven is more valuable than a folk song for some god-forsaken reason. What he complete discounts in this entire chapter (if not book!) is &lt;em&gt;metadata&lt;&#x2F;em&gt;. That is, data about data. Metadata enriches data and I think the author is blind to this. Just an observation of how I think that this dumb techno-religion is just poorly thought out ragebait. There is not sufficient logic to this hyperlogical tech-cult-religion, to put it meanly.&lt;&#x2F;p&gt;
-&lt;p&gt;He makes a point to call out young people, saying that they will naturally fall into this. He claims that &amp;quot;people just want to be part of the data flow, even if that means giving up their privacy.&amp;quot; This take just seems insane to me. The only reason that people do this is because there is literally no other way to get a job, talk to your friends, and connect with your family now. Harari mistakes subjugation for enthusiastic consent. I believe we are better than his vision of the future. Fight it.&lt;&#x2F;p&gt;
-&lt;p&gt;The worst part of this book is that he never answers the question: what are humans going to do in the future? He claims that information will be given rights at the expense of human rights. He never challenges this or asks if it&#x27;s right. The example he gives is provocative, and I do agree with it. However his phrasing that the freedom of information must come at the expense of freedom of expression I think does not hold water. His example, someone losing their ability to privately profit off of &#x27;their&#x27; product, does not exemplify a loss of free expression, at least.&lt;&#x2F;p&gt;
-&lt;p&gt;It is not until the FINAL TWO PAGES until Harari admits that this future that he paints is bleak (to use harsher words than he does). But given the prior THREE HUNDRED AND NINETY-NINE pages of tacit complicity, I can&#x27;t claim this book to be positive in any way.&lt;&#x2F;p&gt;
-&lt;p&gt;Personally I find his future backwards. It is not that we will fully succumb to the flow of information, it is that we will reject it as unnecessary.&lt;&#x2F;p&gt;
-&lt;h1 id=&quot;my-conclusion&quot;&gt;My Conclusion&lt;&#x2F;h1&gt;
-&lt;p&gt;I love thinking about the future, and how we could improve our world. I would much rather recommend ‘Everyday Utopia’ by Kristen R. Ghodsee. This book thinks about what went wrong in many utopian experiments (usually the state tearing them down), and what we can learn about making a better future from them.&lt;&#x2F;p&gt;
-&lt;p&gt;Overall, don’t read Homo Deus. Read better books. But, if you have it in front of you, read it and continue thinking about the future! I also just want to say that a future utopia must not be agrarian, we must utilize economies of scale and community-scale effort. Have a good day!&lt;&#x2F;p&gt;
-&lt;p&gt;If you have made it this far, hear my plea. Change the world. We have done enough protesting. We know the problems. Make a change, a real change. Build a Utopia.&lt;&#x2F;p&gt;
-&lt;p&gt;Thanks! Let me know if you liked the review!&lt;&#x2F;p&gt;
-</content>
-        
-    </entry>
     <entry xml:lang="en">
         <title>Rust&#x27;s Poor Composability</title>
         <published>2023-04-05T12:15:00-05:00</published>
         <updated>2023-04-05T12:15:00-05:00</updated>
+        
         <author>
-          <name>Unknown</name>
+          <name>
+            
+              Unknown
+            
+          </name>
         </author>
-        <link rel="alternate" href="https://thedav.is/post/rusts-poor-composability/" type="text/html"/>
+        
+        <link rel="alternate" type="text/html" href="https://thedav.is/post/rusts-poor-composability/"/>
         <id>https://thedav.is/post/rusts-poor-composability/</id>
         
-        <content type="html">&lt;p&gt;I love Rust. I wish they would spend more time making it actually work for non hello-world use-cases.&lt;&#x2F;p&gt;
+        <content type="html" xml:base="https://thedav.is/post/rusts-poor-composability/">&lt;p&gt;I love Rust. I wish they would spend more time making it actually work for non hello-world use-cases.&lt;&#x2F;p&gt;
 &lt;h2 id=&quot;iteration&quot;&gt;Iteration&lt;&#x2F;h2&gt;
 &lt;p&gt;Rust has a nice pretty syntax for iterating:&lt;&#x2F;p&gt;
 &lt;pre data-lang=&quot;rs&quot; style=&quot;background-color:#282a36;color:#f8f8f2;&quot; class=&quot;language-rs &quot;&gt;&lt;code class=&quot;language-rs&quot; data-lang=&quot;rs&quot;&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;for&lt;&#x2F;span&gt;&lt;span&gt; x &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;in &amp;amp;mut&lt;&#x2F;span&gt;&lt;span&gt; something &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;{
@@ -165,13 +126,19 @@ to use just until it becomes code that &lt;em&gt;actually needs to do anything&l
         <title>Code Review: Contibutor&#x27;s Side</title>
         <published>2021-07-05T12:15:00-05:00</published>
         <updated>2021-07-05T12:15:00-05:00</updated>
+        
         <author>
-          <name>Unknown</name>
+          <name>
+            
+              Unknown
+            
+          </name>
         </author>
-        <link rel="alternate" href="https://thedav.is/post/code-review-contributor/" type="text/html"/>
+        
+        <link rel="alternate" type="text/html" href="https://thedav.is/post/code-review-contributor/"/>
         <id>https://thedav.is/post/code-review-contributor/</id>
         
-        <content type="html">&lt;p&gt;Hi! This is a short and opinionated guide on how to be a model contributor to a codebase. Ideally, a project would adopt this methodology. These are not tips on how to get a reviewer to like you (that&#x27;s &lt;a href=&quot;https:&#x2F;&#x2F;mtlynch.io&#x2F;code-review-love&#x2F;&quot;&gt;here&lt;&#x2F;a&gt; and its a wonderful article!), but a system for how to be a contributor to a codebase that adopts this ethos.&lt;&#x2F;p&gt;
+        <content type="html" xml:base="https://thedav.is/post/code-review-contributor/">&lt;p&gt;Hi! This is a short and opinionated guide on how to be a model contributor to a codebase. Ideally, a project would adopt this methodology. These are not tips on how to get a reviewer to like you (that&#x27;s &lt;a href=&quot;https:&#x2F;&#x2F;mtlynch.io&#x2F;code-review-love&#x2F;&quot;&gt;here&lt;&#x2F;a&gt; and its a wonderful article!), but a system for how to be a contributor to a codebase that adopts this ethos.&lt;&#x2F;p&gt;
 &lt;p&gt;I will also have a second post, from the reviewers side, that should complement this entry. Both posts will form a system of rules for small to moderate size codebases for teams with a few up to around 10 contributors. I have used this system and I find it effective.&lt;&#x2F;p&gt;
 &lt;h1 id=&quot;the-problem&quot;&gt;The Problem&lt;&#x2F;h1&gt;
 &lt;p&gt;Many codebases start with only a single contributor or two hacking away quickly. This is fine and great, but when it comes time to scale up, getting developers into the groove and making sure that knowledge is spread throughout the team becomes more and more important. The &lt;a href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Bus_factor&quot;&gt;bus factor&lt;&#x2F;a&gt; of a team needs to stay high, and I think that my system is an easy way to keep that number up, at worst 2, but as time continues it increases.&lt;&#x2F;p&gt;
@@ -219,13 +186,19 @@ to use just until it becomes code that &lt;em&gt;actually needs to do anything&l
         <title>Crafting Semantics 3: More Fundamentals</title>
         <published>2021-01-21T12:15:00-05:00</published>
         <updated>2021-01-21T12:15:00-05:00</updated>
+        
         <author>
-          <name>Unknown</name>
+          <name>
+            
+              Unknown
+            
+          </name>
         </author>
-        <link rel="alternate" href="https://thedav.is/post/crafting-semantics-3/" type="text/html"/>
+        
+        <link rel="alternate" type="text/html" href="https://thedav.is/post/crafting-semantics-3/"/>
         <id>https://thedav.is/post/crafting-semantics-3/</id>
         
-        <content type="html">&lt;p&gt;This series of posts revolves around creating operational semantics of the Scheme programming language from the ground up, starting with the lambda calculus.&lt;&#x2F;p&gt;
+        <content type="html" xml:base="https://thedav.is/post/crafting-semantics-3/">&lt;p&gt;This series of posts revolves around creating operational semantics of the Scheme programming language from the ground up, starting with the lambda calculus.&lt;&#x2F;p&gt;
 &lt;p&gt;If you have not read the introductory post, you can find it &lt;a href=&quot;https:&#x2F;&#x2F;thedav.is&#x2F;post&#x2F;crafting-semantics-0&#x2F;&quot;&gt;here&lt;&#x2F;a&gt;, and see the index of this series &lt;a href=&quot;&#x2F;tags&#x2F;crafting-semantics&#x2F;&quot;&gt;here&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
 &lt;h1 id=&quot;intro&quot;&gt;Intro&lt;&#x2F;h1&gt;
 &lt;p&gt;Trucking along, we are gonna add some more features that make our language much more usable. Lets list them out:&lt;&#x2F;p&gt;
@@ -569,13 +542,19 @@ k,
         <title>I Hate Parsing</title>
         <published>2021-01-15T12:15:00-05:00</published>
         <updated>2021-01-15T12:15:00-05:00</updated>
+        
         <author>
-          <name>Unknown</name>
+          <name>
+            
+              Unknown
+            
+          </name>
         </author>
-        <link rel="alternate" href="https://thedav.is/post/i-hate-parsing/" type="text/html"/>
+        
+        <link rel="alternate" type="text/html" href="https://thedav.is/post/i-hate-parsing/"/>
         <id>https://thedav.is/post/i-hate-parsing/</id>
         
-        <content type="html">&lt;p&gt;People talk about parsing too much! Its boring! Its tedious to get right, and it doesnt even produce anything special.&lt;&#x2F;p&gt;
+        <content type="html" xml:base="https://thedav.is/post/i-hate-parsing/">&lt;p&gt;People talk about parsing too much! Its boring! Its tedious to get right, and it doesnt even produce anything special.&lt;&#x2F;p&gt;
 &lt;p&gt;The best part of compilation is &lt;em&gt;after&lt;&#x2F;em&gt; you have your AST. Turning the AST into an IR, or further into machine code. And performing optimizations! And after that, working on runtime stuff, like garbage collection, JIT, or runtime libraries. Thats the kind of fun stuff&lt;&#x2F;p&gt;
 &lt;p&gt;I suggest that every compilers class just use a Lisp! Only the most basic of parsing needed, and you can focus on the cool&#x2F;interesting parts of PL: transformations, and semantics.&lt;&#x2F;p&gt;
 &lt;p&gt;After you hook people into how cool the field is, then you show them the boring side of parsing. Parsing just gets really annoying when you realize how much error recovery you have to do to make it somewhat usable.&lt;&#x2F;p&gt;
@@ -587,13 +566,19 @@ k,
         <title>Crafting Semantics 2: Basic Features</title>
         <published>2021-01-14T12:15:00-05:00</published>
         <updated>2021-01-14T12:15:00-05:00</updated>
+        
         <author>
-          <name>Unknown</name>
+          <name>
+            
+              Unknown
+            
+          </name>
         </author>
-        <link rel="alternate" href="https://thedav.is/post/crafting-semantics-2/" type="text/html"/>
+        
+        <link rel="alternate" type="text/html" href="https://thedav.is/post/crafting-semantics-2/"/>
         <id>https://thedav.is/post/crafting-semantics-2/</id>
         
-        <content type="html">&lt;p&gt;This series of posts revolves around creating operational semantics of the Scheme programming language from the ground up, starting with the lambda calculus.&lt;&#x2F;p&gt;
+        <content type="html" xml:base="https://thedav.is/post/crafting-semantics-2/">&lt;p&gt;This series of posts revolves around creating operational semantics of the Scheme programming language from the ground up, starting with the lambda calculus.&lt;&#x2F;p&gt;
 &lt;p&gt;If you have not read the introductory post, you can find it &lt;a href=&quot;https:&#x2F;&#x2F;thedav.is&#x2F;post&#x2F;crafting-semantics-0&#x2F;&quot;&gt;here&lt;&#x2F;a&gt;, and see the index of this series &lt;a href=&quot;&#x2F;tags&#x2F;crafting-semantics&#x2F;&quot;&gt;here&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
 &lt;h1 id=&quot;intro&quot;&gt;Intro&lt;&#x2F;h1&gt;
 &lt;p&gt;Hi! Welcome! Today, we will be extending the CESK machine from the &lt;a href=&quot;https:&#x2F;&#x2F;thedav.is&#x2F;post&#x2F;crafting-semantics-1&#x2F;&quot;&gt;previous post&lt;&#x2F;a&gt;, adding some simple features that will make our language more usable. In particular, we will implement numbers and conditionals. To accomplish that, we will be partitioning the machine into 2 different types of states. This will make future extensions to our language much simpler.&lt;&#x2F;p&gt;
@@ -823,13 +808,19 @@ a &amp;\triangleq alloc(\sigma) \\
         <title>Crafting Semantics 1: Lambda Calculus</title>
         <published>2021-01-06T12:15:00-05:00</published>
         <updated>2021-01-06T12:15:00-05:00</updated>
+        
         <author>
-          <name>Unknown</name>
+          <name>
+            
+              Unknown
+            
+          </name>
         </author>
-        <link rel="alternate" href="https://thedav.is/post/crafting-semantics-1/" type="text/html"/>
+        
+        <link rel="alternate" type="text/html" href="https://thedav.is/post/crafting-semantics-1/"/>
         <id>https://thedav.is/post/crafting-semantics-1/</id>
         
-        <content type="html">&lt;p&gt;This series of posts revolves around creating operational semantics of the Scheme programming language from the ground up, starting with the lambda calculus.&lt;&#x2F;p&gt;
+        <content type="html" xml:base="https://thedav.is/post/crafting-semantics-1/">&lt;p&gt;This series of posts revolves around creating operational semantics of the Scheme programming language from the ground up, starting with the lambda calculus.&lt;&#x2F;p&gt;
 &lt;p&gt;If you have not read the introductory post, you can find it &lt;a href=&quot;https:&#x2F;&#x2F;thedav.is&#x2F;post&#x2F;crafting-semantics-0&#x2F;&quot;&gt;here&lt;&#x2F;a&gt;, and see the index of this series &lt;a href=&quot;&#x2F;tags&#x2F;crafting-semantics&#x2F;&quot;&gt;here&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
 &lt;h1 id=&quot;intro&quot;&gt;Intro&lt;&#x2F;h1&gt;
 &lt;p&gt;Hi, in this post we will be implementing a CESK Abstract Machine for the lambda calculus (or simply &#x27;λ&#x27;). First, we need to define all of what an &#x27;abstract machine&#x27; is, what semantics are, and the syntax we will be using. So this post may be a bit long. Future posts are likely to be shorter!&lt;&#x2F;p&gt;
@@ -1016,13 +1007,19 @@ alloc(\sigma) \triangleq |\sigma| \\&lt;&#x2F;script&gt;
         <title>Crafting Semantics 0: Introduction</title>
         <published>2021-01-05T12:15:00-05:00</published>
         <updated>2021-01-05T12:15:00-05:00</updated>
+        
         <author>
-          <name>Unknown</name>
+          <name>
+            
+              Unknown
+            
+          </name>
         </author>
-        <link rel="alternate" href="https://thedav.is/post/crafting-semantics-0/" type="text/html"/>
+        
+        <link rel="alternate" type="text/html" href="https://thedav.is/post/crafting-semantics-0/"/>
         <id>https://thedav.is/post/crafting-semantics-0/</id>
         
-        <content type="html">&lt;h1 id=&quot;introduction&quot;&gt;Introduction&lt;&#x2F;h1&gt;
+        <content type="html" xml:base="https://thedav.is/post/crafting-semantics-0/">&lt;h1 id=&quot;introduction&quot;&gt;Introduction&lt;&#x2F;h1&gt;
 &lt;p&gt;Hi, this is the first post on a series about creating semantics for a programming language. We will be using Scheme as a reference point, and slowly building more and more features for it.&lt;&#x2F;p&gt;
 &lt;p&gt;We will be using &#x27;&lt;em&gt;computer science notation&lt;&#x2F;em&gt;&#x27; (specifically an operational semantics) for every post. We won&#x27;t be implementing these semantics in a &#x27;real&#x27; programming language, but you could quite easily if you wanted to.&lt;&#x2F;p&gt;
 &lt;p&gt;If you want to get started in Programming Language Theory, and want to understand how to define a programming language formally, this is the series for you! If you want to understand abstract machines better, this is the series for you!&lt;&#x2F;p&gt;
@@ -1043,13 +1040,19 @@ alloc(\sigma) \triangleq |\sigma| \\&lt;&#x2F;script&gt;
         <title>Continuations as First Class Return</title>
         <published>2020-11-30T12:15:00-05:00</published>
         <updated>2020-11-30T12:15:00-05:00</updated>
+        
         <author>
-          <name>Unknown</name>
+          <name>
+            
+              Unknown
+            
+          </name>
         </author>
-        <link rel="alternate" href="https://thedav.is/post/continuations-as-return/" type="text/html"/>
+        
+        <link rel="alternate" type="text/html" href="https://thedav.is/post/continuations-as-return/"/>
         <id>https://thedav.is/post/continuations-as-return/</id>
         
-        <content type="html">&lt;p&gt;This post can serve as an extra-light introduction to continuations.
+        <content type="html" xml:base="https://thedav.is/post/continuations-as-return/">&lt;p&gt;This post can serve as an extra-light introduction to continuations.
 If you have not heard of, or are confused by continuations,
 this post may be for you!&lt;&#x2F;p&gt;
 &lt;p&gt;This will be the first post of a series on continuations.
@@ -1164,13 +1167,19 @@ return points as arguments, and then decide where you want to go next,&lt;&#x2F;
         <title>Abstract Machines: Interpreters for Computer Scientists</title>
         <published>2020-11-09T12:15:00-05:00</published>
         <updated>2020-11-09T12:15:00-05:00</updated>
+        
         <author>
-          <name>Unknown</name>
+          <name>
+            
+              Unknown
+            
+          </name>
         </author>
-        <link rel="alternate" href="https://thedav.is/post/abstract-machines/" type="text/html"/>
+        
+        <link rel="alternate" type="text/html" href="https://thedav.is/post/abstract-machines/"/>
         <id>https://thedav.is/post/abstract-machines/</id>
         
-        <content type="html">&lt;h1 id=&quot;introduction&quot;&gt;Introduction&lt;&#x2F;h1&gt;
+        <content type="html" xml:base="https://thedav.is/post/abstract-machines/">&lt;h1 id=&quot;introduction&quot;&gt;Introduction&lt;&#x2F;h1&gt;
 &lt;p&gt;So im a PhD student now, so I need to write about cool computer science things!
 As part of my learnings, I have been writing a bunch of &#x27;Abstract Machines&#x27;.
 I think of them as how computer scientists do programming languages research without computers.
@@ -1466,13 +1475,19 @@ operational semantics can help you to formalize how your language evalautes, and
         <title>Against Glob Imports</title>
         <published>2020-08-14T00:00:00+00:00</published>
         <updated>2020-08-14T00:00:00+00:00</updated>
+        
         <author>
-          <name>Unknown</name>
+          <name>
+            
+              Unknown
+            
+          </name>
         </author>
-        <link rel="alternate" href="https://thedav.is/post/against-globs/" type="text/html"/>
+        
+        <link rel="alternate" type="text/html" href="https://thedav.is/post/against-globs/"/>
         <id>https://thedav.is/post/against-globs/</id>
         
-        <content type="html">&lt;p&gt;Hi, I hate glob imports. When I see them it actively hurts my understanding of code.
+        <content type="html" xml:base="https://thedav.is/post/against-globs/">&lt;p&gt;Hi, I hate glob imports. When I see them it actively hurts my understanding of code.
 I know they may seem useful, but I think that, overall, they are an anti-pattern.&lt;&#x2F;p&gt;
 &lt;h1 id=&quot;reading-code&quot;&gt;Reading Code&lt;&#x2F;h1&gt;
 &lt;p&gt;Using globs is a detriment to reading code. If I see some code using a type I have not seen
@@ -1530,13 +1545,19 @@ The only exception I find is for preludes, and preludes should be used &lt;em&gt
         <title>The Robson Tree Traversal (DRAFT)</title>
         <published>2019-12-05T08:10:44-05:00</published>
         <updated>2019-12-05T08:10:44-05:00</updated>
+        
         <author>
-          <name>Unknown</name>
+          <name>
+            
+              Unknown
+            
+          </name>
         </author>
-        <link rel="alternate" href="https://thedav.is/post/robson-traversal/" type="text/html"/>
+        
+        <link rel="alternate" type="text/html" href="https://thedav.is/post/robson-traversal/"/>
         <id>https://thedav.is/post/robson-traversal/</id>
         
-        <content type="html">&lt;h1 id=&quot;this-is-a-draft&quot;&gt;THIS IS A DRAFT&lt;&#x2F;h1&gt;
+        <content type="html" xml:base="https://thedav.is/post/robson-traversal/">&lt;h1 id=&quot;this-is-a-draft&quot;&gt;THIS IS A DRAFT&lt;&#x2F;h1&gt;
 &lt;p&gt;Hiya, this is a draft! Please read and give me feedback! Thanks!&lt;&#x2F;p&gt;
 &lt;h2 id=&quot;todo&quot;&gt;TODO&lt;&#x2F;h2&gt;
 &lt;ul&gt;
@@ -2035,13 +2056,19 @@ you need to run the algorithm completely before doing anything else with the tre
         <title>Fancy Tree Traversals</title>
         <published>2019-01-02T10:10:44-05:00</published>
         <updated>2019-01-02T10:10:44-05:00</updated>
+        
         <author>
-          <name>Unknown</name>
+          <name>
+            
+              Unknown
+            
+          </name>
         </author>
-        <link rel="alternate" href="https://thedav.is/post/fancy-tree-traversals/" type="text/html"/>
+        
+        <link rel="alternate" type="text/html" href="https://thedav.is/post/fancy-tree-traversals/"/>
         <id>https://thedav.is/post/fancy-tree-traversals/</id>
         
-        <content type="html">&lt;h1 id=&quot;introduction&quot;&gt;Introduction&lt;&#x2F;h1&gt;
+        <content type="html" xml:base="https://thedav.is/post/fancy-tree-traversals/">&lt;h1 id=&quot;introduction&quot;&gt;Introduction&lt;&#x2F;h1&gt;
 &lt;p&gt;In this post, we will discuss a couple of novel methods for traversing trees.
 The threaded tree offers amortized constant access to the successor of a tree-node.
 The link-inversion traversal offers a stackless traversal of binary trees.&lt;&#x2F;p&gt;
@@ -2314,13 +2341,19 @@ Let&#x27;s get to the real thing now, the Robson traversal.&lt;&#x2F;p&gt;
         <title>Sinistersnare&#x27;s Rust 2019 Wishlist</title>
         <published>2018-12-12T08:10:44-05:00</published>
         <updated>2018-12-12T08:10:44-05:00</updated>
+        
         <author>
-          <name>Unknown</name>
+          <name>
+            
+              Unknown
+            
+          </name>
         </author>
-        <link rel="alternate" href="https://thedav.is/post/rust-wishlist-2019/" type="text/html"/>
+        
+        <link rel="alternate" type="text/html" href="https://thedav.is/post/rust-wishlist-2019/"/>
         <id>https://thedav.is/post/rust-wishlist-2019/</id>
         
-        <content type="html">&lt;p&gt;This is my response to the
+        <content type="html" xml:base="https://thedav.is/post/rust-wishlist-2019/">&lt;p&gt;This is my response to the
 
 &lt;a href=&quot;https:&amp;#x2F;&amp;#x2F;blog.rust-lang.org&amp;#x2F;2018&amp;#x2F;12&amp;#x2F;06&amp;#x2F;call-for-rust-2019-roadmap-blogposts.html&quot; target=&quot;_blank&quot;&gt;Call for Rust 2019 Roadmap↪&lt;&#x2F;a&gt;
 .
@@ -2351,13 +2384,19 @@ Thanks for reading!&lt;&#x2F;p&gt;
         <title>Hello, World!</title>
         <published>2017-12-24T05:50:44-05:00</published>
         <updated>2017-12-24T05:50:44-05:00</updated>
+        
         <author>
-          <name>Unknown</name>
+          <name>
+            
+              Unknown
+            
+          </name>
         </author>
-        <link rel="alternate" href="https://thedav.is/post/hello-world/" type="text/html"/>
+        
+        <link rel="alternate" type="text/html" href="https://thedav.is/post/hello-world/"/>
         <id>https://thedav.is/post/hello-world/</id>
         
-        <content type="html">&lt;p&gt;Hey! Intro Post!&lt;&#x2F;p&gt;
+        <content type="html" xml:base="https://thedav.is/post/hello-world/">&lt;p&gt;Hey! Intro Post!&lt;&#x2F;p&gt;
 &lt;p&gt;I have got some great ideas for blog posts&#x2F;series. Here is a couple:&lt;&#x2F;p&gt;
 &lt;ol&gt;
 &lt;li&gt;The Robson Tree Traversal Algorithm.&lt;&#x2F;li&gt;
