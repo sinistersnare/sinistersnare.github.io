@@ -1,6 +1,6 @@
 +++
 title = "My Work"
-draft = false
+draft = true
 slug = "work"
 [extra]
 no_header = true
@@ -8,16 +8,16 @@ no_header = true
 
 Here is a list of things that I have done. Including papers published and open source projects I am at least a little proud of.
 
-# Papers #
+# Papers
 
-* So You Want To Analyze Scheme Programs With Datalog?
-	* Me et al. wrote a small Scheme AAM CFA and figured we could get accepted at a wokrshop for it. My first ever paper! Can only go up from here!
-	* [Scheme Workshop 2021](https://icfp21.sigplan.org/home/scheme-2021#program)
-	* [ArXiv](https://arxiv.org/abs/2107.12909)
-	* [Presentation video](https://www.youtube.com/watch?v=oiXL44WlC-U)
-	* <a href="/static/SW2021Slides.pdf"> Slides</a> + <a href="/static/SW2021Script.pdf">(Rough) Script</a>
+- So You Want To Analyze Scheme Programs With Datalog?
+  - Me et al. wrote a small Scheme AAM CFA and figured we could get accepted at a wokrshop for it. My first ever paper! Can only go up from here!
+  - [Scheme Workshop 2021](https://icfp21.sigplan.org/home/scheme-2021#program)
+  - [ArXiv](https://arxiv.org/abs/2107.12909)
+  - [Presentation video](https://www.youtube.com/watch?v=oiXL44WlC-U)
+  - <a href="/static/SW2021Slides.pdf"> Slides</a> + <a href="/static/SW2021Script.pdf">(Rough) Script</a>
 
-# Open Source Projects #
+# Open Source Projects
 
 ## {{ elink(text="The Robson Traversal", to="https://github.com/sinistersnare/Robson") }}
 
