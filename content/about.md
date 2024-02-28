@@ -7,8 +7,9 @@ aliases = ["/contact"]
 no_header = true
 +++
 
-Hi! I am <strong>DAVIS</strong>.
-I write code and want to change the world with software.
+Hi! I am <strong>DAVIS</strong>. Technology can change the world.
+
+I am an activist, and work at the intersection of activism and technology.
 
 ## Contact
 

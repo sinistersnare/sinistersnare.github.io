@@ -33,6 +33,8 @@ katex_enable = true
 sam_menu = [
     { text = "Posts", link = "/post" },
     { text = "About", link = "/about" },
+    { text = "Ideas", link = "/ideas" },
+    { text = "Now", link = "/now    " },
     { text = "GitHub↪", link = "https://github.com/sinistersnare" },
 ]
 sam_bottom_menu = true
