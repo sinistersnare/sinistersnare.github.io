@@ -7,16 +7,14 @@
 
 {% block body %}
     <div class="wrap">
-        <div class="section" id="top-link-home">
-            <a href="/">Home</a>
-        </div>
+        {{ macros::menu(base="top", separator=false) }}
         <div class="section" id="title">
             {% block title %}{% endblock title %}
         </div>
         <div class="section" id="content">
             {% block content %}{% endblock content %}
         </div>
-        {{ macros::bottom_menu() }}
+        {{ macros::menu(base="bottom", separator=true) }}
         {{ macros::footer() }}
     </div>
 {% endblock body %}

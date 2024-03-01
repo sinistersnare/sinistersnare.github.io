@@ -1,11 +1,6 @@
 @import "vars"
 @import "mixins"
 
-*
-    margin: 0
-    padding: 0
-    -webkit-box-sizing: border-box
-    box-sizing: border-box
 
 html
     background-color: $dark-grey
@@ -116,12 +111,28 @@ hr
     padding-bottom: 3rem
     text-align: center
 
+.top-menu
+    display: flex
+    flex-direction: column
+    justify-content: center
+    align-items: center
+    text-align: center
+
 // support for dividers between nav items.
 .bottom-nav-item
     display: inline-block
 
     // this excludes the first item by using an adjacency selector (the `+`).
     &+.bottom-nav-item
+        &:before
+            content: '·'
+
+// support for dividers between nav items.
+.top-nav-item
+    display: inline-block
+
+    // this excludes the first item by using an adjacency selector (the `+`).
+    &+.top-nav-item
         &:before
             content: '·'
 
