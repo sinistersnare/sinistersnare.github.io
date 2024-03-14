@@ -36,16 +36,9 @@ Now write, and changes will be reflected.
 - Edit theme to use [ToC support](https://www.getzola.org/documentation/content/table-of-contents/) for posts.
 - Delimit tags in posts with a comma or something.
 - Make blockquote look less SHIT
-- I fucked up default list styles making ToC looking good. Unfuckup while keeping ToCs pretty.
+- I fucked up default list styles making ToC looking good (and have since unfucked it, probably the ToC looks bad). Unfuckup while keeping ToCs pretty.
   - maybe just add inline-style to ToC HTML so i can unfuck the stuff in `_element.sass`?
 
-The theme I am using, [Sam](https://github.com/janbaudisch/zola-sam),
-has an AGPL license.
-Changes I have made to sam include:
+The base theme is [Sam](https://github.com/janbaudisch/zola-sam) licensed AGPL. I did modify it.
 
-- Changed the Footer
-- Tweaked some CSS
-- Added a 'home' link to the top of non-home pages.
-- Probably some other small things, run a diff if you want.
-- Changed the HTML of the tags to use a `<nav>` element.
   Enjoy <3

@@ -1577,17 +1577,11 @@ The only exception I find is for preludes, and preludes should be used &lt;em&gt
         <id>https://thedav.is/post/robson-traversal/</id>
         
         <content type="html" xml:base="https://thedav.is/post/robson-traversal/">&lt;h1 id=&quot;this-is-a-draft&quot;&gt;THIS IS A DRAFT&lt;&#x2F;h1&gt;
-&lt;p&gt;Hiya, this is a draft! Please read and give me feedback! Thanks!&lt;&#x2F;p&gt;
+&lt;p&gt;Hiya, this is a draft! Probably never going to finish it at this rate.&lt;&#x2F;p&gt;
 &lt;h2 id=&quot;todo&quot;&gt;TODO&lt;&#x2F;h2&gt;
 &lt;ul&gt;
 &lt;li&gt;prune images that aren&#x27;t needed.&lt;&#x2F;li&gt;
-&lt;li&gt;make outbound links open in new tab.&lt;&#x2F;li&gt;
-&lt;li&gt;Make sure Table of Contents is correct when post is over&lt;&#x2F;li&gt;
-&lt;li&gt;Add pictures of tree&#x27;s being traversed!!!
-&lt;ul&gt;
-&lt;li&gt;Create shitty pictures and ask Audrey to make pretty ones later.&lt;&#x2F;li&gt;
-&lt;&#x2F;ul&gt;
-&lt;&#x2F;li&gt;
+&lt;li&gt;Add pictures of tree&#x27;s being traversed!!!&lt;&#x2F;li&gt;
 &lt;li&gt;StackOverflow posts:
 &lt;ul&gt;
 &lt;li&gt;https:&#x2F;&#x2F;stackoverflow.com&#x2F;questions&#x2F;31323283&#x2F;incomplete-traversal-using-link-inversion-of-binary-tree&lt;&#x2F;li&gt;
@@ -1955,8 +1949,6 @@ Yet, it successfully used those null pointers that we lamented of their waste.
 The downside of the link-inversion model is that it is worst-case linear-space.
 We had to add an extra bit of memory to each node.
 Robson solves both problems by playing to the strength&#x27;s of both!&lt;&#x2F;p&gt;
-&lt;h5 id=&quot;boom-end-of-blog-post&quot;&gt;&lt;em&gt;&lt;strong&gt;BOOM end of blog post.&lt;&#x2F;strong&gt;&lt;&#x2F;em&gt;&lt;&#x2F;h5&gt;
-&lt;p&gt;Just kidding heres how it works...&lt;&#x2F;p&gt;
 &lt;h3 id=&quot;the-algorithm&quot;&gt;The Algorithm&lt;&#x2F;h3&gt;
 &lt;p&gt;Lets start by talking about the memory usage. We need a few bytes of memory for this to work,
 here is what we will be using those bytes for:&lt;&#x2F;p&gt;
@@ -2005,7 +1997,6 @@ if we should ascend from the left or from the right. Lets move out of this list
 and talk about the leaf stack, and its relation to exchange points.&lt;&#x2F;li&gt;
 &lt;&#x2F;ol&gt;
 &lt;h4 id=&quot;the-leaf-stack&quot;&gt;The Leaf Stack&lt;&#x2F;h4&gt;
-&lt;p&gt;TODO: saying the word stack too much?&lt;&#x2F;p&gt;
 &lt;p&gt;The leaf stack is not a real stack, but a linked list, composed of tree leaves.
 The &lt;code&gt;right&lt;&#x2F;code&gt; pointer of each leaf&#x2F;stack-element points to an &#x27;exchange point&#x27;.
 Each left pointer points to the next element of the list&#x2F;stack.
@@ -2020,7 +2011,7 @@ Once we find an exchange point we will set &lt;code&gt;available&lt;&#x2F;code&g
 &lt;p&gt;TODO: does this last sentence need more reasons&#x2F;usage?
 I feel like people will get caught up on what an exchange point is,
 and lose grasp of the section.&lt;&#x2F;p&gt;
-&lt;p&gt;TODO: make this &lt;code&gt;ol&lt;&#x2F;code&gt; a shortcode so markdown can render inside of it.&lt;&#x2F;p&gt;
+&lt;!-- TODO: make this `ol` a shortcode so markdown can render inside of it. --&gt;
 &lt;!-- Have to re-start the ol from before. --&gt;
 &lt;ol start=&quot;3&quot; class=&quot;numbered&quot;&gt;
     &lt;li&gt;
@@ -2053,8 +2044,6 @@ The tree is &lt;em&gt;&lt;strong&gt;not&lt;&#x2F;strong&gt;&lt;&#x2F;em&gt; in a
 &lt;h3 id=&quot;analysis-2&quot;&gt;Analysis&lt;&#x2F;h3&gt;
 &lt;p&gt;Amazing.&lt;&#x2F;p&gt;
 &lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h2&gt;
-&lt;p&gt;Ending Text!&lt;&#x2F;p&gt;
-&lt;p&gt;If you liked this post, please feel free to connect with me at any of the links on the footer of this site!&lt;&#x2F;p&gt;
 &lt;p&gt;If anyone knows who JM Robson is please tell me, I&#x27;ve tried searching for him, but to no avail. Also,x
 if anyone uses this algorithm, please let me know, I&#x27;d be super interested to see it used somewhere real.&lt;&#x2F;p&gt;
 &lt;h3 id=&quot;p-s&quot;&gt;P.S.&lt;&#x2F;h3&gt;

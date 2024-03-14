@@ -1,5 +1,5 @@
 +++
-title = "The About Page"
+title = "About"
 draft = false
 slug = "about"
 aliases = ["/contact"]

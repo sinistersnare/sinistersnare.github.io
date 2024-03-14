@@ -42,7 +42,3 @@ home = "Home" # Name for home page links.
 date_format = "%b %d, %Y"
 show_reading_time = true
 show_word_count = false
-
-[extra.sam_footer]
-years = "2017-2023"
-name = "Davis"

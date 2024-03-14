@@ -8,13 +8,12 @@
 {% block body %}
     <div class="wrap">
         {{ macros::menu(base="top", separator=false) }}
-        <div class="section" id="title">
+        <h1 class="section" id="title">
             {% block title %}{% endblock title %}
-        </div>
+        </h1>
         <div class="section" id="content">
             {% block content %}{% endblock content %}
         </div>
         {{ macros::menu(base="bottom", separator=true) }}
-        {{ macros::footer() }}
     </div>
 {% endblock body %}

@@ -1,5 +1,5 @@
 +++
-title = "The Now Page"
+title = "Now"
 draft = false
 slug = "now"
 [extra]

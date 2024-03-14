@@ -10,15 +10,12 @@ tags = ["Data-Structures", "Algorithms", "Trees", "C"]
 
 # THIS IS A DRAFT #
 
-Hiya, this is a draft! Please read and give me feedback! Thanks!
+Hiya, this is a draft! Probably never going to finish it at this rate.
 
 ## TODO ##
 
 * prune images that aren't needed.
-* make outbound links open in new tab.
-* Make sure Table of Contents is correct when post is over
 * Add pictures of tree's being traversed!!!
-    * Create shitty pictures and ask Audrey to make pretty ones later.
 * StackOverflow posts:
     * https://stackoverflow.com/questions/31323283/incomplete-traversal-using-link-inversion-of-binary-tree
     * https://stackoverflow.com/questions/22288074/robson-tree-traversal-algorithm
@@ -423,10 +420,6 @@ The downside of the link-inversion model is that it is worst-case linear-space.
 We had to add an extra bit of memory to each node.
 Robson solves both problems by playing to the strength's of both!
 
-##### ***BOOM end of blog post.*** #####
-
-Just kidding heres how it works...
-
 ### The Algorithm ###
 
 Lets start by talking about the memory usage. We need a few bytes of memory for this to work,
@@ -479,8 +472,6 @@ and talk about the leaf stack, and its relation to exchange points.
 
 #### The Leaf Stack ####
 
-TODO: saying the word stack too much?
-
 The leaf stack is not a real stack, but a linked list, composed of tree leaves.
 The `right` pointer of each leaf/stack-element points to an 'exchange point'.
 Each left pointer points to the next element of the list/stack.
@@ -499,7 +490,7 @@ TODO: does this last sentence need more reasons/usage?
 I feel like people will get caught up on what an exchange point is,
 and lose grasp of the section.
 
-TODO: make this `ol` a shortcode so markdown can render inside of it.
+<!-- TODO: make this `ol` a shortcode so markdown can render inside of it. -->
 <!-- Have to re-start the ol from before. -->
 <ol start="3" class="numbered">
     <li>
@@ -536,10 +527,6 @@ The tree is ***not*** in a safe, workable, state during these traversals!
 Amazing.
 
 ## Conclusion ##
-
-Ending Text!
-
-If you liked this post, please feel free to connect with me at any of the links on the footer of this site!
 
 If anyone knows who JM Robson is please tell me, I've tried searching for him, but to no avail. Also,x
 if anyone uses this algorithm, please let me know, I'd be super interested to see it used somewhere real.

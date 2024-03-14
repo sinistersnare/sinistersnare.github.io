@@ -1,13 +1,10 @@
 +++
-title = "The Ideas Page"
+title = "Ideas"
 draft = false
 slug = "ideas"
 [extra]
 no_header = true
 +++
-
-
-Some of my ideas:
 
 - A data network architecture that powers social media
 	- Social Media should not own its data
