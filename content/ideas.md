@@ -7,7 +7,7 @@ no_header = true
 +++
 
 
-Some ideas for future projects I want to do:
+Some of my ideas:
 
 - A data network architecture that powers social media
 	- Social Media should not own its data
@@ -15,4 +15,6 @@ Some ideas for future projects I want to do:
 	- involves a new email content type, ship apps via email.
 - A fry cart
 	- selling french fries out of a cart!
-- Industrial production technologies also interest me.
+- Industrial production
+	- Socialism
+
