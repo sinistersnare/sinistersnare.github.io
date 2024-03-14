@@ -107,9 +107,8 @@
 {% macro footer() %}
     {% if config.extra.sam_footer %}
         <div class="section footer">
-            ©{{ config.extra.sam_footer.years | safe }} {{ config.extra.sam_footer.name | safe }}
             <div class="copyright">
-                Fuck copyright. Steal this website.
+                <span class="strikethrough">©</span> Steal this website.
             </div>
         </div>
     {% endif %}

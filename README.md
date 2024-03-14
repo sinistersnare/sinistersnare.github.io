@@ -39,14 +39,6 @@ Now write, and changes will be reflected.
 - I fucked up default list styles making ToC looking good. Unfuckup while keeping ToCs pretty.
   - maybe just add inline-style to ToC HTML so i can unfuck the stuff in `_element.sass`?
 
-## LICENSE
-
-- All of MY source code (basically, the markdown files) that generates this site is MIT licensed.
-- All source code provided by posts is MIT licensed (unless cribbed from a project,
-  in which case it is that license).
-- All non-code content that I own the copyright to is
-  [CC BY 4](https://creativecommons.org/licenses/by/4.0/).
-
 The theme I am using, [Sam](https://github.com/janbaudisch/zola-sam),
 has an AGPL license.
 Changes I have made to sam include:
