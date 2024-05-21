@@ -9,7 +9,7 @@ no_header = true
 
 Hi! I am <strong>DAVIS</strong>.
 
-Technology is what changes the world.
+Infrastructure is what changes the world.
 
 ## Contact
 
