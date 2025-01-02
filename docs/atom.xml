@@ -2044,8 +2044,12 @@ The tree is &lt;em&gt;&lt;strong&gt;not&lt;&#x2F;strong&gt;&lt;&#x2F;em&gt; in a
 &lt;h3 id=&quot;analysis-2&quot;&gt;Analysis&lt;&#x2F;h3&gt;
 &lt;p&gt;Amazing.&lt;&#x2F;p&gt;
 &lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h2&gt;
-&lt;p&gt;If anyone knows who JM Robson is please tell me, I&#x27;ve tried searching for him, but to no avail. Also,x
-if anyone uses this algorithm, please let me know, I&#x27;d be super interested to see it used somewhere real.&lt;&#x2F;p&gt;
+&lt;p&gt;Ending Text!&lt;&#x2F;p&gt;
+&lt;p&gt;If you liked this post, please feel free to connect with me at any of the links on the footer of this site!&lt;&#x2F;p&gt;
+&lt;p&gt;If anyone knows who JM Robson is please let me know! It seems that he is
+&lt;a href=&quot;https:&#x2F;&#x2F;www.labri.fr&#x2F;perso&#x2F;robson&#x2F;&quot;&gt;Mike Robson&lt;&#x2F;a&gt; but any further info is hard to find.
+Also, if anyone uses this algorithm, please let me know,
+I would be super interested to see it used somewhere real.&lt;&#x2F;p&gt;
 &lt;h3 id=&quot;p-s&quot;&gt;P.S.&lt;&#x2F;h3&gt;
 &lt;p&gt;On x86 systems at least, the least-significant bit of a pointer will always be 0, so you could theoretically store
 anything there, as long as you swap it for 0 when you need to actually use the pointer. So maybe
