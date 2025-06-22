@@ -8,10 +8,10 @@ compile_sass = true
 build_search_index = false
 
 # Generates atom.xml
-generate_feed = true
+generate_feeds = true
 
 taxonomies = [{ name = "tags", rss = true }]
-title = "The (Site of) Davis"
+title = "The (Website of) Davis"
 
 theme = "sam"
 
