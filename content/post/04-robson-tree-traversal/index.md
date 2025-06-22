@@ -530,13 +530,6 @@ Amazing.
 
 Ending Text!
 
-If you liked this post, please feel free to connect with me at any of the links on the footer of this site!
-
-If anyone knows who JM Robson is please let me know! It seems that he is
-[Mike Robson](https://www.labri.fr/perso/robson/) but any further info is hard to find.
-Also, if anyone uses this algorithm, please let me know,
-I would be super interested to see it used somewhere real.
-
 ### P.S. ###
 
 On x86 systems at least, the least-significant bit of a pointer will always be 0, so you could theoretically store
