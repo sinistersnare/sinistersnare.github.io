@@ -92,7 +92,7 @@ Small step semantics are a bit more precise in my opinion, and they are much eas
 to _real_ interpreters. But it is very useful to understand both styles, they have different uses. Using small steps, we can also more closely trace how an expression is evaluated.
 
 
-# A Simple Abstract Machine, C #
+# A Simple Abstract Machine - C #
 
 I dont mean the the C language, especially because I would not use simple to describe it!
 C in this case stands for 'control'. You may remember things like 'if' are called 'control flow

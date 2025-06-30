@@ -12,11 +12,11 @@ generate_toc = false
 
 This series of posts revolves around creating operational semantics of the Scheme programming language from the ground up, starting with the lambda calculus.
 
-If you have not read the introductory post, you can find it [here](@/post/08-crafting-semantics-0.md), and see the index of this series [here](/tags/crafting-semantics/).
+If you have not read the introductory post, you can find it [here](@/post/crafting-semantics-0.md), and see the index of this series [here](/tags/crafting-semantics/).
 
 # Intro #
 
-Hi! Welcome! Today, we will be extending the CESK machine from the [previous post](@/post/09-crafting-semantics-1.md), adding some simple features that will make our language more usable. In particular, we will implement numbers and conditionals. To accomplish that, we will be partitioning the machine into 2 different types of states. This will make future extensions to our language much simpler.
+Hi! Welcome! Today, we will be extending the CESK machine from the [previous post](@/post/crafting-semantics-1.md), adding some simple features that will make our language more usable. In particular, we will implement numbers and conditionals. To accomplish that, we will be partitioning the machine into 2 different types of states. This will make future extensions to our language much simpler.
 
 
 ## Recap ##
@@ -57,7 +57,7 @@ Let's look at the machine that we have so far. These transition functions serve 
 
 The main issue with this machine is that it is very 'lambda-centric'. For example, if you pay close attention in the last post, closure creation is actually deeply embedded into the semantics. When a variable is evaluated it finds the closure and sets it to the current environment. We want a machine that is more ... 'value independent'
 
-If we wanted to have values that are less syntactically visible, like [first-class continuations](@/post/07-continuations-as-returns.md), adding them to the current machine would overcomplicate our transitions. Instead, we will partition the machine into 'eval' and 'apply' states. Eval states are for _evaluating_ syntax to get a value. Apply states are for _applying_ the value into the current Kontinuation.
+If we wanted to have values that are less syntactically visible, like [first-class continuations](@/post/continuations-as-returns.md), adding them to the current machine would overcomplicate our transitions. Instead, we will partition the machine into 'eval' and 'apply' states. Eval states are for _evaluating_ syntax to get a value. Apply states are for _applying_ the value into the current Kontinuation.
 
 # The Next Machine #
 

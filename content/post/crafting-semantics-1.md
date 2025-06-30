@@ -12,13 +12,13 @@ generate_toc = false
 
 This series of posts revolves around creating operational semantics of the Scheme programming language from the ground up, starting with the lambda calculus.
 
-If you have not read the introductory post, you can find it [here](@/post/08-crafting-semantics-0.md), and see the index of this series [here](/tags/crafting-semantics/).
+If you have not read the introductory post, you can find it [here](@/post/crafting-semantics-0.md), and see the index of this series [here](/tags/crafting-semantics/).
 
 # Intro #
 
 Hi, in this post we will be implementing a CESK Abstract Machine for the lambda calculus (or simply 'λ'). First, we need to define all of what an 'abstract machine' is, what semantics are, and the syntax we will be using. So this post may be a bit long. Future posts are likely to be shorter!
 
-If you know all of the intro stuff already, but dont know how to define semantics for the lambda calculus, feel free to skip to [here](@/post/09-crafting-semantics-1.md#the-machine)
+If you know all of the intro stuff already, but dont know how to define semantics for the lambda calculus, feel free to skip to [here](@/post/crafting-semantics-1.md#the-machine)
 
 # CESK #
 

@@ -26,7 +26,7 @@ For a mostly 'finished' product, I have semantics for many forms of Scheme [here
 
 # Semantics #
 
-The semantics of a language are how its syntax is interpreted by a reader (either human or machine). Like many things in Programming Language Theory, we have stolen this term from the field of linguistics (thanks!). Computer scientists use semantics to study programming languages. You can learn more about them in my ['Abstract Machines' post](@/post/06-abstract-machines.md).
+The semantics of a language are how its syntax is interpreted by a reader (either human or machine). Like many things in Programming Language Theory, we have stolen this term from the field of linguistics (thanks!). Computer scientists use semantics to study programming languages. You can learn more about them in my ['Abstract Machines' post](@/post/abstract-machines.md).
 
 # Prerequisites #
 
@@ -36,7 +36,7 @@ All I ask is that you are interested in the topic at hand!
 
 # Let's begin! #
 
-We will start after that post, with a CESK machine based on the lambda calculus. See [The next post](@/post/09-crafting-semantics-1.md) for the exciting start to this series!
+We will start after that post, with a CESK machine based on the lambda calculus. See [The next post](@/post/crafting-semantics-1.md) for the exciting start to this series!
 
 
 
