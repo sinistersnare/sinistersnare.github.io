@@ -13,18 +13,18 @@ Enjoy!
 Run the command:
 
 ```bash
-$ zola serve
+
+# 1. Make sure Zola is installed.
+#    https://www.getzola.org/documentation/getting-started/installation/
+$ zola serve --drafts
 ```
 
-This will create a test-server to write new posts and content in. `--drafts` will show drafts.
+This will create a test-server to write new posts and content in.
 
 Now write, and changes will be reflected.
 
 ## Releasing The Site
 
-1. Make sure Zola is installed. https://www.getzola.org/documentation/getting-started/installation/
-2. `$ zola build --output-dir docs` # GH Pages uses `docs/` for output.
-3. commit and push.
 
 ## TODO:
 
