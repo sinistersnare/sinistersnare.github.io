@@ -26,5 +26,3 @@ which will automatically build and publish this site, as long as the zola build 
 zola check
 git push origin master
 ```
-
-The base theme is [Sam](https://github.com/janbaudisch/zola-sam) licensed AGPL. I did modify it.
