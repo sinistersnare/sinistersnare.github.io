@@ -1,9 +1,9 @@
-name = "sam"
-description = "A Simple and Minimalist theme with a focus on typography and content."
-license = "AGPL-3.0"
-homepage = "https://github.com/janbaudisch/zola-sam"
+name = "clean"
+description = "Davis's Theme"
+license = "None"
+homepage = "https://github.com/sinistersnare/sinistersnare.github.io"
 min_version = "0.4.0"
-demo = "https://zola-sam.janbaudisch.dev"
+demo = "https://thedav.is"
 
 [extra]
 show_word_count = true
@@ -16,8 +16,8 @@ home = "home"
 sam_bottom_menu = true
 
 [author]
-name = "Jan Baudisch"
-homepage = "https://janbaudisch.dev"
+name = "Davis"
+homepage = "thedav.is"
 
 [original]
 author =  "Victoria"

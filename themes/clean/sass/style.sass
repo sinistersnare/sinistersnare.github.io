@@ -1,8 +1,11 @@
 @import "vars"
 @import "mixins"
 
+*
+    box-sizing: border-box
 
 html
+    height: 100%
     background-color: $dark-grey
     font-family: $font
     font-size: 16px
@@ -17,7 +20,6 @@ body
     display: flex
     flex-direction: column
     justify-content: space-between
-    align-items: center
     opacity: 1
 
 h1,h2,h3
@@ -65,14 +67,6 @@ hr
     +skinny-hr
     opacity: 0.3
 
-.wrap
-    margin: 0 auto
-    margin-top: 6rem
-    width: 53%
-    @media screen and (max-width: 736px)
-        padding: 1rem
-        width: 100%
-
 .tag-container
     display: flex
     flex-direction: row
@@ -102,21 +96,16 @@ hr
     justify-content: center
     align-items: flex-start
 
-.bottom-menu
+.menu
     display: flex
     flex-direction: column
     justify-content: center
     align-items: center
-    padding-top: 3rem
-    padding-bottom: 3rem
     text-align: center
 
-.top-menu
-    display: flex
-    flex-direction: column
-    justify-content: center
-    align-items: center
-    text-align: center
+.bottom-menu
+    padding-top: 3rem
+    margin-bottom: 3rem
 
 // support for dividers between nav items.
 .bottom-nav-item
@@ -173,4 +162,15 @@ hr
 .mainpage-header
     font-family: "EB Garamond", serif
     font-style: italic
-    font-size: 100px
+    display: flex
+    flex-direction: column
+    justify-content: center
+    align-items: flex-start
+    margin-top: calc(1rem + 4vw)
+
+header h1
+    font-size: 36px
+
+body
+    max-width: min(60rem, 100vw)
+    height: 100%

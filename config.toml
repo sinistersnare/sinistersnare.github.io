@@ -1,44 +1,29 @@
-# The URL the site will be built for
 base_url = "https://thedav.is"
 
-# Whether to automatically compile all Sass files in the sass directory
+theme = "clean"
 compile_sass = true
-
-# Whether to build a search index to be used later on by a JavaScript library
 build_search_index = false
-
-# Generates atom.xml
 generate_feeds = true
 
 taxonomies = [{ name = "tags", rss = true }]
 title = "The (Website of) Davis"
 
-theme = "sam"
-
 ignored_content = ["inversion.xml", "threaded.xml"]
 
 [markdown]
-
 # Whether to do syntax highlighting
 # Theme can be customised by setting the `highlight_theme` variable to a theme supported by Zola
 highlight_code = true
 highlight_theme = "dracula"
 
 [extra]
-
-# Moderately-pilfered from the Even Theme
 katex_enable = true
-
-# Sam Config
-sam_menu = [
-    { text = "Posts", link = "/post" },
-    { text = "About", link = "/about" },
-    { text = "Ideas", link = "/ideas" },
-    { text = "Now", link = "/now    " },
-    { text = "GitHub↪", link = "https://github.com/sinistersnare" },
-]
-sam_bottom_menu = true
-home = "Home" # Name for home page links.
 date_format = "%b %d, %Y"
 show_reading_time = true
 show_word_count = false
+
+menu = [
+    { text = "yap", link = "/post" },
+    { text = "now", link = "/about" },
+    { text = "code", link = "https://github.com/sinistersnare" },
+]

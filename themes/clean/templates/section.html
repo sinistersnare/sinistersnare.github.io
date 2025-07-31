@@ -11,6 +11,7 @@
 {% endblock title %}
 
 {% block content %}
+{{ section.content | safe }}
 <ul>
     {% for page in section.pages %}
         <li>

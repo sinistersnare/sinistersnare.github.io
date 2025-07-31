@@ -1,0 +1,14 @@
+{% extends "index.html" %}
+
+{% import "macros.html" as macros %}
+
+{% block htmltitle %}
+{% endblock htmltitle %}
+
+{% block body %}
+    {{ macros::menu(base="top") }}
+    <div class="section" id="page-content">
+        {% block content %}{% endblock content %}
+    </div>
+    {{ macros::menu(base="bottom") }}
+{% endblock body %}

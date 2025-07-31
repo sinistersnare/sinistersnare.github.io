@@ -34,7 +34,9 @@ The kontinuation is what happens 'next', after we finish evaluating an expressio
 
 It is used to represent a fine grained call-stack. But instead of only keeping track of function calls, it tracks many other things, such as conditionals and let bindings.
 
-# λ #
+# The λ of Computer Science #
+
+λ, spelled 'lambda' in english, is a greek letter which is ubiquitous in the computing sciences. It refers to computation itself.
 
 The lambda calculus is a very simple language. Created before modern computers, its goal was to express logic formally. Now, we can use it as a basis for a small and simple programming language. Its {{ elink(text="Wikipedia Page", to="https://en.wikipedia.org/wiki/Lambda_calculus") }} is chock-full of great stuff, but I will give it a quick introduction.
 
