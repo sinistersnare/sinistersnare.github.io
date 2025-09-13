@@ -1,2 +1,9 @@
 public/
 docs/
+node_modules/
+# Only ignore React build outputs, not every dist/ in the repo
+applications/*/dist/
+
+# OS/editor noise
+.DS_Store
+*.log

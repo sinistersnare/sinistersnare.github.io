@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Install Zola
         run: |
@@ -18,9 +18,43 @@ jobs:
             "https://github.com/getzola/zola/releases/download/v0.20.0/zola-v0.20.0-x86_64-unknown-linux-gnu.tar.gz" \
             | tar xzf - -C /usr/local/bin
 
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js (pnpm)
+        uses: actions/setup-node@v5
+        with:
+          node-version: "24"
+          cache: "pnpm"
+
+      - name: Install React app dependencies (all)
+        run: |
+          for d in applications/*; do
+            if [ -d "$d" ]; then pnpm -C "$d" install || exit 1; fi;
+          done
+
+      - name: Build React apps (all)
+        run: |
+          for d in applications/*; do
+            if [ -d "$d" ]; then pnpm -C "$d" build || exit 1; fi;
+          done
+
       - name: Build static files
         id: build
         run: zola build
+
+      - name: Move React app dist folders into public
+        run: |
+          for d in applications/*; do
+            if [ -d "$d/dist" ]; then
+              name="$(basename "$d")"
+              out="public/$name"
+              rm -rf "$out"
+              mkdir -p "$out"
+              cp -R "$d/dist/"* "$out/"
+            fi
+          done
 
       - name: Upload static files as artifact
         id: deployment
@@ -31,8 +65,8 @@ jobs:
   deploy:
     needs: build
     permissions:
-      pages: write      # to deploy to Pages
-      id-token: write   # to verify the deployment originates from an appropriate source
+      pages: write # to deploy to Pages
+      id-token: write # to verify the deployment originates from an appropriate source
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

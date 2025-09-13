@@ -1,0 +1,12 @@
+{
+  "name": "sinistersnare.github.io",
+  "private": true,
+  "version": "2.3.1",
+  "scripts": {
+    "build:react": "for d in applications/*; do if [ -d \"$d\" ]; then pnpm -C \"$d\" build || exit 1; fi; done",
+    "build:zola": "zola build",
+    "postbuild:react": "for d in applications/*; do name=\"$(basename \"$d\")\"; out=\"public/$name\"; rm -rf \"$out\"; mkdir -p \"$out\"; if [ -d \"$d/dist\" ]; then cp -R \"$d/dist/\"* \"$out/\"; fi; done",
+    "build": "pnpm run build:react && pnpm run build:zola && pnpm run postbuild:react",
+    "serve": "zola serve"
+  }
+}

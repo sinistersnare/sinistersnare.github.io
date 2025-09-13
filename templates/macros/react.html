@@ -1,0 +1,16 @@
+{% macro vite_app(name, mount_path) %}
+  {# TODO: I dont really like the hardcoded `dist` here, but its fine for now... #}
+  {% set manifest_path = "applications/" ~ name ~ "/dist/manifest.json" %}
+  {% set manifest = load_data(path=manifest_path, required=false) %}
+  {% if manifest %}
+    {% set entry = manifest['index.html'] %}
+    {% if entry.css %}
+      {% for css_file in entry.css %}
+        <link rel="stylesheet" href="{{ mount_path }}/{{ css_file }}">
+      {% endfor %}
+    {% endif %}
+    <script type="module" src="{{ mount_path }}/{{ entry.file }}"></script>
+  {% else %}
+    <div> Build error: Manifest not found for {{ name }} at {{ manifest_path }} </div>
+  {% endif %}
+{% endmacro %}

@@ -25,5 +25,5 @@ show_word_count = false
 menu = [
     { text = "yap", link = "/post" },
     { text = "now", link = "/about" },
-    { text = "code", link = "https://github.com/sinistersnare" },
+    { text = "code", link = "/code" },
 ]
