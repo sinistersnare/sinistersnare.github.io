@@ -1,5 +1,5 @@
 {% macro vite_app(name, mount_path) %}
-  {# TODO: I dont really like the hardcoded `dist` here, but its fine for now... #}
+  {# Load the Vite manifest emitted at applications/<name>/dist (copied to public/<name> during build). #}
   {% set manifest_path = "applications/" ~ name ~ "/dist/manifest.json" %}
   {% set manifest = load_data(path=manifest_path, required=false) %}
   {% if manifest %}
@@ -11,6 +11,6 @@
     {% endif %}
     <script type="module" src="{{ mount_path }}/{{ entry.file }}"></script>
   {% else %}
-    <div> Build error: Manifest not found for {{ name }} at {{ manifest_path }} </div>
+    <div> Build error: Manifest not found for {{ name }} at {{ manifest_path }}. </div>
   {% endif %}
 {% endmacro %}

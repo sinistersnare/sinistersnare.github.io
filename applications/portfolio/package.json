@@ -1,0 +1,48 @@
+{
+  "name": "portfolio",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev:static": "vite build --watch --emptyOutDir",
+    "build": "vite build",
+    "build:debug": "vite build --mode development --minify false --sourcemap inline",
+    "preview": "vite preview",
+    "build:rag": "node ./scripts/build-rag.mjs",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "dependencies": {
+    "@finos/perspective": "^3.8.0",
+    "@finos/perspective-react": "^3.8.0",
+    "@finos/perspective-viewer": "^3.8.0",
+    "@finos/perspective-viewer-d3fc": "^3.8.0",
+    "@finos/perspective-viewer-datagrid": "^3.8.0",
+    "@google/generative-ai": "^0.21.0",
+    "@monaco-editor/react": "^4.6.0",
+    "@reduxjs/toolkit": "^2.2.7",
+    "@xenova/transformers": "^2.17.2",
+    "dompurify": "^3.2.6",
+    "framer-motion": "^11.3.31",
+    "marked": "^16.3.0",
+    "monaco-editor": "^0.52.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-redux": "^9.1.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.9",
+    "@types/react": "^18.2.56",
+    "@types/react-dom": "^18.2.19",
+    "@vitejs/plugin-react": "^4.3.1",
+    "eslint": "^9.12.0",
+    "eslint-plugin-react": "^7.35.0",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "prettier": "^3.3.3",
+    "typescript": "5.6.2",
+    "typescript-eslint": "^8",
+    "vite": "^4.5.3"
+  }
+}

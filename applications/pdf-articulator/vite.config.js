@@ -9,6 +9,12 @@ export default defineConfig({
     outDir: 'dist',
     emptyOutDir: true,
     manifest: true,
+    sourcemap: true,
+    minify: 'esbuild',
+    cssMinify: process.env.VITE_NO_CSS_MINIFY === 'true' ? false : 'esbuild',
+    esbuild: {
+      keepNames: true,
+    },
     rollupOptions: {
       output: {
         manualChunks: {

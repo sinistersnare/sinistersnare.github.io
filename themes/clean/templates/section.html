@@ -21,7 +21,7 @@
             {% if page.draft %}
                 DRAFT:
             {% endif %}
-            <a href="{{ page.permalink }}">{{ macros::title_or_last(component=page, offset=0) }}</a>
+            <a href="{{ page.permalink | replace(from=config.base_url, to='') }}">{{ macros::title_or_last(component=page, offset=0) }}</a>
         </li>
     {% endfor %}
 </ul>

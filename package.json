@@ -3,10 +3,20 @@
   "private": true,
   "version": "2.3.1",
   "scripts": {
+    "build:rag": "pnpm -C applications/portfolio run build:rag",
     "build:react": "for d in applications/*; do if [ -d \"$d\" ]; then pnpm -C \"$d\" build || exit 1; fi; done",
+    "build:react:debug": "for d in applications/*; do if [ -d \"$d\" ]; then (pnpm -C \"$d\" run build:debug || pnpm -C \"$d\" build) || exit 1; fi; done",
     "build:zola": "zola build",
     "postbuild:react": "for d in applications/*; do name=\"$(basename \"$d\")\"; out=\"public/$name\"; rm -rf \"$out\"; mkdir -p \"$out\"; if [ -d \"$d/dist\" ]; then cp -R \"$d/dist/\"* \"$out/\"; fi; done",
-    "build": "pnpm run build:react && pnpm run build:zola && pnpm run postbuild:react",
-    "serve": "zola serve"
+    "build": "pnpm run build:react && pnpm run build:rag && pnpm run build:zola && pnpm run postbuild:react",
+    "build:debug": "pnpm run build:react:debug && pnpm run build:rag && pnpm run build:zola && pnpm run postbuild:react",
+    "serve": "pnpm run build && python3 -m http.server -d public 1111",
+    "serve:debug": "pnpm run build:debug && python3 -m http.server -d public 1111",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "pnpm -r --if-present run lint"
+  },
+  "devDependencies": {
+    "prettier": "^3.6.2"
   }
 }

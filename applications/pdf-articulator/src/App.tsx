@@ -179,8 +179,8 @@ const App: React.FC = () => {
               const destArray = Array.isArray(dest)
                 ? dest
                 : dest
-                ? await pdf.getDestination(dest)
-                : null;
+                  ? await pdf.getDestination(dest)
+                  : null;
               if (!destArray || !destArray[0]) return undefined;
               const pageIndex = await pdf.getPageIndex(destArray[0]);
               return pageIndex + 1; // 1-based
@@ -335,7 +335,11 @@ const App: React.FC = () => {
         const parts = firstAuthor.split(/\s+/).filter(Boolean);
         return (parts[parts.length - 1] || 'Document').trim();
       };
-      const toSafePart = (s: string) => s.replace(/[\\/:*?"<>|]+/g, '').replace(/\s+/g, ' ').trim();
+      const toSafePart = (s: string) =>
+        s
+          .replace(/[\\/:*?"<>|]+/g, '')
+          .replace(/\s+/g, ' ')
+          .trim();
       const lastName = toSafePart(deriveLastName(chosenAuthor));
       const cleanTitle = toSafePart(chosenTitle);
       const fileName = `${lastName} - ${cleanTitle}.pdf`;

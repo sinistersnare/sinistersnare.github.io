@@ -16,4 +16,3 @@ Infrastructure is what changes the world. To that end I work to change the world
 New York City based!
 
 Contact me via email: `my name @ this domain`
-

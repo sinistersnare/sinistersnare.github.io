@@ -1,0 +1,13 @@
+# Ignore Zola/Tera templates (Prettier HTML parser can't handle template tags)
+templates/**
+themes/**
+
+# Build outputs
+public/**
+applications/**/dist/**
+
+# Misc
+pnpm-lock.yaml
+
+# Content: avoid reformatting KaTeX-heavy Markdown
+content/post/**

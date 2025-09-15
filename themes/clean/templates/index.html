@@ -29,7 +29,7 @@
             <header class="mainpage-header">
                 <h1>The (Site of) Davis</h1>
                 {% for item in config.extra.menu %}
-                <a class="big-link" href="{{ item.link }}">{{ item.text }}</a>
+                <a class="big-link" href="{{ item.link | replace(from=config.base_url, to='') }}">{{ item.text }}</a>
                 {% endfor %}
             </header>
         {% endblock body %}

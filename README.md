@@ -17,14 +17,14 @@ This will create a test-server at `http://127.0.0.1:1111`
 
 Now write, and changes will be reflected.
 
-## Development ##
+## Development
 
 This repository contains code that must be built and appended onto the zola build.
 Specifically, the `applications/` directory is full of single-page react apps.
 
 To build and run the site from scratch:
 
-1) Prerequisites
+1. Prerequisites
 
 - Node.js 24 and npm
 - PNPM (uses Corepack) — if not available, enable via:
@@ -34,9 +34,9 @@ corepack enable
 ```
 
 - Zola static site generator
-	- Install from https://www.getzola.org/documentation/getting-started/installation/
+  - Install from https://www.getzola.org/documentation/getting-started/installation/
 
-2) Install dependencies
+2. Install dependencies
 
 ```bash
 # From repo root
@@ -45,18 +45,19 @@ pnpm install --recursive
 
 This will install dependencies for the root and each app under `applications/*`.
 
-3) Build everything
+3. Build everything
 
 ```bash
 pnpm run build
 ```
 
 What this does:
+
 - Builds all React apps in `applications/*` (emits each app’s `dist/`)
 - Builds the Zola site into `public/`
 - Copies each app’s built files into `public/<app>/` so they’re served alongside the site
 
-4) Serve locally
+4. Serve locally
 
 ```bash
 pnpm run serve
@@ -71,6 +72,11 @@ zola check
 ```
 
 If you edit or add an app under `applications/`, check its README for information on developing it.
+
+Included apps:
+
+- applications/pdf-articulator — PDF editing demo embedded via Zola at /code/pdf-articulator/
+- applications/portfolio — React + Redux SPA with the Docent chatbot at /code/portfolio/
 
 ## Releasing The Site
 
