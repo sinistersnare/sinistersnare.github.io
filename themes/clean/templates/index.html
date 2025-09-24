@@ -9,13 +9,18 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="referrer" content="no-referrer">
 
-        <link rel="stylesheet" href="{{ get_url(path='fonts.css') }}">
-        <link rel="stylesheet" href="{{ get_url(path='index.css') }}">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Fleur+De+Leah&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@200..900&display=swap" rel="stylesheet">
+        <link rel="preload" href="{{ get_url(path='fonts/Roboto-Regular.ttf') | replace(from=config.base_url, to='') }}" as="font" type="font/ttf" crossorigin>
+        <link rel="stylesheet" href="{{ get_url(path='fonts.css') | replace(from=config.base_url, to='') }}">
+        <link rel="stylesheet" href="{{ get_url(path='index.css') | replace(from=config.base_url, to='') }}">
 
         <title>{% block htmltitle %}{{ config.title }}{% endblock htmltitle %}</title>
 
         {% if config.generate_feed %}
-            <link rel="alternate" type="application/rss+xml" title="RSS" href="{{ get_url(path='atom.xml') }}">
+            <link rel="alternate" type="application/rss+xml" title="RSS" href="{{ get_url(path='atom.xml') | replace(from=config.base_url, to='') }}">
         {% endif %}
 
         {% if config.extra.katex_enable %}
@@ -27,7 +32,7 @@
     <body>
         {% block body %}
             <header class="mainpage-header">
-                <h1>The (Site of) Davis</h1>
+                <h1 class="page-title">{{ config.title }}</h1>
                 {% for item in config.extra.menu %}
                 <a class="big-link" href="{{ item.link | replace(from=config.base_url, to='') }}">{{ item.text }}</a>
                 {% endfor %}

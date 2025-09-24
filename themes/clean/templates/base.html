@@ -3,6 +3,13 @@
 {% import "macros.html" as macros %}
 
 {% block htmltitle %}
+    {% if page %}
+        {{ page.title }}
+    {% elif section %}
+        {{ macros::title_or_last(component=section) }}
+    {% else %}
+        {{ config.title }}
+    {% endif %}
 {% endblock htmltitle %}
 
 {% block body %}
@@ -10,5 +17,4 @@
     <div class="section" id="page-content">
         {% block content %}{% endblock content %}
     </div>
-    {{ macros::menu(base="bottom") }}
 {% endblock body %}

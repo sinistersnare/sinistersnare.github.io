@@ -6,7 +6,7 @@ build_search_index = false
 generate_feeds = true
 
 taxonomies = [{ name = "tags", rss = true }]
-title = "The (Website of) Davis"
+title = "Davis"
 
 ignored_content = ["inversion.xml", "threaded.xml"]
 

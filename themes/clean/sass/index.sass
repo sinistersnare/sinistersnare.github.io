@@ -101,27 +101,37 @@ hr
     align-items: center
     text-align: center
 
-.bottom-menu
-    padding-top: 3rem
-    margin-bottom: 3rem
-
 // support for dividers between nav items.
-.bottom-nav-item
+.nav-item
     display: inline-block
 
     // this excludes the first item by using an adjacency selector (the `+`).
-    &+.bottom-nav-item
+    &+nav-item
         &:before
-            content: '·'
+            content: none
 
-// support for dividers between nav items.
-.top-nav-item
-    display: inline-block
+.nav-list
+    display: flex
+    justify-content: center
+    align-items: center
+    column-gap: 2rem
+    row-gap: 0
+    padding: 0
+    margin: 0 0 40px 0
+    -webkit-overflow-scrolling: touch
 
-    // this excludes the first item by using an adjacency selector (the `+`).
-    &+.top-nav-item
-        &:before
-            content: '·'
+.nav-link
+    white-space: nowrap
+    // Make nav text larger overall
+    font-size: clamp(1.2rem, 1.4vw + 0.6rem, 2rem)
+    border-bottom: none
+
+// Make the nav title use the fancy site title font but keep it smaller than the hero header
+.nav-link.page-title
+    font-family: "Fleur De Leah", cursive
+    font-weight: 400
+    font-style: normal
+    font-size: clamp(1.5rem, 2.5vw + 0.5rem, 2.75rem)
 
 .footer
     width: 100%
@@ -155,8 +165,13 @@ hr
     margin-top: calc(1rem + 4vw)
 
 header h1
-    font-size: 36px
+    // Responsive size: up to 6rem, but shrink on small viewports
+    font-size: 6rem
+
+.page-title
+    font-family: "Fleur De Leah", cursive
+    font-weight: 400
+    font-style: normal
 
 body
-    max-width: min(60rem, 100vw)
     height: 100%

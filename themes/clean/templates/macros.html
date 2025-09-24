@@ -12,15 +12,15 @@
 {% macro menu(base) %}
     <div class="section menu {{ base }}-menu">
         <nav class="{{ base }}-menu-nav">
-            <ul class="{{ base }}-nav-list">
-                <li class="{{ base }}-nav-item">
-                    <a class="{{ base }}-nav-link" href="/">
-                        home
+            <ul class="nav-list">
+                <li class="nav-item">
+                    <a class="nav-link page-title" href="/">
+                        {{ config.title }}
                     </a>
                 </li>
                     {% for link in config.extra.menu %}
-                    <li class="{{ base }}-nav-item">
-                        <a class="{{ base }}-nav-link" href="{{ link.link }}">{{ link.text }}</a>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ link.link }}">{{ link.text }}</a>
                     </li>
                     {% endfor %}
             </ul>

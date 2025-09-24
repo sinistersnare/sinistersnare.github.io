@@ -87,3 +87,22 @@ which will automatically build and publish this site, as long as the zola build 
 zola check
 git push origin master
 ```
+
+
+## TODO:
+
+https://goodinternetmagazine.com/my-website-is-ugly-because-i-made-it/
+have some fun with the frontpage
+
+```css
+li:nth-child(4n + 0) { transform: rotate(1deg); }
+li:nth-child(4n + 1) { transform: rotate(-0.6deg); }
+li:nth-child(4n + 2) { transform: rotate(0.5deg); }
+li:nth-child(4n + 3) { transform: rotate(-0.75deg); }
+li:nth-child(6n + 0) { font-family: Times; }
+li:nth-child(6n + 1) { font-family: Helvetica; }
+li:nth-child(6n + 2) { font-family: Georgia; }
+li:nth-child(6n + 3) { font-family: Times; }
+li:nth-child(6n + 4) { font-family: Arial; }
+li:nth-child(6n + 5) { font-family: "Trebuchet MS"; }
+```
