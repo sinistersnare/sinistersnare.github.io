@@ -8,6 +8,7 @@ draft = false
 tags = ["PLT", "Computer Science", "Semantics", "Crafting Semantics"]
 [extra]
 generate_toc = false
+use_katex = true
 +++
 
 This series of posts revolves around creating operational semantics of the Scheme programming language from the ground up, starting with the lambda calculus.

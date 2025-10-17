@@ -36,11 +36,17 @@
     href="{{ get_url(path='atom.xml') | replace(from=config.base_url, to='') }}">
   {% endif %}
 
-  {% if config.extra.katex_enable %}
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css" crossorigin="anonymous">
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.js" crossorigin="anonymous"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/contrib/mathtex-script-type.min.js"
-    crossorigin="anonymous"></script>
+  {# Per-page/section KaTeX opt-in: set `use_katex = true` in front matter #}
+  {% set katex_on = false %}
+  {% if page and page.extra and page.extra.use_katex %}
+    {% set katex_on = true %}
+  {% elif section and section.extra and section.extra.use_katex %}
+    {% set katex_on = true %}
+  {% endif %}
+  {% if katex_on %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.js" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/contrib/mathtex-script-type.min.js" crossorigin="anonymous"></script>
   {% endif %}
 </head>
 

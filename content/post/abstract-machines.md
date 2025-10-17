@@ -6,6 +6,7 @@ date = 2020-11-09T12:15:00-05:00
 draft = false
 [extra]
 generate_toc = true
+use_katex = true
 [taxonomies]
 tags = ["PLT", "Computer Science", "Interpreters", "Abstract Machines", "Continuations"]
 +++
