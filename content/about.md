@@ -5,6 +5,7 @@ slug = "about"
 aliases = ["/contact"]
 [extra]
 no_header = true
+hide_reading_time = true
 +++
 
 # About
@@ -15,4 +16,4 @@ Infrastructure is what changes the world. To that end I work to change the world
 
 New York City based!
 
-Contact me via email: `my name @ this domain`
+Contact me via email: `hello @ this domain`

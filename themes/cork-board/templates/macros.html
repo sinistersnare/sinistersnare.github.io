@@ -1,0 +1,25 @@
+{% macro title_or_last(component, offset=2) %}
+  {% set length = component.components | length %}
+  {% set name = component.components | slice(end=length - offset) | last %}
+  {{ component.title | default(value=name) }}
+{% endmacro title_or_last %}
+
+{% macro format_date(date) %}
+  {% set date_format = config.extra.date_format | default(value="%a %b %e, %Y") %}
+  {{ date | date(format=date_format) }}
+{% endmacro format_date %}
+
+{% macro menu(base="top") %}
+  <div class="section menu {{ base }}-menu">
+    <nav class="{{ base }}-menu-nav">
+      <ul class="nav-list">
+        <li class="nav-item">
+          <a class="nav-link site-title" href="/">{{ config.title }}</a>
+        </li>
+        {% for link in config.extra.menu %}
+        <li class="nav-item"><a class="nav-link" href="{{ link.link }}">{{ link.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </nav>
+  </div>
+{% endmacro menu %}

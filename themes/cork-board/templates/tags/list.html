@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block htmltitle %}Tags · {{ config.title }}{% endblock htmltitle %}
+
+{% block content %}
+  <section class="board">
+    <h1>Tags</h1>
+    <ul class="tag-list">
+      {% for term in terms %}
+      <li>
+        <a href="{{ term.permalink | replace(from=config.base_url, to='') }}">#{{ term.name }}</a>
+        <span class="count">({{ term.pages | length }})</span>
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+{% endblock content %}

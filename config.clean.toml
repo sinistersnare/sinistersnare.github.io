@@ -1,6 +1,6 @@
 base_url = "https://thedav.is"
 
-theme = "cork-board"
+theme = "clean"
 compile_sass = true
 build_search_index = false
 generate_feeds = true
@@ -11,6 +11,8 @@ title = "Davis"
 ignored_content = ["inversion.xml", "threaded.xml"]
 
 [markdown]
+# Whether to do syntax highlighting
+# Theme can be customised by setting the `highlight_theme` variable to a theme supported by Zola
 highlight_code = true
 highlight_theme = "dracula"
 

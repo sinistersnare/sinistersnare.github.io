@@ -1,0 +1,300 @@
+/* Basic Resets */
+:root {
+  --cork-color: #D2B48C;
+  --paper-color: #fdf5e6;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Simple pages (non-home): reuse cork background, provide a clean content container */
+body.cork.simple {
+  background-color: #d2b48c;
+  background-image: url("../images/cork-texture.svg");
+  background-size: 240px 240px;
+  background-repeat: repeat;
+}
+.board-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  backdrop-filter: blur(2px);
+}
+.board-header-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+}
+.site-title {
+  font-family: 'Fleur De Leah', cursive;
+  font-weight: 400;
+  font-size: 30px;
+  color: #2b2b2b;
+  text-decoration: none;
+}
+.board-nav .nav-link { margin-left: 1rem; color: #2b2b2b; text-decoration: none; }
+.board-nav .nav-link:hover { text-decoration: underline; }
+.board-content {
+  max-width: 1100px;
+  margin: 1rem auto 2rem;
+  background: rgba(255,255,255,0.9);
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  padding: 1.25rem;
+}
+@media (max-width: 768px) {
+  .board-content { margin: 0.5rem; padding: 1rem; }
+}
+
+/* Page content primitives */
+.note .note-title { margin: 0 0 0.25rem; }
+.note .note-meta { color: #666; font-size: 0.9rem; }
+.note .tags { margin-top: 0.5rem; }
+.note .tag { margin-right: 0.5rem; color: #333; text-decoration: none; }
+.note .tag:hover { text-decoration: underline; }
+.note .note-content { margin-top: 1rem; line-height: 1.65; }
+.note .note-content img { max-width: 100%; height: auto; }
+.note .note-content pre { overflow: auto; padding: 0.75rem; background: #f7f7f7; border-radius: 6px; }
+.note .note-content code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+
+/* Section listing */
+.board .board-intro { margin-bottom: 1rem; }
+.board-grid { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem; }
+.pin-note { display: block; background: #fff; border-radius: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.12); padding: 0.75rem; color: inherit; text-decoration: none; }
+.pin-note:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.18); }
+.pin-title { margin: 0 0 0.25rem; font-size: 1.05rem; }
+.pin-summary { margin: 0.5rem 0 0; color: #555; }
+
+/* Home note-paper specific link tweaks */
+note-paper.about-note a {
+  text-decoration: none;
+  color: inherit;
+}
+note-paper.about-note a:hover,
+note-paper.about-note a:focus {
+  text-decoration: none;
+}
+note-paper.blog-note h3 a {
+  text-decoration: none;
+  color: inherit;
+  display: block; /* make the entire row clickable */
+  padding: 2px 0; /* small tap target padding */
+}
+note-paper.blog-note h3 a:hover,
+note-paper.blog-note h3 a:focus {
+  text-decoration: none;
+}
+/* keep the underline/border on the row, not the link, to avoid layout issues */
+note-paper.blog-note h3 {
+  margin: 0 0 0.25rem;
+  border-bottom: 1px solid rgba(0,0,0,0.15);
+}
+
+.corkboard-wrapper {
+    display: flex;
+    justify-content: center;
+}
+.corkboard-frame {
+  --frame: 24px;
+  position: relative;
+  padding: var(--frame);
+  margin: 10px;
+  border-radius: 10px;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.2);
+  display: inline-block; /* shrink-wrap to its contents so total width = surface + 2*frame */
+
+  /* Simple bright birch look with soft stripes and mitered corner seams */
+  background-color: #f3d8b5; /* bright birch base */
+  background-image:
+    /* Corner seam lines (4 corners) */
+    linear-gradient(45deg, transparent calc(50% - 1px), rgba(120,85,50,0.22) 50%, transparent calc(50% + 1px)),
+    linear-gradient(135deg, transparent calc(50% - 1px), rgba(120,85,50,0.22) 50%, transparent calc(50% + 1px)),
+    linear-gradient(315deg, transparent calc(50% - 1px), rgba(120,85,50,0.22) 50%, transparent calc(50% + 1px)),
+    linear-gradient(225deg, transparent calc(50% - 1px), rgba(120,85,50,0.22) 50%, transparent calc(50% + 1px)),
+    /* Soft vertical shading */
+    linear-gradient(180deg, rgba(255,255,255,0.10), rgba(0,0,0,0.06));
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, repeat;
+  background-size: var(--frame) var(--frame), var(--frame) var(--frame), var(--frame) var(--frame), var(--frame) var(--frame), cover, auto;
+  background-position: left top, right top, left bottom, right bottom, center, left top;
+}
+.corkboard-surface {
+  /* Base cork color + seamless SVG texture */
+  background-color: #d2b48c;
+  background-image: url("../images/cork-texture.svg");
+  background-size: 240px 240px; /* matches the SVG viewBox for crisp tiling */
+  background-repeat: repeat;
+  border-radius: 6px;
+  position: relative; /* positioning context for tack-scatter overlay */
+  /* Ensure the surface + frame + wrapper padding always fits the viewport */
+  width: min(1100px, calc(100vw - 2rem - 2*var(--frame)));
+  min-height: 60vh;
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.2);
+}
+.corkboard-surface svg,
+.corkboard-surface .corkboard-surface {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: 6px;
+}
+.corkboard-surface cork-board { display: block; padding: 2rem 1rem; }
+
+.note-paper:hover, .polaroid:hover, .flyer:hover {
+  box-shadow: 8px 8px 15px rgba(0,0,0,0.3);
+}
+
+.note-paper {
+  background-color: var(--paper-color);
+  width: 200px;
+  height: 180px;
+}
+
+.polaroid {
+  background-color: white;
+  width: 220px;
+  padding: 15px 15px 50px 15px;
+}
+.polaroid-image-placeholder {
+  width: 100%;
+  height: 180px;
+  background-color: #e0e0e0;
+  border: 1px solid #ccc;
+}
+.stacked-polaroids-link img[slot="image"] { display: block; max-width: 100%; height: auto; }
+.polaroid span {
+  display: block;
+  text-align: center;
+  margin-top: 15px;
+  font-family: 'Courier New', monospace;
+  font-size: 1.2rem;
+}
+
+.flyer {
+  background-color: #add8e6;
+  width: 200px;
+  height: 250px;
+  border-left: 5px solid #ff6347;
+}
+
+/* HTMX Content Pane (Overlay) */
+#content-pane {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  z-index: 100;
+}
+
+#content-pane:not(:empty) {
+  opacity: 1;
+  visibility: visible;
+}
+
+.content-wrapper {
+  background-color: var(--paper-color);
+  padding: 2rem;
+  border-radius: 5px;
+  max-width: 800px;
+  width: 90%;
+  position: relative;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  color: #555;
+}
+
+/* Stacked Polaroids Cluster */
+.board-item-stacked {
+  display: grid;
+  place-items: center;
+}
+
+/* Utility: ensure children can absolutely position inside board tiles */
+.pos-relative { position: relative; }
+
+.stacked-polaroids-link {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: min(400px, 92vw);
+  aspect-ratio: 3 / 1.8;
+  text-decoration: none;
+  color: inherit;
+}
+
+.stacked-polaroids-link .polaroid-wrapper {
+  position: absolute;
+  transition: transform 200ms ease, filter 200ms ease;
+}
+
+/* Pre-upgrade fallback to prevent image jump before custom element defines */
+polaroid-card { display: block; width: 220px; }
+polaroid-card:not(:defined) [slot="image"] {
+  display: block;
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+}
+/* Reserve space for wrappers to avoid layout shift */
+.stacked-polaroids-link .polaroid-wrapper { width: 220px; min-height: 232px; }
+
+/* Base positions (centered stack) */
+.stacked-polaroids-link .polaroid-center {
+  z-index: 2;
+}
+.stacked-polaroids-link .polaroid-left {
+  z-index: 1;
+  transform: translateX(-16%) rotate(-6deg);
+}
+.stacked-polaroids-link .polaroid-right {
+  z-index: 1;
+  transform: translateX(16%) rotate(6deg);
+}
+
+/* Hover fan-out effect */
+.stacked-polaroids-link:hover .polaroid-center {
+  transform: translateY(-6%) scale(1.04);
+  filter: drop-shadow(0 12px 14px rgba(0,0,0,0.2));
+}
+.stacked-polaroids-link:hover .polaroid-left {
+  transform: translateX(-38%) rotate(-12deg) translateY(-6%);
+  filter: drop-shadow(0 12px 14px rgba(0,0,0,0.2));
+}
+.stacked-polaroids-link:hover .polaroid-right {
+  transform: translateX(38%) rotate(12deg) translateY(-6%);
+  filter: drop-shadow(0 12px 14px rgba(0,0,0,0.2));
+}
+
+/* Responsiveness: hide outer cards on small screens */
+@media (max-width: 768px) {
+  .stacked-polaroids-link .polaroid-left,
+  .stacked-polaroids-link .polaroid-right {
+    display: none;
+  }
+}

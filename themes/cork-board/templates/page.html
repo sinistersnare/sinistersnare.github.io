@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% import "macros.html" as macros %}
+
+{% block htmltitle %}
+  {{ page.title }} · {{ config.title }}
+{% endblock htmltitle %}
+
+{% block content %}
+  <article class="note">
+    {% if not page.extra.no_header %}
+    <header class="note-header">
+      <h1 class="note-title">{{ page.title }}</h1>
+      <div class="note-meta">
+        {% if page.date %}
+          <time>{{ macros::format_date(date=page.date) }}</time>
+        {% endif %}
+        {% if config.extra.show_word_count and not page.extra.hide_word_count %}
+          <span class="sep">·</span> {{ page.word_count }} words
+        {% endif %}
+        {% if config.extra.show_reading_time and not page.extra.hide_reading_time %}
+          <span class="sep">·</span> {{ page.reading_time }} min
+        {% endif %}
+      </div>
+      {% if page.taxonomies.tags %}
+      <nav class="tags">
+        {% for tag in page.taxonomies.tags %}
+        <a class="tag" href="{{ get_taxonomy_url(kind='tags', name=tag) }}">#{{ tag }}</a>
+        {% endfor %}
+      </nav>
+      {% endif %}
+    </header>
+    {% endif %}
+    <div class="note-content">
+      {{ page.content | safe }}
+    </div>
+  </article>
+{% endblock content %}

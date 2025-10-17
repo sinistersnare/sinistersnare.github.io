@@ -1,0 +1,62 @@
+{% import "macros.html" as macros %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="referrer" content="no-referrer" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fleur+De+Leah&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@200..900&display=swap" rel="stylesheet">
+
+  {% if config.compile_sass %}
+  <link rel="stylesheet" href="{{ get_url(path='index.css') | replace(from=config.base_url, to='') }}" />
+  {% endif %}
+  <link rel="stylesheet" href="{{ get_url(path='css/styles.css') | replace(from=config.base_url, to='') }}" />
+
+  <title>
+    {% if page %}
+      {{ page.title }} · {{ config.title }}
+    {% elif section %}
+      {{ macros::title_or_last(component=section) }} · {{ config.title }}
+    {% else %}
+      {{ config.title }}
+    {% endif %}
+  </title>
+
+  {% if config.generate_feed %}
+  <link rel="alternate" type="application/rss+xml" title="RSS"
+    href="{{ get_url(path='atom.xml') | replace(from=config.base_url, to='') }}">
+  {% endif %}
+
+  {% if config.extra.katex_enable %}
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/contrib/mathtex-script-type.min.js"
+    crossorigin="anonymous"></script>
+  {% endif %}
+</head>
+
+<body class="cork simple">
+  <header class="board-header">
+    <div class="board-header-inner">
+      <a class="site-title" href="/">{{ config.title }}</a>
+      <nav class="board-nav">
+        {% for item in config.extra.menu %}
+          <a class="nav-link" href="{{ item.link | replace(from=config.base_url, to='') }}">{{ item.text }}</a>
+        {% endfor %}
+      </nav>
+    </div>
+  </header>
+  <main id="page-content" class="board-content">
+    {% block content %}{% endblock content %}
+  </main>
+
+  <script type="module" src="{{ get_url(path='js/bundle.js') | replace(from=config.base_url, to='') }}"></script>
+</body>
+
+</html>

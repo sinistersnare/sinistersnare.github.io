@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% import "macros.html" as macros %}
+
+{% block htmltitle %}
+  {{ macros::title_or_last(component=section) }} · {{ config.title }}
+{% endblock htmltitle %}
+
+{% block content %}
+  <section class="board">
+    {% if section.content %}
+      <div class="board-intro">{{ section.content | safe }}</div>
+    {% endif %}
+    <ul class="board-grid">
+      {% for page in section.pages %}
+      <li class="pin">
+        <a href="{{ page.permalink | replace(from=config.base_url, to='') }}" class="pin-note">
+          <h2 class="pin-title">{{ macros::title_or_last(component=page, offset=0) }}</h2>
+          <div class="pin-meta">
+            {% if page.date %}
+              <time>{{ macros::format_date(date=page.date) }}</time>
+            {% endif %}
+            {% if page.summary %}
+              <p class="pin-summary">{{ page.summary | safe }}</p>
+            {% endif %}
+          </div>
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+{% endblock content %}

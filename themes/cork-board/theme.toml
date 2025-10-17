@@ -1,0 +1,15 @@
+name = "cork-board"
+description = "A personal, warm cork-board theme for Zola."
+license = "MIT"
+homepage = "https://github.com/sinistersnare/sinistersnare.github.io"
+min_version = "0.4.0"
+demo = "https://thedav.is"
+
+[extra]
+show_word_count = true
+show_reading_time = true
+date_format = "%a %b %e, %Y"
+
+[author]
+name = "Davis"
+homepage = "https://thedav.is"

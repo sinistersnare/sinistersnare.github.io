@@ -1,0 +1,119 @@
+{% import "macros.html" as macros %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="referrer" content="no-referrer" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fleur+De+Leah&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@200..900&display=swap" rel="stylesheet">
+
+    {% if config.compile_sass %}
+    <link rel="stylesheet" href="{{ get_url(path='index.css') | replace(from=config.base_url, to='') }}" />
+    {% endif %}
+    <link rel="stylesheet" href="{{ get_url(path='css/styles.css') | replace(from=config.base_url, to='') }}" />
+
+    <title>{% block htmltitle %}{{ config.title }}{% endblock htmltitle %}</title>
+
+    {% if config.generate_feed %}
+    <link rel="alternate" type="application/rss+xml" title="RSS"
+        href="{{ get_url(path='atom.xml') | replace(from=config.base_url, to='') }}">
+    {% endif %}
+
+    {% if config.extra.katex_enable %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.js" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/contrib/mathtex-script-type.min.js"
+        crossorigin="anonymous"></script>
+    {% endif %}
+</head>
+
+<body class="cork">
+    {% block body %}
+    <div class="corkboard-wrapper">
+        <div class="corkboard-frame">
+            <div class="corkboard-surface">
+                <tack-scatter layer="over" count="20" distribute="random" colors="red,yellow,green,purple"></tack-scatter>
+                <cork-board>
+                    <board-item class="pos-relative">
+                        <profile-card tack="purple">
+                            <img slot="avatar" width="100" height="100"
+                                src="https://gravatar.com/avatar/902b873be144cf1e5d9636f29f6f99bfe5584f9a21e5d5d4a7299b4b3042bfe9?s=1000"
+                                alt="Davis">
+                            <span slot="name">Davis</span>
+                            <span slot="subtitle">__________________</span>
+                        </profile-card>
+                    </board-item>
+                    <board-item class="pos-relative">
+                        <tack-pin color="red"></tack-pin>
+                        <note-paper class="about-note" thumbtack="red">
+                            <a href="/about">
+                                <h3>A Little About Me</h3>
+                                <p>Who I am and what I do.</p>
+                            </a>
+                        </note-paper>
+                    </board-item>
+                    <board-item class="pos-relative">
+                        <tack-pin color="yellow"></tack-pin>
+                        <note-paper class="blog-note" thumbtack="yellow" variant="sheet">
+                            <h3><a href="/post">yapping</a></h3>
+                            <div>latest posts</div>
+                            {% set post_section = get_section(path="post/_index.md") %}
+                            {% set recent = post_section.pages | sort(attribute="date") | reverse %}
+                            <ul>
+                                {% for page in recent | slice(end=3) %}
+                                    <li>
+                                        <a href="{{ page.permalink | replace(from=config.base_url, to='') }}">{{ page.title }}</a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </note-paper>
+                    </board-item>
+                    <board-item class="board-item-stacked">
+                        <a class="stacked-polaroids-link" href="/code">
+                            <div class="polaroid-wrapper polaroid-left">
+                                <polaroid-card pin="top" tack="red">
+                                    <img slot="image" width="220" height="160"
+                                        src="{{ get_url(path='images/chart-light.png') | replace(from=config.base_url, to='') }}"
+                                        alt="Tools preview left" />
+                                    <span slot="caption">DATA!!</span>
+                                </polaroid-card>
+                            </div>
+                            <div class="polaroid-wrapper polaroid-center">
+                                <polaroid-card pin="top" tack="yellow">
+                                    <img slot="image" width="220" height="160"
+                                        src="{{ get_url(path='images/shed.png') | replace(from=config.base_url, to='') }}"
+                                        alt="Workshop Shed" />
+                                    <span slot="caption">Tools &amp; Projects</span>
+                                </polaroid-card>
+                            </div>
+                            <div class="polaroid-wrapper polaroid-right">
+                                <polaroid-card pin="top" tack="green">
+                                    <img slot="image" width="220" height="160"
+                                        src="{{ get_url(path='images/tools.png') | replace(from=config.base_url, to='') }}"
+                                        alt="Tools grid" />
+                                    <span slot="caption">&minus;&minus;&gt; TOOLS &minus;&minus;&gt;</span>
+                                </polaroid-card>
+                            </div>
+                        </a>
+                    </board-item>
+                </cork-board>
+            </div>
+        </div>
+    </div>
+
+    <div id="content-pane"></div>
+
+    <script src="https://unpkg.com/htmx.org@1.9.12"
+        integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2XoQrxeTUQyRjrOnlCoYta87iKBWq3EsdM2"
+        crossorigin="anonymous"></script>
+    <script type="module" src="{{ get_url(path='js/bundle.js') | replace(from=config.base_url, to='') }}"></script>
+    {% endblock body %}
+</body>
+
+</html>
