@@ -13,6 +13,7 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   min-height: 100vh;
   overflow-x: hidden;
+  background: #1a1422;
 }
 
 /* Simple pages (non-home): reuse cork background, provide a clean content container */
