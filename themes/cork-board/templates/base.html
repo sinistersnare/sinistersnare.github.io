@@ -7,6 +7,9 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="referrer" content="no-referrer" />
+  {# SEO: Meta description from page/section when available, else fallback #}
+  {% set meta_description = page.description | default(value=section.description | default(value=config.extra.description | default(value=config.title))) %}
+  <meta name="description" content="{{ meta_description | striptags | trim | truncate(length=160, end='…') }}" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

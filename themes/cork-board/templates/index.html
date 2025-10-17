@@ -7,6 +7,9 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="referrer" content="no-referrer" />
+    {# SEO: Meta description for homepage #}
+    {% set meta_description = config.extra.description | default(value=config.title) %}
+    <meta name="description" content="{{ meta_description | striptags | trim | truncate(length=160, end='…') }}" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -79,7 +82,7 @@
                             <div class="polaroid-wrapper polaroid-left">
                                 <polaroid-card pin="top" tack="red">
                                     <img slot="image" width="220" height="160"
-                                        src="{{ get_url(path='images/chart-light.png') | replace(from=config.base_url, to='') }}"
+                                        src="{{ get_url(path='images/chart-light.webp') | replace(from=config.base_url, to='') }}"
                                         alt="Tools preview left" />
                                     <span slot="caption">DATA!!</span>
                                 </polaroid-card>
@@ -87,7 +90,7 @@
                             <div class="polaroid-wrapper polaroid-center">
                                 <polaroid-card pin="top" tack="yellow">
                                     <img slot="image" width="220" height="160"
-                                        src="{{ get_url(path='images/shed.png') | replace(from=config.base_url, to='') }}"
+                                        src="{{ get_url(path='images/shed.webp') | replace(from=config.base_url, to='') }}"
                                         alt="Workshop Shed" />
                                     <span slot="caption">Tools &amp; Projects</span>
                                 </polaroid-card>
@@ -95,7 +98,7 @@
                             <div class="polaroid-wrapper polaroid-right">
                                 <polaroid-card pin="top" tack="green">
                                     <img slot="image" width="220" height="160"
-                                        src="{{ get_url(path='images/tools.png') | replace(from=config.base_url, to='') }}"
+                                        src="{{ get_url(path='images/tools.webp') | replace(from=config.base_url, to='') }}"
                                         alt="Tools grid" />
                                     <span slot="caption">&minus;&minus;&gt; TOOLS &minus;&minus;&gt;</span>
                                 </polaroid-card>
@@ -107,11 +110,6 @@
         </div>
     </div>
 
-    <div id="content-pane"></div>
-
-    <script src="https://unpkg.com/htmx.org@1.9.12"
-        integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2XoQrxeTUQyRjrOnlCoYta87iKBWq3EsdM2"
-        crossorigin="anonymous"></script>
     <script type="module" src="{{ get_url(path='js/bundle.js') | replace(from=config.base_url, to='') }}"></script>
     {% endblock body %}
 </body>

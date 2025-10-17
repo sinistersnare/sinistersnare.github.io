@@ -19,6 +19,7 @@ katex_enable = true
 date_format = "%b %d, %Y"
 show_reading_time = true
 show_word_count = false
+description = "The homepage of the Davis"
 
 menu = [
     { text = "yap", link = "/post" },
