@@ -16,6 +16,45 @@ body {
   background: #1a1422;
 }
 
+/* --- Pre-upgrade fallbacks to prevent layout shift before JS loads --- */
+/* Layout the board items before <cork-board> defines */
+cork-board:not(:defined) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 100px;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 3rem;
+  min-height: 90vh; /* matches defined component for stability */
+}
+/* Ensure custom elements reserve space early */
+board-item { display: block; }
+profile-card { display: block; width: 340px; min-height: 132px; }
+@media (max-width: 480px) {
+  profile-card { width: 300px; min-height: 118px; }
+}
+note-paper { display: block; width: 280px; min-height: 200px; }
+note-paper[variant="sheet"] { width: 320px; min-height: 220px; }
+polaroid-card { display: block; width: 220px; min-height: 232px; }
+/* Already present image fallback for polaroid-card, keep it working pre-define */
+polaroid-card:not(:defined) [slot="image"] {
+  display: block;
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+}
+/* Reserve space for absolute tacks so notes don't jump on upgrade */
+note-paper { position: relative; }
+note-paper::before {
+  content: "";
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  width: 20px; height: 28px;
+  transform: translateX(-50%);
+}
+/* -------------------------------------------------------------------- */
+
 /* Simple pages (non-home): reuse cork background, provide a clean content container */
 body.cork.simple {
   background-color: #d2b48c;

@@ -1,4 +1,9 @@
+themes/cork-board/static/js
+
 public/
+
+pnpm-lock.yaml
+
 docs/
 node_modules/
 # Only ignore React build outputs, not every dist/ in the repo

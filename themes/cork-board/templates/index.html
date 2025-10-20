@@ -46,7 +46,7 @@
                     <board-item class="pos-relative">
                         <profile-card tack="purple">
                             <img slot="avatar" width="100" height="100"
-                                src="https://gravatar.com/avatar/902b873be144cf1e5d9636f29f6f99bfe5584f9a21e5d5d4a7299b4b3042bfe9?s=1000"
+                                src="{{ get_url(path='images/gravatar.webp') | replace(from=config.base_url, to='') }}"
                                 alt="Davis">
                             <span slot="name">Davis</span>
                             <span slot="subtitle">__________________</span>

@@ -4,11 +4,11 @@ class CorkBoardEl extends HTMLElement {
     const shadowRoot = this.attachShadow({ mode: "open" });
     shadowRoot.innerHTML = `
       <style>
-        :host { display: block; position: relative; z-index: 1; }
+        :host { display: block; position: relative; z-index: 1; min-height: 90vh; }
         .container {
           display: flex;
           flex-wrap: wrap;
-          gap: 40px; /* Increased gap for better spacing */
+          gap: 100px; /* Increased gap for better spacing */
           justify-content: center;
           align-items: space-around;
           padding: 3rem;
