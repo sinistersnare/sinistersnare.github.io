@@ -13,7 +13,11 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   min-height: 100vh;
   overflow-x: hidden;
-  background: #1a1422;
+  /* Realistic wall: brick running bond */
+  background-color: #ded8cc; /* mortar tone fallback */
+  background-image: url("../images/brick-wall.svg");
+  background-size: 120px 56px; /* matches SVG for crisp tiling */
+  background-repeat: repeat;
 }
 
 /* --- Pre-upgrade fallbacks to prevent layout shift before JS loads --- */
@@ -25,7 +29,6 @@ cork-board:not(:defined) {
   justify-content: center;
   align-items: flex-start;
   padding: 3rem;
-  min-height: 90vh; /* matches defined component for stability */
 }
 /* Ensure custom elements reserve space early */
 board-item { display: block; }
@@ -56,10 +59,11 @@ note-paper::before {
 /* -------------------------------------------------------------------- */
 
 /* Simple pages (non-home): reuse cork background, provide a clean content container */
-body.cork.simple {
-  background-color: #d2b48c;
-  background-image: url("../images/cork-texture.svg");
-  background-size: 240px 240px;
+body.wall.simple {
+  /* Keep wall background behind content pages to retain the room feel */
+  background-color: #ded8cc;
+  background-image: url("../images/brick-wall.svg");
+  background-size: 120px 56px;
   background-repeat: repeat;
 }
 .board-header {
@@ -151,22 +155,14 @@ note-paper.blog-note h3 {
   padding: var(--frame);
   margin: 10px;
   border-radius: 10px;
-  box-shadow: 0 10px 24px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.2);
+  box-shadow: 0 14px 28px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.2);
   display: inline-block; /* shrink-wrap to its contents so total width = surface + 2*frame */
-
-  /* Simple bright birch look with soft stripes and mitered corner seams */
-  background-color: #f3d8b5; /* bright birch base */
-  background-image:
-    /* Corner seam lines (4 corners) */
-    linear-gradient(45deg, transparent calc(50% - 1px), rgba(120,85,50,0.22) 50%, transparent calc(50% + 1px)),
-    linear-gradient(135deg, transparent calc(50% - 1px), rgba(120,85,50,0.22) 50%, transparent calc(50% + 1px)),
-    linear-gradient(315deg, transparent calc(50% - 1px), rgba(120,85,50,0.22) 50%, transparent calc(50% + 1px)),
-    linear-gradient(225deg, transparent calc(50% - 1px), rgba(120,85,50,0.22) 50%, transparent calc(50% + 1px)),
-    /* Soft vertical shading */
-    linear-gradient(180deg, rgba(255,255,255,0.10), rgba(0,0,0,0.06));
-  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, repeat;
-  background-size: var(--frame) var(--frame), var(--frame) var(--frame), var(--frame) var(--frame), var(--frame) var(--frame), cover, auto;
-  background-position: left top, right top, left bottom, right bottom, center, left top;
+  /* Realistic wood frame using tiled grain */
+  background-color: #d2a579;
+  background-image: url("../images/wood-grain.svg");
+  background-size: 240px 240px;
+  background-repeat: repeat;
+  outline: 1px solid rgba(0,0,0,0.15);
 }
 .corkboard-surface {
   /* Base cork color + seamless SVG texture */
@@ -178,8 +174,7 @@ note-paper.blog-note h3 {
   position: relative; /* positioning context for tack-scatter overlay */
   /* Ensure the surface + frame + wrapper padding always fits the viewport */
   width: min(1100px, calc(100vw - 2rem - 2*var(--frame)));
-  min-height: 60vh;
-  box-shadow: inset 0 2px 6px rgba(0,0,0,0.2);
+  box-shadow: inset 0 2px 8px rgba(0,0,0,0.25), 0 1px 0 rgba(255,255,255,0.4);
 }
 .corkboard-surface svg,
 .corkboard-surface .corkboard-surface {
@@ -188,7 +183,7 @@ note-paper.blog-note h3 {
   display: block;
   border-radius: 6px;
 }
-.corkboard-surface cork-board { display: block; padding: 2rem 1rem; }
+.corkboard-surface cork-board { color: black; display: block; padding: 2rem 1rem; }
 
 .note-paper:hover, .polaroid:hover, .flyer:hover {
   box-shadow: 8px 8px 15px rgba(0,0,0,0.3);
@@ -196,14 +191,25 @@ note-paper.blog-note h3 {
 
 .note-paper {
   background-color: var(--paper-color);
+  background-image: url("../images/paper-fiber.svg");
+  background-size: 220px 220px;
+  background-repeat: repeat;
   width: 200px;
   height: 180px;
+  box-shadow: 0 12px 24px rgba(0,0,0,0.25), 0 1px 0 rgba(255,255,255,0.7) inset;
+  border-radius: 6px;
+  border: 1px solid rgba(0,0,0,0.05);
 }
 
 .polaroid {
   background-color: white;
+  background-image: url("../images/paper-fiber.svg");
+  background-size: 220px 220px;
+  background-repeat: repeat;
   width: 220px;
   padding: 15px 15px 50px 15px;
+  box-shadow: 0 12px 24px rgba(0,0,0,0.25);
+  border: 1px solid rgba(0,0,0,0.06);
 }
 .polaroid-image-placeholder {
   width: 100%;
@@ -279,15 +285,15 @@ polaroid-card:not(:defined) [slot="image"] {
 /* Hover fan-out effect */
 .stacked-polaroids-link:hover .polaroid-center {
   transform: translateY(-6%) scale(1.04);
-  filter: drop-shadow(0 12px 14px rgba(0,0,0,0.2));
+  filter: drop-shadow(0 14px 18px rgba(0,0,0,0.25));
 }
 .stacked-polaroids-link:hover .polaroid-left {
   transform: translateX(-38%) rotate(-12deg) translateY(-6%);
-  filter: drop-shadow(0 12px 14px rgba(0,0,0,0.2));
+  filter: drop-shadow(0 14px 18px rgba(0,0,0,0.25));
 }
 .stacked-polaroids-link:hover .polaroid-right {
   transform: translateX(38%) rotate(12deg) translateY(-6%);
-  filter: drop-shadow(0 12px 14px rgba(0,0,0,0.2));
+  filter: drop-shadow(0 14px 18px rgba(0,0,0,0.25));
 }
 
 /* Responsiveness: hide outer cards on small screens */
@@ -297,3 +303,100 @@ polaroid-card:not(:defined) [slot="image"] {
     display: none;
   }
 }
+
+/* Realistic tack heads for custom elements fallbacks */
+tack-pin, tack-scatter {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+/* In case tacks need standalone rendering */
+.tack-head {
+  width: 18px; height: 18px; border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9), rgba(255,255,255,0.2) 35%, rgba(0,0,0,0.25) 36%, rgba(0,0,0,0.4) 100%), #d64;
+  box-shadow: 0 6px 6px rgba(0,0,0,0.25);
+}
+
+/* --- Cork-board strip header (shared across non-home pages) --- */
+.corkboard-strip-header {
+  padding: 0.35rem 0.5rem; /* slight breathing room around frame */
+}
+.corkboard-strip-wrapper { display: flex; justify-content: center; }
+.corkboard-strip-frame {
+  --frame: 14px; /* slimmer frame than full board */
+  position: relative;
+  padding: var(--frame);
+  border-radius: 8px;
+  box-shadow: 0 10px 18px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.25);
+  background-color: #d2a579;
+  background-image: url("../images/wood-grain.svg");
+  background-size: 240px 240px;
+  background-repeat: repeat;
+  outline: 1px solid rgba(0,0,0,0.15);
+  width: 100dvw;
+  display: block;
+}
+.corkboard-strip-surface {
+  background-color: #d2b48c;
+  background-image: url("../images/cork-texture.svg");
+  background-size: 240px 240px;
+  background-repeat: repeat;
+  border-radius: 5px;
+  position: relative;
+  width: 100%;
+  min-height: 110px; /* strip height */
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.25), 0 1px 0 rgba(255,255,255,0.4);
+  overflow: hidden; /* ensure the strip doesn't overlap content */
+}
+.corkboard-strip-surface cork-board.corkboard-inline {
+  display: flex;
+  align-items: center;
+  height: auto;
+  justify-content: center;
+}
+.corkboard-strip-surface cork-board.corkboard-inline .strip-item { flex: 0 0 auto; }
+
+/* Notes inside header: smaller format */
+profile-card.site-title-note {
+  width: 280px; min-height: 120px; padding: 0.6rem 0.85rem; display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+profile-card.site-title-note img[slot="avatar"] {
+  display: block;
+  border-radius: 50%;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.25);
+  margin-bottom: 0.35rem;
+  width: 72px; height: 72px; object-fit: cover;
+  outline: 2px solid rgba(255,255,255,0.7);
+}
+/* Binder tabs as nav items */
+binder-tab.nav-tab { width: 75px; min-height: 76px; display: block; }
+profile-card.site-title-note .site-title { font-size: 28px; display: block; text-align: center; }
+binder-tab.nav-tab .nav-link { font-size: 0.95rem; font-weight: 700; text-align: center; display: block; text-decoration: none; color: #2b2b2b; }
+binder-tab.nav-tab .nav-link:hover { text-decoration: underline; }
+/* Anchor wrapping a binder-tab adopts the tab foreground color */
+a.nav-link > binder-tab.nav-tab { display: block; }
+a.nav-link { text-decoration: none; display: inline-block; }
+a.nav-link:hover binder-tab.nav-tab .sticky { box-shadow: 0 12px 20px rgba(0,0,0,0.28); }
+
+/* Responsive adjustments */
+@media (max-width: 860px) {
+  .corkboard-strip-surface cork-board.corkboard-inline { gap: 0.6rem; padding: 0.4rem 0.4rem; }
+  binder-tab.nav-tab { width: 64px; min-height: 86px; }
+}
+@media (max-width: 640px) {
+  .corkboard-strip-surface { min-height: 86px; }
+  binder-tab.nav-tab { width: 58px; min-height: 78px; }
+}
+@media (max-width: 400px) {
+  .corkboard-strip-surface { min-height: 78px; }
+  binder-tab.nav-tab { width: 54px; min-height: 72px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .corkboard-strip-header, .corkboard-strip-frame, .corkboard-strip-surface, note-paper { transition: none !important; }
+}
+
+/* Fallback if custom elements not defined yet */
+.corkboard-strip-surface cork-board.corkboard-inline:not(:defined) { display: flex; }
+/* Reserve space before definition */
+binder-tab { display: block; width: 75px; min-height: 90px; }
+

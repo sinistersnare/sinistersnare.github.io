@@ -15,6 +15,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fleur+De+Leah&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@200..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
 
     {% if config.compile_sass %}
     <link rel="stylesheet" href="{{ get_url(path='index.css') | replace(from=config.base_url, to='') }}" />
@@ -36,7 +37,7 @@
     {% endif %}
 </head>
 
-<body class="cork">
+<body class="wall">
     {% block body %}
     <div class="corkboard-wrapper">
         <div class="corkboard-frame">
@@ -53,7 +54,6 @@
                         </profile-card>
                     </board-item>
                     <board-item class="pos-relative">
-                        <tack-pin color="red"></tack-pin>
                         <note-paper class="about-note" thumbtack="red">
                             <a href="/about">
                                 <h3>A Little About Me</h3>
@@ -62,7 +62,6 @@
                         </note-paper>
                     </board-item>
                     <board-item class="pos-relative">
-                        <tack-pin color="yellow"></tack-pin>
                         <note-paper class="blog-note" thumbtack="yellow" variant="sheet">
                             <h3><a href="/post">yapping</a></h3>
                             <div>latest posts</div>

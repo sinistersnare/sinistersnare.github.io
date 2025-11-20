@@ -6,3 +6,5 @@ import "./components/note-paper.ts";
 import "./components/tack-pin.ts";
 import "./components/profile-card.ts";
 import "./components/tack-scatter.ts";
+import "./components/binder-tab.ts";
+import "./components/compact-card.ts";

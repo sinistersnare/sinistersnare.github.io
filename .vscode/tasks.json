@@ -1,0 +1,29 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "zola-build",
+			"type": "shell",
+			"command": "zola build",
+			"args": [],
+			"isBackground": false,
+			"problemMatcher": [
+				"$gcc"
+			],
+			"group": "build"
+		},
+		{
+			"label": "build:cork:ts",
+			"type": "shell",
+			"command": "pnpm",
+			"args": [
+				"-s",
+				"build:cork:ts"
+			],
+			"problemMatcher": [
+				"$eslint-stylish"
+			],
+			"group": "build"
+		}
+	]
+}

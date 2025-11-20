@@ -5,14 +5,22 @@ var CorkBoardEl = class extends HTMLElement {
     const shadowRoot = this.attachShadow({ mode: "open" });
     shadowRoot.innerHTML = `
       <style>
-        :host { display: block; position: relative; z-index: 1; min-height: 90vh; }
+        :host { display: block; position: relative; z-index: 1; }
         .container {
           display: flex;
           flex-wrap: wrap;
           gap: 100px; /* Increased gap for better spacing */
           justify-content: center;
           align-items: space-around;
-          padding: 3rem;
+        }
+
+        /* Inline header mode: compact, single-row, scrollable on overflow */
+        :host([mode="inline"]) .container {
+          gap: 10px;
+          flex-wrap: nowrap;
+          align-items: center;
+          justify-content: center; /* center items */
+          padding: 6px 8px;
         }
 
         /* Responsive scale-down to preserve visible frame edges */
@@ -24,6 +32,14 @@ var CorkBoardEl = class extends HTMLElement {
         @media (max-width: 480px) {
           .container { padding: 1.25rem 0.5rem; gap: 20px; }
           .container { transform: scale(0.86); }
+        }
+
+        /* Do NOT scale the inline header mode; keep natural size */
+        @media (max-width: 768px) {
+          :host([mode="inline"]) .container { transform: none; padding: 6px 8px; gap: 8px; }
+        }
+        @media (max-width: 480px) {
+          :host([mode="inline"]) .container { transform: none; padding: 4px 6px; gap: 6px; }
         }
       </style>
       <div class="container">
@@ -447,4 +463,195 @@ var TackScatterEl = class extends HTMLElement {
   }
 };
 customElements.define("tack-scatter", TackScatterEl);
+
+// themes/cork-board/static/ts/components/binder-tab.ts
+var BinderTabEl = class extends HTMLElement {
+  static get observedAttributes() {
+    return ["tack", "color"];
+  }
+  shadow;
+  constructor() {
+    super();
+    this.shadow = this.attachShadow({ mode: "open" });
+    this.render();
+  }
+  attributeChangedCallback() {
+    this.render();
+  }
+  render() {
+    const hasTack = this.hasAttribute("tack");
+    const tackColor = tackFill(this.getAttribute("tack"), "yellow");
+    const stickyColor = tackFill(this.getAttribute("color"), "yellow");
+    const rgb = stickyColor.replace("#", "");
+    const r = parseInt(rgb.substring(0, 2), 16);
+    const g = parseInt(rgb.substring(2, 4), 16);
+    const b = parseInt(rgb.substring(4, 6), 16);
+    const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+    const fgColor = luminance > 0.6 ? "#222" : "#fdfdfd";
+    this.shadow.innerHTML = `
+      <style>
+        :host {
+          display: block;
+          width: 64px;
+          min-height: 86px;
+          color: black;
+          --tab-fg: ${fgColor};
+        }
+        .wrap {
+          position: relative;
+        }
+  .tack { z-index: 1; position: absolute; top: -0.8rem; left: 50%; transform: translateX(-50%); }
+  .tack svg { width: 18px; height: 26px; filter: drop-shadow(0 3px 4px rgba(0,0,0,0.35)); }
+
+        /* Sticky note flag body (vertical) */
+        .sticky {
+          position: relative;
+          background: ${stickyColor};
+          border-radius: 4px;
+          box-shadow: 0 8px 14px rgba(0,0,0,0.18);
+          padding: 0.4rem 0.4rem 0.55rem 0.4rem;
+          min-height: 86px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
+        }
+        /* Adhesive shine strip */
+        .sticky::before {
+          content: "";
+          position: absolute;
+          top: 0; left: 0; right: 0;
+          height: 6px;
+          background: linear-gradient(180deg, rgba(255,255,255,0.4), rgba(255,255,255,0.1));
+          border-radius: 4px 4px 0 0;
+          opacity: 0.8;
+        }
+        /* Triangle tip at the bottom for vertical flag */
+        .sticky::after {
+          content: "";
+          position: absolute;
+          left: 50%;
+          bottom: -12px;
+          transform: translateX(-50%);
+          border-width: 12px 10px 0 10px;
+          border-style: solid;
+          border-color: ${stickyColor} transparent transparent transparent;
+          filter: drop-shadow(0 3px 3px rgba(0,0,0,0.12));
+        }
+        :host(:hover) .sticky { box-shadow: 0 10px 18px rgba(0,0,0,0.22); }
+
+        /* Content now provided by external anchor wrapping component */
+  ::slotted(*) { color: var(--tab-fg); font-weight: 700; font-size: 0.85rem; line-height: 1.15; }
+
+        /* Even more compact on narrow screens */
+        @media (max-width: 480px) {
+          :host { width: 58px; min-height: 78px; }
+          .sticky { min-height: 78px; padding: 0.35rem 0.35rem 0.5rem 0.35rem; }
+          .tack { top: -0.65rem; }
+          .tack svg { width: 15px; height: 22px; }
+          ::slotted(*) { font-size: 0.78rem; }
+        }
+        @media (max-width: 400px) {
+          :host { width: 54px; min-height: 72px; }
+          .sticky { min-height: 72px; padding: 0.3rem 0.3rem 0.45rem 0.3rem; }
+          ::slotted(*) { font-size: 0.72rem; }
+        }
+      </style>
+      <div class="wrap">
+        ${hasTack ? `<span class="tack" aria-hidden="true">${buildTackSVG(tackColor)}</span>` : ""}
+        <div class="sticky" part="sticky">
+          <slot></slot>
+        </div>
+      </div>
+    `;
+  }
+};
+customElements.define("binder-tab", BinderTabEl);
+
+// themes/cork-board/static/ts/components/compact-card.ts
+var CompactCardEl = class extends HTMLElement {
+  static get observedAttributes() {
+    return ["tack"];
+  }
+  shadow;
+  constructor() {
+    super();
+    this.shadow = this.attachShadow({ mode: "open" });
+    this.render();
+  }
+  attributeChangedCallback() {
+    this.render();
+  }
+  render() {
+    const tackColor = tackFill(this.getAttribute("tack"), "purple");
+    this.shadow.innerHTML = `
+      <style>
+        :host { display: inline-block; color: inherit; text-decoration: none; }
+        .card {
+          position: relative;
+          width: 146px;
+          background: #fff;
+          border-radius: 8px;
+          border: 1px solid rgba(0,0,0,0.08);
+          box-shadow: 0 5px 12px rgba(0,0,0,0.14);
+          padding: 12px 10px 14px 10px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 6px;
+        }
+
+        .tack { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); }
+        .tack svg { width: 18px; height: 26px; filter: drop-shadow(0 3px 4px rgba(0,0,0,0.35)); }
+
+        .avatar {
+          width: 58px; height: 58px;
+          background: #eee;
+          border: 1px solid #d0d0d0;
+          border-radius: 8px;
+          overflow: hidden;
+          display: block;
+        }
+        ::slotted(img[slot="avatar"]) {
+          width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 8px;
+        }
+
+        .info { text-align: center; max-width: 100%; }
+        .name {
+          font-family: "Fleur De Leah", cursive;
+          font-weight: 400;
+          font-size: 1.25rem;
+          line-height: 1.05;
+          margin: 0;
+          word-break: break-word;
+        }
+        .subtitle { font-size: 0.78rem; color: #555; margin-top: 2px; }
+
+        @media (max-width: 480px) {
+          .card { width: 132px; padding: 10px 8px 12px 8px; gap: 5px; }
+          .avatar { width: 52px; height: 52px; }
+          .name { font-size: 1.15rem; }
+          .subtitle { font-size: 0.72rem; }
+        }
+        @media (max-width: 400px) {
+          .card { width: 120px; padding: 8px 6px 10px 6px; gap: 4px; }
+          .avatar { width: 48px; height: 48px; }
+          .name { font-size: 1.05rem; }
+          .subtitle { font-size: 0.68rem; }
+        }
+      </style>
+      <div class="card">
+        <span class="tack" aria-hidden="true">${buildTackSVG(tackColor)}</span>
+        <div class="avatar">
+          <slot name="avatar"></slot>
+        </div>
+        <div class="info">
+          <div class="name"><slot name="name"></slot></div>
+          <div class="subtitle"><slot name="subtitle"></slot></div>
+        </div>
+      </div>
+    `;
+  }
+};
+customElements.define("compact-card", CompactCardEl);
 //# sourceMappingURL=bundle.js.map

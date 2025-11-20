@@ -15,6 +15,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fleur+De+Leah&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@200..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
 
   {% if config.compile_sass %}
   <link rel="stylesheet" href="{{ get_url(path='index.css') | replace(from=config.base_url, to='') }}" />
@@ -50,15 +51,46 @@
   {% endif %}
 </head>
 
-<body class="cork simple">
-  <header class="board-header">
-    <div class="board-header-inner">
-      <a class="site-title" href="/">{{ config.title }}</a>
-      <nav class="board-nav">
-        {% for item in config.extra.menu %}
-          <a class="nav-link" href="{{ item.link | replace(from=config.base_url, to='') }}">{{ item.text }}</a>
-        {% endfor %}
-      </nav>
+<body class="wall simple">
+  <header class="corkboard-strip-header">
+    <div class="corkboard-strip-wrapper">
+      <div class="corkboard-strip-frame">
+        <div class="corkboard-strip-surface">
+          <cork-board class="corkboard-inline" mode="inline">
+            <board-item class="strip-item site-title-item">
+              <a href="/">
+                {% set colors = ["red", "yellow", "green", "purple", "blue"] %}
+                {% set colors_len = colors | length %}
+                {% set rand = get_random(end=5) %}
+                {% set which_tack = rand % colors_len %}
+                {% set tackcol = colors | nth(n=which_tack) %}
+                <compact-card tack="{{ tackcol }}">
+                    <img slot="avatar" width="72" height="72"
+                        src="{{ get_url(path='images/gravatar.webp') | replace(from=config.base_url, to='') }}"
+                        alt="Davis">
+                    <span slot="name">Davis</span>
+                </compact-card>
+              </a>
+            </board-item>
+            {% set colors = ["red", "yellow", "green", "purple", "blue"] %}
+            {% set colors_len = colors | length %}
+            {% for item in config.extra.menu %}
+            {% set rand = get_random(end=5) %}
+            {% set which_tack = rand % colors_len %}
+            {% set tackcol = colors | nth(n=which_tack) %}
+            {% set which_color = loop.index % colors_len %}
+            {% set col = colors | nth(n=which_color) %}
+            <board-item class="strip-item nav-item">
+              <a class="nav-link" href="{{ item.link | replace(from=config.base_url, to='') }}">
+                <binder-tab color="{{ col }}" tack="{{ tackcol }}" class="nav-tab">
+                  {{ item.text }}
+                </binder-tab>
+              </a>
+            </board-item>
+            {% endfor %}
+          </cork-board>
+        </div>
+      </div>
     </div>
   </header>
   <main id="page-content" class="board-content">
