@@ -9,7 +9,6 @@
     "build": "vite build",
     "build:debug": "vite build --mode development --minify false --sourcemap inline",
     "preview": "vite preview",
-    "build:rag": "node ./scripts/build-rag.mjs",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "format": "prettier --write .",
     "format:check": "prettier --check ."

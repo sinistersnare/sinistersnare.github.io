@@ -242,7 +242,7 @@ const App: React.FC = () => {
          - "title": A string for the heading title.
          - "text_snippet": A short, unique text snippet (5-10 words) from the paragraph immediately following the heading. This will be used to locate the heading in the original PDF.`;
 
-    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent`;
+    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent`;
     const payload = {
       contents: [{ parts: [{ text }] }],
       systemInstruction: { parts: [{ text: systemPrompt }] },
